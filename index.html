@@ -2,23 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Zack D. Cook – Engineer, Author, Swamp Ass Survivor</title>
   <style>
-    body { font-family: system-ui, sans-serif; background:#fafafa; color:#222; margin:2rem; }
-    h1 { font-size: 2.2rem; margin-bottom: 0.2rem; }
-    .progress-container { background:#ddd; border-radius:6px; width:100%; max-width:400px; height:20px; overflow:hidden; }
-    .progress-bar { background:#4caf50; height:100%; width:5%; }
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Space+Mono&display=swap');
+
+    :root {
+      --bg-gradient: linear-gradient(160deg, #0a3d2e 0%, #1e1f2f 100%);
+      --text-light: #f3f3f3;
+      --accent: #70e6a2;
+      --muted: #a2b5a5;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-light);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    img.profile {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      object-fit: cover;
+      box-shadow: 0 0 20px rgba(112,230,162,0.4);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    h2 {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--muted);
+      margin-top: 0;
+    }
+
+    section {
+      max-width: 650px;
+      text-align: center;
+    }
+
+    .progress-container {
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 420px;
+      height: 20px;
+      margin: 1rem auto;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      width: 5%;
+      background: var(--accent);
+      transition: width 0.6s ease;
+    }
+
+    footer {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 3rem;
+      opacity: 0.7;
+    }
   </style>
 </head>
 <body>
-  <h1>Zack D. Cook</h1>
-  <p>Engineer | Author | Swamp Ass Survivor</p>
+  <header>
+    <img src="profile.jpg" alt="Zack D. Cook profile picture" class="profile">
+    <h1>Zack D. Cook</h1>
+    <h2>Engineer | Author | Swamp Ass Survivor</h2>
+  </header>
 
-  <h2>Novel Progress</h2>
-  <div class="progress-container"><div class="progress-bar"></div></div>
-  <p>First Draft – 5 % complete</p>
+  <section>
+    <p>
+      I'm working on writing my first novel! 
+    </p>
 
-  <p><a href="/about.html">About</a> | <a href="/updates.html">Updates</a></p>
+    <h3>Novel Progress</h3>
+    <div class="progress-container">
+      <div class="progress-bar"></div>
+    </div>
+    <p>First Draft – 5 % Complete</p>
+  </section>
+
+  <footer>© 2025 Zack D. Cook — All Rights Reserved</footer>
 </body>
 </html>
