@@ -11,8 +11,14 @@
   <style>
     /* --- FORM STYLING --- */
     form {
-      max-width: 420px;
-      margin: 1rem auto;
+      max-width: 500px;
+      margin: 1.5rem 0;
+      text-align: left;
+    }
+
+    section {
+      max-width: 700px;
+      margin: auto;
       text-align: left;
     }
 
@@ -46,59 +52,10 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      display: block;
-      width: 100%;
-      text-align: center;
+      display: inline-block;
     }
 
     form button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 0 10px rgba(255,255,255,0.3);
-    }
-
-    /* --- POPUP STYLING --- */
-    #thankYouPopup {
-      display: none !important;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      backdrop-filter: blur(6px);
-      background: rgba(10, 10, 30, 0.85);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .popup-content {
-      background: linear-gradient(160deg, #1c1354 0%, #301a60 100%);
-      border: 2px solid var(--accent-blue);
-      border-radius: 12px;
-      padding: 2rem;
-      text-align: center;
-      max-width: 450px;
-      box-shadow: 0 0 20px var(--accent-pink);
-      color: var(--text-light);
-    }
-
-    .popup-content p {
-      font-size: 1rem;
-      line-height: 1.5;
-      margin-bottom: 1rem;
-    }
-
-    .popup-content button {
-      background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
-      color: #fff;
-      border: none;
-      border-radius: 25px;
-      padding: 0.5rem 1.2rem;
-      font-family: 'Space Mono', monospace;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .popup-content button:hover {
       transform: translateY(-2px);
       box-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
@@ -125,11 +82,13 @@
 
     <p><strong>Spots are limited</strong> — so sign up below and I’ll reach out if there’s a good fit!</p>
 
-    <form id="betaForm" action="https://formsubmit.co/hi@zackdcook.com" method="POST">
-      <input type="hidden" name="_next" value="">
+    <form action="https://formsubmit.co/hi@zackdcook.com" method="POST">
+      <!-- Hidden fields -->
       <input type="hidden" name="_subject" value="New Beta Reader Application">
+      <input type="hidden" name="_next" value="https://zackdcook.com/formthankyou.html">
       <input type="text" name="_honey" style="display:none">
 
+      <!-- User inputs -->
       <label for="name">Name:</label>
       <input type="text" id="name" name="name" required>
 
@@ -142,17 +101,6 @@
       <button type="submit">Submit Application</button>
     </form>
 
-    <!-- Hidden thank-you popup -->
-    <div id="thankYouPopup">
-      <div class="popup-content">
-        <p>
-          Thank you for your interest in being a beta reader!
-          I’m genuinely grateful for your support — it means the world.
-          Keep an eye on your inbox — fingers crossed you're able to nab a spot on my beta reader team!</p>
-        <button id="closePopup">Close</button>
-      </div>
-    </div>
-
     <p style="margin-top:1.5rem; font-size:0.9rem; color:var(--muted);">
       If you’re not selected this round, don’t worry — future opportunities will open up as the series expands!
     </p>
@@ -160,45 +108,9 @@
 
   <footer>© 2025 Zack D. Cook — All Rights Reserved</footer>
 
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const betaForm = document.getElementById('betaForm');
-  const thankYouPopup = document.getElementById('thankYouPopup');
-  const closePopup = document.getElementById('closePopup');
-
-  if (!betaForm) return; // failsafe
-
-  betaForm.addEventListener('submit', async function(e) {
-    e.preventDefault();
-
-    const formData = new FormData(betaForm);
-
-    try {
-      const response = await fetch(betaForm.action, {
-        method: betaForm.method,
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if (response.ok) {
-        thankYouPopup.style.display = 'flex';
-        betaForm.reset();
-      } else {
-        alert('Something went wrong! Please try again.');
-      }
-    } catch (error) {
-      alert('Submission failed. Please check your connection.');
-    }
-  });
-
-  closePopup.addEventListener('click', () => {
-    thankYouPopup.style.display = 'none';
-  });
-});
-</script>
-
   <!-- Cloudflare Web Analytics -->
-  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "25529c53f667454c84579c2abc404e20"}'></script>
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js'
+    data-cf-beacon='{"token": "25529c53f667454c84579c2abc404e20"}'></script>
   <!-- End Cloudflare Web Analytics -->
 </body>
 </html>
