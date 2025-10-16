@@ -8,19 +8,21 @@
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Space+Mono&display=swap');
 
     :root {
-      --bg-gradient: linear-gradient(160deg, #a7b8ff 0%, #ffbde6 100%);
-      --text-light: #ffffff;
+      --bg-gradient: linear-gradient(160deg, #0B3078 0%, #412B78 100%);
+      --text-light: #f3f3f3;
       --accent-blue: #90d3ff;
       --accent-pink: #ff9ace;
-      --muted: #e3d9f3;
+      --muted: #a8a6d1;
       --bar-bg: rgba(255,255,255,0.15);
-      --bar-glow: rgba(255, 255, 255, 0.4);
+      --bar-glow: rgba(255, 255, 255, 0.3);
     }
 
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: 'Montserrat', sans-serif;
+      background-color: #0B3078;
       background: var(--bg-gradient);
+      font-family: 'Montserrat', sans-serif;
       color: var(--text-light);
       display: flex;
       flex-direction: column;
@@ -63,19 +65,30 @@
     }
 
     nav {
-      margin-top: 1rem;
+      margin-top: 1.2rem;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
     }
 
     nav a {
       color: var(--text-light);
       text-decoration: none;
       font-weight: 600;
-      margin: 0 0.8rem;
-      transition: color 0.3s;
+      background: rgba(255,255,255,0.1);
+      padding: 0.5rem 1.2rem;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      font-family: 'Space Mono', monospace;
     }
 
     nav a:hover {
-      color: var(--accent-blue);
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+      color: #fff;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+      transform: translateY(-2px);
     }
 
     section {
@@ -137,15 +150,18 @@
     <img src="profile.jpg" alt="Zack D. Cook profile picture" class="profile">
     <h1>Zack D. Cook</h1>
     <h2>Engineer | Author | Swamp Ass Survivor</h2>
+
     <nav>
-      <a href="bio.html">Bio</a> |
-      <a href="works.html">Books</a> |
+      <a href="bio.html">Bio</a>
+      <a href="works.html">Books</a>
       <a href="beta.html">Beta Readers</a>
     </nav>
   </header>
 
   <section>
-    <p>Follow my quest as I level up through the stages of writing my debut novel.</p>
+    <p>
+      Follow my progress as I write my debut novel, <em>Swamp Ass, The Apocalypse, and Other Inconveniences</em>.
+    </p>
 
     <h3>Writing Progress</h3>
 
