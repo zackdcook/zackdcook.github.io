@@ -126,6 +126,7 @@
     <p><strong>Spots are limited</strong> — so sign up below and I’ll reach out if there’s a good fit!</p>
 
     <form id="betaForm" action="https://formsubmit.co/hi@zackdcook.com" method="POST">
+      <input type="hidden" name="_next" value="">
       <input type="hidden" name="_subject" value="New Beta Reader Application">
       <input type="text" name="_honey" style="display:none">
 
@@ -160,29 +161,41 @@
   <footer>© 2025 Zack D. Cook — All Rights Reserved</footer>
 
   <script>
-    const betaForm = document.getElementById('betaForm');
-    const thankYouPopup = document.getElementById('thankYouPopup');
-    const closePopup = document.getElementById('closePopup');
+document.addEventListener('DOMContentLoaded', () => {
+  const betaForm = document.getElementById('betaForm');
+  const thankYouPopup = document.getElementById('thankYouPopup');
+  const closePopup = document.getElementById('closePopup');
 
-    betaForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
+  if (!betaForm) return; // failsafe
 
-      const formData = new FormData(betaForm);
+  betaForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
 
-      await fetch(betaForm.action, {
+    const formData = new FormData(betaForm);
+
+    try {
+      const response = await fetch(betaForm.action, {
         method: betaForm.method,
         body: formData,
         headers: { 'Accept': 'application/json' }
       });
 
-      thankYouPopup.style.display = 'flex';
-      betaForm.reset();
-    });
+      if (response.ok) {
+        thankYouPopup.style.display = 'flex';
+        betaForm.reset();
+      } else {
+        alert('Something went wrong! Please try again.');
+      }
+    } catch (error) {
+      alert('Submission failed. Please check your connection.');
+    }
+  });
 
-    closePopup.addEventListener('click', () => {
-      thankYouPopup.style.display = 'none';
-    });
-  </script>
+  closePopup.addEventListener('click', () => {
+    thankYouPopup.style.display = 'none';
+  });
+});
+</script>
 
   <!-- Cloudflare Web Analytics -->
   <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "25529c53f667454c84579c2abc404e20"}'></script>
