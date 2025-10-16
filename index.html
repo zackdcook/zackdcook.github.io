@@ -8,10 +8,13 @@
     @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Space+Mono&display=swap');
 
     :root {
-      --bg-gradient: linear-gradient(160deg, #0a3d2e 0%, #1e1f2f 100%);
-      --text-light: #f3f3f3;
-      --accent: #70e6a2;
-      --muted: #a2b5a5;
+      --bg-gradient: linear-gradient(160deg, #a7b8ff 0%, #ffbde6 100%);
+      --text-light: #ffffff;
+      --accent-blue: #90d3ff;
+      --accent-pink: #ff9ace;
+      --muted: #e3d9f3;
+      --bar-bg: rgba(255,255,255,0.15);
+      --bar-glow: rgba(255, 255, 255, 0.4);
     }
 
     body {
@@ -25,56 +28,89 @@
       justify-content: flex-start;
       min-height: 100vh;
       padding: 2rem;
+      text-align: center;
     }
 
     header {
-      text-align: center;
       margin-bottom: 2rem;
     }
 
     img.profile {
-      width: 160px;
-      height: 160px;
+      width: 180px;
+      height: 180px;
       border-radius: 50%;
-      border: 3px solid var(--accent);
+      border: 4px solid var(--accent-blue);
+      box-shadow: 0 0 25px var(--accent-pink);
       object-fit: cover;
-      box-shadow: 0 0 20px rgba(112,230,162,0.4);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 25px var(--accent-pink); }
+      50% { box-shadow: 0 0 35px var(--accent-blue); }
     }
 
     h1 {
-      font-size: 2.2rem;
-      margin-top: 1rem;
-      margin-bottom: 0.3rem;
+      font-size: 2.3rem;
+      margin: 1rem 0 0.3rem;
     }
 
     h2 {
       font-family: 'Space Mono', monospace;
       font-size: 1.1rem;
-      font-weight: 400;
       color: var(--muted);
       margin-top: 0;
     }
 
+    nav {
+      margin-top: 1rem;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 0 0.8rem;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: var(--accent-blue);
+    }
+
     section {
       max-width: 650px;
-      text-align: center;
+      margin-top: 2rem;
     }
 
-    .progress-container {
-      background: rgba(255,255,255,0.15);
-      border-radius: 8px;
+    .xp-container {
+      background: var(--bar-bg);
+      border-radius: 10px;
       width: 100%;
       max-width: 420px;
-      height: 20px;
-      margin: 1rem auto;
+      height: 22px;
+      margin: 0.8rem auto;
       overflow: hidden;
+      box-shadow: 0 0 10px var(--bar-glow);
     }
 
-    .progress-bar {
+    .xp-bar {
       height: 100%;
-      width: 15%;
-      background: var(--accent);
-      transition: width 0.6s ease;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+      width: 0%;
+      animation: fillBar 2s ease-out forwards;
+    }
+
+    .xp-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 0.2rem;
+    }
+
+    @keyframes fillBar {
+      from { width: 0%; }
+      to { width: var(--target-width); }
     }
 
     footer {
@@ -84,6 +120,16 @@
       margin-top: 3rem;
       opacity: 0.7;
     }
+
+    /* Spotify placeholder */
+    .spotify-placeholder {
+      margin-top: 3rem;
+      font-style: italic;
+      color: var(--muted);
+      border-top: 1px solid rgba(255,255,255,0.3);
+      padding-top: 1rem;
+    }
+
   </style>
 </head>
 <body>
@@ -91,18 +137,31 @@
     <img src="profile.jpg" alt="Zack D. Cook profile picture" class="profile">
     <h1>Zack D. Cook</h1>
     <h2>Engineer | Author | Swamp Ass Survivor</h2>
+    <nav>
+      <a href="bio.html">Bio</a> |
+      <a href="works.html">Books</a> |
+      <a href="beta.html">Beta Readers</a>
+    </nav>
   </header>
 
   <section>
-    <p>
-      Follow my progress as I write my first novel! 
-    </p>
+    <p>Follow my quest as I level up through the stages of writing my debut novel.</p>
 
-    <h3>Novel Progress</h3>
-    <div class="progress-container">
-      <div class="progress-bar"></div>
+    <h3>Writing Progress</h3>
+
+    <div class="xp-label">🧠 Level 0: Brain Dump — 32,129 / 32,129 words</div>
+    <div class="xp-container" style="--target-width:100%;">
+      <div class="xp-bar" style="width:100%;"></div>
     </div>
-    <p>Discovery Draft – 15% Complete</p>
+
+    <div class="xp-label">✍️ Level 1: Discovery Draft — 8,724 / 100,000 words</div>
+    <div class="xp-container" style="--target-width:8.7%;">
+      <div class="xp-bar" style="width:8.7%;"></div>
+    </div>
+
+    <div class="spotify-placeholder">
+      🎧 <em>“What I’m listening to right now”</em> — Spotify integration coming soon...
+    </div>
   </section>
 
   <footer>© 2025 Zack D. Cook — All Rights Reserved</footer>
