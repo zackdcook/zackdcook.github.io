@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>SWAMP RUN // hidden</title>
+<style>
+  :root{
+    --bg1:#0B3078; --bg2:#412B78; --ink:#f3f3f3;
+    --pink:#ff9ace; --blue:#90d3ff; --lime:#70e6a2; --amber:#ffcc66; --red:#ff6b6b;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(160deg,var(--bg1),var(--bg2));color:var(--ink);font-family:system-ui,Segoe UI,Montserrat,Arial,sans-serif;}
+  .wrap{max-width:960px;margin:auto;padding:12px 16px;}
+  h1{font-weight:700;letter-spacing:.06em;margin:.2rem 0}
+  .hud{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .btn{appearance:none;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;padding:.5rem .9rem;border-radius:999px;font-weight:700;cursor:pointer}
+  .btn:hover{background:linear-gradient(90deg,var(--blue),var(--pink))}
+  canvas{width:100%;height:60vh;max-height:520px;border:1px solid rgba(255,255,255,.2);border-radius:12px;display:block;background:transparent}
+  .legend{opacity:.8;font-size:.9rem;line-height:1.4}
+  .pill{padding:.2rem .5rem;border:1px solid rgba(255,255,255,.25);border-radius:999px;margin-left:.3rem}
+  .muted{opacity:.75}
+  .center{text-align:center}
+  .big{font-size:1.1rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hud">
+    <div>
+      <h1>SWAMP RUN <span class="pill">hidden</span></h1>
+      <div class="muted">Endless glitch-runner • Florida apocalypse</div>
+    </div>
+    <div>
+      <button id="playBtn" class="btn">▶︎ Play / Pause</button>
+      <button id="resetBtn" class="btn">↺ Reset</button>
+    </div>
+  </div>
+
+  <canvas id="game" width="960" height="420"></canvas>
+
+  <div class="legend">
+    <strong>Controls:</strong>
+    <span class="pill">Space / ↑</span> Jump
+    <span class="pill">↓</span> Drop/Fast-fall
+    <span class="pill">F</span> Blitz (if Swamp Surge)
+    <span class="pill">P</span> Pause
+    <br/>
+    <strong>Artifacts:</strong>
+    <span class="pill">Winged Boots</span> fly briefly •
+    <span class="pill">Gator Skin</span> invincible •
+    <span class="pill">Swamp Surge</span> dash through foes
+  </div>
+
+  <p class="center big muted" id="status"></p>
+</div>
+
+<script>
+(() => {
+  // --- Canvas setup ---
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  // DPI fix for crispness on high-DPI screens
+  function fixDPI() {
+    const rect = canvas.getBoundingClientRect();
+    const dpi = window.devicePixelRatio || 1;
+    canvas.width = Math.round(rect.width * dpi);
+    canvas.height = Math.round(rect.height * dpi);
+    ctx.setTransform(dpi,0,0,dpi,0,0);
+  }
+  fixDPI(); window.addEventListener('resize', fixDPI);
+
+  // --- Helpers ---
+  const R = (min,max)=>Math.random()*(max-min)+min;
+  const RI = (min,max)=>Math.floor(R(min,max+1));
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  const nowMS=()=>performance.now();
+
+  // --- World constants ---
+  const GROUND_Y = 0.82;     // ground as % of canvas height
+  const GRAVITY = 0.72;      // base gravity
+  const JUMP_V   = -15.5;    // jump velocity
+  const BASE_SPD = 6.2;      // base scroll speed
+  const SKY = ['#0B3078','#1a2b74','#2a2a78','#412B78'];
+  const WATER = 'rgba(144, 211, 255, 0.07)';
+
+  // Difficulty ramp
+  let difficulty = 1;           // grows slowly
+  let dist = 0;                 // meters
+  let score = 0;
+  let best = +localStorage.getItem('swamprun_best') || 0;
+
+  // --- Player (runner) ---
+  const player = {
+    x: 120, y: 0, w: 42, h: 58,
+    vy: 0,
+    onGround: false,
+    flyUntil: 0, invUntil: 0, surgeUntil: 0,
+    alive: true,
+  };
+
+  // Chaser on the left (the Zêlos)
+  const chaser = { x: -120, w: 120, hue: 310 };
+
+  // Pools
+  const obstacles = []; // debris, barriers
+  const enemies = [];   // tactical NPCs
+  const artifacts = []; // power-ups
+  const particles = [];
+
+  // Spawners
+  let nextObsAt = 0, nextEnemyAt = 100, nextArtifactAt = 250;
+
+  // Input
+  const keys = new Set();
+  window.addEventListener('keydown', e => {
+    if (['ArrowUp','ArrowDown','Space','KeyF','KeyP'].includes(e.code)) e.preventDefault();
+    keys.add(e.code);
+    if (e.code==='Space' || e.code==='ArrowUp') jump();
+    if (e.code==='KeyF') dash();
+    if (e.code==='KeyP') togglePause();
+  });
+  window.addEventListener('keyup', e => keys.delete(e.code));
+
+  // UI
+  const statusEl = document.getElementById('status');
+  const playBtn = document.getElementById('playBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  playBtn.onclick=()=>togglePause();
+  resetBtn.onclick=()=>reset(true);
+
+  // --- Core actions ---
+  function jump(){
+    if(!player.alive) return;
+    const canFly = player.flyUntil > t;
+    if(player.onGround || canFly){
+      player.vy = JUMP_V*(canFly?0.85:1);
+      player.onGround=false;
+    }
+  }
+  function dash(){
+    if(!player.alive) return;
+    if(player.surgeUntil > t){
+      // small forward lunge effect (visual only, clears nearby enemies)
+      for(const e of enemies){
+        if(Math.abs(e.x - (player.x+player.w)) < 80 && Math.abs((e.y+e.h) - (player.y+player.h)) < 60){
+          e.dead = true;
+          puff(e.x,e.y,'#ffea8a');
+          score += 10;
+        }
+      }
+    }
+  }
+
+  // --- Entities ---
+  function spawnObstacle(){
+    const h = RI(24, 42) * (Math.random()<0.2 ? 2 : 1);  // sometimes tall
+    obstacles.push({
+      x: canvas.width+RI(0,120), y: groundY()-h, w: RI(26, 46), h,
+      color: Math.random()<0.5 ? '#3dd39a' : '#a5f7ff',
+      vx: -scrollSpeed()
+    });
+  }
+  function spawnEnemy(){
+    enemies.push({
+      x: canvas.width+RI(0,120),
+      y: groundY()-54, w: 36, h: 54,
+      vx: -scrollSpeed() * R(1.02,1.18),
+      step: 0,
+      dead: false,
+    });
+  }
+  function spawnArtifact(){
+    const types = ['fly','inv','surge'];
+    const type = types[RI(0,2)];
+    artifacts.push({
+      x: canvas.width+RI(0,120),
+      y: groundY()-RI(80,140),
+      r: 12,
+      type,
+      vx: -scrollSpeed()*0.98,
+      a: 0
+    });
+  }
+
+  function groundY(){ return canvas.height*GROUND_Y; }
+  function scrollSpeed(){ return BASE_SPD + Math.min(8, difficulty*0.5); }
+
+  function collide(a,b){
+    return a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
+  }
+  function circleHitRect(c,r,rect){
+    const cx = clamp(c.x, rect.x, rect.x+rect.w);
+    const cy = clamp(c.y, rect.y, rect.y+rect.h);
+    const dx = c.x - cx, dy = c.y - cy;
+    return (dx*dx + dy*dy) <= r*r;
+  }
+
+  // --- Particles ---
+  function puff(x,y,color='#fff'){
+    for(let i=0;i<12;i++){
+      particles.push({x,y, vx:R(-1.8,1.8), vy:R(-2.2,0.4), life:R(400,900), born:t, color});
+    }
+  }
+
+  // --- Draw helpers ---
+  function bg(){
+    // layered parallax marsh & skyline
+    const w = canvas.width, h = canvas.height;
+    // sky bands glitch
+    for(let i=0;i<SKY.length;i++){
+      ctx.fillStyle = SKY[i];
+      const bandH = h*(0.18/(i+1));
+      ctx.fillRect(0, i*bandH, w, bandH);
+    }
+    // sun/moon glitch
+    ctx.save();
+    ctx.globalCompositeOperation='screen';
+    ctx.fillStyle='rgba(255,255,255,0.06)';
+    ctx.beginPath(); ctx.arc(w*0.8, h*0.18, 50, 0, Math.PI*2); ctx.fill();
+    ctx.restore();
+
+    // distant city silhouette
+    ctx.fillStyle='rgba(255,255,255,0.08)';
+    for(let i=0;i<8;i++){
+      const bw = RI(40,80), bh = RI(60,120);
+      ctx.fillRect(i*120 + ((t/30)%120), h*0.52 - bh, bw, bh);
+    }
+
+    // sawgrass / water shimmer
+    ctx.fillStyle=WATER;
+    ctx.fillRect(0, h*0.7, w, h*0.3);
+    ctx.strokeStyle='rgba(112,230,162,0.15)';
+    ctx.beginPath();
+    for(let x=0;x<w;x+=24){
+      const y = h*0.7 + Math.sin((t*0.002)+x*0.05)*4;
+      ctx.moveTo(x, y); ctx.lineTo(x+18, y+R(-6,6));
+    }
+    ctx.stroke();
+
+    // ground line
+    ctx.fillStyle='rgba(255,255,255,0.15)';
+    ctx.fillRect(0, groundY(), w, 4);
+  }
+
+  function drawPlayer(){
+    // body
+    const {x,y,w,h} = player;
+    const inv = player.invUntil > t;
+    const surge = player.surgeUntil > t;
+    ctx.save();
+    if(inv) { ctx.shadowColor='#ffea8a'; ctx.shadowBlur=18; }
+    if(surge){ ctx.shadowColor='#9cf'; ctx.shadowBlur=12; }
+    ctx.fillStyle = inv ? '#ffe66d' : '#e5ecff';
+    ctx.fillRect(x, y, w, h);
+    // bandana/accent
+    ctx.fillStyle = surge ? '#9cf' : '#ff9ace';
+    ctx.fillRect(x+6, y+10, w-12, 6);
+    // legs
+    ctx.fillStyle = '#90d3ff';
+    ctx.fillRect(x+6, y+h-12, 10, 12);
+    ctx.fillRect(x+w-16, y+h-12, 10, 12);
+    ctx.restore();
+
+    // flight trail
+    if(player.flyUntil>t){
+      ctx.strokeStyle='rgba(255,154,206,.6)';
+      ctx.beginPath();
+      ctx.moveTo(x, y+h/2);
+      ctx.lineTo(x-24, y+h/2+Math.sin(t*0.03)*8);
+      ctx.stroke();
+    }
+  }
+
+  function drawChaser(){
+    chaser.x = -100 + Math.sin(t*0.0018)*18; // menacing bob
+    const y0 = groundY()-70;
+    ctx.save();
+    ctx.globalCompositeOperation='screen';
+    for(let i=0;i<3;i++){
+      ctx.fillStyle=`hsla(${(chaser.hue+i*12)%360}, 90%, 60%, ${0.08*(3-i)})`;
+      ctx.fillRect(chaser.x + i*8, y0 - i*12, 90-i*6, 90-i*8);
+    }
+    ctx.restore();
+  }
+
+  function drawObstacles(list){
+    for(const o of list){
+      ctx.fillStyle=o.color;
+      ctx.fillRect(o.x,o.y,o.w,o.h);
+    }
+  }
+  function drawEnemies(list){
+    for(const e of list){
+      if(e.dead) continue;
+      // simple visor soldier
+      ctx.fillStyle='#9ad0ff';
+      ctx.fillRect(e.x, e.y, e.w, e.h);
+      ctx.fillStyle='#111';
+      ctx.fillRect(e.x+4, e.y+10, e.w-8, 10);
+      // idle sway
+      e.step += 0.2;
+      e.y += Math.sin(e.step)*0.2;
+    }
+  }
+  function drawArtifacts(list){
+    for(const a of list){
+      a.a += 0.05;
+      const glow = a.type==='fly' ? '#ff9ace' : a.type==='inv' ? '#ffe66d' : '#90d3ff';
+      ctx.save();
+      ctx.shadowColor=glow; ctx.shadowBlur=12;
+      ctx.fillStyle=glow;
+      ctx.beginPath();
+      ctx.arc(a.x, a.y + Math.sin(a.a)*4, a.r, 0, Math.PI*2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+  function drawParticles(){
+    for(const p of particles){
+      const age = t - p.born;
+      const k = 1 - age/p.life;
+      if(k<=0) { p.dead=true; continue; }
+      ctx.globalAlpha = k;
+      ctx.fillStyle=p.color;
+      ctx.fillRect(p.x, p.y, 3,3);
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // --- Game loop ---
+  let t = 0, last = nowMS(), paused = false;
+
+  function update(dt){
+    if(!player.alive) dt*=0.5; // slow-mo on death
+
+    // Difficulty ramp over time
+    difficulty += dt*0.00012;
+    dist += scrollSpeed()*dt*0.01;
+    score = Math.floor(dist + (player.invUntil>t?50:0) + (player.surgeUntil>t?25:0));
+
+    // Player physics
+    const gravity = player.flyUntil>t ? GRAVITY*0.4 : GRAVITY;
+    player.vy += gravity;
+    player.y += player.vy;
+    const gY = groundY()-player.h;
+    if(player.y >= gY){ player.y=gY; player.vy=0; player.onGround=true; }
+    if(keys.has('ArrowDown') && !player.onGround){ player.vy += 1.6; } // fast-fall
+
+    // Scroll / move entities
+    const spd = -scrollSpeed();
+    for(const o of obstacles){ o.x += spd; }
+    for(const e of enemies){ e.x += spd*1.0; }
+    for(const a of artifacts){ a.x += spd*0.98; }
+    for(const p of particles){ p.x += p.vx; p.y += p.vy; }
+
+    // Spawn logic
+    nextObsAt -= scrollSpeed(); if(nextObsAt<=0){ spawnObstacle(); nextObsAt = RI(220, 360) - difficulty*6; }
+    if(difficulty>1.8){ nextEnemyAt -= scrollSpeed(); if(nextEnemyAt<=0){ spawnEnemy(); nextEnemyAt = RI(520, 920) - difficulty*8; } }
+    if(difficulty>1.2){ nextArtifactAt -= scrollSpeed(); if(nextArtifactAt<=0){ spawnArtifact(); nextArtifactAt = RI(1400, 2200) - difficulty*10; } }
+
+    // Cleanup offscreen/dead
+    const off = -120;
+    while(obstacles[0]?.x+obstacles[0].w < off) obstacles.shift();
+    while(enemies[0]?.x+enemies[0].w < off || enemies[0]?.dead) enemies.shift();
+    while(artifacts[0]?.x < off) artifacts.shift();
+    for(let i=particles.length-1;i>=0;i--) if(particles[i].dead) particles.splice(i,1);
+
+    // Collisions
+    if(player.invUntil <= t){
+      for(const o of obstacles){
+        if(collide(player,o)) { die(); break; }
+      }
+      for(const e of enemies){
+        if(!e.dead && collide(player,e)) { die(); break; }
+      }
+      // Chaser kill if caught
+      if(player.x < chaser.x + chaser.w - 10){ die(); }
+    }
+
+    // Artifacts pickup
+    for(let i=artifacts.length-1;i>=0;i--){
+      const a = artifacts[i];
+      if(circleHitRect({x:a.x,y:a.y},a.r, player)){
+        if(a.type==='fly') player.flyUntil = t + 4000;
+        if(a.type==='inv') player.invUntil = t + 3000;
+        if(a.type==='surge') player.surgeUntil = t + 2500;
+        puff(a.x,a.y, a.type==='inv' ? '#ffe66d' : a.type==='fly' ? '#ff9ace' : '#90d3ff');
+        score += 15;
+        artifacts.splice(i,1);
+      }
+    }
+
+    // Surge auto-clear a bit in front
+    if(player.surgeUntil>t){
+      for(const e of enemies){
+        if(!e.dead && e.x < player.x+player.w+18) { e.dead=true; puff(e.x,e.y,'#9cf'); score+=10; }
+      }
+    }
+  }
+
+  function die(){
+    if(!player.alive){
+      return;
+    }
+    player.alive=false;
+    best = Math.max(best, score);
+    localStorage.setItem('swamprun_best', best);
+    statusEl.innerHTML = `☠️ Caught by the Zêlos — Score: <b>${score}</b> • Best: <b>${best}</b> • Press <b>↺ Reset</b>`;
+    puff(player.x+20, player.y+30, '#ff6b6b');
+  }
+
+  function draw(){
+    bg();
+    drawChaser();
+    drawObstacles(obstacles);
+    drawEnemies(enemies);
+    drawArtifacts(artifacts);
+    drawPlayer();
+    drawParticles();
+
+    // HUD
+    ctx.fillStyle='rgba(0,0,0,.35)';
+    ctx.fillRect(canvas.width-280, 10, 270, 64);
+    ctx.fillStyle='#fff';
+    ctx.font='700 16px system-ui,Segoe UI,Arial';
+    ctx.fillText(`Score: ${score}`, canvas.width-265, 32);
+    ctx.fillText(`Best: ${best}`, canvas.width-265, 54);
+
+    // Power timers
+    const y0 = 90, x0 = canvas.width-280;
+    const tms = [
+      ['Winged', Math.max(0, player.flyUntil - t), '#ff9ace'],
+      ['Gator',  Math.max(0, player.invUntil - t), '#ffe66d'],
+      ['Surge',  Math.max(0, player.surgeUntil - t), '#90d3ff'],
+    ];
+    let yy=y0;
+    for(const [label,ms,color] of tms){
+      if(ms<=0) continue;
+      ctx.fillStyle='rgba(255,255,255,.25)';
+      ctx.fillRect(x0, yy, 140, 10);
+      ctx.fillStyle=color;
+      ctx.fillRect(x0, yy, 140*(ms/4000), 10);
+      ctx.fillStyle='#fff';
+      ctx.font='12px system-ui';
+      ctx.fillText(label, x0+150, yy+9);
+      yy+=16;
+    }
+
+    // Start/Dead overlay text
+    if(!started){
+      ctx.fillStyle='rgba(0,0,0,.45)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#fff';
+      ctx.font='700 22px system-ui,Segoe UI';
+      ctx.fillText('Press Space to Start • Jump over debris • Grab artifacts • Avoid the Zêlos', 24, canvas.height*0.45);
+    } else if(!player.alive){
+      ctx.fillStyle='rgba(0,0,0,.45)';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle='#fff';
+      ctx.font='700 24px system-ui,Segoe UI';
+      ctx.fillText(`Score: ${score}  |  Best: ${best}`, 24, canvas.height*0.45);
+    }
+  }
+
+  // --- Loop driver ---
+  let started=false;
+  function loop(ts){
+    if(paused){ last = ts; requestAnimationFrame(loop); return; }
+    const dt = Math.min(40, ts - last); last = ts; t = ts;
+    if(started && player.alive) update(dt);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  // Start on first jump
+  window.addEventListener('keydown', (e)=>{
+    if(!started && (e.code==='Space'||e.code==='ArrowUp')) { started=true; statusEl.textContent=''; }
+  });
+
+  function reset(full=false){
+    // reset state
+    player.y = groundY()-player.h; player.vy=0; player.onGround=true;
+    player.flyUntil=player.invUntil=player.surgeUntil=0; player.alive=true;
+    obstacles.length=enemies.length=artifacts.length=particles.length=0;
+    nextObsAt=0; nextEnemyAt=100; nextArtifactAt=250;
+    difficulty = 1; dist = 0; score=0; started = !full ? started : false;
+    statusEl.textContent='';
+  }
+
+  function togglePause(){
+    paused = !paused;
+    playBtn.textContent = paused ? '▶︎ Resume' : '⏸ Pause';
+  }
+
+  // initial position
+  reset(true);
+})();
+</script>
+</body>
+</html>
