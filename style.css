@@ -165,7 +165,7 @@ form textarea {
 }
 
 form button {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+  background: rgba(255,255,255,0.1);
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -183,14 +183,14 @@ form button {
 }
 
 form button:hover {
-  background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue)); /* reverse gradient */
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
   color: #fff;
-  box-shadow: 0 0 14px rgba(255,255,255,0.4);
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
   transform: translateY(-2px);
 }
 
 .back-btn {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+  background: rgba(255,255,255,0.1);
   color: #fff;
   border: none;
   border-radius: 25px;
@@ -206,8 +206,8 @@ form button:hover {
 }
 
 .back-btn:hover {
-  background: linear-gradient(90deg, var(--accent-pink), var(--accent-blue)); /* reverse gradient */
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
   color: #fff;
-  box-shadow: 0 0 14px rgba(255,255,255,0.4);
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
   transform: translateY(-2px);
 }
