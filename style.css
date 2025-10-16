@@ -69,7 +69,9 @@ nav {
   gap: 0.6rem;
 }
 
-nav a {
+nav a,
+form button,
+.back-btn {
   color: var(--text-light);
   text-decoration: none;
   font-weight: 600;
@@ -81,7 +83,9 @@ nav a {
   font-family: 'Space Mono', monospace;
 }
 
-nav a:hover {
+nav a:hover,
+form button:hover,
+.back-btn:hover {
   background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
   color: #fff;
   box-shadow: 0 0 10px rgba(255,255,255,0.3);
@@ -162,52 +166,4 @@ form textarea {
   font-size: 1rem;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
-}
-
-form button {
-  background: rgba(255,255,255,0.1);
-  color: var(--text-light);
-  border: none;
-  border-radius: 25px;
-  padding: 0.7rem 1.4rem;
-  font-family: 'Space Mono', monospace;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  box-shadow: 0 0 6px rgba(255,255,255,0.15);
-  margin-top: 1rem;
-  width: 100%;
-}
-
-form button:hover {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
-  color: #fff;
-  box-shadow: 0 0 10px rgba(255,255,255,0.3);
-  transform: translateY(-2px);
-}
-
-.back-btn {
-  background: rgba(255,255,255,0.1);
-  color: var(--text-light);
-  border: none;
-  border-radius: 25px;
-  padding: 0.7rem 1.4rem;
-  font-family: 'Space Mono', monospace;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: inline-block;
-  text-align: center;
-  text-decoration: none;
-  margin-top: 2rem;
-}
-
-.back-btn:hover {
-  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
-  color: #fff;
-  box-shadow: 0 0 10px rgba(255,255,255,0.3);
-  transform: translateY(-2px);
 }
