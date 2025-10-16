@@ -7,7 +7,104 @@
   <link rel="apple-touch-icon" href="favicon.png">
   <meta name="theme-color" content="#0B3078">
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* --- FORM STYLING --- */
+    form {
+      max-width: 420px;
+      margin: 1rem auto;
+      text-align: left;
+    }
+
+    form label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      margin-top: 0.4rem;
+      padding: 0.6rem;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.1);
+      color: var(--text-light);
+      font-size: 1rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    form button {
+      margin-top: 1rem;
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 0.7rem 1.4rem;
+      font-family: 'Space Mono', monospace;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+
+    form button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+
+    /* --- POPUP STYLING --- */
+    #thankYouPopup {
+      display: none !important;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      backdrop-filter: blur(6px);
+      background: rgba(10, 10, 30, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .popup-content {
+      background: linear-gradient(160deg, #1c1354 0%, #301a60 100%);
+      border: 2px solid var(--accent-blue);
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      max-width: 450px;
+      box-shadow: 0 0 20px var(--accent-pink);
+      color: var(--text-light);
+    }
+
+    .popup-content p {
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+
+    .popup-content button {
+      background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 0.5rem 1.2rem;
+      font-family: 'Space Mono', monospace;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .popup-content button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
+    }
+  </style>
 </head>
+
 <body>
   <nav>
     <a href="index.html">Home</a>
@@ -26,34 +123,31 @@
       I’m recruiting a limited number of beta readers to provide feedback on story flow, tone, and emotional punch.
     </p>
 
-    <p><strong>Spots are limited</strong> (supplies of Swamp Ass are not, unfortunately) — so sign up below, and I’ll reach out if there’s a good fit!</p>
+    <p><strong>Spots are limited</strong> — so sign up below and I’ll reach out if there’s a good fit!</p>
 
     <form id="betaForm" action="https://formsubmit.co/hi@zackdcook.com" method="POST">
-      <!-- Hidden settings -->
       <input type="hidden" name="_subject" value="New Beta Reader Application">
       <input type="text" name="_honey" style="display:none">
-    
-      <!-- User fields -->
-      <label for="name">Name:</label><br>
-      <input type="text" id="name" name="name" required><br>
-    
-      <label for="email">Email:</label><br>
-      <input type="email" id="email" name="email" required><br>
-    
-      <label for="why">Why do you want to be a beta reader?</label><br>
-      <textarea id="why" name="why" rows="4" required></textarea><br>
-    
-      <button type="submit">Submit</button>
+
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="why">Why do you want to be a beta reader?</label>
+      <textarea id="why" name="why" rows="4" required></textarea>
+
+      <button type="submit">Submit Application</button>
     </form>
-    
+
     <!-- Hidden thank-you popup -->
-    <div id="thankYouPopup" class="popup">
+    <div id="thankYouPopup">
       <div class="popup-content">
         <p>
           Thank you for your interest in being a beta reader!
           I’m genuinely grateful for your support — it means the world.
-          Keep an eye on your inbox — fingers crossed you end up as one of the lucky few to join my beta reader team!
-        </p>
+          Keep an eye on your inbox — fingers crossed you're able to nab a spot on my beta reader team!</p>
         <button id="closePopup">Close</button>
       </div>
     </div>
@@ -64,31 +158,34 @@
   </section>
 
   <footer>© 2025 Zack D. Cook — All Rights Reserved</footer>
+
   <script>
-    document.getElementById('betaForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-  
-    const form = e.target;
-    const formData = new FormData(form);
-  
-    // Post to FormSubmit
-    await fetch(form.action, {
-      method: form.method,
-      body: formData,
-      headers: { 'Accept': 'application/json' }
+    const betaForm = document.getElementById('betaForm');
+    const thankYouPopup = document.getElementById('thankYouPopup');
+    const closePopup = document.getElementById('closePopup');
+
+    betaForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const formData = new FormData(betaForm);
+
+      await fetch(betaForm.action, {
+        method: betaForm.method,
+        body: formData,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      thankYouPopup.style.display = 'flex';
+      betaForm.reset();
     });
-  
-    // Show popup
-    document.getElementById('thankYouPopup').style.display = 'flex';
-  
-    // Optional: reset form
-    form.reset();
+
+    closePopup.addEventListener('click', () => {
+      thankYouPopup.style.display = 'none';
     });
-  
-    document.getElementById('closePopup').addEventListener('click', () => {
-      document.getElementById('thankYouPopup').style.display = 'none';
-    });
-</script>
-  <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "25529c53f667454c84579c2abc404e20"}'></script><!-- End Cloudflare Web Analytics -->
+  </script>
+
+  <!-- Cloudflare Web Analytics -->
+  <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "25529c53f667454c84579c2abc404e20"}'></script>
+  <!-- End Cloudflare Web Analytics -->
 </body>
 </html>
