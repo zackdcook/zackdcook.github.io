@@ -167,3 +167,47 @@ form textarea {
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
 }
+
+/* --- BLOG PREVIEW SECTION --- */
+.blog-preview {
+  margin-top: 3rem;
+  text-align: left;
+  max-width: 650px;
+}
+
+.blog-preview h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.2rem;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.blog-preview article h2 {
+  font-size: 1.6rem;
+  margin-bottom: 0.6rem;
+  color: var(--text-light);
+}
+
+.preview-snippet {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.read-more {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 25px;
+  padding: 0.4rem 1rem;
+  color: var(--text-light);
+  text-decoration: none;
+  font-family: 'Space Mono', monospace;
+  transition: all 0.3s ease;
+}
+
+.read-more:hover {
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
+  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+  color: #fff;
+}
