@@ -245,3 +245,41 @@ footer {
   margin-top: 3rem;
   opacity: 0.7;
 }
+
+/* ---------- Fine-tuned spacing adjustments ---------- */
+
+/* Adds breathing room after writing progress bars */
+.xp-container:last-of-type {
+  margin-bottom: 2.5rem; /* increase space before newsletter section */
+}
+
+/* Makes the form feel more structured and readable */
+form {
+  max-width: 420px;
+  margin: 2rem auto 3rem auto; /* more space before/after form */
+}
+
+/* Adds more space above and below labels */
+form label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1.2rem; /* adds space above each label */
+  margin-bottom: 0.4rem; /* adds breathing room before input */
+}
+
+/* Slightly increase spacing between inputs */
+form input,
+form textarea {
+  margin-bottom: 1rem; /* space between fields */
+}
+
+/* Add more space before the submit button */
+form button {
+  margin-top: 1.5rem;
+}
+
+/* Adds visual separation before the "How to Stay in the Know" heading */
+h3 {
+  margin-top: 3rem; /* creates space above new sections */
+  margin-bottom: 1.2rem;
+}
