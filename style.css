@@ -6,10 +6,11 @@
   --accent-blue: #90d3ff;
   --accent-pink: #ff9ace;
   --muted: #a8a6d1;
-  --bar-bg: rgba(255,255,255,0.15);
+  --bar-bg: rgba(255, 255, 255, 0.15);
   --bar-glow: rgba(255, 255, 255, 0.3);
 }
 
+/* ---------- Base Layout ---------- */
 html {
   height: 100%;
 }
@@ -17,10 +18,10 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, #0B3078 0%, #412B78 100%) fixed;
-  background-size: 100% 100%;
+  background: var(--bg-gradient);
   background-attachment: fixed;
   background-repeat: no-repeat;
+  background-size: cover;
   font-family: 'Montserrat', sans-serif;
   color: var(--text-light);
   display: flex;
@@ -31,6 +32,7 @@ body {
   text-align: center;
 }
 
+/* ---------- Header ---------- */
 header {
   margin-bottom: 2rem;
 }
@@ -54,6 +56,7 @@ h1 {
   font-size: 2.3rem;
   margin: 1rem 0 0.3rem;
 }
+
 h1.justified {
   text-align: justify;
 }
@@ -65,6 +68,7 @@ h2 {
   margin-top: 0;
 }
 
+/* ---------- Navigation ---------- */
 nav {
   margin-top: 1.2rem;
   margin-bottom: 2.4rem;
@@ -80,9 +84,9 @@ form button,
   color: var(--text-light);
   text-decoration: none;
   font-weight: 600;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   padding: 0.5rem 1.2rem;
-  border: 1px solid rgba(255,255,255,0.2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 25px;
   transition: all 0.3s ease;
   font-family: 'Space Mono', monospace;
@@ -93,12 +97,27 @@ form button:hover,
 .back-btn:hover {
   background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
   color: #fff;
-  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
 }
 
+/* ---------- Section + Text ---------- */
 section {
   max-width: 650px;
+}
+
+section p {
+  text-align: left;
+  line-height: 1.6;
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- XP Bars ---------- */
+.xp-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 0.4rem;
 }
 
 .xp-container {
@@ -107,7 +126,7 @@ section {
   width: 100%;
   max-width: 420px;
   height: 22px;
-  margin: 0.8rem auto;
+  margin: 0.8rem auto 1.6rem auto; /* better spacing between bars */
   overflow: hidden;
   box-shadow: 0 0 10px var(--bar-glow);
 }
@@ -119,61 +138,53 @@ section {
   animation: fillBar 2s ease-out forwards;
 }
 
-.xp-label {
-  font-family: 'Space Mono', monospace;
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 0.2rem;
-}
-
 @keyframes fillBar {
   from { width: 0%; }
   to { width: var(--target-width); }
 }
 
-footer {
+/* ---------- Headings ---------- */
+h3 {
   font-family: 'Space Mono', monospace;
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin-top: 3rem;
-  opacity: 0.7;
+  margin-top: 2.5rem; /* clear space before new sections */
+  margin-bottom: 1rem;
+  color: var(--text-light);
 }
 
-.spotify-placeholder {
-  margin-top: 3rem;
-  font-style: italic;
-  color: var(--muted);
-  border-top: 1px solid rgba(255,255,255,0.3);
-  padding-top: 1rem;
-}
-
-section p {
-  text-align: left;
-  line-height: 1.6;
-  margin-bottom: 1.2rem;
-}
-
+/* ---------- Forms ---------- */
 form {
   width: 100%;
+  max-width: 400px;
+  margin: 1.5rem auto 2.5rem auto;
   text-align: left;
-  margin-top: 1.5rem;
+}
+
+form label {
+  display: block;
+  font-weight: 600;
+  margin-top: 1.2rem;
+  margin-bottom: 0.3rem;
 }
 
 form input,
 form textarea {
   width: 100%;
-  margin-top: 0.4rem;
-  padding: 0.6rem;
-  border: 1px solid rgba(255,255,255,0.3);
+  padding: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 6px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--text-light);
   font-size: 1rem;
   font-family: 'Montserrat', sans-serif;
+  margin-bottom: 0.5rem;
   box-sizing: border-box;
 }
 
-/* --- BLOG PREVIEW SECTION --- */
+form button {
+  margin-top: 1.2rem;
+}
+
+/* ---------- Blog Preview ---------- */
 .blog-preview {
   margin-top: 3rem;
   text-align: left;
@@ -200,8 +211,8 @@ form textarea {
 }
 
 .read-more {
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 25px;
   padding: 0.4rem 1rem;
   color: var(--text-light);
@@ -212,7 +223,25 @@ form textarea {
 
 .read-more:hover {
   background: linear-gradient(90deg, var(--accent-blue), var(--accent-pink));
-  box-shadow: 0 0 10px rgba(255,255,255,0.3);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
   color: #fff;
+}
+
+/* ---------- Spotify Placeholder ---------- */
+.spotify-placeholder {
+  margin-top: 3rem;
+  font-style: italic;
+  color: var(--muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  padding-top: 1rem;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin-top: 3rem;
+  opacity: 0.7;
 }
