@@ -283,3 +283,63 @@ h3 {
   margin-top: 3rem; /* creates space above new sections */
   margin-bottom: 1.2rem;
 }
+
+article {
+  max-width: 700px;
+  text-align: left;
+  line-height: 1.7;
+}
+
+article h1 {
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+article .date {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 1.4rem;
+}
+
+.teaser {
+  color: var(--accent-blue);
+  font-size: 1.05rem;
+  margin-bottom: 1.2rem;
+}
+
+.subscribe-box {
+  margin-top: 2.5rem;
+  padding: 1.4rem 1.2rem;
+  background: var(--bar-bg);
+  border-radius: 12px;
+  box-shadow: 0 0 20px var(--bar-glow) inset;
+  text-align: left;
+}
+
+.subscribe-box h3 {
+  margin-top: 0;
+  color: var(--accent-pink);
+}
+
+.subscribe-box form label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.reading-meta {
+  font-family: 'Space Mono', monospace;
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.next-post {
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255,255,255,0.3);
+  color: var(--muted);
+  font-style: italic;
+  text-align: center;
+}
