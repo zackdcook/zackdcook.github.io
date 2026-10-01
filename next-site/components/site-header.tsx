@@ -3,21 +3,33 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { SiteMark } from "@/components/icons";
 
 const links = [
   ["Creative Works", "/writing"],
+  ["Find Me At…", "/events"],
+  ["About Me", "/about"],
   ["Words of Folly", "/journal"],
   ["Inspo Board", "/commonplace"],
-  ["About Me", "/about"],
-  ["Find Me At…", "/events"],
+  ["Shoutouts", "/#shoutouts"],
 ];
 
 export function SiteHeader() {
   const pathname = usePathname();
   const menu = useRef<HTMLDetailsElement>(null);
+  const menuScrollStart = useRef(0);
   useEffect(() => {
     if (menu.current) menu.current.open = false;
   }, [pathname]);
+  useEffect(() => {
+    const closeOnScroll = () => {
+      if (menu.current?.open && Math.abs(window.scrollY - menuScrollStart.current) > 6) {
+        menu.current.open = false;
+      }
+    };
+    window.addEventListener("scroll", closeOnScroll, { passive: true });
+    return () => window.removeEventListener("scroll", closeOnScroll);
+  }, []);
   const current = (href: string) =>
     pathname === href || pathname.startsWith(`${href}/`)
       ? ("page" as const)
@@ -26,7 +38,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" className="wordmark" aria-label="Zack Cook, home">
-          <span className="wordmark-dot" aria-hidden="true" />
+          <SiteMark className="site-mark" />
           Zack Cook
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -39,6 +51,7 @@ export function SiteHeader() {
         <details
           className="mobile-menu"
           ref={menu}
+          onToggle={() => { menuScrollStart.current = window.scrollY; }}
           onKeyDown={(event) => {
             if (event.key === "Escape" && menu.current) {
               menu.current.open = false;

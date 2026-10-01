@@ -1,5 +1,7 @@
 import Link from "next/link";
+import Image from "next/image";
 import { site } from "@/content/site";
+import { DollarIcon, MailIcon, RssIcon } from "@/components/icons";
 
 export function SiteFooter() {
   return (
@@ -11,12 +13,14 @@ export function SiteFooter() {
         <p>Lakeland, Florida.</p>
       </div>
       <div className="footer-links">
-        <Link href="/events">Find me at…</Link>
         <a href={`mailto:${site.email}`}>
-          Say hello <span aria-hidden="true">↗</span>
+          <MailIcon /> Say hello
         </a>
-        <Link href="/journal/feed.xml">RSS</Link>
+        {site.instagram && <a href={site.instagram} target="_blank" rel="noopener noreferrer"><Image src="/icons/instagram.svg" alt="" width={20} height={20} /> Instagram</a>}
+        {site.threads && <a href={site.threads} target="_blank" rel="noopener noreferrer"><Image src="/icons/threads.svg" alt="" width={20} height={20} /> Threads</a>}
+        <Link href="/rss"><RssIcon /> RSS</Link>
       </div>
+      {site.supportUrl && <div className="support-callout"><a href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span><span aria-hidden="true">↗</span></a></div>}
       <p className="copyright">© {new Date().getFullYear()} Zack Cook</p>
     </footer>
   );
