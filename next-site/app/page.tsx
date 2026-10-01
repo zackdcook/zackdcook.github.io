@@ -80,7 +80,7 @@ export default async function Home() {
             <p className="desk-detail">
               I took a three-year braindump while absorbing every possible lesson on the craft of writing.
             </p>
-            <p>
+            <p className="desk-detail">
               Now, as of September 1<sup>st</sup>, 2026, I'm working on my zeroth draft with a current target of 60,000 words.
             </p>
             <Link className="text-link" href="/writing">
