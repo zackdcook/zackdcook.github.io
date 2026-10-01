@@ -1,6 +1,6 @@
 # Local and production verification — October 1, 2026
 
-The Next.js design preview builds successfully. TypeScript checks and all six security tests pass. Browser checks used a fresh local Chromium session against the production build. The agent-browser CLI could not start in this workspace, so the local verification used Playwright directly.
+The Next.js design preview builds successfully. Direct TypeScript checks and all seven security tests pass. Browser checks used a fresh local Chromium session against the production build. The agent-browser CLI could not start in this workspace, so the local verification used Playwright directly.
 
 Verified:
 
@@ -36,5 +36,18 @@ Production checkpoint:
 - Attached `zackdcook.com` to Production and `www.zackdcook.com` as a 308 redirect to the primary domain. Vercel currently reports Invalid Configuration until Porkbun DNS is updated: A `@` to `216.198.79.1`; CNAME `www` to `d439eccb731bf84e.vercel-dns-017.com.`. Preserve email and unrelated DNS records.
 - Porkbun's login presents a CAPTCHA and terms acceptance. No credentials were collected, no CAPTCHA was attempted, and no registrar DNS changes were made at this checkpoint.
 - No Supabase database was created and no cloud schema was applied. Spotify and authentication providers remain unconfigured.
+
+Security and cost follow-up:
+
+- Billing confirms Vercel Hobby, and the firewall dashboard confirms Firewall is active and System Mitigations Active. No paid upgrade, credit purchase, paid ruleset, or additional cloud database was enabled.
+- Added baseline security headers to all application paths and a seventh regression test. This baseline CSP is not a full script-src/XSS policy.
+- Reduced unnecessary function usage: Spotify stops refreshing while not connected. Connected playback retains its one-minute refresh and hidden-page behavior.
+- The build initially could not parse the separately spawned TypeScript CLI's empty output. Using the installed compiler API fixes the build while keeping type checking enabled.
+- Direct execution of the test suite reports seven passes. The workspace's isolated Node test runner only reported a file-level result, so verification also ran with test isolation disabled and checked TypeScript directly.
+- The dependency audit could not complete because the workspace blocked its registry connection. No clean audit or universal security guarantee is claimed.
+- The follow-up local browser run could not start: the workspace denied binding the local web server (`listen EPERM`). Earlier launch browser checks remain valid for the original release, but are not a new browser pass for these security edits. The new build and direct tests pass; deployed page checks are separate.
+- Porkbun accepted account recovery, but opening its domain manager still returned to login. Custom-domain DNS work remains blocked until a usable sign-in is completed.
+
+See [security and costs](security-and-costs.md) for the actual protection state, proposed future rate limits, and account-security steps.
 
 The database schema and integration code are prepared for the next setup stage; their presence is not proof of a working live integration. See the project README for setup steps.
