@@ -1,6 +1,8 @@
+For everyday changes, start with [the simple editing guide](docs/editing.md). Spotify is currently shelved; the integration setup below is retained for future reference, not part of the live site.
+
 # Zack Cook — author site
 
-This is Zack Cook's Next.js author website. The production build is live at https://zack-cook.vercel.app/. The original GitHub Pages site is preserved in the repository root, Git history, and `archive/pre-nextjs-2026-10-01`. Vercel has `zackdcook.com` attached and a permanent www redirect prepared; Porkbun DNS changes and domain verification are pending. The database schema and account integrations are prepared but have not been activated.
+This is Zack Cook's Next.js author website. The production build is live at https://zackdcook.com/; https://www.zackdcook.com/ redirects to it. The Vercel fallback is https://zack-cook.vercel.app/. The original GitHub Pages site is preserved in the repository root, Git history, and `archive/pre-nextjs-2026-10-01`. Vercel also has `zackyc.xyz` and `www.zackyc.xyz` configured as permanent 308 redirects to `zackdcook.com`; those two addresses still need Porkbun DNS changes. The database schema and account integrations are prepared but have not been activated.
 
 ## How hosting works
 
@@ -15,7 +17,7 @@ Think of the services as four different jobs:
 
 Next.js includes React. Most of this site is prebuilt so it loads quickly. The private tools and integrations run on Vercel when someone uses them; there is no computer at home you need to keep running.
 
-The Vercel project uses **Root Directory `next-site`**. Production uses `SITE_URL=https://zackdcook.com` and `SITE_LIVE=true`; Preview environments keep `SITE_LIVE=false`. Point the domain's website records at the exact values Vercel provides, preserving email and other DNS records. Later, `zackyc.xyz` can redirect to the main domain. Keep the original site history available rather than deleting the old repository.
+The Vercel project uses **Root Directory `next-site`**. Production uses `SITE_URL=https://zackdcook.com` and `SITE_LIVE=true`; Preview environments keep `SITE_LIVE=false`. Zack updated the main domain's website DNS, and Vercel now reports Valid Configuration for both `zackdcook.com` and `www.zackdcook.com`. Public HTTPS loading and the www redirect were verified. The pending alias records are A at the root of `zackyc.xyz` to `216.198.79.1`, and CNAME `www` to `d439eccb731bf84e.vercel-dns-017.com.`. Porkbun uses a blank Host field for the root. Preserve email and unrelated DNS records, and recheck the exact values in Vercel before editing. Keep the original site history available rather than deleting the old repository.
 
 References: [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [GitHub Pages limitations](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages), [Vercel plans](https://vercel.com/docs/plans). Review current plan eligibility and pricing before enabling commercial features or choosing a paid plan.
 
@@ -33,7 +35,7 @@ Zack requires **no new spending**. The current Vercel project is on Hobby; no pa
 | Colors, typography, spacing                                  | `app/globals.css`       |
 | Photos                                                       | `public/images/`        |
 
-The braindump value, **35,834 words**, comes from the counter published on the original homepage. It is not a new word count of a manuscript. The draft is **27,000 / 60,000**. Revision has no invented target. Add more stages to the JSON to create more rings.
+The braindump value, **35,834 words**, comes from the counter published on the original homepage. It is not a new word count of a manuscript. The draft is **27,250 / 50,000**. Revision has no invented target. Add more stages to the JSON to create more rings.
 
 The existing “It’s not too late” journal entry is preserved in `content/its-not-too-late.json`. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
 

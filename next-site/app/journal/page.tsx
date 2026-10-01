@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { journalPost } from "@/content/site";
+import { displayDate, publishedJournalPosts } from "@/content/site";
 
 export const metadata: Metadata = {
   title: "Words of Folly",
@@ -20,16 +20,15 @@ export default function Journal() {
         </h1>
         <p>Writing updates, longer thoughts, and things I’m figuring out.</p>
       </div>
-      <article className="journal-list-entry">
-        <time dateTime={journalPost.date}>October 20, 2025</time>
-        <h2>
-          <Link href={`/journal/${journalPost.slug}`}>{journalPost.title}</Link>
-        </h2>
-        <p>{journalPost.excerpt}</p>
-        <Link className="text-link" href={`/journal/${journalPost.slug}`}>
-          Read the entry →
-        </Link>
-      </article>
+      <ol className="journal-archive" aria-label="Entries, newest first">
+        {publishedJournalPosts().map(post => <li key={post.slug}>
+          <Link className="journal-row" href={`/journal/${post.slug}`}>
+            <time dateTime={post.date}>{displayDate(post.date)}</time>
+            <div><h2>{post.title}</h2><p>{post.excerpt}</p></div>
+            <span aria-hidden="true">→</span>
+          </Link>
+        </li>)}
+      </ol>
     </div>
   );
 }

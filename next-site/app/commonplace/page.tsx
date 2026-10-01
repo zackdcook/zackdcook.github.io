@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { CommonplaceCard } from "@/components/commonplace-card";
-import { SpotifyCard } from "@/components/spotify-card";
 import { getCommonplace } from "@/lib/commonplace";
 
 export const metadata: Metadata = {
@@ -27,7 +26,7 @@ export default async function Commonplace() {
           to make something of my own.
         </p>
       </div>
-      <SpotifyCard />
+      {!entries.length && <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
       <div className="commonplace-grid collection-grid">
         {entries.map((entry) => (
           <CommonplaceCard key={entry.id} entry={entry} />

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { publishedJournalPosts, site } from "@/content/site";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   if (process.env.SITE_LIVE !== "true") return [];
@@ -6,12 +7,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/",
     "/writing",
     "/journal",
-    "/journal/its-not-too-late",
+    ...publishedJournalPosts().map(post => `/journal/${post.slug}`),
     "/commonplace",
     "/about",
     "/events",
   ].map((path) => ({
-    url: `https://zackdcook.com${path}`,
+    url: `${site.url}${path}`,
     changeFrequency: path === "/commonplace" ? "weekly" : "monthly",
   }));
 }

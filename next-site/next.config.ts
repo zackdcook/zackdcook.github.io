@@ -23,8 +23,8 @@ const nextConfig: NextConfig = {
           {
             key: "Content-Security-Policy",
             // Baseline protections without inline-script exceptions or dynamic
-            // nonces. This is not a complete script-src/XSS policy. Spotify may
-            // still embed its player; other sites cannot frame this website.
+            // nonces. This is not a complete script-src/XSS policy. Curated
+            // public posts can embed; other sites cannot frame this website.
             value:
               "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'",
           },

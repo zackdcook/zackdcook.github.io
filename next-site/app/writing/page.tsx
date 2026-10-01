@@ -5,7 +5,7 @@ import { ProgressRings } from "@/components/progress-rings";
 export const metadata: Metadata = {
   title: "Creative Works",
   description:
-    "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a first draft at 27,000 of 60,000 words.",
+    "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a first draft at 27,250 of 50,000 words.",
   alternates: { canonical: "/writing" },
 };
 
@@ -35,7 +35,7 @@ export default function Writing() {
             reshape it.
           </p>
           <p>
-            The draft target is 60,000 words. It’s a working estimate based on
+            The draft target is 50,000 words. It’s a working estimate based on
             where I am in the story.
           </p>
         </div>
