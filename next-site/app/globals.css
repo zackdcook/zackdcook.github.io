@@ -342,7 +342,7 @@ h3 {
   overflow: hidden;
 }
 .desk-section:after {
-  content: "✳";
+  content: "🍃";
   position: absolute;
   bottom: -77px;
   left: -48px;
