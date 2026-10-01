@@ -18,20 +18,18 @@ export default async function Home() {
       <section className="hero shell">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">
-            Engineer by day & author in every other spare minute <span aria-hidden="true">✦</span>
+            Engineer by day | Author in play <span aria-hidden="true">✦</span>
           </p>
           <h1>
             Zack
             <br /> <em>Cook.</em>
           </h1>
           <p className="hero-intro">
-            Aspiring author working on my first novel.
-            <br />
             Easily distracted by cats, birds, and ...
           </p>
           <p className="hero-detail">
-            Greetings, fellow person! I’m Zack and I live in Lakeland, Florida. I made this site to promote my creative works,
-            share any of my learnings, and share all the things that inspire me.
+            Greetings, fellow person! I’m Zack and I live in Lakeland, FL.
+            <br />I made this site to promote my creative works, scream into the void, and share things that inspire me.
           </p>
           <div className="actions">
             <Link className="button" href="/writing">
@@ -57,7 +55,7 @@ export default async function Home() {
             />
           </div>
           <span className="portrait-note">
-            G'day, mate! <span aria-hidden="true">🫪</span>
+            G'day, mate! <span aria-hidden="true">🚯</span>
           </span>
           <p className="photo-location">
             <span aria-hidden="true">●</span> Lakeland, Florida
@@ -74,10 +72,11 @@ export default async function Home() {
               Let him
               <br /> <em>Cook.</em>
             </h2>
-            <p>Drafting my first novel, and learning the process as I go.</p>
+            <p>Drafting my first novel,
+              <br />learning the process as I go.</p>
             <p className="desk-detail">
-              I took a three-year braindump while absorbing every possible thing on writing. Now, as of September 1, 2026,
-              I'm working on my zeroth draft, with a current target of 60,000 words.
+              I took a three-year braindump while absorbing every possible lesson on the craft of writing.
+              <br /> Now, as of September 1, 2026, I'm working on my zeroth draft with a current target of 60,000 words.
             </p>
             <Link className="text-link" href="/writing">
               More deets <span aria-hidden="true">→</span>
@@ -122,7 +121,7 @@ export default async function Home() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">My Inspo Board</p>
-              <h2>Worth keeping.</h2>
+              <h2>Cool stuff (if you're me)</h2>
             </div>
             <Link className="text-link" href="/commonplace">
               Take a look around <span aria-hidden="true">→</span>
