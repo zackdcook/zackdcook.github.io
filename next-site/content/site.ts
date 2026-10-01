@@ -2,7 +2,7 @@ export const site = {
   name: "Zack Cook",
   email: "hi@zackdcook.com",
   description:
-    "Zack Cook is a fiction writer and industrial engineer in Lakeland, Florida. Follow his first novel, read his journal, and explore the things that inspire him.",
+    "Zack Cook is an aspiring author and industrial engineer in Lakeland, Florida. Stay tuned for his first novel, read his ramblings, and explore the things that inspire him.",
 };
 
 export const journalPost = {
@@ -28,8 +28,8 @@ export type CommonplaceEntry = {
 export const personalEntries: CommonplaceEntry[] = [
   {
     id: "lego-door",
-    title: "Hide in plain sight.",
-    note: "A small door. A suspicious little guy. Excellent use of an afternoon.",
+    title: "DnD + LEGO.",
+    note: "what could be better?",
     category: "inspiration",
     source_url: null,
     creator: null,
@@ -39,7 +39,7 @@ export const personalEntries: CommonplaceEntry[] = [
   {
     id: "neon",
     title: "Exactly where you need to be.",
-    note: "Keeping this one around.",
+    note: "Ain't that the truth.",
     category: "inspiration",
     source_url: null,
     creator: null,
@@ -49,7 +49,7 @@ export const personalEntries: CommonplaceEntry[] = [
   {
     id: "gundam",
     title: "Some assembly required.",
-    note: "Model kits, tiny details, and the satisfaction of making something with my hands.",
+    note: "Gunpla's fun!",
     category: "life",
     source_url: null,
     creator: null,
@@ -74,7 +74,7 @@ export const writingGroup = {
   location: "Downtown Lakeland, Florida",
   address: "213 E Bay St., Lakeland, FL 33801",
   description:
-    "We talk through wins and challenges, brainstorm, and body-double to get some writing in. Bring whatever you’re working on.",
+    "Join us as we talk through the ups and downs of creative writing, brainstorm together, and body-double to get some writing in. Bring whatever you’re working on, and come as you are.",
   venueUrl: "https://www.pressedbooksandcoffee.com/",
   directionsUrl:
     "https://www.google.com/maps/search/?api=1&query=Pressed+Books+%26+Coffee+213+E+Bay+St+Lakeland+FL+33801",
