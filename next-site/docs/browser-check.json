@@ -1,0 +1,23 @@
+{
+  "pages": [
+    "/writing",
+    "/about",
+    "/journal",
+    "/journal/its-not-too-late",
+    "/commonplace",
+    "/events"
+  ],
+  "checks": [
+    "Requested navigation, symmetrical portrait, and Spotify placement",
+    "Homepage identity, confirmed counters, 45% active draft",
+    "Original biography redirect",
+    "Profile structured data parses",
+    "No horizontal overflow at 320, 390, 740, 768, 960, 1024, 1440 px",
+    "Phone menu navigation closes and exposes current page",
+    "Share form accepts cleaned URL and reports missing setup without false success",
+    "Spotify quiet fallback and unauthorized connection rejection",
+    "Preview requests no search indexing",
+    "No browser errors or framework overlays"
+  ],
+  "errors": []
+}
