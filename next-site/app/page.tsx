@@ -30,7 +30,9 @@ export default async function Home() {
           <p className="hero-detail">
             Greetings, fellow person!
             <br />I’m Zack and I live in sunny Lakeland, Florida.
-            <br />I made this site to promote my creative works, scream into the void, and share things that inspire me.
+          </p>
+          <p>
+            I made this site to promote my creative works, scream into the void, and share things that inspire me.
           </p>
           <div className="actions">
             <Link className="button" href="/writing">
