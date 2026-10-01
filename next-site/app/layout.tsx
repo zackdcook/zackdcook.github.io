@@ -20,7 +20,6 @@ export const metadata: Metadata = {
   },
   description: site.description,
   authors: [{ name: site.name }],
-  alternates: { types: { "application/rss+xml": `${site.url}/journal/feed.xml` } },
   openGraph: {
     type: "website",
     siteName: site.name,
@@ -49,6 +48,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={zain.variable}>
+      <head>
+        <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/journal/feed.xml`} />
+      </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
