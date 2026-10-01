@@ -1,0 +1,32 @@
+{
+  "updated": "2026-09-30",
+  "stages": [
+    {
+      "id": "braindump",
+      "label": "Braindump",
+      "value": 35834,
+      "target": 35834,
+      "unit": "words",
+      "status": "complete",
+      "color": "#91b3a1"
+    },
+    {
+      "id": "draft",
+      "label": "First draft",
+      "value": 27000,
+      "target": 60000,
+      "unit": "words",
+      "status": "active",
+      "color": "#e2ac57"
+    },
+    {
+      "id": "revision",
+      "label": "Revision",
+      "value": 0,
+      "target": null,
+      "unit": "chapters",
+      "status": "planned",
+      "color": "#c396be"
+    }
+  ]
+}
