@@ -31,7 +31,7 @@ export default async function Home() {
             Greetings, fellow person!
             <br />I’m Zack and I live in sunny Lakeland, Florida.
           </p>
-          <p>
+          <p className="hero-detail">
             I made this site to promote my creative works, scream into the void, and share things that inspire me.
           </p>
           <div className="actions">
