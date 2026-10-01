@@ -18,27 +18,27 @@ export default async function Home() {
       <section className="hero shell">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">
-            Fiction writer & engineer <span aria-hidden="true">✦</span>
+            Engineer by day & author in every other spare minute <span aria-hidden="true">✦</span>
           </p>
           <h1>
             Zack
             <br /> <em>Cook.</em>
           </h1>
           <p className="hero-intro">
-            Writing my first novel.
+            Aspiring author working on my first novel.
             <br />
-            With music on and cats nearby.
+            Easily distracted by cats, birds, and ...
           </p>
           <p className="hero-detail">
-            I’m based in Lakeland, Florida. This is where I keep my writing, the
-            things that catch my attention, and a little of life in between.
+            Greetings, fellow person! I’m Zack and I live in Lakeland, Florida. I made this site to promote my creative works,
+            share any of my learnings, and share all the things that inspire me.
           </p>
           <div className="actions">
             <Link className="button" href="/writing">
-              See what I’m writing <span aria-hidden="true">↗</span>
+              Creative works <span aria-hidden="true">↗</span>
             </Link>
             <Link className="text-link" href="/about">
-              Meet Zack <span aria-hidden="true">→</span>
+              More about me <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
@@ -57,7 +57,7 @@ export default async function Home() {
             />
           </div>
           <span className="portrait-note">
-            Oh, hey. <span aria-hidden="true">↖</span>
+            G'day, mate! <span aria-hidden="true">🫪</span>
           </span>
           <p className="photo-location">
             <span aria-hidden="true">●</span> Lakeland, Florida
@@ -69,18 +69,18 @@ export default async function Home() {
       <section className="desk-section">
         <div className="shell desk-inner">
           <div className="desk-copy">
-            <p className="eyebrow">On my desk</p>
+            <p className="eyebrow">Active project</p>
             <h2>
               Let him
               <br /> <em>Cook.</em>
             </h2>
-            <p>A first novel, one scene at a time.</p>
+            <p>Drafting my first novel, and learning the process as I go.</p>
             <p className="desk-detail">
-              The braindump gave me a place to start. Now I’m turning it into a
-              draft, with a working target of 60,000 words.
+              I took a three-year braindump while absorbing every possible thing on writing. Now, as of September 1, 2026,
+              I'm working on my zeroth draft, with a current target of 60,000 words.
             </p>
             <Link className="text-link" href="/writing">
-              Visit the writing desk <span aria-hidden="true">→</span>
+              More deets <span aria-hidden="true">→</span>
             </Link>
             <p className="updated">
               Progress updated{" "}
@@ -93,7 +93,7 @@ export default async function Home() {
 
       <section className="journal-feature shell section-space">
         <div className="section-heading">
-          <p className="eyebrow">From Words of Folly</p>
+          <p className="eyebrow">Words of Folly</p>
           <Link className="text-link" href="/journal">
             All entries <span aria-hidden="true">→</span>
           </Link>
@@ -121,7 +121,7 @@ export default async function Home() {
         <div className="shell">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">The Inspo Board</p>
+              <p className="eyebrow">My Inspo Board</p>
               <h2>Worth keeping.</h2>
             </div>
             <Link className="text-link" href="/commonplace">
@@ -129,7 +129,7 @@ export default async function Home() {
             </Link>
           </div>
           <p className="section-intro">
-            A few things that made me stop, look, or want to make something.
+            Stuff that makes you go, "Hmm" for $500.
           </p>
           <div className="commonplace-grid">
             {entries.slice(0, 3).map((entry) => (
@@ -148,30 +148,29 @@ export default async function Home() {
             height={1034}
             sizes="(max-width: 740px) 90vw, 48vw"
           />
-          <span className="photo-label">The household editorial board.</span>
+          <span className="photo-label">The editorial board aka firing squad.</span>
         </div>
         <div className="life-copy">
-          <p className="eyebrow">A little life in between</p>
+          <p className="eyebrow">Who am I?</p>
           <h2>
-            At home
+            My life
             <br /> in Lakeland.
           </h2>
           <p>
-            I live with my wife, Jennifer, and our three cats: Chemi, Tashi, and
+            I live with my beautiful wife, Jennifer, and our three cats: Chemi, Tashi, and
             Brave.
           </p>
           <p>
-            Beyond writing, there’s engineering, birdwatching, model kits,
-            matcha, and a steady rotation of things I want to learn.
+            My favorite hobby is learning new hobbies.
           </p>
           <Link className="text-link" href="/about">
-            A little more about me <span aria-hidden="true">→</span>
+            A lil more aboot lil ole me <span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>
 
       <section className="event-callout shell">
-        <p className="eyebrow">Find Me At…</p>
+        <p className="eyebrow">Find me at…</p>
         <h2>{writingGroup.title}</h2>
         <p className="event-schedule">{writingGroup.schedule}</p>
         <p>{writingGroup.venue} · Downtown Lakeland</p>
@@ -193,7 +192,7 @@ export default async function Home() {
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
           <h2>Keep in touch.</h2>
-          <p>Occasional notes from the writing desk.</p>
+          <p>Occasional blurbs from my noggin to your feed.</p>
           <a className="button" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>
             Get writing updates ↗
           </a>
