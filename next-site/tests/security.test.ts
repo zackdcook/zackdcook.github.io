@@ -6,6 +6,25 @@ import {
   validateEntry,
 } from "../lib/validation";
 import { sealToken, openToken, matchingState } from "../lib/token-crypto";
+import nextConfig from "../next.config";
+
+test("all routes receive baseline browser security headers", async () => {
+  assert.ok(nextConfig.headers);
+  const rules = await nextConfig.headers();
+  const rule = rules.find((item) => item.source === "/:path*");
+  assert.ok(rule);
+  const headers = Object.fromEntries(
+    rule.headers.map(({ key, value }) => [key, value]),
+  );
+  assert.equal(headers["X-Content-Type-Options"], "nosniff");
+  assert.equal(headers["X-Frame-Options"], "DENY");
+  assert.equal(headers["Referrer-Policy"], "strict-origin-when-cross-origin");
+  assert.match(headers["Permissions-Policy"], /camera=\(\)/);
+  assert.match(headers["Permissions-Policy"], /microphone=\(\)/);
+  assert.match(headers["Content-Security-Policy"], /frame-ancestors 'none'/);
+  assert.match(headers["Content-Security-Policy"], /object-src 'none'/);
+  assert.match(headers["Content-Security-Policy"], /form-action 'self'/);
+});
 
 test("shared links accept the iOS text format and remove tracking", () => {
   assert.equal(
