@@ -14,7 +14,7 @@ export function CommonplaceCard({ entry }: { entry: CommonplaceEntry }) {
             alt={entry.title}
             width={640}
             height={640}
-            sizes="(max-width: 740px) 45vw, 30vw"
+            sizes="(max-width: 640px) 90vw, (max-width: 960px) 45vw, 30vw"
             unoptimized={!entry.image_url.startsWith("/images/")}
           />
         </div>
