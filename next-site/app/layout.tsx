@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
+import { Zain } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
+
+const zain = Zain({
+  weight: ["700", "800"],
+  subsets: ["latin"],
+  variable: "--font-zain",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://zackdcook.com"),
@@ -39,7 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={zain.variable}>
       <body>
         <a className="skip-link" href="#main">
           Skip to content

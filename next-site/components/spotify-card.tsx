@@ -10,10 +10,11 @@ type Playing =
       url: string;
       image: string | null;
     }
-  | { status: "quiet" | "unavailable" | "not-connected" };
+  | { status: "quiet" | "unavailable" | "not-connected" | "loading" };
 
 export function SpotifyCard() {
-  const [playing, setPlaying] = useState<Playing>({ status: "not-connected" });
+  const [playing, setPlaying] = useState<Playing>({ status: "loading" });
+  const [playerOpen, setPlayerOpen] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
     let timer: ReturnType<typeof setTimeout> | undefined;
@@ -33,7 +34,8 @@ export function SpotifyCard() {
           }
         }
       } catch {
-        // Keep the last honest state during temporary connection failures.
+        if (!controller.signal.aborted)
+          setPlaying({ status: "unavailable" });
       }
       if (!controller.signal.aborted) timer = setTimeout(refresh, 60000);
     };
@@ -92,8 +94,12 @@ export function SpotifyCard() {
             <>
               <strong>
                 {playing.status === "quiet"
-                  ? "A quiet moment."
-                  : "There’s usually a soundtrack."}
+                  ? "Nothing playing right now."
+                  : playing.status === "not-connected"
+                    ? "Spotify isn’t connected yet."
+                    : playing.status === "loading"
+                      ? "Checking the soundtrack…"
+                      : "Spotify is temporarily unavailable."}
               </strong>
               <p>
                 {playlist ? (
@@ -118,14 +124,23 @@ export function SpotifyCard() {
           />
         )}
       </div>
-      {trackId && (
+      {trackId && !playerOpen && (
+        <button
+          className="button secondary spotify-load-player"
+          type="button"
+          onClick={() => setPlayerOpen(true)}
+        >
+          Load Spotify player
+        </button>
+      )}
+      {trackId && playerOpen && (
         <iframe
           className="spotify-player"
           title={`Listen to ${playing.status === "playing" ? playing.title : "this track"} on Spotify`}
           src={`https://open.spotify.com/embed/track/${trackId}`}
           width="100%"
           height="152"
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          allow="encrypted-media; fullscreen; picture-in-picture"
           allowFullScreen
           loading="lazy"
         />

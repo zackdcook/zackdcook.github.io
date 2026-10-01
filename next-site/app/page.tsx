@@ -18,7 +18,7 @@ export default async function Home() {
       <section className="hero shell">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">
-            Engineer by day // Author in play <span aria-hidden="true">✦</span>
+            Engineer by day // Author in play
           </p>
           <h1>
             Zack
@@ -44,9 +44,6 @@ export default async function Home() {
           </div>
         </div>
         <div className="hero-photo">
-          <span className="portrait-spark" aria-hidden="true">
-            🫪
-          </span>
           <div className="portrait-frame">
             <Image
               src="/images/portrait.webp"
@@ -57,9 +54,6 @@ export default async function Home() {
               sizes="(max-width: 740px) 85vw, 40vw"
             />
           </div>
-          <span className="portrait-note">
-            G'day, mate! <span aria-hidden="true">🚯</span>
-          </span>
           <p className="photo-location">
             <span aria-hidden="true">●</span> Lakeland, Florida
           </p>
