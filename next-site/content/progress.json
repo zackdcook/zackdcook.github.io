@@ -8,7 +8,7 @@
       "target": 35834,
       "unit": "words",
       "status": "complete",
-      "color": "#91b3a1"
+      "color": "#81B29A"
     },
     {
       "id": "draft",
@@ -17,7 +17,7 @@
       "target": 60000,
       "unit": "words",
       "status": "active",
-      "color": "#e2ac57"
+      "color": "#F2CC8F"
     },
     {
       "id": "revision",
@@ -26,7 +26,7 @@
       "target": null,
       "unit": "chapters",
       "status": "planned",
-      "color": "#c396be"
+      "color": "#E07A5F"
     }
   ]
 }
