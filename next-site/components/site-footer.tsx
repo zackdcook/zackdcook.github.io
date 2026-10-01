@@ -8,10 +8,10 @@ export function SiteFooter() {
         <Link className="footer-name" href="/">
           Zack Cook.
         </Link>
-        <p>Lakeland, Florida. Usually making something.</p>
+        <p>Lakeland, Florida.</p>
       </div>
       <div className="footer-links">
-        <Link href="/events">Find Me At…</Link>
+        <Link href="/events">Find me at…</Link>
         <a href={`mailto:${site.email}`}>
           Say hello <span aria-hidden="true">↗</span>
         </a>
