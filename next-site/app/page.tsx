@@ -43,7 +43,7 @@ export default async function Home() {
         </div>
         <div className="hero-photo">
           <span className="portrait-spark" aria-hidden="true">
-            ✳
+            🫪
           </span>
           <div className="portrait-frame">
             <Image
