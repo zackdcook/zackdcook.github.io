@@ -2,8 +2,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { ProgressRings } from "@/components/progress-rings";
 import { CommonplaceCard } from "@/components/commonplace-card";
-import { SpotifyCard } from "@/components/spotify-card";
-import { journalPost, upcomingEvents, writingGroup } from "@/content/site";
+import { ContentRail } from "@/components/content-rail";
+import { displayDate, publishedJournalPosts, shoutouts, upcomingEvents, writingGroup } from "@/content/site";
 import { getCommonplace } from "@/lib/commonplace";
 import progress from "@/content/progress.json";
 
@@ -13,6 +13,8 @@ export const metadata = { alternates: { canonical: "/" } };
 export default async function Home() {
   const entries = await getCommonplace();
   const event = upcomingEvents()[0];
+  const posts = publishedJournalPosts().slice(0, 5);
+  const draft = progress.stages.find(stage => stage.status === "active");
   return (
     <>
       <section className="hero shell">
@@ -38,9 +40,6 @@ export default async function Home() {
             <Link className="button" href="/writing">
               Creative works <span aria-hidden="true">↗</span>
             </Link>
-            <Link className="text-link" href="/about">
-              More about me <span aria-hidden="true">→</span>
-            </Link>
           </div>
         </div>
         <div className="hero-photo">
@@ -57,11 +56,10 @@ export default async function Home() {
           <p className="photo-location">
             <span aria-hidden="true">●</span> Lakeland, Florida
           </p>
-          <SpotifyCard />
         </div>
       </section>
 
-      <section className="desk-section">
+      <section id="creative-works" className="desk-section">
         <div className="shell desk-inner">
           <div className="desk-copy">
             <p className="eyebrow">Active project</p>
@@ -75,70 +73,34 @@ export default async function Home() {
               I took a three-year braindump while absorbing every possible lesson on the craft of writing.
             </p>
             <p className="desk-detail">
-              Now, as of September 1<sup>st</sup>, 2026, I'm working on my zeroth draft with a current target of 60,000 words.
+              Now, as of September 1<sup>st</sup>, 2026, I'm working on my zeroth draft with a current target of {draft?.target?.toLocaleString("en-US")} words.
             </p>
             <Link className="text-link" href="/writing">
               More deets <span aria-hidden="true">→</span>
             </Link>
             <p className="updated">
               Progress updated{" "}
-              <time dateTime={progress.updated}>September 30, 2026</time>
+              <time dateTime={progress.updated}>{displayDate(progress.updated)}</time>
             </p>
           </div>
           <ProgressRings />
         </div>
       </section>
 
-      <section className="journal-feature shell section-space">
-        <div className="section-heading">
-          <p className="eyebrow">Words of Folly</p>
-          <Link className="text-link" href="/journal">
-            All entries <span aria-hidden="true">→</span>
-          </Link>
-        </div>
-        <article>
-          <div className="journal-meta">
-            <time dateTime={journalPost.date}>October 20, 2025</time>
-            <span>Writing & starting over</span>
-          </div>
-          <div>
-            <h2>
-              <Link href={`/journal/${journalPost.slug}`}>
-                {journalPost.title}
-              </Link>
-            </h2>
-            <p>{journalPost.excerpt}</p>
-            <Link className="text-link" href={`/journal/${journalPost.slug}`}>
-              Read the entry <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </article>
+      <section id="find-me-at" className="event-callout shell">
+        <p className="eyebrow">Find me at…</p>
+        <h2>{writingGroup.title}</h2>
+        <p className="event-schedule">{writingGroup.schedule}</p>
+        <p>{writingGroup.venue} · Downtown Lakeland</p>
+        <p className="event-description">{writingGroup.description}</p>
+        <Link className="text-link" href="/events">Come write with us <span aria-hidden="true">→</span></Link>
       </section>
+      {event && <section className="event-callout shell upcoming-callout">
+        <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
+        <Link className="text-link" href="/events">Event details →</Link>
+      </section>}
 
-      <section className="commonplace-section section-space">
-        <div className="shell">
-          <div className="section-heading">
-            <div>
-              <p className="eyebrow">Inspo Board</p>
-              <h2>Cool stuff
-                  <br />(if you're me)</h2>
-            </div>
-            <Link className="text-link" href="/commonplace">
-              See more <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-          <p className="section-intro">
-            Things that makes you go, "Hmm" for $500.
-          </p>
-          <div className="commonplace-grid">
-            {entries.slice(0, 3).map((entry) => (
-              <CommonplaceCard key={entry.id} entry={entry} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="life-section shell section-space">
+      <section id="about-me" className="life-section shell section-space">
         <div className="life-photo">
           <Image
             src="/images/cats.webp"
@@ -167,26 +129,35 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="event-callout shell">
-        <p className="eyebrow">Find me at…</p>
-        <h2>{writingGroup.title}</h2>
-        <p className="event-schedule">{writingGroup.schedule}</p>
-        <p>{writingGroup.venue} · Downtown Lakeland</p>
-        <p className="event-description">{writingGroup.description}</p>
-        <Link className="text-link" href="/events">
-          Come write with us →
-        </Link>
+      <section id="words-of-folly" className="journal-feature shell section-space">
+        <div className="section-heading"><div><p className="eyebrow">Words of Folly</p><h2>From my noggin.</h2></div></div>
+        <ContentRail label="Recent Words of Folly" count={posts.length}>
+          {posts.map(post => <Link className="journal-banner" key={post.slug} href={`/journal/${post.slug}`}>
+            <time dateTime={post.date}>{displayDate(post.date)}</time>
+            <h3>{post.title}</h3><p>{post.excerpt}</p>
+            <span className="text-link">Read the entry <span aria-hidden="true">→</span></span>
+          </Link>)}
+        </ContentRail>
+        <div className="rail-more"><Link className="button button-outline" href="/journal">All Words of Folly <span aria-hidden="true">→</span></Link></div>
       </section>
-      {event && (
-        <section className="event-callout shell">
-          <p className="eyebrow">Find me at…</p>
-          <h2>{event.title}</h2>
-          <p>{event.location}</p>
-          <Link className="text-link" href="/events">
-            Event details →
-          </Link>
-        </section>
-      )}
+
+      <section id="inspo-board" className="commonplace-section section-space">
+        <div className="shell">
+          <div className="section-heading"><div><p className="eyebrow">Inspo Board</p><h2>Cool stuff<br />(if you're me)</h2></div></div>
+          <p className="section-intro">Things that makes you go, "Hmm" for $500.</p>
+          {entries.length ? <ContentRail label="Recent inspiration" count={entries.slice(0, 5).length}>
+            {entries.slice(0, 5).map(entry => <CommonplaceCard key={entry.id} entry={entry} />)}
+          </ContentRail> : <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
+          <div className="rail-more"><Link className="button button-outline" href="/commonplace">The whole Inspo Board <span aria-hidden="true">→</span></Link></div>
+        </div>
+      </section>
+
+      <section id="shoutouts" className="shoutouts-section shell section-space">
+        <p className="eyebrow">Shoutouts</p><h2>Good people. Good work.</h2>
+        <div className="shoutout-list">{shoutouts.map(person => <a className="shoutout-link" key={person.url} href={person.url} target="_blank" rel="noopener noreferrer">
+          <div><h3>{person.name}</h3><p>{person.note}</p></div><span aria-hidden="true">↗</span>
+        </a>)}</div>
+      </section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
           <h2>Keep in touch.</h2>

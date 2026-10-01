@@ -13,28 +13,29 @@ const zain = Zain({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://zackdcook.com"),
+  metadataBase: new URL(site.url),
   title: {
-    default: "Zack Cook — Fiction writer & engineer",
+    default: site.title,
     template: "%s · Zack Cook",
   },
   description: site.description,
   authors: [{ name: site.name }],
+  alternates: { types: { "application/rss+xml": `${site.url}/journal/feed.xml` } },
   openGraph: {
     type: "website",
     siteName: site.name,
-    title: "Zack Cook — Fiction writer & engineer",
+    title: site.title,
     description: site.description,
     images: [
       {
-        url: "/images/portrait.webp",
+        url: site.shareImage,
         width: 1200,
-        height: 1200,
-        alt: "Zack Cook",
+        height: 630,
+        alt: site.title,
       },
     ],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.shareImage] },
   robots:
     process.env.SITE_LIVE === "true"
       ? { index: true, follow: true }
