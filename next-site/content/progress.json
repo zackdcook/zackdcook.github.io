@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-30",
+  "updated": "2026-10-01",
   "stages": [
     {
       "id": "braindump",
@@ -13,8 +13,8 @@
     {
       "id": "draft",
       "label": "First draft",
-      "value": 27000,
-      "target": 60000,
+      "value": 27250,
+      "target": 50000,
       "unit": "words",
       "status": "active",
       "color": "#F2CC8F"

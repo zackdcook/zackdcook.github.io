@@ -1,6 +1,14 @@
 export const site = {
   name: "Zack Cook",
   email: "hi@zackdcook.com",
+  url: "https://zackdcook.com",
+  title: "Zack Cook — Fiction writer & engineer",
+  // These control the footer. Add only your own public profile/payment links.
+  instagram: "https://www.instagram.com/zackyc.xyz/",
+  threads: "",
+  supportUrl: "https://cash.app/$zackdcook",
+  supportLabel: "Fill my veins with caffeine",
+  shareImage: "/opengraph-image",
   description:
     "Zack Cook is an aspiring author and industrial engineer in Lakeland, Florida. Stay tuned for his first novel, read his ramblings, and explore the things that inspire him.",
 };
@@ -13,6 +21,24 @@ export const journalPost = {
     "I grew up naturally talented at STEM, but my heart always craved the mess of making things. Here’s what happened when I turned 33.",
 };
 
+export type JournalPost = typeof journalPost;
+
+// Add each published article here. The homepage, archive, and RSS share this list.
+export const journalPosts: JournalPost[] = [journalPost];
+
+export function publishedJournalPosts() {
+  return [...journalPosts].sort((a, b) => b.date.localeCompare(a.date));
+}
+
+export function displayDate(date: string) {
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${date}T12:00:00Z`));
+}
+
 export type CommonplaceEntry = {
   id: string;
   title: string;
@@ -24,37 +50,14 @@ export type CommonplaceEntry = {
   created_at: string;
 };
 
-// Personal photos from Zack's supplied favorites. Replace captions freely.
-export const personalEntries: CommonplaceEntry[] = [
+// Paste curated public post URLs here; the old camera-roll entries are in Git history.
+export const personalEntries: CommonplaceEntry[] = [];
+
+export const shoutouts = [
   {
-    id: "lego-door",
-    title: "DnD + LEGO.",
-    note: "what could be better?",
-    category: "inspiration",
-    source_url: null,
-    creator: null,
-    image_url: "/images/lego.webp",
-    created_at: "2026-09-30",
-  },
-  {
-    id: "neon",
-    title: "Exactly where you need to be.",
-    note: "Ain't that the truth.",
-    category: "inspiration",
-    source_url: null,
-    creator: null,
-    image_url: "/images/neon.webp",
-    created_at: "2026-09-30",
-  },
-  {
-    id: "gundam",
-    title: "Some assembly required.",
-    note: "Gunpla's fun!",
-    category: "life",
-    source_url: null,
-    creator: null,
-    image_url: "/images/gundam.webp",
-    created_at: "2026-09-30",
+    name: "R.M. Hamrick",
+    url: "https://rmhamrick.com/",
+    note: "A fellow author from Write On, Lakeland!",
   },
 ];
 
