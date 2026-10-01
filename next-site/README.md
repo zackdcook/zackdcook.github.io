@@ -19,6 +19,8 @@ The Vercel project uses **Root Directory `next-site`**. Production uses `SITE_UR
 
 References: [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [GitHub Pages limitations](https://docs.github.com/en/pages/getting-started-with-github-pages/about-github-pages), [Vercel plans](https://vercel.com/docs/plans). Review current plan eligibility and pricing before enabling commercial features or choosing a paid plan.
 
+Zack requires **no new spending**. The current Vercel project is on Hobby; no paid upgrades or new database resources have been enabled. Keep existing domain renewals separate from new hosting costs. Read [the security and cost checkpoint](docs/security-and-costs.md) before enabling sign-in, comments, Spotify, or another service. No site can be guaranteed hack-proof, and the dependency advisory scan remains incomplete because this workspace could not reach the audit registry.
+
 ## Personalizing the site
 
 | Edit                                                         | File                    |
