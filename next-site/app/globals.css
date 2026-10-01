@@ -1529,7 +1529,10 @@ h3 {
   letter-spacing: -0.035em;
 }
 .hero h1 em {
-  background: linear-gradient(transparent 82%, var(--peach) 82%, var(--peach) 96%, transparent 96%);
+  text-decoration: underline;
+  text-decoration-color: var(--peach);
+  text-decoration-thickness: 0.04em;
+  text-underline-offset: 0.03em;
 }
 .hero-photo {
   padding-top: 0;
