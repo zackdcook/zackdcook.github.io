@@ -1530,7 +1530,7 @@ h3 {
   letter-spacing: -0.035em;
 }
 .hero h1 em {
-  color: var(--peach);
+  color: color-mix(in srgb, var(--peach) 85%, var(--ink));
   font-family: "Fraunces Variable", Georgia, serif;
   font-style: italic;
   font-weight: 600;
