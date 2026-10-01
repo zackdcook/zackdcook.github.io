@@ -1,6 +1,6 @@
 # Zack Cook — author site
 
-This is Zack Cook's Next.js author website. The original GitHub Pages site is preserved in the repository root and in Git history. Publishing is authorized; cloud deployment and domain verification are in progress. The database schema and account integrations are prepared but have not been activated.
+This is Zack Cook's Next.js author website. The production build is live at https://zack-cook.vercel.app/. The original GitHub Pages site is preserved in the repository root, Git history, and `archive/pre-nextjs-2026-10-01`. Vercel has `zackdcook.com` attached and a permanent www redirect prepared; Porkbun DNS changes and domain verification are pending. The database schema and account integrations are prepared but have not been activated.
 
 ## How hosting works
 
