@@ -16,17 +16,30 @@ export function SpotifyCard() {
   const [playing, setPlaying] = useState<Playing>({ status: "not-connected" });
   useEffect(() => {
     const controller = new AbortController();
-    const refresh = () => {
-      if (!document.hidden)
-        fetch("/api/spotify/now-playing", { signal: controller.signal })
-          .then((r) => r.json())
-          .then(setPlaying)
-          .catch(() => {});
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const refresh = async () => {
+      try {
+        if (!document.hidden) {
+          const response = await fetch("/api/spotify/now-playing", {
+            signal: controller.signal,
+          });
+          if (response.ok) {
+            const result: Playing = await response.json();
+            if (controller.signal.aborted) return;
+            setPlaying(result);
+            // An unconfigured integration cannot change during this visit.
+            // Avoid polling a server feature that has not been switched on.
+            if (result.status === "not-connected") return;
+          }
+        }
+      } catch {
+        // Keep the last honest state during temporary connection failures.
+      }
+      if (!controller.signal.aborted) timer = setTimeout(refresh, 60000);
     };
-    refresh();
-    const timer = setInterval(refresh, 60000);
+    void refresh();
     return () => {
-      clearInterval(timer);
+      clearTimeout(timer);
       controller.abort();
     };
   }, []);
