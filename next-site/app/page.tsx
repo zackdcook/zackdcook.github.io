@@ -18,7 +18,7 @@ export default async function Home() {
       <section className="hero shell">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">
-            Engineer by day | Author in play <span aria-hidden="true">✦</span>
+            Engineer by day // Author in play <span aria-hidden="true">✦</span>
           </p>
           <h1>
             Zack
@@ -28,7 +28,8 @@ export default async function Home() {
             Easily distracted by cats, birds, and ...
           </p>
           <p className="hero-detail">
-            Greetings, fellow person! I’m Zack and I live in Lakeland, FL.
+            Greetings, fellow person!
+            <br />I’m Zack and I live in sunny Lakeland, Florida.
             <br />I made this site to promote my creative works, scream into the void, and share things that inspire me.
           </p>
           <div className="actions">
@@ -72,11 +73,13 @@ export default async function Home() {
               Let him
               <br /> <em>Cook.</em>
             </h2>
-            <p>Drafting my first novel,
-              <br />learning the process as I go.</p>
+            <p>Writing my first novel, and
+              <br />learning the process along the way.</p>
             <p className="desk-detail">
               I took a three-year braindump while absorbing every possible lesson on the craft of writing.
-              <br /> Now, as of September 1, 2026, I'm working on my zeroth draft with a current target of 60,000 words.
+            </p>
+            <p>
+              Now, as of September 1<sup>st</sup>, 2026, I'm working on my zeroth draft with a current target of 60,000 words.
             </p>
             <Link className="text-link" href="/writing">
               More deets <span aria-hidden="true">→</span>
@@ -120,15 +123,16 @@ export default async function Home() {
         <div className="shell">
           <div className="section-heading">
             <div>
-              <p className="eyebrow">My Inspo Board</p>
-              <h2>Cool stuff (if you're me)</h2>
+              <p className="eyebrow">Inspo Board</p>
+              <h2>Cool stuff
+                  <br />(if you're me)</h2>
             </div>
             <Link className="text-link" href="/commonplace">
-              Take a look around <span aria-hidden="true">→</span>
+              See more <span aria-hidden="true">→</span>
             </Link>
           </div>
           <p className="section-intro">
-            Stuff that makes you go, "Hmm" for $500.
+            Things that makes you go, "Hmm" for $500.
           </p>
           <div className="commonplace-grid">
             {entries.slice(0, 3).map((entry) => (
@@ -150,10 +154,9 @@ export default async function Home() {
           <span className="photo-label">The editorial board aka firing squad.</span>
         </div>
         <div className="life-copy">
-          <p className="eyebrow">Who am I?</p>
+          <p className="eyebrow">About Me</p>
           <h2>
-            My life
-            <br /> in Lakeland.
+            Who am I?
           </h2>
           <p>
             I live with my beautiful wife, Jennifer, and our three cats: Chemi, Tashi, and
