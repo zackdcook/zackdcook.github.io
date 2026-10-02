@@ -2,15 +2,19 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultPreferences, normalizePreferences, preferenceKey, type Preferences } from "@/lib/preferences";
+import { carvingBookmarkKey, livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
 
-const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, update: (_patch: Partial<Preferences>) => {} });
+const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
 export const usePreferences = () => useContext(PreferenceContext);
 
 export function SitePreferences({ children }: { children: React.ReactNode }) {
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [systemReduced, setSystemReduced] = useState(false);
+  const [timeline, setTimeline] = useState(livingTimeline);
+  const [hydrated, setHydrated] = useState(false);
+  const [resetVersion, setResetVersion] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
-  const opener = useRef<HTMLButtonElement>(null);
+  const opener = useRef<HTMLElement | null>(null);
   const latest = useRef(defaultPreferences);
 
   useEffect(() => {
@@ -18,6 +22,10 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     try { initial = normalizePreferences(JSON.parse(localStorage.getItem(preferenceKey) || "{}")); } catch { /* Defaults remain usable. */ }
     setPreferences(initial);
     latest.current = initial;
+    let story = livingTimeline;
+    try { story = normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey) || "{}")); } catch { /* A fresh living timeline. */ }
+    setTimeline(story); document.documentElement.dataset.timeline = story.kind;
+    setHydrated(true);
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const theme = matchMedia("(prefers-color-scheme: dark)");
     const apply = () => {
@@ -27,12 +35,18 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
       root.dataset.effects = initial.reduceEffects || motion.matches ? "reduced" : "full";
       root.dataset.compact = String(initial.compact);
       root.dataset.projects = initial.expandedProjects ? "expanded" : "collapsed";
+      root.dataset.text = initial.largeText ? "large" : "normal";
       setSystemReduced(motion.matches);
     };
     apply();
     motion.addEventListener("change", apply);
     theme.addEventListener("change", apply);
     const sync = (event: StorageEvent) => {
+      if (event.key === timelineKey) {
+        let next = livingTimeline;
+        try { next = normalizeTimeline(JSON.parse(event.newValue || "{}")); } catch { /* Defaults. */ }
+        setTimeline(next); document.documentElement.dataset.timeline = next.kind; return;
+      }
       if (event.key !== preferenceKey) return;
       try { initial = normalizePreferences(JSON.parse(event.newValue || "{}")); } catch { initial = defaultPreferences; }
       latest.current = initial; setPreferences(initial); apply();
@@ -51,13 +65,21 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     root.dataset.effects = next.reduceEffects || systemReduced ? "reduced" : "full";
     root.dataset.compact = String(next.compact);
     root.dataset.projects = next.expandedProjects ? "expanded" : "collapsed";
+    root.dataset.text = next.largeText ? "large" : "normal";
+  }
+  function changeTimeline(next: LocalTimeline) {
+    const safe = normalizeTimeline(next);
+    setTimeline(safe); document.documentElement.dataset.timeline = safe.kind;
+    try { localStorage.setItem(timelineKey, JSON.stringify(safe)); } catch { /* Still works in this visit. */ }
+  }
+  function reset() {
+    update(defaultPreferences); changeTimeline(livingTimeline); setResetVersion(v => v + 1);
+    try { [preferenceKey, timelineKey, carvingBookmarkKey, carvingBookmarkKey + ".seen"].forEach(key => localStorage.removeItem(key)); } catch { /* Local state is already reset. */ }
+    // The server identity cookie and real communal entries are deliberately untouched.
   }
 
-  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, update }}>
+  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
     {children}
-    <div className="preferences-launcher shell">
-      <button className="button button-small" ref={opener} onClick={() => dialog.current?.showModal()} aria-haspopup="dialog">Make yourself at home</button>
-    </div>
     <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => opener.current?.focus()} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
         <div className="calendar-dialog-heading"><h2 id="preferences-title">Your corner.</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
@@ -67,7 +89,8 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
         {systemReduced && <p className="calendar-help">Your device requests reduced motion, so the motion and lighting are already resting.</p>}
         <label className="preference-row"><span>Cozy, compact spacing</span><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /></label>
         <label className="preference-row"><span>Expand project descriptions</span><input type="checkbox" checked={preferences.expandedProjects} onChange={e => update({ expandedProjects: e.target.checked })} /></label>
-        <button className="button button-small" onClick={() => update(defaultPreferences)}>Reset preferences</button>
+        <label className="preference-row"><span>Larger text</span><input type="checkbox" checked={preferences.largeText} onChange={e => update({ largeText: e.target.checked })} /></label>
+        <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
       </div>
     </dialog>
   </PreferenceContext>;

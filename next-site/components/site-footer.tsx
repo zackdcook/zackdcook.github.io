@@ -3,6 +3,7 @@ import Image from "next/image";
 import { site } from "@/content/site";
 import { DollarIcon, MailIcon, RssIcon } from "@/components/icons";
 import { CopyrightNote } from "@/components/copyright-note";
+import { PreferencesButton } from "@/components/preferences-button";
 
 export function SiteFooter() {
   return (
@@ -17,6 +18,7 @@ export function SiteFooter() {
         <Link className="button button-small" href="/rss"><RssIcon /> RSS</Link>
       </div>
       {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
+      <PreferencesButton />
       <CopyrightNote year={2026} name={site.name} />
     </footer>
   );

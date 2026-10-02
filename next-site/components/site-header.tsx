@@ -15,9 +15,26 @@ export function SiteHeader() {
   const visiblePath = segment ? `/${segment}` : "/";
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
+  const explicitHome = useRef(false);
+  // Only a deliberate Home navigation resets scroll. popstate clears this intent,
+  // leaving Next/browser history restoration in charge of Back and Forward.
+  useEffect(() => {
+    const historyTravel = () => { explicitHome.current = false; };
+    window.addEventListener("popstate", historyTravel);
+    return () => window.removeEventListener("popstate", historyTravel);
+  }, []);
   useEffect(() => {
     if (menu.current) menu.current.open = false;
+    if (pathname === "/" && explicitHome.current) {
+      explicitHome.current = false;
+      const frame = requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+      return () => cancelAnimationFrame(frame);
+    }
   }, [pathname]);
+  const goHome = () => {
+    explicitHome.current = true;
+    if (pathname === "/") { explicitHome.current = false; window.scrollTo({ top: 0, left: 0, behavior: "instant" }); }
+  };
   useEffect(() => {
     const closeOnScroll = () => {
       if (menu.current?.open && Math.abs(window.scrollY - menuScrollStart.current) > 6) {
@@ -34,13 +51,13 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link href="/" className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={visiblePath === "/" ? "page" : undefined}>
+        <Link href="/" scroll={false} onNavigate={goHome} className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={visiblePath === "/" ? "page" : undefined}>
           <Image className="site-mark" src={site.icon} alt="" width={34} height={34} unoptimized />
           Zack Cook
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map(([label, href]) => (
-            <Link key={href} href={href} prefetch aria-current={current(href)}>
+            <Link key={href} href={href} prefetch scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)}>
               {label}
             </Link>
           ))}
@@ -64,6 +81,8 @@ export function SiteHeader() {
               <Link
                 key={href}
                 href={href}
+                scroll={href === "/" ? false : undefined}
+                onNavigate={href === "/" ? goHome : undefined}
                 aria-current={current(href)}
                 onClick={() => {
                   if (menu.current) menu.current.open = false;
