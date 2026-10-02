@@ -4,17 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { navigation } from "@/content/navigation";
 import { site } from "@/content/site";
 
-const links = [
-  ["Home", "/"],
-  ["Creative Works", "/writing"],
-  ["Events", "/events"],
-  ["About Me", "/about"],
-  ["Words of Folly", "/journal"],
-  ["Inspo Board", "/commonplace"],
-  ["Shoutouts", "/shoutouts"],
-];
+const links = navigation.map(({ title, href }) => [title, href]);
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -47,7 +40,7 @@ export function SiteHeader() {
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map(([label, href]) => (
-            <Link key={href} href={href} aria-current={current(href)}>
+            <Link key={href} href={href} prefetch aria-current={current(href)}>
               {label}
             </Link>
           ))}
