@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { upcomingEvents, writingGroup } from "@/content/site";
 
 export const metadata: Metadata = {
-  title: "Find Me At…",
+  title: "Events",
   description:
     "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.",
   alternates: { canonical: "/events" },
