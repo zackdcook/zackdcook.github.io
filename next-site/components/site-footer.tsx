@@ -16,7 +16,7 @@ export function SiteFooter() {
         <Link className="button button-small" href="/rss"><RssIcon /> RSS</Link>
       </div>
       {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
-      <p className="copyright">© {new Date().getFullYear()}</p>
+      <p className="copyright">© {new Date().getFullYear()} {site.name}</p>
     </footer>
   );
 }
