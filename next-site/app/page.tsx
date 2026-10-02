@@ -12,6 +12,7 @@ import { getCommonplace } from "@/lib/commonplace";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import progress from "@/content/progress.json";
+import { EditorialKitties } from "@/components/editorial-kitties";
 
 export const metadata = { alternates: { canonical: "/" } };
 
@@ -34,7 +35,7 @@ export default async function Home() {
           </div>
         </div>
         <div className="hero-photo">
-          <div className="portrait-frame">
+          <div className="portrait-frame tactile-photo">
             <Image
               src="/images/portrait.webp"
               alt="Zack Cook smiling in a black sweater"
@@ -50,7 +51,7 @@ export default async function Home() {
       <section id="creative-works" className="desk-section">
         <div className="shell desk-inner">
           <div className="desk-copy">
-            <p className="eyebrow">Active project</p>
+            <h2 className="eyebrow section-label">Active Project</h2>
             <h2>
               Let him
               <br /> <em>Cook.</em>
@@ -77,18 +78,9 @@ export default async function Home() {
       </section>}
 
       <section id="about-me" className="life-section shell section-space">
-        <div className="life-photo">
-          <Image
-            src="/images/cats.webp"
-            alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window"
-            width={1400}
-            height={1034}
-            sizes="(max-width: 740px) 90vw, 48vw"
-          />
-          <span className="photo-label">{editorial.home.editorialLabel}</span>
-        </div>
+        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} />
         <div className="life-copy">
-          <p className="eyebrow">Aboot Zack</p>
+          <h2 className="eyebrow section-label">Aboot Zack</h2>
           <h2>
             Who am I?
             <sub className="identity-aside">no really // plz help // idk who I am</sub>
@@ -136,7 +128,6 @@ export default async function Home() {
           </a>
         </section>
       )}
-      <section className="guestbook-invitation shell section-space"><p className="eyebrow">Before you wander off</p><h2>Leave a little<br/><em>mark.</em></h2><p>A growing cypress, a patch of bark, and everyone who’s stopped by.</p><Link href="/guestbook" className="button">Sign My Guestbook</Link></section>
     </>
   );
 }
