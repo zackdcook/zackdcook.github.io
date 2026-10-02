@@ -1,74 +1,121 @@
 "use client";
 
 import { useEffect } from "react";
+import { lightIntensity, materialLight } from "@/lib/material-light";
 
-// One controller. Pointer movement writes CSS variables, never React state.
+const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+
+// Shared mouse/touch light. The animation path never updates React state.
 export function PointerLight() {
   useEffect(() => {
-    const selector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.desktop-nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
-    let surfaces: HTMLElement[] = [], visible = new Set<HTMLElement>();
+    const surfaces = new Set<HTMLElement>();
+    const visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
-    let x = -1000, y = -1000, lastMove = 0, released = false, frame = 0, dirty = true, queued = false;
+    let x = -1000, y = -1000, lastMove = 0, released = false;
+    let frame = 0, collectionFrame = 0, dirty = true, hasLight = false;
     const reduced = () => document.documentElement.dataset.effects === "reduced";
     const observer = new IntersectionObserver(entries => {
-      for (const e of entries) e.isIntersecting ? visible.add(e.target as HTMLElement) : visible.delete(e.target as HTMLElement);
+      for (const entry of entries) {
+        const element = entry.target as HTMLElement;
+        if (entry.isIntersecting) visible.add(element);
+        else { visible.delete(element); resetSurface(element); }
+      }
       dirty = true;
+      start();
     }, { rootMargin: "80px" });
-    function collect() {
-      observer.disconnect(); visible.clear(); rectangles.clear();
-      surfaces = [...document.querySelectorAll<HTMLElement>(selector)].slice(0, 200);
-      surfaces.forEach(el => { el.style.setProperty("--light-strength", "0"); observer.observe(el); });
-      dirty = true; queued = false;
+    const resize = new ResizeObserver(() => { dirty = true; start(); });
+
+    function paint(element: HTMLElement, bounds: DOMRect, strength: number) {
+      const light = materialLight(bounds, x, y, strength);
+      const px = (value: number) => `${value.toFixed(2)}px`;
+      element.style.setProperty("--light-strength", light.strength.toFixed(3));
+      element.style.setProperty("--light-x", px(light.lightX));
+      element.style.setProperty("--light-y", px(light.lightY));
+      element.style.setProperty("--shadow-x", px(light.shadowX));
+      element.style.setProperty("--shadow-y", px(light.shadowY));
+      element.style.setProperty("--shadow-blur", px(light.blur));
+      element.style.setProperty("--rim-x", px(light.rimX));
+      element.style.setProperty("--rim-y", px(light.rimY));
+      // Preserve the existing tree's light hooks without changing its behavior.
+      element.style.setProperty("--cast-x", px(light.shadowX));
+      element.style.setProperty("--cast-y", px(light.shadowY));
     }
-    function reset() { surfaces.forEach(el => el.style.setProperty("--light-strength", "0")); cancelAnimationFrame(frame); frame = 0; }
+    function resetSurface(element: HTMLElement) {
+      element.style.setProperty("--light-strength", "0");
+      for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y"]) element.style.removeProperty(name);
+    }
+    function collect() {
+      collectionFrame = 0;
+      const next = new Set(document.querySelectorAll<HTMLElement>(surfacesSelector));
+      for (const element of surfaces) if (!next.has(element)) {
+        observer.unobserve(element); resize.unobserve(element);
+        surfaces.delete(element); visible.delete(element); rectangles.delete(element);
+      }
+      for (const element of next) if (!surfaces.has(element)) {
+        surfaces.add(element); resetSurface(element);
+        observer.observe(element); resize.observe(element);
+      }
+      // A stage label changing must not extinguish the light on every surface.
+      dirty = true;
+      start();
+    }
+    function reset() {
+      for (const element of surfaces) resetSurface(element);
+      cancelAnimationFrame(frame); frame = 0;
+    }
     function tick(now: number) {
       frame = 0;
       if (reduced() || document.hidden) { reset(); return; }
-      const elapsed = now - lastMove;
-      const strength = Math.max(0, 1 - Math.max(0, elapsed - (released ? 0 : 220)) / 1050);
-      if (dirty) { for (const el of visible) rectangles.set(el, el.getBoundingClientRect()); dirty = false; }
-      // Batch all reads above, then writes; no repeated layout reads in the hot path.
-      for (const el of visible) {
-        const rect = rectangles.get(el);
-        if (!rect) continue;
-        const dx = Math.max(-11, Math.min(11, (rect.x + rect.width / 2 - x) / 42));
-        const dy = Math.max(-7, Math.min(13, (rect.y + rect.height / 2 - y) / 48));
-        const proximity = Math.max(0, 1 - Math.hypot(x - rect.x - rect.width / 2, y - rect.y - rect.height / 2) / 900);
-        el.style.setProperty("--light-x", `${Math.round(x - rect.x)}px`);
-        el.style.setProperty("--light-y", `${Math.round(y - rect.y)}px`);
-        el.style.setProperty("--cast-x", `${dx.toFixed(1)}px`);
-        el.style.setProperty("--cast-y", `${dy.toFixed(1)}px`);
-        // Reflection moves toward the source; the cast shadow moves away.
-        el.style.setProperty("--shine-x", `${(rect.width / 2 - dx * 5).toFixed(1)}px`);
-        el.style.setProperty("--shine-y", `${(rect.height / 2 - dy * 5).toFixed(1)}px`);
-        el.style.setProperty("--light-strength", (strength * proximity).toFixed(3));
+      const strength = hasLight ? lightIntensity(now - lastMove, released) : 0;
+      if (dirty) {
+        // Read all bounds together before writing any style. Re-measure after
+        // scroll/resize/pointer motion, including moved ribbons and nested rails.
+        for (const element of visible) rectangles.set(element, element.getBoundingClientRect());
+        dirty = false;
+      }
+      for (const element of visible) {
+        const bounds = rectangles.get(element);
+        if (bounds) paint(element, bounds, strength);
       }
       if (strength > 0) frame = requestAnimationFrame(tick);
     }
-    const start = () => { if (!frame && !reduced()) frame = requestAnimationFrame(tick); };
+    function start() { if (!frame && !reduced()) frame = requestAnimationFrame(tick); }
     const move = (event: PointerEvent) => {
-      x = event.clientX; y = event.clientY; lastMove = performance.now(); released = false; start();
+      x = event.clientX; y = event.clientY; lastMove = performance.now();
+      released = false; dirty = true; hasLight = true; start();
     };
-    const release = () => { lastMove = performance.now(); released = true; start(); };
+    const release = (event: PointerEvent) => {
+      // Mouse clicks do not extinguish a still-hovered light. Touch leaves an
+      // afterglow once the finger is lifted.
+      if (event.type === "pointerleave" || event.type === "pointercancel" || event.pointerType !== "mouse") {
+        lastMove = performance.now(); released = true; start();
+      }
+    };
     const geometry = () => { dirty = true; start(); };
     const visibility = () => { if (document.hidden) reset(); };
-    const changes = new MutationObserver(() => { if (!queued) { queued = true; requestAnimationFrame(collect); } });
-    const settings = new MutationObserver(() => { if (reduced()) reset(); });
+    const changes = new MutationObserver(() => {
+      if (!collectionFrame) collectionFrame = requestAnimationFrame(collect);
+    });
+    const settings = new MutationObserver(() => { if (reduced()) reset(); else { dirty = true; start(); } });
     collect();
     changes.observe(document.body, { subtree: true, childList: true });
-    settings.observe(document.documentElement, { attributes: true, attributeFilter: ["data-effects"] });
+    settings.observe(document.documentElement, { attributes: true, attributeFilter: ["data-effects", "data-theme"] });
     window.addEventListener("pointermove", move, { passive: true });
     window.addEventListener("pointerdown", move, { passive: true });
     window.addEventListener("pointerup", release, { passive: true });
     window.addEventListener("pointercancel", release, { passive: true });
     document.documentElement.addEventListener("pointerleave", release, { passive: true });
-    window.addEventListener("scroll", geometry, { passive: true });
+    document.addEventListener("scroll", geometry, { passive: true, capture: true });
     window.addEventListener("resize", geometry, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     return () => {
-      reset(); observer.disconnect(); changes.disconnect(); settings.disconnect();
-      window.removeEventListener("pointermove", move); window.removeEventListener("pointerdown", move); window.removeEventListener("pointerup", release); window.removeEventListener("pointercancel", release);
-      document.documentElement.removeEventListener("pointerleave", release); window.removeEventListener("scroll", geometry); window.removeEventListener("resize", geometry); document.removeEventListener("visibilitychange", visibility);
+      reset(); cancelAnimationFrame(collectionFrame);
+      observer.disconnect(); resize.disconnect(); changes.disconnect(); settings.disconnect();
+      window.removeEventListener("pointermove", move); window.removeEventListener("pointerdown", move);
+      window.removeEventListener("pointerup", release); window.removeEventListener("pointercancel", release);
+      document.documentElement.removeEventListener("pointerleave", release);
+      document.removeEventListener("scroll", geometry, true); window.removeEventListener("resize", geometry);
+      document.removeEventListener("visibilitychange", visibility);
     };
   }, []);
   return null;

@@ -84,9 +84,16 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     {children}
     <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => { const target = resetting.current ? document.querySelector<HTMLElement>("#main") : opener.current; resetting.current = false; target?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
-        <div className="calendar-dialog-heading"><h2 id="preferences-title">Your corner.</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
-        <p className="calendar-help">Just for this browser. No account needed.</p>
-        <label className="preference-row"><span>Light or twilight?</span><select value={preferences.theme} onChange={e => update({ theme: e.target.value as Preferences["theme"] })}><option value="system">Follow my device</option><option value="light">Light · paper</option><option value="dark">Dark · twilight</option></select></label>
+        <div className="calendar-dialog-heading"><h2 id="preferences-title">Accessibility &amp; Preferences</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
+        <fieldset className="appearance-options">
+          <legend>Appearance</legend>
+          <div className="appearance-selector">{([
+            ["light", "Light"], ["dark", "Dark"], ["system", "Mirror my device"],
+          ] as const).map(([value, label]) => <label key={value}>
+            <input type="radio" name="appearance" value={value} checked={preferences.theme === value} onChange={() => update({ theme: value })} />
+            <span>{label}</span>
+          </label>)}</div>
+        </fieldset>
         <label className="preference-row"><span>Reduce effects</span><input type="checkbox" checked={preferences.reduceEffects} onChange={e => update({ reduceEffects: e.target.checked })} /></label>
         {systemReduced && <p className="calendar-help">Your device requests reduced motion, so the motion and lighting are already resting.</p>}
         <label className="preference-row"><span>Cozy, compact spacing</span><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /></label>

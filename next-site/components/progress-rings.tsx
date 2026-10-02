@@ -13,7 +13,7 @@ function StageLabel({ label }: { label: string }) {
 }
 
 function toneFor(index: number) {
-  if (index === 0) return "color-mix(in srgb, var(--progress-hue) 18%, var(--paper))";
+  if (index === 0) return "color-mix(in srgb, var(--progress-hue) 18%, var(--floral))";
   const position = (index - 1) / Math.max(1, progress.stages.length - 2);
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
@@ -57,12 +57,12 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         <button
           type="button"
           className="stage-button"
-          aria-pressed={current === index}
+          aria-pressed={selected === index}
           aria-describedby={`${id}-note-${item.id}`}
-          onClick={() => setSelected(index)}
+          onClick={() => { setSelected(index); setHovered(null); }}
           onFocus={() => setFocused(index)}
           onBlur={() => setFocused(null)}
-          onPointerEnter={() => setHovered(index)}
+          onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(index); }}
           onPointerLeave={() => setHovered(null)}
         >
           <span className="stage-dot" style={{ background: toneFor(index) }} aria-hidden="true" />
@@ -87,14 +87,14 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           const ratio = progressRatio(item.value, item.target);
           return <g
             key={item.id}
-            className={`ring-layer ${current === index ? "is-selected" : ""} ${preview === index ? "is-highlighted" : ""}`}
+            className={`ring-layer ${current === index ? "is-selected is-highlighted" : ""}`}
             style={{ "--ring-color": toneFor(index), "--ring-offset": 100 * (1 - ratio), "--ring-delay": `${index * 140}ms` } as CSSProperties}
-            onPointerEnter={() => setHovered(index)}
+            onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(index); }}
             onPointerLeave={() => setHovered(null)}
-            onClick={() => setSelected(index)}
+            onClick={() => { setSelected(index); setHovered(null); setFocused(null); }}
           >
             {index === 0 ? <circle className="core-fill" cx="160" cy="160" r={coreRadius} fill={`url(#${id}-tone-${index})`} /> : <>
-              <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--ink)" strokeOpacity=".1" strokeWidth={width} />
+              <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--midnight)" strokeOpacity=".1" strokeWidth={width} />
               {item.status === "planned" ? <g className="ring-dots" fill={`url(#${id}-tone-${index})`}>{Array.from({ length: 40 }, (_, dot) => {
                 const angle = dot * Math.PI * 2 / 40 - Math.PI / 2;
                 // Fixed world geometry avoids Safari's dashed-stroke resampling
