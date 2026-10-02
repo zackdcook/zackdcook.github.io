@@ -43,8 +43,8 @@ html[data-theme] .life-photo .kitty-ribbon { color: var(--coral); }
 .empty-window-placeholder { display: grid; place-items: center; height: 100%; padding: 35px; text-align: center; background: color-mix(in srgb,var(--coral) 15%,var(--paper)); color: var(--ink); font-size: .9rem; }
 /* The same small heading treatment as Active Project, on every home section. */
 body :is(.section-label,.collection-heading.section-label,.inspiration-heading.section-label,.desk-copy h2.section-label,.event-callout h2.section-label,.life-copy h2.section-label) { font: 600 11px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; margin: 0 0 20px; max-width: none; }
-.footer-preferences { grid-column: 1/-1; margin: 28px 0; }
-.site-footer .support-callout { grid-column: 1/-1; }
+.footer-preferences { flex: 0 0 100%; text-align: center; margin: 12px 0; }
+.site-footer .support-callout { flex: 0 0 100%; text-align: center; }
 html[data-text="large"] { font-size: 18px; }
 html[data-text="large"] :is(.hero-detail,.life-copy>p,.prose p,.journal-row p,.shoutout-card p) { font-size: max(1.05rem,18px); }
 /* Reserve the tallest note's geometry. Changing stages cannot move the SVG. */
@@ -73,6 +73,7 @@ body .stage-button:active { transform: none; }
 .fallen-instruction { text-align: center; padding: 12px 0 25px; }
 .fallen-origin { position: absolute; left: 0; top: -9%; height: 118%; max-width: none; object-fit: contain; object-position: left bottom; z-index: 1; pointer-events: none; }
 .fallen-scroll .tree-space { z-index: 2; }
+.tree-bark { position: absolute; left: 0; top: 0; overflow: clip; }
 .fallen-scroll { overflow-x: auto; overflow-y: hidden; height: clamp(330px,70svh,600px); overscroll-behavior-x: contain; scrollbar-color: var(--coral) #293126; }
 .fallen-scroll .tree-world { margin: 0; touch-action: pan-x; }
 .fallen-scroll .carving-inspect { touch-action: pan-x; }
