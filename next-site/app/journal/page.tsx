@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { displayDate, publishedJournalPosts } from "@/content/site";
+import { CollectionHeading } from "@/components/collection-heading";
 
 export const metadata: Metadata = {
   title: "Words of Folly",
@@ -12,13 +13,7 @@ export default function Journal() {
   return (
     <div className="shell page-wrap">
       <div className="page-intro">
-        <p className="eyebrow">The journal</p>
-        <h1>
-          Words
-          <br />
-          <em>of Folly.</em>
-        </h1>
-        <p>Writing updates, longer thoughts, and things I’m figuring out.</p>
+        <CollectionHeading level={1}>Notes from my noggin</CollectionHeading>
       </div>
       <ol className="journal-archive" aria-label="Entries, newest first">
         {publishedJournalPosts().map(post => <li key={post.slug}>
