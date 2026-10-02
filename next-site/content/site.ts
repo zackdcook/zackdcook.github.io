@@ -55,15 +55,7 @@ export type CommonplaceEntry = {
 // Paste curated public post URLs here; the old camera-roll entries are in Git history.
 export const personalEntries: CommonplaceEntry[] = [];
 
-export const shoutouts = [
-  {
-    name: "RM Hamrick",
-    subtitle: "Science fiction with action, humor, and heart",
-    url: "https://rmhamrick.com/",
-    note: "Fellow author and co-founder of my writing group,",
-    groupName: "Write On, Lakeland!",
-  },
-];
+export { default as shoutouts } from "./shoutouts.json";
 
 export type SiteEvent = {
   title: string;

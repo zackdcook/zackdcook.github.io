@@ -1,0 +1,38 @@
+{
+  "home": {
+    "eyebrow": "Engineer by day // Author at play",
+    "intro": "Easily distracted by cats, birds, and ...",
+    "paragraphs": [
+      "Greetings, fellow person!",
+      "I’m Zack and I live in sunny Lakeland, Florida.",
+      "I made this site to promote my creative works, scream into the void, and share stuff that inspires me."
+    ],
+    "aboutParagraphs": [
+      "I live with my beautiful wife, Jennifer, and our three cats: Chemi, Tashi, and Brave.",
+      "My favorite hobby is learning new hobbies."
+    ],
+    "editorialLabel": "The editorial board aka firing squad."
+  },
+  "aboutSections": [
+    {
+      "heading": "The engineering part",
+      "paragraphs": [
+        "I’m a Senior Manufacturing Industrial Engineer at Publix in Lakeland, Florida, and a Lean Six Sigma Black Belt. I graduated from the University of Florida in 2012 with a B.S. in Chemical Engineering, cum laude.",
+        "My work is about understanding how things run, finding the right problem to solve, and making systems work better for the people using them."
+      ]
+    },
+    {
+      "heading": "The writing part",
+      "paragraphs": [
+        "Making things has always mattered to me. Drawing, music, model kits, stories. Engineering became my career; fiction is something I’m choosing to give room to as well.",
+        "I’m writing my first novel and learning as I go. I’m drawn to strange worlds, found family, and stories that leave room for humor even when things get dark."
+      ]
+    },
+    {
+      "heading": "The home part",
+      "paragraphs": [
+        "I live in Lakeland with my wife, Jennifer, and our cats Chemi, Tashi, and Brave. There’s usually music playing, something I’m building, or a bird outside worth getting distracted by."
+      ]
+    }
+  ]
+}
