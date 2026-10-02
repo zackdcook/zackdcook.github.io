@@ -5,7 +5,7 @@ import { site } from "@/content/site";
 export const metadata: Metadata = {
   title: "About Zack Cook",
   description:
-    "Meet Zack Cook, also known as Zacky C: a fiction writer, Publix industrial engineer, and University of Florida chemical engineering graduate in Lakeland, Florida.",
+    "Meet Zack Cook, also known as Zacky C: an engineer & aspiring author, Publix industrial engineer, and University of Florida chemical engineering graduate in Lakeland, Florida.",
   alternates: { canonical: "/about" },
 };
 
@@ -28,7 +28,7 @@ export default function About() {
       "Chemical engineering",
       "Lean Six Sigma",
     ],
-    sameAs: ["https://github.com/zackdcook"],
+    sameAs: ["https://github.com/zackdcook", site.linkedin, site.instagram, site.threads],
   };
   return (
     <div className="shell page-wrap">
@@ -51,7 +51,7 @@ export default function About() {
             <em>Cook.</em>
           </h1>
           <p>
-            A fiction writer, an engineer, and someone who’s happiest making
+            An engineer, an aspiring author, and someone who’s happiest making
             something.
           </p>
           <p>
