@@ -20,7 +20,7 @@ export default function JournalEntry() {
     <div className="shell page-wrap">
       <header className="article-heading">
         <Link className="text-link" href="/journal">
-          ← The journal
+          The journal
         </Link>
         <p className="eyebrow">
           <time dateTime="2025-10-20">October 20, 2025</time> ·{" "}
