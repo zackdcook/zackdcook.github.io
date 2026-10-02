@@ -16,6 +16,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLElement | null>(null);
   const latest = useRef(defaultPreferences);
+  const resetting = useRef(false);
 
   useEffect(() => {
     let initial = defaultPreferences;
@@ -76,11 +77,12 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     update(defaultPreferences); changeTimeline(livingTimeline); setResetVersion(v => v + 1);
     try { [preferenceKey, timelineKey, carvingBookmarkKey, carvingBookmarkKey + ".seen"].forEach(key => localStorage.removeItem(key)); } catch { /* Local state is already reset. */ }
     // The server identity cookie and real communal entries are deliberately untouched.
+    resetting.current = true; dialog.current?.close();
   }
 
   return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
     {children}
-    <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => opener.current?.focus()} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
+    <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => { const target = resetting.current ? document.querySelector<HTMLElement>("#main") : opener.current; resetting.current = false; target?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
         <div className="calendar-dialog-heading"><h2 id="preferences-title">Your corner.</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
         <p className="calendar-help">Just for this browser. No account needed.</p>

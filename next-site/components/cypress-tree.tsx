@@ -79,8 +79,9 @@ export function CypressTree({initialState,initialEntries,enabled,siteKey,fallen=
      const ratio=Math.min(1,Math.max(0,local/Math.max(1,treeRef.current.height-viewport/currentScale.current)));
      if(minimap.current)minimap.current.value=String(Math.round(ratio*100));
      if(scene.current&&document.documentElement.dataset.effects!=="reduced"){
-       scene.current.style.setProperty("--swamp-drift",(-Math.sin((window.scrollY-worldTop.current)/2500)*35).toFixed(2)+"px");
-       scene.current.style.setProperty("--moss-drift",(-Math.sin((window.scrollY-worldTop.current)/1100)*65).toFixed(2)+"px");
+       const travel=fallen&&horizontal.current?horizontal.current.scrollLeft:window.scrollY-worldTop.current;
+       scene.current.style.setProperty("--swamp-drift",(-Math.sin(travel/2500)*35).toFixed(2)+"px");
+       scene.current.style.setProperty("--moss-drift",(-Math.sin(travel/1100)*65).toFixed(2)+"px");
      }
    }
    const scroll=()=>{if(!scrollFrame.current)scrollFrame.current=requestAnimationFrame(tick);};
