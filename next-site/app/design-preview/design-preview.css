@@ -11,7 +11,7 @@ body:has(.design-preview) > main { padding: 0; }
 .design-preview--everglade .hero h1 em { font-family: "Fraunces Variable", Georgia, serif; }
 .design-preview--olive .hero h1 { font-size: clamp(90px, 12vw, 160px); }
 .design-preview .desk-copy .desk-detail, .design-preview .updated { color: var(--paper); }
-.design-preview .ring-center > span { color: var(--paper); }
+.design-preview .ring-center > span { color: var(--ink); }
 .design-preview .hero h1, .design-preview h2, .design-preview h3, .design-preview .wordmark, .design-preview .footer-name { font-weight: 700; }
 .design-preview .wordmark { font-size: 23px; }
 .design-preview .desk-copy h2 { font-size: 65px; }
@@ -30,10 +30,3 @@ body:has(.design-preview) > main { padding: 0; }
 .design-toolbar a { font-size: 12px; padding: 10px 0; }
 .design-toolbar .design-description { grid-column: 1 / -1; max-width: 880px; font-size: 13px; line-height: 1.6; }
 @media (max-width: 740px) { .design-toolbar { grid-template-columns: 1fr; } .design-preview .hero h1 { font-size: clamp(70px, 19vw, 110px); } .design-preview--olive .hero h1 { font-size: clamp(90px, 24vw, 135px); } }
-.design-preview .ring-layer:nth-of-type(1) .ring-fill { stroke: var(--teal); }
-.design-preview .ring-layer:nth-of-type(2) .ring-fill { stroke: var(--gold); }
-.design-preview .ring-layer:nth-of-type(3) line { stroke: var(--peach); }
-.design-preview .stage-list li:nth-child(1) .stage-dot { background: var(--teal) !important; }
-.design-preview .stage-list li:nth-child(2) .stage-dot { background: var(--gold) !important; }
-.design-preview .stage-list li:nth-child(3) .stage-dot { background: var(--peach) !important; }
-.design-preview--olive .ring-layer:nth-of-type(1) .ring-fill, .design-preview--everglade .ring-layer:nth-of-type(1) .ring-fill { stroke: #b8d0bc; }
