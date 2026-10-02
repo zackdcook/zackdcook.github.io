@@ -38,7 +38,7 @@ export default async function Home() {
           </p>
           <div className="actions">
             <Link className="button" href="/writing">
-              Creative works <span aria-hidden="true">↗</span>
+              Creative works
             </Link>
           </div>
         </div>
@@ -65,7 +65,7 @@ export default async function Home() {
               <br /> <em>Cook.</em>
             </h2>
             <Link className="button" href="/writing">
-              More deets <span aria-hidden="true">→</span>
+              More deets
             </Link>
             <p className="updated">
               Progress updated{" "}
@@ -84,14 +84,13 @@ export default async function Home() {
         <p className="event-address">{writingGroup.address}</p>
         <p className="event-description">{writingGroup.description}</p>
         <div className="actions event-actions">
-          <Link className="button" href="/events#writing-group-title">Come write with me <span aria-hidden="true">→</span></Link>
-          <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span></a>
+          <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer">Get directions</a>
         </div>
-        <div className="event-more"><Link className="button" href="/events#other-events">Other events <span aria-hidden="true">→</span></Link></div>
+        <div className="event-more"><Link className="button" href="/events#other-events">Other events</Link></div>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
-        <Link className="button" href="/events">Event details →</Link>
+        <Link className="button" href="/events">Event details</Link>
       </section>}
 
       <section id="about-me" className="life-section shell section-space">
@@ -118,7 +117,7 @@ export default async function Home() {
             My favorite hobby is learning new hobbies.
           </p>
           <Link className="button" href="/about">
-            A lil more aboot lil ole me <span aria-hidden="true">→</span>
+            A lil more aboot lil ole me
           </Link>
         </div>
       </section>
@@ -129,10 +128,10 @@ export default async function Home() {
           {posts.map(post => <Link className="journal-banner" key={post.slug} href={`/journal/${post.slug}`}>
             <time dateTime={post.date}>{displayDate(post.date)}</time>
             <h3>{post.title}</h3><p>{post.excerpt}</p>
-            <span className="button card-button">Read more <span aria-hidden="true">→</span></span>
+            <span className="button card-button">Read more</span>
           </Link>)}
         </ContentRail>
-        <div className="rail-more"><Link className="button button-outline" href="/journal">All Words of Folly <span aria-hidden="true">→</span></Link></div>
+        <div className="rail-more"><Link className="button button-outline" href="/journal">All Words of Folly</Link></div>
       </section>
 
       <section id="inspo-board" className="commonplace-section section-space">
@@ -142,21 +141,21 @@ export default async function Home() {
           {entries.length ? <ContentRail label="Recent inspiration" count={entries.slice(0, 5).length}>
             {entries.slice(0, 5).map(entry => <CommonplaceCard key={entry.id} entry={entry} />)}
           </ContentRail> : <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
-          <div className="rail-more"><Link className="button button-outline" href="/commonplace">The whole Inspo Board <span aria-hidden="true">→</span></Link></div>
+          <div className="rail-more"><Link className="button button-outline" href="/commonplace">The whole Inspo Board</Link></div>
         </div>
       </section>
 
       <section id="shoutouts" className="shoutouts-section shell section-space">
         <p className="eyebrow">Shoutouts</p><h2>Check out these cool peeps.</h2>
         <ShoutoutList people={shoutouts.slice(0, 3)} />
-        <div className="rail-more"><Link className="button" href="/shoutouts">All shoutouts <span aria-hidden="true">→</span></Link></div>
+        <div className="rail-more"><Link className="button" href="/shoutouts">All shoutouts</Link></div>
       </section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
           <h2>Keep in touch.</h2>
           <p>Occasional blurbs from my noggin to your feed.</p>
           <a className="button" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>
-            Get writing updates ↗
+            Get writing updates
           </a>
         </section>
       )}
