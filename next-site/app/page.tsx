@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ProgressRings } from "@/components/progress-rings";
 import { CommonplaceCard } from "@/components/commonplace-card";
 import { ContentRail } from "@/components/content-rail";
+import { ShoutoutList } from "@/components/shoutout-list";
 import { displayDate, publishedJournalPosts, shoutouts, upcomingEvents, writingGroup } from "@/content/site";
 import { getCommonplace } from "@/lib/commonplace";
 import progress from "@/content/progress.json";
@@ -14,13 +15,12 @@ export default async function Home() {
   const entries = await getCommonplace();
   const event = upcomingEvents()[0];
   const posts = publishedJournalPosts().slice(0, 5);
-  const draft = progress.stages.find(stage => stage.status === "active");
   return (
     <>
       <section className="hero shell">
         <div className="hero-copy">
           <p className="eyebrow hero-eyebrow">
-            Engineer by day // Author in play
+            Engineer by day // Author at play
           </p>
           <h1>
             Zack
@@ -53,9 +53,6 @@ export default async function Home() {
               sizes="(max-width: 740px) 85vw, 40vw"
             />
           </div>
-          <p className="photo-location">
-            <span aria-hidden="true">●</span> Lakeland, Florida
-          </p>
         </div>
       </section>
 
@@ -67,15 +64,7 @@ export default async function Home() {
               Let him
               <br /> <em>Cook.</em>
             </h2>
-            <p>Writing my first novel, and
-              <br />learning the process along the way.</p>
-            <p className="desk-detail">
-              I took a three-year braindump while absorbing every possible lesson on the craft of writing.
-            </p>
-            <p className="desk-detail">
-              Now, as of September 1<sup>st</sup>, 2026, I'm working on my zeroth draft with a current target of {draft?.target?.toLocaleString("en-US")} words.
-            </p>
-            <Link className="text-link" href="/writing">
+            <Link className="button" href="/writing">
               More deets <span aria-hidden="true">→</span>
             </Link>
             <p className="updated">
@@ -92,12 +81,17 @@ export default async function Home() {
         <h2>{writingGroup.title}</h2>
         <p className="event-schedule">{writingGroup.schedule}</p>
         <p>{writingGroup.venue} · Downtown Lakeland</p>
+        <p className="event-address">{writingGroup.address}</p>
         <p className="event-description">{writingGroup.description}</p>
-        <Link className="text-link" href="/events">Come write with us <span aria-hidden="true">→</span></Link>
+        <div className="actions event-actions">
+          <Link className="button" href="/events#writing-group-title">Come write with me <span aria-hidden="true">→</span></Link>
+          <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer">Get directions <span aria-hidden="true">↗</span></a>
+        </div>
+        <div className="event-more"><Link className="button" href="/events#other-events">Other events <span aria-hidden="true">→</span></Link></div>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
-        <Link className="text-link" href="/events">Event details →</Link>
+        <Link className="button" href="/events">Event details →</Link>
       </section>}
 
       <section id="about-me" className="life-section shell section-space">
@@ -123,7 +117,7 @@ export default async function Home() {
           <p>
             My favorite hobby is learning new hobbies.
           </p>
-          <Link className="text-link" href="/about">
+          <Link className="button" href="/about">
             A lil more aboot lil ole me <span aria-hidden="true">→</span>
           </Link>
         </div>
@@ -135,7 +129,7 @@ export default async function Home() {
           {posts.map(post => <Link className="journal-banner" key={post.slug} href={`/journal/${post.slug}`}>
             <time dateTime={post.date}>{displayDate(post.date)}</time>
             <h3>{post.title}</h3><p>{post.excerpt}</p>
-            <span className="text-link">Read the entry <span aria-hidden="true">→</span></span>
+            <span className="button card-button">Read more <span aria-hidden="true">→</span></span>
           </Link>)}
         </ContentRail>
         <div className="rail-more"><Link className="button button-outline" href="/journal">All Words of Folly <span aria-hidden="true">→</span></Link></div>
@@ -153,10 +147,9 @@ export default async function Home() {
       </section>
 
       <section id="shoutouts" className="shoutouts-section shell section-space">
-        <p className="eyebrow">Shoutouts</p><h2>Good people. Good work.</h2>
-        <div className="shoutout-list">{shoutouts.map(person => <a className="shoutout-link" key={person.url} href={person.url} target="_blank" rel="noopener noreferrer">
-          <div><h3>{person.name}</h3><p>{person.note}</p></div><span aria-hidden="true">↗</span>
-        </a>)}</div>
+        <p className="eyebrow">Shoutouts</p><h2>Check out these cool peeps.</h2>
+        <ShoutoutList people={shoutouts.slice(0, 3)} />
+        <div className="rail-more"><Link className="button" href="/shoutouts">All shoutouts <span aria-hidden="true">→</span></Link></div>
       </section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">

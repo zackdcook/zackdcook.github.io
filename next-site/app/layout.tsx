@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import { Zain } from "next/font/google";
+import { Grandstander } from "next/font/google";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
 
-const zain = Zain({
-  weight: ["700", "800"],
+// Temporary open-source stand-in until Zack supplies licensed Achiko webfonts.
+const displayFont = Grandstander({
+  weight: ["600", "700", "800"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
-  variable: "--font-zain",
+  variable: "--font-author-display",
   display: "swap",
 });
 
@@ -16,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: site.title,
-    template: "%s · Zack Cook",
+    template: "%s · Zack Cook — Engineer & aspiring author",
   },
   description: site.description,
   authors: [{ name: site.name }],
@@ -47,7 +49,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={zain.variable}>
+    <html lang="en" className={displayFont.variable}>
       <head>
         <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/journal/feed.xml`} />
       </head>

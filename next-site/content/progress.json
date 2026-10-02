@@ -1,5 +1,6 @@
 {
   "updated": "2026-10-01",
+  "ringColor": "#81B29A",
   "stages": [
     {
       "id": "braindump",
@@ -8,25 +9,25 @@
       "target": 35834,
       "unit": "words",
       "status": "complete",
-      "color": "#81B29A"
+      "note": "I took a three-year braindump while absorbing every possible lesson on the craft of writing."
     },
     {
       "id": "draft",
-      "label": "First draft",
+      "label": "0th draft",
       "value": 27250,
       "target": 50000,
       "unit": "words",
       "status": "active",
-      "color": "#F2CC8F"
+      "note": "Now, as of September 1st, 2026, I’m working on my zeroth draft with a current target of {target} words."
     },
     {
       "id": "revision",
-      "label": "Revision",
+      "label": "1st revision",
       "value": 0,
       "target": null,
       "unit": "chapters",
       "status": "planned",
-      "color": "#E07A5F"
+      "note": "Hold your narwhals! One step at a time"
     }
   ]
 }
