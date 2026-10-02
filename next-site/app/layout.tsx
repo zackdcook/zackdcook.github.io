@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s · Zack Cook — Engineer & aspiring author",
   },
   description: site.description,
-  icons: { apple: "/icon.png" },
+  icons: { icon: site.icon, apple: site.icon },
   authors: [{ name: site.name }],
   openGraph: {
     type: "website",
