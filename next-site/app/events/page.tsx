@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { upcomingEvents, writingGroup } from "@/content/site";
+import { upcomingEvents } from "@/content/site";
+import { WritingGroupCard } from "@/components/writing-group-card";
 
 export const metadata: Metadata = {
   title: "Events",
@@ -21,32 +22,7 @@ export default function Events() {
         </h1>
         <p>Readings, gatherings, and a chance to say hello.</p>
       </div>
-      <section
-        className="event-callout writing-group"
-        aria-labelledby="writing-group-title"
-      >
-        <p className="eyebrow">A standing Thursday date</p>
-        <h2 id="writing-group-title">{writingGroup.title}</h2>
-        <p className="event-schedule">{writingGroup.schedule}</p>
-        <p>
-          {writingGroup.venue}
-          <br />
-          {writingGroup.location}
-        </p>
-        <p className="event-description">{writingGroup.description}</p>
-        <div className="actions">
-          <a
-            className="button"
-            href={writingGroup.directionsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Get directions
-          </a>
-          <a className="button" href={writingGroup.venueUrl} target="_blank" rel="noopener noreferrer">Pressed Books & Coffee</a>
-        </div>
-        <p className="event-address">{writingGroup.address}</p>
-      </section>
+      <WritingGroupCard eyebrow="A standing Thursday date" />
       <section id="other-events" aria-labelledby="other-events-heading" className="other-events-section">
       <h2 id="other-events-heading">Other events</h2>
       {events.length ? (

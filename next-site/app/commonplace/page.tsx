@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { CommonplaceCard } from "@/components/commonplace-card";
 import { getCommonplace } from "@/lib/commonplace";
+import { InspirationHeading } from "@/components/collection-heading";
 
 export const metadata: Metadata = {
   title: "Inspo Board",
@@ -15,16 +16,7 @@ export default async function Commonplace() {
   return (
     <div className="shell page-wrap">
       <div className="page-intro">
-        <p className="eyebrow">The Inspo Board</p>
-        <h1>
-          Worth
-          <br />
-          <em>keeping.</em>
-        </h1>
-        <p>
-          Things I like. Things that make me curious. Things that make me want
-          to make something of my own.
-        </p>
+        <InspirationHeading level={1} />
       </div>
       {!entries.length && <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
       <div className="commonplace-grid collection-grid">

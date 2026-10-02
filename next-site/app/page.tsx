@@ -4,7 +4,9 @@ import { ProgressRings } from "@/components/progress-rings";
 import { CommonplaceCard } from "@/components/commonplace-card";
 import { ContentRail } from "@/components/content-rail";
 import { ShoutoutList } from "@/components/shoutout-list";
-import { displayDate, publishedJournalPosts, shoutouts, upcomingEvents, writingGroup } from "@/content/site";
+import { WritingGroupCard } from "@/components/writing-group-card";
+import { CollectionHeading, InspirationHeading } from "@/components/collection-heading";
+import { displayDate, publishedJournalPosts, shoutouts, upcomingEvents } from "@/content/site";
 import { getCommonplace } from "@/lib/commonplace";
 import progress from "@/content/progress.json";
 
@@ -31,10 +33,12 @@ export default async function Home() {
           </p>
           <p className="hero-detail">
             Greetings, fellow person!
-            <br />I’m Zack and I live in sunny Lakeland, Florida.
           </p>
           <p className="hero-detail">
-            I made this site to promote my creative works, scream into the void, and share things that inspire me.
+            I’m Zack and I live in sunny Lakeland, Florida.
+          </p>
+          <p className="hero-detail">
+            I made this site to promote my creative works, scream into the void, and share stuff that inspires me.
           </p>
           <div className="actions">
             <Link className="button" href="/writing">
@@ -77,17 +81,7 @@ export default async function Home() {
       </section>
 
       <section id="find-me-at" className="events-section shell">
-      <div className="event-callout">
-        <p className="eyebrow">Find me at…</p>
-        <h2>{writingGroup.title}</h2>
-        <p className="event-schedule">{writingGroup.schedule}</p>
-        <p>{writingGroup.venue} · Downtown Lakeland</p>
-        <p className="event-address">{writingGroup.address}</p>
-        <p className="event-description">{writingGroup.description}</p>
-        <div className="actions event-actions">
-          <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer">Get directions</a>
-        </div>
-      </div>
+        <WritingGroupCard />
         <div className="rail-more"><Link className="button" href="/events#other-events">Other events</Link></div>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
@@ -107,9 +101,10 @@ export default async function Home() {
           <span className="photo-label">The editorial board aka firing squad.</span>
         </div>
         <div className="life-copy">
-          <p className="eyebrow">About Me</p>
+          <p className="eyebrow">Aboot Zack</p>
           <h2>
             Who am I?
+            <sub className="identity-aside">no really // plz help // idk who I am</sub>
           </h2>
           <p>
             I live with my beautiful wife, Jennifer, and our three cats: Chemi, Tashi, and
@@ -119,13 +114,13 @@ export default async function Home() {
             My favorite hobby is learning new hobbies.
           </p>
           <Link className="button" href="/about">
-            A lil more aboot lil ole me
+            A lil more about me
           </Link>
         </div>
       </section>
 
       <section id="words-of-folly" className="journal-feature shell section-space">
-        <div className="section-heading"><div><p className="eyebrow">Words of Folly</p><h2>From my noggin.</h2></div></div>
+        <div className="section-heading"><CollectionHeading>Notes from my noggin</CollectionHeading></div>
         <ContentRail label="Recent Words of Folly" count={posts.length}>
           {posts.map(post => <Link className="journal-banner" key={post.slug} href={`/journal/${post.slug}`}>
             <time dateTime={post.date}>{displayDate(post.date)}</time>
@@ -133,24 +128,23 @@ export default async function Home() {
             <span className="button card-button">Read more</span>
           </Link>)}
         </ContentRail>
-        <div className="rail-more"><Link className="button button-outline" href="/journal">All Words of Folly</Link></div>
+        <div className="rail-more"><Link className="button button-outline" href="/journal">Older rants and rambles</Link></div>
       </section>
 
       <section id="inspo-board" className="commonplace-section section-space">
         <div className="shell">
-          <div className="section-heading"><div><p className="eyebrow">Inspo Board</p><h2>Cool stuff<br />(if you're me)</h2></div></div>
-          <p className="section-intro">Things that makes you go, "Hmm" for $500.</p>
+          <div className="section-heading"><InspirationHeading /></div>
           {entries.length ? <ContentRail label="Recent inspiration" count={entries.slice(0, 5).length}>
             {entries.slice(0, 5).map(entry => <CommonplaceCard key={entry.id} entry={entry} />)}
           </ContentRail> : <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
-          <div className="rail-more"><Link className="button button-outline" href="/commonplace">The whole Inspo Board</Link></div>
+          <div className="rail-more"><Link className="button button-outline" href="/commonplace">Further inspiration</Link></div>
         </div>
       </section>
 
       <section id="shoutouts" className="shoutouts-section shell section-space">
-        <p className="eyebrow">Shoutouts</p><h2>Check out these cool peeps.</h2>
+        <CollectionHeading>Cool peeps</CollectionHeading>
         <ShoutoutList people={shoutouts.slice(0, 3)} />
-        <div className="rail-more"><Link className="button" href="/shoutouts">All Shoutouts</Link></div>
+        <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
       </section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
