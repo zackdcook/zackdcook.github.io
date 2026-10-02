@@ -1,16 +1,12 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
-import { upcomingEvents } from "@/content/site";
+import { getUpcomingEvents } from "@/lib/site-events";
 import { WritingGroupCard } from "@/components/writing-group-card";
 
-export const metadata: Metadata = {
-  title: "Events",
-  description:
-    "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.",
-  alternates: { canonical: "/events" },
-};
+export const metadata: Metadata = pageMetadata("events", "Events");
 
-export default function Events() {
-  const events = upcomingEvents();
+export default async function Events() {
+  const events = await getUpcomingEvents();
   return (
     <div className="shell page-wrap">
       <div className="page-intro">
