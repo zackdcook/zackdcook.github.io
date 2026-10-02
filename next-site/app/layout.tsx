@@ -70,7 +70,7 @@ export default function RootLayout({
         <SitePreferences>
           <PointerLight />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
-          <OrganicTransition name="zacks-corner"><main id="main"><Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense></main></OrganicTransition>
+          <OrganicTransition name="zacks-corner"><main id="main" tabIndex={-1}><Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense></main></OrganicTransition>
           <SiteFooter />
         </SitePreferences>
       </body>

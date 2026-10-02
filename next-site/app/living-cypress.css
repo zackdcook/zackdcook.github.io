@@ -1,8 +1,8 @@
 /* A shared material and motion language; the original identity remains underneath. */
 :root { --midnight: #31031F; --coral: #E88F93; --khaki: #393313; --floral: #FFF8ED; --leaf: #66693E; --light-strength: 0; --cast-x: 0px; --cast-y: 0px; --material-shadow: #31031f28; }
 html { color-scheme: light; }
-html[data-theme="dark"] { color-scheme: dark; --paper: #31031F; --ink: #FFF8ED; --muted: #E88F93; --line: #E88F9355; --material-shadow: #00000070; }
-@media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { color-scheme: dark; --paper: #31031F; --ink: #FFF8ED; --muted: #E88F93; --line: #E88F9355; --material-shadow: #00000070; } }
+html[data-theme="dark"] { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); --material-shadow: #00000070; }
+@media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); --material-shadow: #00000070; } }
 html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em { color: var(--coral); }
 html[data-theme="dark"] :is(.event-callout,.writing-panel,.commonplace-section,.subscribe-callout,.board-empty,.empty-note,.admin-panel,.moderation-entry) { background-color: color-mix(in srgb, var(--khaki) 70%, var(--midnight)); color: var(--floral); }
 html[data-theme="dark"] :is(.event-description,.event-schedule,.progress-note,.commonplace-card p) { color: var(--floral); }
@@ -13,18 +13,18 @@ html[data-theme="dark"] .photo-label { color: var(--midnight); }
 .desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) { background-color: var(--midnight); color: var(--coral); }
 .stage-button[aria-pressed="true"], .stage-button[aria-pressed="true"] .stage-label > span { color: var(--midnight); }
 .stage-button:hover .stage-label > span { color: var(--coral); }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button) { color: var(--midnight); background-color: var(--coral); border-color: #31031F40; }
+body :is(.button,.text-link,.rail-controls button,.feed-copy button) { color: var(--midnight); background-color: var(--coral); border-color: color-mix(in srgb,var(--midnight) 25.0980%,transparent); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):hover { background-color: var(--midnight); color: var(--coral); border-color: var(--coral); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):active { background-color: var(--khaki); color: var(--coral); }
 :is(a,button,input,textarea,select,summary):focus-visible { outline-color: var(--ink); }
 body :is(.button,.text-link,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.photo-label,.writing-panel,.guestbook-invitation,.signature-pad,.submission-panel) {
   background-image: radial-gradient(440px circle at var(--light-x,-1000px) var(--light-y,-1000px), rgb(255 248 237 / calc(var(--light-strength) * .15)), transparent 75%);
-  box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(5px + var(--cast-y) * var(--light-strength)) 18px var(--material-shadow), inset 0 1px 0 #fff8ed45;
+  box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(5px + var(--cast-y) * var(--light-strength)) 18px var(--material-shadow), inset 0 1px 0 color-mix(in srgb,var(--floral) 27.0588%,transparent);
 }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled) { box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(3px + var(--cast-y) * var(--light-strength)) 0 #39331338, calc(var(--cast-x) * var(--light-strength)) calc(6px + var(--cast-y) * var(--light-strength)) 16px var(--material-shadow), inset 0 1px 0 #fff8ed80; }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):hover { box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(7px + var(--cast-y) * var(--light-strength)) 0 #39331338, calc(var(--cast-x) * var(--light-strength)) calc(12px + var(--cast-y) * var(--light-strength)) 21px var(--material-shadow), inset 0 1px 0 #e88f9355; }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):active { box-shadow: 0 1px 0 #39331338, inset 0 2px 4px #31031F50; transform: translateY(1px); }
-.desktop-nav a { background-image: radial-gradient(180px at var(--light-x,-1000px) var(--light-y,-1000px), rgb(255 248 237 / calc(var(--light-strength) * .22)), transparent); box-shadow: inset 0 1px 0 #fff8ed66; }
+body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled) { box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(3px + var(--cast-y) * var(--light-strength)) 0 color-mix(in srgb,var(--khaki) 21.9608%,transparent), calc(var(--cast-x) * var(--light-strength)) calc(6px + var(--cast-y) * var(--light-strength)) 16px var(--material-shadow), inset 0 1px 0 color-mix(in srgb,var(--floral) 50.1961%,transparent); }
+body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):hover { box-shadow: calc(var(--cast-x) * var(--light-strength)) calc(7px + var(--cast-y) * var(--light-strength)) 0 color-mix(in srgb,var(--khaki) 21.9608%,transparent), calc(var(--cast-x) * var(--light-strength)) calc(12px + var(--cast-y) * var(--light-strength)) 21px var(--material-shadow), inset 0 1px 0 color-mix(in srgb,var(--coral) 33.3333%,transparent); }
+body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):active { box-shadow: 0 1px 0 color-mix(in srgb,var(--khaki) 21.9608%,transparent), inset 0 2px 4px color-mix(in srgb,var(--midnight) 31.3725%,transparent); transform: translateY(1px); }
+.desktop-nav a { background-image: radial-gradient(180px at var(--light-x,-1000px) var(--light-y,-1000px), rgb(255 248 237 / calc(var(--light-strength) * .22)), transparent); box-shadow: inset 0 1px 0 color-mix(in srgb,var(--floral) 40.0000%,transparent); }
 .desktop-nav a[aria-current="page"] { box-shadow: none; background-image: none; }
 .desktop-nav a[aria-current="page"]:hover { background-color: var(--paper); color: var(--ink); }
 .photo-label { transition: transform .4s cubic-bezier(.2,.7,.2,1); }

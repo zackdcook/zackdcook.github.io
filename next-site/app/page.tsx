@@ -78,7 +78,7 @@ export default async function Home() {
       </section>}
 
       <section id="about-me" className="life-section shell section-space">
-        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} />
+        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
         <div className="life-copy">
           <h2 className="eyebrow section-label">Aboot Zack</h2>
           <h2>

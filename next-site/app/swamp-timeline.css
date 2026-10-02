@@ -77,6 +77,9 @@ body .stage-button:active { transform: none; }
 .fallen-experience .tree-minimap { display: none; }
 .fallen-scroll .carving-info { transform: translateX(-50%) rotate(-90deg); transform-origin: 50% 0; }
 .fallen-experience .tree-scene { background: #343b27; }
+.fallen-experience .swamp-middle,.fallen-experience .swamp-distance { transform: translateX(var(--swamp-drift,0px)); }
+.fallen-experience .moss-foreground { transform: translateX(var(--moss-drift,0px)); }
+html[data-theme="dark"] .footer-links img { filter: brightness(0) invert(1); }
 html[data-effects="reduced"] .tactile-photo { transform: none !important; box-shadow: 0 2px 0 var(--material-shadow); }
 html[data-effects="reduced"] .tactile-photo::after { display: none; }
 html[data-effects="reduced"] .is-felling .standing-base { transition: none; }
