@@ -44,7 +44,7 @@ export default function About() {
       />
       <section className="about-intro">
         <div className="page-intro">
-          <p className="eyebrow">Nice to meet you</p>
+          <p className="eyebrow">Aboot Zack</p>
           <h1>
             I’m Zack
             <br />
