@@ -24,17 +24,18 @@ export function CommonplaceCard({ entry }: { entry: CommonplaceEntry }) {
       )}
       <div className="commonplace-copy">
         <p className="eyebrow">{entry.category}</p>
-        <h3>{entry.source_url ? <a href={entry.source_url} target="_blank" rel="noopener noreferrer">{entry.title}</a> : entry.title}</h3>
+        <h3>{entry.title}</h3>
         {entry.note && <p>{entry.note}</p>}
         <p className="source">
           {entry.creator && <>{entry.creator} · </>}
           {entry.source_url ? (
             <a
+              className="button button-small"
               href={entry.source_url}
               target="_blank"
               rel="noopener noreferrer"
             >
-              {sourceName(entry.source_url)} <span aria-hidden="true">↗</span>
+              Open on {sourceName(entry.source_url)} <span aria-hidden="true">↗</span>
             </a>
           ) : (
             sourceName(null)

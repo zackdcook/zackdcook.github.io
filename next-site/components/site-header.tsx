@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { SiteMark } from "@/components/icons";
+import { site } from "@/content/site";
 
 const links = [
   ["Creative Works", "/writing"],
@@ -11,7 +12,7 @@ const links = [
   ["About Me", "/about"],
   ["Words of Folly", "/journal"],
   ["Inspo Board", "/commonplace"],
-  ["Shoutouts", "/#shoutouts"],
+  ["Shoutouts", "/shoutouts"],
 ];
 
 export function SiteHeader() {
@@ -37,8 +38,8 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link href="/" className="wordmark" aria-label="Zack Cook, home">
-          <SiteMark className="site-mark" />
+        <Link href="/" className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={pathname === "/" ? "page" : undefined}>
+          <Image className="site-mark" src={site.icon} alt="" width={34} height={34} unoptimized />
           Zack Cook
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
