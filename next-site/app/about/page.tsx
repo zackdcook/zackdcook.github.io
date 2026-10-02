@@ -56,26 +56,26 @@ export default function About() {
             Cook.
           </p>
         </div>
-        <Image
-          className="about-portrait"
+        <div className="portrait-frame tactile-photo"><Image
           src="/images/portrait.webp"
           alt="Zack Cook"
           width={1200}
           height={1200}
           sizes="(max-width: 740px) 90vw, 40vw"
-        />
+        /></div>
       </section>
       <div className="prose section-space">
         {editorial.aboutSections.map(section => <section key={section.heading}><h2>{section.heading}</h2>{section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</section>)}
       </div>
       <figure className="about-cats">
+        <div className="tactile-photo kitty-photo">
         <Image
           src="/images/cats.webp"
           alt="The three cats at home in a sunny patch by the window"
           width={1400}
           height={1034}
           sizes="90vw"
-        />
+        /></div>
         <figcaption>
           Chemi, Tashi, and Brave. Enthusiastic participants in every
           work-from-home day.
