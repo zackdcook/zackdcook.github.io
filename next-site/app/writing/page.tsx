@@ -5,7 +5,7 @@ import { ProgressRings } from "@/components/progress-rings";
 export const metadata: Metadata = {
   title: "Creative Works",
   description:
-    "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a first draft at 27,250 of 50,000 words.",
+    "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a zeroth draft at 27,250 of 50,000 words.",
   alternates: { canonical: "/writing" },
 };
 
@@ -27,7 +27,7 @@ export default function Writing() {
           <h2>
             First novel.
             <br />
-            First draft.
+            0<sup>th</sup> draft.
           </h2>
           <p>
             Fantasy, strange things, and people trying to figure out what
@@ -45,7 +45,7 @@ export default function Writing() {
         <h2>Before the draft</h2>
         <p>
           The braindump came first: 35,834 words of getting ideas out of my head
-          and onto the page. That stage is complete. The first draft is a
+          and onto the page. That stage is complete. The zeroth draft is a
           separate pass, with its own count and goal.
         </p>
         <h2>When there’s something to read</h2>
