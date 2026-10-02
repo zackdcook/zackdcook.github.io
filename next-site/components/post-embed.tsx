@@ -23,7 +23,7 @@ export function PostEmbed({ embed, title }: { embed: PublicPostEmbed; title: str
   return <div className="post-embed">
     {loaded ? <iframe ref={frame} src={embed.url} height={height} title={`${title} on ${embed.provider}`} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" allow="fullscreen" /> : <>
       <p>Load the original post from {embed.provider}. This connects to {embed.provider}.</p>
-      <button className="button button-outline" type="button" onClick={() => setLoaded(true)}>Show {embed.provider} post ↗</button>
+      <button className="button button-outline" type="button" onClick={() => setLoaded(true)}>Show {embed.provider} post</button>
     </>}
   </div>;
 }

@@ -91,7 +91,7 @@ export function JournalConversation({
     <section className="conversation">
       <div className="actions">
         <button className="button secondary" onClick={share}>
-          Share this entry ↗
+          Share this entry
         </button>
         {conversation.enabled &&
           (conversation.signedIn ? (
@@ -108,7 +108,7 @@ export function JournalConversation({
               className="text-link"
               href={`/login?next=${encodeURIComponent(`/journal/${slug}`)}`}
             >
-              Sign in to like or comment →
+              Sign in to like or comment
             </Link>
           ))}
       </div>
@@ -128,7 +128,7 @@ export function JournalConversation({
                 <textarea name="body" required maxLength={2000} />
               </label>
               <button className="button" disabled={busy}>
-                Leave a comment →
+                Leave a comment
               </button>
               <p className="form-help">Comments appear after review.</p>
             </form>

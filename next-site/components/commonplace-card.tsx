@@ -35,7 +35,7 @@ export function CommonplaceCard({ entry }: { entry: CommonplaceEntry }) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open on {sourceName(entry.source_url)} <span aria-hidden="true">↗</span>
+              Open on {sourceName(entry.source_url)}
             </a>
           ) : (
             sourceName(null)

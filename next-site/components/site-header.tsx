@@ -7,6 +7,7 @@ import { useEffect, useRef } from "react";
 import { site } from "@/content/site";
 
 const links = [
+  ["Home", "/"],
   ["Creative Works", "/writing"],
   ["Find Me At…", "/events"],
   ["About Me", "/about"],
