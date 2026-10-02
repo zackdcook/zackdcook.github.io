@@ -9,6 +9,9 @@ export const carvingWidth = 216;
 export const carvingHeight = 76;
 export const cellSize = 4;
 export const cellsPerRow = treeWidth / cellSize;
+export const fallenBaseUnits = 720;
+// Rigid rotation, without reflow or moving any carving relative to a landmark.
+export const fallenPoint = (x:number,y:number,height:number) => ({ x:height + fallenBaseUnits - y, y:x });
 export type Geometry = { contours: Point[][]; lines: Stroke[] };
 export type FontGeometry = { units: number; glyphs: Record<string, { advance: number; contours: Point[][] }> };
 export type TreeState = { approved_count: number; height: number; active_top: number; active_bottom: number; version: number; oldest: { id: string; y: number; public_sequence: number } | null; newest: { id: string; y: number; public_sequence: number } | null };

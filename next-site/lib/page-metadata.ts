@@ -11,7 +11,7 @@ export const shareRecords: ShareRecord[] = [
   { id: "journal", path: "/journal", title: "Notes from my noggin.", description: "Writing updates, essays, and occasional notes from Zack Cook.", category: "Words of Folly" },
   { id: "commonplace", path: "/commonplace", title: "Further inspiration.", description: "Things Zack Cook wants to keep around: inspiration, photos, music, and interesting finds.", category: "Inspo Board" },
   { id: "shoutouts", path: "/shoutouts", title: "Cool peeps.", description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.", category: "Shoutouts" },
-  { id: "guestbook", path: "/guestbook", title: "Leave a little mark.", description: "Sign Zack Cook’s guestbook: a growing Florida bald cypress with a place for your words, your doodles, and your own little mark.", category: "The guestbook tree" },
+  { id: "guestbook", path: "/tree", title: "A tree, impossibly tall.", description: "Wander into a quiet Florida swamp and leave a permanent mark on Zack Cook’s living bald-cypress guestbook.", category: "The living cypress" },
   ...projects.map(p => ({ id: `project-${p.slug}`, path: `/writing/${p.slug}`, title: p.shareTitle, description: p.summary, category: p.category, status: p.status })),
   ...journalPosts.map(p => ({ id: `journal-${p.slug}`, path: `/journal/${p.slug}`, title: p.title, description: p.excerpt, category: "Words of Folly", date: p.date })),
 ];
