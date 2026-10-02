@@ -9,7 +9,7 @@ import { site } from "@/content/site";
 const links = [
   ["Home", "/"],
   ["Creative Works", "/writing"],
-  ["Find Me At…", "/events"],
+  ["Events", "/events"],
   ["About Me", "/about"],
   ["Words of Folly", "/journal"],
   ["Inspo Board", "/commonplace"],
