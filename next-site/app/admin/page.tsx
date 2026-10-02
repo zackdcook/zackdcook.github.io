@@ -46,8 +46,8 @@ export default async function Admin() {
       ) : (
         <>
           <nav className="admin-nav" aria-label="Private tools">
-            <Link href="/admin/share">Add to Commonplace →</Link>
-            <Link href="/admin/comments">Review comments →</Link>
+            <Link href="/admin/share">Add to Commonplace</Link>
+            <Link href="/admin/comments">Review comments</Link>
           </nav>
           <p className="short-note">
             Writing counts and page copy live in the project files. We can
