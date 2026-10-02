@@ -25,7 +25,7 @@ export default function Journal() {
           <Link className="journal-row" href={`/journal/${post.slug}`}>
             <time dateTime={post.date}>{displayDate(post.date)}</time>
             <div><h2>{post.title}</h2><p>{post.excerpt}</p></div>
-            <span aria-hidden="true">→</span>
+            <span className="button card-button">Read more <span aria-hidden="true">→</span></span>
           </Link>
         </li>)}
       </ol>
