@@ -6,5 +6,4 @@ export const navigation = [
   { title: "Words of Folly", href: "/journal" },
   { title: "Inspo Board", href: "/commonplace" },
   { title: "Shoutouts", href: "/shoutouts" },
-  { title: "Guestbook", href: "/guestbook" },
 ];
