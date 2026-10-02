@@ -98,5 +98,12 @@ test("real Postgres: reservations, moderation, frontier movement, expiry and RLS
      if(i===0)assert.equal((await db.query<{ok:boolean}>("select public.reserve_submission_notice($1) ok",[id])).rows[0].ok,false,"repeat notification must not use quota");
    }
   });
+  await t.test("a felled cutoff excludes later approvals without moving old neighbors",async()=>{
+    const before=(await db.query("select id,x,y,public_sequence from public.guestbook_entries where status='approved' and public_sequence<=3 order by public_sequence")).rows;
+    const r=await reserve(360,1000,"Later guest");await submit(r);await approve(r.id);
+    const after=(await db.query("select id,x,y,public_sequence from public.guestbook_entries where status='approved' and public_sequence<=3 order by public_sequence")).rows;
+    assert.deepEqual(after,before);
+    assert.equal((await db.query<{n:number}>("select approved_count::int n from public.cypress_state")).rows[0].n,4,"the communal tree keeps growing");
+  });
  }finally{await db.close();}
 });
