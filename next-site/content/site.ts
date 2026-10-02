@@ -2,7 +2,7 @@ export const site = {
   name: "Zack Cook",
   email: "hi@zackdcook.com",
   url: "https://zackdcook.com",
-  title: "Zack Cook — Engineer & aspiring author",
+  title: "Zack Cook ⇌ Aspiring Author + Engineer",
   icon: "/icon.png",
   // These control the footer. Add only your own public profile/payment links.
   instagram: "https://www.instagram.com/zackyc.xyz/",
