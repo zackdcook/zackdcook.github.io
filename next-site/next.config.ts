@@ -2,9 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  cacheComponents: true,
+  partialPrefetching: true,
+  outputFileTracingIncludes: { "/*": ["./public/fonts/geometry/*.json"] },
   // Use the installed TypeScript compiler API, keeping build-time checks on
   // without depending on a separate CLI process for reading tsconfig.
-  experimental: { useTypeScriptCli: false },
+  experimental: { useTypeScriptCli: false, serverActions: { bodySizeLimit: "64kb" } },
   async headers() {
     return [
       {
