@@ -156,7 +156,7 @@ export function CypressTree({initialState,initialEntries,enabled,siteKey,fallen=
     onPointerCancel={()=>{dragging.current=false;pointerStart.current=null;}}>
     {fallen&&<img className="fallen-origin" src="/images/cypress-felled-base.webp" alt="A chopped cypress stump beside the severed base of the fallen tree" width="1200" height="800" style={{width:fallenBaseUnits*scale*1.9}}/>}
     <div className="tree-space" style={{width:treeWidth,height:tree.height,transform:fallen?`translateX(${(tree.height+fallenBaseUnits)*scale}px) rotate(90deg) scale(${scale})`:"scale("+scale+")"}}>
-     {sections.map(section=><TreeSection key={section} section={section}/>)}
+     <div className="tree-bark" style={{width:treeWidth,height:tree.height}}>{sections.map(section=><TreeSection key={section} section={section}/>)}</div>
      {entries.map(entry=><CarvingDetails key={entry.id} entry={entry} emphasized={highlight===entry.id}/>)}
      {!fallen&&!tree.approved_count&&!draft&&<div className="tree-first-note" style={{top:tree.active_bottom-520}}><p>No carvings yet.</p><p>There’s a little patch of history waiting for you.</p></div>}
      {draft&&<><div className="active-bark-hint" style={{top:tree.active_top,height:tree.active_bottom-tree.active_top}} aria-hidden="true"/><div ref={ghost} hidden={draft.x===null} className="placement-ghost" data-valid={selectionValid} style={{left:draft.x??0,top:draft.y??0,width:carvingWidth,height:carvingHeight}}><SignatureArt name={draft.name} note={draft.note} mode={draft.mode} font={draft.font} strokes={draft.strokes} geometry={draft.geometry} carved/><span>Preview · awaiting approval</span></div></>}
