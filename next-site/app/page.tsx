@@ -6,40 +6,27 @@ import { ContentRail } from "@/components/content-rail";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
 import { CollectionHeading, InspirationHeading } from "@/components/collection-heading";
-import { displayDate, publishedJournalPosts, shoutouts, upcomingEvents } from "@/content/site";
+import { displayDate, publishedJournalPosts } from "@/content/site";
+import { getShoutouts } from "@/lib/community";
 import { getCommonplace } from "@/lib/commonplace";
+import editorial from "@/content/editorial.json";
+import { getUpcomingEvents } from "@/lib/site-events";
 import progress from "@/content/progress.json";
 
-export const revalidate = 60;
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
-  const entries = await getCommonplace();
-  const event = upcomingEvents()[0];
+  const [entries, events, shoutouts] = await Promise.all([getCommonplace(), getUpcomingEvents(), getShoutouts()]);
+  const event = events[0];
   const posts = publishedJournalPosts().slice(0, 5);
   return (
     <>
       <section className="hero shell">
         <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">
-            Engineer by day // Author at play
-          </p>
-          <h1>
-            Zack
-            <br /> <em>Cook.</em>
-          </h1>
-          <p className="hero-intro">
-            Easily distracted by cats, birds, and ...
-          </p>
-          <p className="hero-detail">
-            Greetings, fellow person!
-          </p>
-          <p className="hero-detail">
-            I’m Zack and I live in sunny Lakeland, Florida.
-          </p>
-          <p className="hero-detail">
-            I made this site to promote my creative works, scream into the void, and share stuff that inspires me.
-          </p>
+          <p className="eyebrow hero-eyebrow">{editorial.home.eyebrow}</p>
+          <h1>Zack<br /> <em>Cook.</em></h1>
+          <p className="hero-intro">{editorial.home.intro}</p>
+          {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
           <div className="actions">
             <Link className="button" href="/writing">
               Creative works
@@ -98,7 +85,7 @@ export default async function Home() {
             height={1034}
             sizes="(max-width: 740px) 90vw, 48vw"
           />
-          <span className="photo-label">The editorial board aka firing squad.</span>
+          <span className="photo-label">{editorial.home.editorialLabel}</span>
         </div>
         <div className="life-copy">
           <p className="eyebrow">Aboot Zack</p>
@@ -106,13 +93,7 @@ export default async function Home() {
             Who am I?
             <sub className="identity-aside">no really // plz help // idk who I am</sub>
           </h2>
-          <p>
-            I live with my beautiful wife, Jennifer, and our three cats: Chemi, Tashi, and
-            Brave.
-          </p>
-          <p>
-            My favorite hobby is learning new hobbies.
-          </p>
+          {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
           <Link className="button" href="/about">
             A lil more about me
           </Link>
@@ -155,6 +136,7 @@ export default async function Home() {
           </a>
         </section>
       )}
+      <section className="guestbook-invitation shell section-space"><p className="eyebrow">Before you wander off</p><h2>Leave a little<br/><em>mark.</em></h2><p>A growing cypress, a patch of bark, and everyone who’s stopped by.</p><Link href="/guestbook" className="button">Sign My Guestbook</Link></section>
     </>
   );
 }

@@ -4,6 +4,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
+import "./living-cypress.css";
+import "./cypress.css";
+import { Suspense } from "react";
+import { SitePreferences } from "@/components/site-preferences";
+import { PointerLight } from "@/components/pointer-light";
+import { OrganicTransition } from "@/components/organic-transition";
+import { preferenceBootstrap } from "@/lib/preferences";
 
 // A soft, open-source alternative to MADE Gentle's paid webfont license.
 const displayFont = localFont({
@@ -39,7 +46,7 @@ export const metadata: Metadata = {
   },
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.shareImage] },
   robots:
-    process.env.SITE_LIVE === "true"
+    process.env.SITE_LIVE === "true" && process.env.VERCEL_ENV !== "preview"
       ? { index: true, follow: true }
       : { index: false, follow: false },
 };
@@ -50,17 +57,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={displayFont.variable}>
+    <html lang="en" className={displayFont.variable} suppressHydrationWarning>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap }} />
         <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/journal/feed.xml`} />
       </head>
       <body>
         <a className="skip-link" href="#main">
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main">{children}</main>
-        <SiteFooter />
+        <SitePreferences>
+          <PointerLight />
+          <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
+          <OrganicTransition name="zacks-corner"><main id="main"><Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense></main></OrganicTransition>
+          <SiteFooter />
+        </SitePreferences>
       </body>
     </html>
   );
