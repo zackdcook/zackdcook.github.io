@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import { useEffect, useRef } from "react";
 import { site } from "@/content/site";
 
 const links = [
@@ -18,12 +18,11 @@ const links = [
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const [visiblePath, setVisiblePath] = useState(pathname);
+  const segment = useSelectedLayoutSegment();
+  const visiblePath = segment ? `/${segment}` : "/";
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
   useEffect(() => {
-    // Match the address visitors see, including the initial static homepage.
-    setVisiblePath(window.location.pathname);
     if (menu.current) menu.current.open = false;
   }, [pathname]);
   useEffect(() => {
