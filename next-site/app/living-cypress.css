@@ -9,6 +9,10 @@ html[data-theme="dark"] :is(.event-description,.event-schedule,.progress-note,.c
 html[data-theme="dark"] .photo-label { color: var(--midnight); }
 .prose { color: var(--ink); }
 .writing-panel .progress-note { color: var(--floral); }
+.desktop-nav a:not([aria-current="page"]) { color: var(--midnight); }
+.desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) { background-color: var(--midnight); color: var(--coral); }
+.stage-button[aria-pressed="true"], .stage-button[aria-pressed="true"] .stage-label > span { color: var(--midnight); }
+.stage-button:hover .stage-label > span { color: var(--coral); }
 body :is(.button,.text-link,.rail-controls button,.feed-copy button) { color: var(--midnight); background-color: var(--coral); border-color: #31031F40; }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):hover { background-color: var(--midnight); color: var(--coral); border-color: var(--coral); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):active { background-color: var(--khaki); color: var(--coral); }
