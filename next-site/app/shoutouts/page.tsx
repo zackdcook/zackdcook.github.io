@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { shoutouts } from "@/content/site";
+import { CollectionHeading } from "@/components/collection-heading";
 
 export const metadata: Metadata = {
   title: "Shoutouts",
@@ -11,8 +12,7 @@ export const metadata: Metadata = {
 export default function Shoutouts() {
   return <div className="shell page-wrap">
     <div className="page-intro">
-      <p className="eyebrow">Shoutouts</p>
-      <h1>Check out these<br />cool peeps.</h1>
+      <CollectionHeading level={1}>Cool peeps</CollectionHeading>
     </div>
     <ShoutoutList people={shoutouts} />
   </div>;
