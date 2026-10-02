@@ -98,7 +98,16 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
               {item.status === "planned" ? <circle cx="160" cy="160" r={radius} pathLength="100" fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth={Math.min(7, width)} strokeDasharray="1 4" strokeLinecap="round" /> :
                 <circle className="ring-fill" cx="160" cy="160" r={radius} pathLength="100" fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth={width} strokeLinecap="round" strokeDasharray="100 100" transform="rotate(-90 160 160)" />}
             </>}
-            <circle className="ring-highlight" cx="160" cy="160" r={index === 0 ? coreRadius + 2 : radius} fill="none" stroke="var(--progress-dark)" strokeWidth={index === 0 ? 4 : width + 7} />
+            {(index === 0 ? [coreRadius + 3] : [radius - width / 2 - 3, radius + width / 2 + 3]).map(edge => <circle
+              key={edge}
+              className="ring-highlight"
+              cx="160"
+              cy="160"
+              r={edge}
+              fill="none"
+              stroke="var(--progress-dark)"
+              strokeWidth="2.5"
+            />)}
             <circle cx="160" cy="160" r={radius} fill={index === 0 ? "transparent" : "none"} stroke="transparent" strokeWidth={index === 0 ? 0 : Math.max(width + 10, spacing - 5)} className="ring-hit" />
           </g>;
         })}
