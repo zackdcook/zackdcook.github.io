@@ -21,7 +21,7 @@ html[data-timeline="felled"] .site-mark { filter: sepia(.8) saturate(.75) hue-ro
 body :is(.button,.text-link,.rail-controls button,.feed-copy button) { background-color: var(--button-bg); color: var(--button-ink); border-color: var(--material-cut); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):hover { background-color: var(--button-hover-bg); color: var(--button-hover-ink); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):active { background-color: var(--button-down-bg); color: var(--button-hover-ink); }
-body :is(.button,.text-link,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.photo-label) {
+body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.desktop-nav a,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.photo-label) {
   background-image: radial-gradient(ellipse 240px 120px at var(--shine-x,-1000px) var(--shine-y,-1000px), color-mix(in srgb,var(--floral) calc(var(--light-strength)*19%),transparent),transparent 85%);
 }
 body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled) { box-shadow: calc(var(--cast-x)*var(--light-strength)) calc(3px + var(--cast-y)*var(--light-strength)) 0 var(--material-cut),calc(var(--cast-x)*var(--light-strength)) calc(6px + var(--cast-y)*var(--light-strength)) 16px var(--material-shadow),inset 0 1px 0 var(--material-edge); }
@@ -43,7 +43,8 @@ html[data-theme] .life-photo .kitty-ribbon { color: var(--coral); }
 .empty-window-placeholder { display: grid; place-items: center; height: 100%; padding: 35px; text-align: center; background: color-mix(in srgb,var(--coral) 15%,var(--paper)); color: var(--ink); font-size: .9rem; }
 /* The same small heading treatment as Active Project, on every home section. */
 body :is(.section-label,.collection-heading.section-label,.inspiration-heading.section-label,.desk-copy h2.section-label,.event-callout h2.section-label,.life-copy h2.section-label) { font: 600 11px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; margin: 0 0 20px; max-width: none; }
-.footer-preferences { margin: 28px 0; }
+.footer-preferences { grid-column: 1/-1; margin: 28px 0; }
+.site-footer .support-callout { grid-column: 1/-1; }
 html[data-text="large"] { font-size: 18px; }
 html[data-text="large"] :is(.hero-detail,.life-copy>p,.prose p,.journal-row p,.shoutout-card p) { font-size: max(1.05rem,18px); }
 /* Reserve the tallest note's geometry. Changing stages cannot move the SVG. */
@@ -70,7 +71,8 @@ body .stage-button:active { transform: none; }
 .dead-stump { width: min(100%,980px); height: min(78svh,760px); object-fit: contain; object-position: bottom; margin: auto; }
 .is-felling .standing-base { opacity: .25; transition: opacity .2s; }
 .fallen-instruction { text-align: center; padding: 12px 0 25px; }
-.fallen-origin { position: absolute; left: 0; top: -9%; height: 118%; max-width: none; object-fit: contain; object-position: left bottom; z-index: 4; pointer-events: none; }
+.fallen-origin { position: absolute; left: 0; top: -9%; height: 118%; max-width: none; object-fit: contain; object-position: left bottom; z-index: 1; pointer-events: none; }
+.fallen-scroll .tree-space { z-index: 2; }
 .fallen-scroll { overflow-x: auto; overflow-y: hidden; height: clamp(330px,70svh,600px); overscroll-behavior-x: contain; scrollbar-color: var(--coral) #293126; }
 .fallen-scroll .tree-world { margin: 0; touch-action: pan-x; }
 .fallen-scroll .carving-inspect { touch-action: pan-x; }
