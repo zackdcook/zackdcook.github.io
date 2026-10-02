@@ -22,7 +22,7 @@ export default async function DesignPreview({ searchParams }: { searchParams: Pr
   return <div className={`design-preview design-preview--${key} ${cormorant.variable} ${stack.variable}`}>
     <aside className="design-toolbar" aria-label="Compare homepage designs">
       <div><p>Homepage design studies</p><h1>{theme.name}</h1><p>{theme.font} headings · DM Sans for reading</p></div>
-      <form action="/design-preview" method="get"><label htmlFor="theme">Try a direction</label><select id="theme" name="theme" defaultValue={key}>{Object.entries(themes).map(([value, item]) => <option key={value} value={value}>{item.name}</option>)}</select><button type="submit">View design →</button><a href="/">Back to the live site ↗</a></form>
+      <form action="/design-preview" method="get"><label htmlFor="theme">Try a direction</label><select id="theme" name="theme" defaultValue={key}>{Object.entries(themes).map(([value, item]) => <option key={value} value={value}>{item.name}</option>)}</select><button type="submit">View design</button><a href="/">Back to the live site</a></form>
       <p className="design-description">{theme.description} These studies keep your words and layout; they do not change the main homepage.</p>
     </aside>
     <SiteHeader />
