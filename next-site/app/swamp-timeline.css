@@ -2,7 +2,7 @@
 :root {
   --button-bg: var(--coral); --button-ink: var(--midnight);
   --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral);
-  --button-down-bg: var(--khaki); --frame-ink: var(--khaki);
+  --frame-ink: var(--khaki);
   --material-edge: color-mix(in srgb,var(--floral) 45%,transparent);
   --material-cut: color-mix(in srgb,var(--khaki) 24%,transparent);
   --material-gloss: color-mix(in srgb,var(--floral) 23%,transparent);
@@ -15,29 +15,9 @@ html[data-timeline="felled"] {
   --violet: var(--wine); --peach: var(--camel); --apricot: var(--camel); --teal: var(--chocolate); --progress-dark: var(--coffee);
   --material-shadow: #43281830; --button-ink: var(--coffee); --button-hover-ink: var(--apricot-light);
 }
-html[data-timeline="felled"][data-theme="dark"] { --paper: var(--coffee); --ink: var(--apricot-light); --muted: var(--camel); --line: #BB945766; --material-shadow: #1d100990; }
+html[data-timeline="felled"][data-theme="dark"] { --paper: var(--coffee); --ink: var(--apricot-light); --muted: var(--camel); --line: #BB945766; --material-shadow: color-mix(in srgb,var(--coffee) 80%,transparent); }
 html[data-timeline="felled"] .progress-display { --progress-hue: var(--chocolate) !important; }
 html[data-timeline="felled"] .site-mark { filter: sepia(.8) saturate(.75) hue-rotate(338deg); }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button) { background-color: var(--button-bg); color: var(--button-ink); border-color: var(--material-cut); }
-body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):hover { background-color: var(--button-hover-bg); color: var(--button-hover-ink); }
-body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):active { background-color: var(--button-down-bg); color: var(--button-hover-ink); }
-body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.desktop-nav a,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.photo-label) {
-  background-image: radial-gradient(ellipse 240px 120px at var(--shine-x,-1000px) var(--shine-y,-1000px), color-mix(in srgb,var(--floral) calc(var(--light-strength)*19%),transparent),transparent 85%);
-}
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled) { box-shadow: calc(var(--cast-x)*var(--light-strength)) calc(3px + var(--cast-y)*var(--light-strength)) 0 var(--material-cut),calc(var(--cast-x)*var(--light-strength)) calc(6px + var(--cast-y)*var(--light-strength)) 16px var(--material-shadow),inset 0 1px 0 var(--material-edge); }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):hover { box-shadow: calc(var(--cast-x)*var(--light-strength)) calc(7px + var(--cast-y)*var(--light-strength)) 0 var(--material-cut),calc(var(--cast-x)*var(--light-strength)) calc(12px + var(--cast-y)*var(--light-strength)) 21px var(--material-shadow),inset 0 1px 0 var(--material-edge); }
-body :is(.button,.text-link,.rail-controls button,.feed-copy button):not(:disabled):active { box-shadow: 0 1px 0 var(--material-cut),inset 0 2px 4px var(--material-shadow); }
-.tactile-photo { position: relative; isolation: isolate; overflow: hidden; border-radius: 28px; transition: transform .26s ease,box-shadow .26s ease; box-shadow: calc(var(--cast-x)*var(--light-strength)) calc(8px + var(--cast-y)*var(--light-strength)) 24px var(--material-shadow); }
-.tactile-photo::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 280px 210px at var(--shine-x,-1000px) var(--shine-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.24)),transparent 85%); mix-blend-mode: screen; z-index: 2; }
-.tactile-photo:is(:hover,:focus-within) { transform: translateY(-3px); box-shadow: calc(var(--cast-x)*var(--light-strength)) calc(12px + var(--cast-y)*var(--light-strength)) 28px var(--material-shadow); }
-.tactile-photo:active { transform: translateY(1px); }
-.portrait-frame { border-color: var(--frame-ink); }
-.kitty-photo { border: 8px solid var(--coral); aspect-ratio: 1400/1034; }
-.life-photo .kitty-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-.kitty-discovery { min-width: 0; }
-.life-photo .kitty-ribbon { right: -24px; bottom: -12px; color: var(--coral); background-color: var(--leaf); border: 0; padding: 17px 22px; font: 600 24px/1.3 var(--sans); width: min(360px,85%); transform: rotate(-10deg); transition: none; cursor: grab; touch-action: none; user-select: none; z-index: 4; transform-origin: 80% 45%; }
-.life-photo .kitty-ribbon:active { cursor: grabbing; }
-html[data-theme] .life-photo .kitty-ribbon { color: var(--coral); }
 .cats-escaped { padding-top: 50px; }
 .cats-escaped p { margin: 0; }
 .empty-window-placeholder { display: grid; place-items: center; height: 100%; padding: 35px; text-align: center; background: color-mix(in srgb,var(--coral) 15%,var(--paper)); color: var(--ink); font-size: .9rem; }
@@ -55,7 +35,6 @@ html[data-text="large"] :is(.hero-detail,.life-copy>p,.prose p,.journal-row p,.s
 .rings svg { width: 100%; height: 100%; display: block; }
 .ring-dots { transform: none; filter: none; }
 .ring-layer.is-highlighted .ring-dots { opacity: .92; }
-body .stage-button:active { transform: none; }
 /* Ordinary browser scrolling is still the tree's primary navigation. */
 .swamp-entry { max-width: 820px; padding: 50px 0 38px; }
 .swamp-entry p { font-size: clamp(1.05rem,2.2vw,1.3rem); line-height: 1.85; }
@@ -82,16 +61,12 @@ body .stage-button:active { transform: none; }
 .fallen-experience .tree-scene { background: #343b27; }
 .fallen-experience .swamp-middle,.fallen-experience .swamp-distance { transform: translateX(var(--swamp-drift,0px)); }
 .fallen-experience .moss-foreground { transform: translateX(var(--moss-drift,0px)); }
-html[data-theme="dark"] .footer-links img { filter: brightness(0) invert(1); }
-html[data-effects="reduced"] .tactile-photo { transform: none !important; box-shadow: 0 2px 0 var(--material-shadow); }
-html[data-effects="reduced"] .tactile-photo::after { display: none; }
 html[data-effects="reduced"] .is-felling .standing-base { transition: none; }
 @media(max-width:740px) {
-  .life-photo .kitty-ribbon { right: -7px; bottom: -22px; font-size: 20px; padding: 13px 17px; }
   .swamp-entry { padding-top: 28px; }
   .swamp-entry .button { font-size: .86rem; padding: 12px 16px; }
   .cats-escaped { padding-top: 58px; }
   .swamp-base,.standing-base { min-height: 68svh; }
   .standing-base { background-size: auto 100%; }
 }
-@media(prefers-reduced-motion:reduce) { .tactile-photo { transform: none !important; }.tactile-photo::after { display:none; }.is-felling .standing-base { transition:none; } }
+@media(prefers-reduced-motion:reduce) { .is-felling .standing-base { transition:none; } }

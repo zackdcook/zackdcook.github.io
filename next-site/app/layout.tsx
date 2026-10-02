@@ -7,6 +7,7 @@ import "./globals.css";
 import "./living-cypress.css";
 import "./cypress.css";
 import "./swamp-timeline.css";
+import "./materials.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
