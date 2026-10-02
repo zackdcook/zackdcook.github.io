@@ -57,9 +57,11 @@ export const personalEntries: CommonplaceEntry[] = [];
 
 export const shoutouts = [
   {
-    name: "R.M. Hamrick",
+    name: "RM Hamrick",
+    subtitle: "Science fiction with action, humor, and heart",
     url: "https://rmhamrick.com/",
-    note: "A fellow author from Write On, Lakeland!",
+    note: "Fellow author and co-founder of my writing group,",
+    groupName: "Write On, Lakeland!",
   },
 ];
 
@@ -83,6 +85,13 @@ export const writingGroup = {
   venueUrl: "https://www.pressedbooksandcoffee.com/",
   directionsUrl:
     "https://www.google.com/maps/search/?api=1&query=Pressed+Books+%26+Coffee+213+E+Bay+St+Lakeland+FL+33801",
+  calendar: {
+    timeZone: "America/New_York",
+    weekday: 4,
+    startTime: "16:00",
+    endTime: "18:00",
+    description: "Creative writing group. Come as you are.",
+  },
 };
 
 export function upcomingEvents(now = new Date()) {
