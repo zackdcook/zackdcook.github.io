@@ -2,8 +2,12 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { personalEntries, type CommonplaceEntry } from "@/content/site";
 import { authConfigured } from "@/lib/supabase";
+import { cacheLife, cacheTag } from "next/cache";
 
 export async function getCommonplace(): Promise<CommonplaceEntry[]> {
+  "use cache";
+  cacheLife({ stale: 60, revalidate: 60, expire: 3600 });
+  cacheTag("commonplace");
   if (!authConfigured()) return personalEntries;
   const client = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
