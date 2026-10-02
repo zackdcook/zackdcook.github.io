@@ -7,6 +7,8 @@ html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em {
 html[data-theme="dark"] :is(.event-callout,.writing-panel,.commonplace-section,.subscribe-callout,.board-empty,.empty-note,.admin-panel,.moderation-entry) { background-color: color-mix(in srgb, var(--khaki) 70%, var(--midnight)); color: var(--floral); }
 html[data-theme="dark"] :is(.event-description,.event-schedule,.progress-note,.commonplace-card p) { color: var(--floral); }
 html[data-theme="dark"] .photo-label { color: var(--midnight); }
+.prose { color: var(--ink); }
+.writing-panel .progress-note { color: var(--floral); }
 body :is(.button,.text-link,.rail-controls button,.feed-copy button) { color: var(--midnight); background-color: var(--coral); border-color: #31031F40; }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):hover { background-color: var(--midnight); color: var(--coral); border-color: var(--coral); }
 body :is(.button,.text-link,.rail-controls button,.stage-button,.feed-copy button):not(:disabled):active { background-color: var(--khaki); color: var(--coral); }
