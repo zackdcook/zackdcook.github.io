@@ -13,7 +13,7 @@ Open [the website folder on GitHub](https://github.com/zackdcook/zackdcook.githu
 | Event schedule, shoutouts, Inspo links, social/payment links | `content/site.ts` |
 | Footer wording | `components/site-footer.tsx` |
 | Colors and spacing | `app/globals.css` |
-| Tab icon / favicon | `app/icon.svg` |
+| Tab icon / favicon and the header home icon | `app/icon.svg` (the header uses `site.icon` in `content/site.ts`) |
 | Shared-link title and description | `site.title` and `site.description` in `content/site.ts` |
 | Shared-link picture | `app/opengraph-image.tsx` (1200 × 630) |
 | Pictures | `public/images` |
@@ -52,9 +52,19 @@ An optional signed-in sharing form exists at `/admin/share`; it is not enabled o
 
 ## Social links and caffeine
 
-`site.instagram` is your supplied Instagram profile, `@zackyc.xyz`. `site.supportUrl` goes to your Cash App, `$zackdcook`. Add your exact public Threads profile URL to `site.threads`; its official icon and footer link appear automatically. Empty links are hidden rather than sent to an invented account.
+`site.instagram` and `site.threads` are your supplied profiles, `@zackyc.xyz`. `site.linkedin` points to `linkedin.com/in/zackdcook`. `site.supportUrl` goes to your Cash App, `$zackdcook`.
 
-The social SVG marks are from Simple Icons' Instagram and Threads assets. The site mark is an original vector drawing of a cat behind an open book.
+The Instagram and Threads marks are from Simple Icons. The LinkedIn mark is from Font Awesome (CC BY 4.0); its attribution is included in the SVG. Shoutouts live in `app/shoutouts/page.tsx` and use the same `shoutouts` list in `content/site.ts` as the homepage preview.
+
+## Progress rings and display fonts
+
+`content/progress.json` lists stages from the center outward. Braindump is the filled center, followed by `0th draft`, `1st revision`, and any stages you add. Change `status` to `active` for your current stage. Its ring is selected automatically. Each stage's `note` is a desktop tooltip and visible mobile subtext. `{target}` in a note is replaced with its target word count. The rings automatically receive lighter-to-darker shades of `ringColor`; no individual stage colors are needed.
+
+The exact palette colors are in `app/globals.css`: peach `#E07A5F`, apricot `#F2CC8F`, teal `#81B29A`, eggshell `#F4F1DE`, and indigo `#3D405B`. Translucent layers of those colors create the matte glass finish.
+
+Achiko's designer lists a paid webfont license. To keep this update free, headings use **Grandstander**, a temporary open-source stand-in, through `next/font/google` in `app/layout.tsx`. Its license is in `public/fonts/Grandstander-OFL.txt`. If you have licensed Achiko webfont files, upload them and ask ChatGPT to switch the display font using `next/font/local`.
+
+When your custom icon is ready, replace `app/icon.svg` with your SVG. Both the browser icon and the header home icon use it. For a PNG instead, ask ChatGPT to put it in the right two places and update the filename.
 
 ## RSS and sharing
 
