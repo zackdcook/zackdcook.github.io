@@ -5,10 +5,10 @@ import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
 
-// The original Indigo Regular font is bundled unchanged with its SIL OFL license.
+// A soft, open-source alternative to MADE Gentle's paid webfont license.
 const displayFont = localFont({
-  src: "../public/fonts/Indigo-Regular.otf",
-  weight: "400",
+  src: "../public/fonts/Fraunces-Soft-Semibold.ttf",
+  weight: "650",
   style: "normal",
   variable: "--font-author-display",
   display: "swap",
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
     default: site.title,
-    template: "%s · Zack Cook — Engineer & aspiring author",
+    template: `%s · ${site.title}`,
   },
   description: site.description,
   icons: { icon: site.icon, apple: site.icon },

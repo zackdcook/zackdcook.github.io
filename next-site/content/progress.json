@@ -1,6 +1,6 @@
 {
   "updated": "2026-10-01",
-  "ringColor": "#81B29A",
+  "ringColor": "#66693E",
   "stages": [
     {
       "id": "braindump",
@@ -27,7 +27,7 @@
       "target": null,
       "unit": "chapters",
       "status": "planned",
-      "note": "Hold your narwhals! One step at a time."
+      "note": "Hold your narwhals! I need to finish my {currentStep} first. One step at a time."
     }
   ]
 }

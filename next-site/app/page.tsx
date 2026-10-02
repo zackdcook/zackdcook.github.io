@@ -76,7 +76,8 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="find-me-at" className="event-callout shell">
+      <section id="find-me-at" className="events-section shell">
+      <div className="event-callout">
         <p className="eyebrow">Find me at…</p>
         <h2>{writingGroup.title}</h2>
         <p className="event-schedule">{writingGroup.schedule}</p>
@@ -86,7 +87,8 @@ export default async function Home() {
         <div className="actions event-actions">
           <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer">Get directions</a>
         </div>
-        <div className="event-more"><Link className="button" href="/events#other-events">Other events</Link></div>
+      </div>
+        <div className="rail-more"><Link className="button" href="/events#other-events">Other events</Link></div>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
@@ -148,7 +150,7 @@ export default async function Home() {
       <section id="shoutouts" className="shoutouts-section shell section-space">
         <p className="eyebrow">Shoutouts</p><h2>Check out these cool peeps.</h2>
         <ShoutoutList people={shoutouts.slice(0, 3)} />
-        <div className="rail-more"><Link className="button" href="/shoutouts">All shoutouts</Link></div>
+        <div className="rail-more"><Link className="button" href="/shoutouts">All Shoutouts</Link></div>
       </section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
