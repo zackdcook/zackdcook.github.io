@@ -5,7 +5,7 @@ import { useEffect } from "react";
 // One controller. Pointer movement writes CSS variables, never React state.
 export function PointerLight() {
   useEffect(() => {
-    const selector = ".button,.text-link,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.desktop-nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+    const selector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.desktop-nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
     let surfaces: HTMLElement[] = [], visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
     let x = -1000, y = -1000, lastMove = 0, released = false, frame = 0, dirty = true, queued = false;
