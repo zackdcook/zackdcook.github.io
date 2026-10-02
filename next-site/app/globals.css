@@ -1525,7 +1525,7 @@ h3 {
   letter-spacing: -0.035em;
 }
 .hero h1 em {
-  color: var(--ink);
+  color: var(--peach);
   font-family: inherit;
   font-style: italic;
   font-weight: 800;
@@ -1707,7 +1707,7 @@ h3 {
 section[id] { scroll-margin-top: 115px; }
 h1, h2, h3, .wordmark { text-shadow: 0 1px 0 #F4F1DE66, 0 3px 4px #3D405B0d; }
 .hero h1 { font-size: clamp(80px, 9.8vw, 136px); letter-spacing: -.05em; line-height: 1.04; }
-.hero h1 em { font-family: inherit; }
+.hero h1 em { font-family: inherit; text-shadow: 0 1px 0 var(--ink), 0 3px 4px #3D405B20; }
 .desk-section { overflow: visible; }
 .desk-copy .button, .life-copy .button { margin-top: 20px; }
 .photo-label { font-size: 20px; line-height: 1.45; border-radius: 12px; background: linear-gradient(135deg, #F4F1DEed, #F2CC8Fed); box-shadow: inset 0 1px 0 #F4F1DE, 0 6px 18px #3D405B1a; backdrop-filter: blur(12px); }
@@ -1756,6 +1756,12 @@ h1, h2, h3, .wordmark { text-shadow: 0 1px 0 #F4F1DE66, 0 3px 4px #3D405B0d; }
 .compact .ring-center strong { font-size: 30px; }
 .compact .ring-center > span { font-size: 11px; }
 .compact .ring-center small { font-size: 8px; }
+
+@media (min-width: 741px) {
+  .stage-list { position: relative; }
+  .stage-list li { position: static; }
+  .progress-details:has(.is-previewing) .ring-detail { visibility: hidden; }
+}
 
 /* Sideways reading rows keep every card a clear destination. */
 .content-rail { position: relative; margin-top: 30px; }
