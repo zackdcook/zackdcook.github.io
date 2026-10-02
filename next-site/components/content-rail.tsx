@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { ArrowIcon } from "@/components/icons";
 
 export function ContentRail({ label, count, children }: { label: string; count: number; children: ReactNode }) {
   const track = useRef<HTMLDivElement>(null);
@@ -27,8 +26,8 @@ export function ContentRail({ label, count, children }: { label: string; count: 
   };
   return <div className="content-rail">
     {count > 1 && <div className="rail-controls" aria-label={`${label} controls`}>
-      <button type="button" onClick={() => move(-1)} disabled={edges.start} aria-label={`Previous ${label}`} aria-controls={id}><ArrowIcon direction="left" /></button>
-      <button type="button" onClick={() => move(1)} disabled={edges.end} aria-label={`Next ${label}`} aria-controls={id}><ArrowIcon /></button>
+      <button type="button" onClick={() => move(-1)} disabled={edges.start} aria-label={`Previous ${label}`} aria-controls={id}>Previous</button>
+      <button type="button" onClick={() => move(1)} disabled={edges.end} aria-label={`Next ${label}`} aria-controls={id}>Next</button>
     </div>}
     <div id={id} className="rail-track" role="region" aria-label={label} tabIndex={count > 1 ? 0 : undefined}>{children}</div>
   </div>;

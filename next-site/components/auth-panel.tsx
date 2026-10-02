@@ -119,7 +119,7 @@ export function AuthPanel({
             </label>
           )}
           <button className="button" disabled={busy}>
-            {busy ? "One moment…" : sent ? "Sign in →" : "Email me a code →"}
+            {busy ? "One moment…" : sent ? "Sign in" : "Email me a code"}
           </button>
         </form>
       )}

@@ -41,9 +41,9 @@ export default function Events() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Get directions ↗
+            Get directions
           </a>
-          <a className="button" href={writingGroup.venueUrl} target="_blank" rel="noopener noreferrer">Pressed Books & Coffee ↗</a>
+          <a className="button" href={writingGroup.venueUrl} target="_blank" rel="noopener noreferrer">Pressed Books & Coffee</a>
         </div>
         <p className="event-address">{writingGroup.address}</p>
       </section>
@@ -64,7 +64,7 @@ export default function Events() {
             <p>{event.location}</p>
             {event.url && (
               <a className="button" href={event.url}>
-                Event details ↗
+                Event details
               </a>
             )}
           </article>

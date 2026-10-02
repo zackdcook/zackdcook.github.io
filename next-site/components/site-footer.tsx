@@ -15,7 +15,7 @@ export function SiteFooter() {
         {site.linkedin && <a className="button button-small" href={site.linkedin} target="_blank" rel="noopener noreferrer"><Image src="/icons/linkedin.svg" alt="" width={20} height={20} /> LinkedIn</a>}
         <Link className="button button-small" href="/rss"><RssIcon /> RSS</Link>
       </div>
-      {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span><span aria-hidden="true">↗</span></a></div>}
+      {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
       <p className="copyright">© {new Date().getFullYear()}</p>
     </footer>
   );

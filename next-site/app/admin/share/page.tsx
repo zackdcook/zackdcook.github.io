@@ -24,7 +24,7 @@ export default async function Share({
   return (
     <div className="shell page-wrap admin-page">
       <Link className="text-link" href="/admin">
-        ← Your desk
+        Your desk
       </Link>
       <div className="page-intro">
         <p className="eyebrow">Keep something good</p>

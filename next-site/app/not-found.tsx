@@ -11,7 +11,7 @@ export default function NotFound() {
       </h1>
       <p>The page you’re looking for isn’t here.</p>
       <Link className="button" href="/">
-        Back home →
+        Back home
       </Link>
     </div>
   );

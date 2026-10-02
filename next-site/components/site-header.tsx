@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { site } from "@/content/site";
 
 const links = [
+  ["Home", "/"],
   ["Creative Works", "/writing"],
   ["Find Me At…", "/events"],
   ["About Me", "/about"],
@@ -17,6 +18,8 @@ const links = [
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const segment = useSelectedLayoutSegment();
+  const visiblePath = segment ? `/${segment}` : "/";
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
   useEffect(() => {
@@ -32,13 +35,13 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", closeOnScroll);
   }, []);
   const current = (href: string) =>
-    pathname === href || pathname.startsWith(`${href}/`)
+    visiblePath === href || visiblePath.startsWith(`${href}/`)
       ? ("page" as const)
       : undefined;
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Link href="/" className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={pathname === "/" ? "page" : undefined}>
+        <Link href="/" className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={visiblePath === "/" ? "page" : undefined}>
           <Image className="site-mark" src={site.icon} alt="" width={34} height={34} unoptimized />
           Zack Cook
         </Link>

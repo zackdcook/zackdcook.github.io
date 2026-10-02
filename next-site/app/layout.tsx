@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import { Grandstander } from "next/font/google";
+import localFont from "next/font/local";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
 
-// Temporary open-source stand-in until Zack supplies licensed Achiko webfonts.
-const displayFont = Grandstander({
-  weight: ["600", "700", "800"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
+// The original Indigo Regular font is bundled unchanged with its SIL OFL license.
+const displayFont = localFont({
+  src: "../public/fonts/Indigo-Regular.otf",
+  weight: "400",
+  style: "normal",
   variable: "--font-author-display",
   display: "swap",
 });
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
     template: "%s · Zack Cook — Engineer & aspiring author",
   },
   description: site.description,
+  icons: { icon: site.icon, apple: site.icon },
   authors: [{ name: site.name }],
   openGraph: {
     type: "website",

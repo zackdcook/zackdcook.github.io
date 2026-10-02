@@ -83,7 +83,7 @@ export function ShareForm({ initialUrl }: { initialUrl: string }) {
           </select>
         </label>
         <button className="button" disabled={busy}>
-          {busy ? "Adding…" : "Add to Commonplace →"}
+          {busy ? "Adding…" : "Add to Commonplace"}
         </button>
       </form>
       <p
@@ -95,7 +95,7 @@ export function ShareForm({ initialUrl }: { initialUrl: string }) {
       </p>
       {saved && (
         <Link className="text-link" href="/commonplace">
-          See it on the page →
+          See it on the page
         </Link>
       )}
       <p className="share-tip">

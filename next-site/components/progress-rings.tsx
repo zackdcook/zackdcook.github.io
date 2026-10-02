@@ -78,7 +78,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         })}
       </svg>
       <div className="ring-center" aria-hidden="true">
-        <strong>{stage.status === "planned" ? "Next" : <>{percentage}<span>%</span></>}</strong>
+        <strong>{percentage}<span>%</span></strong>
         <span><StageLabel label={stage.label} /></span>
         <small>{stage.status === "planned" ? "Up next" : `${number(stage.value)} ${stage.unit}`}</small>
       </div>
@@ -98,13 +98,12 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         >
           <span className="stage-dot" style={{ background: toneFor(index) }} aria-hidden="true" />
           <span><span className="stage-label"><StageLabel label={item.label} />{item.status === "complete" && <span aria-label="complete"> ✓</span>}</span>
-            <span className="stage-count">{item.status === "planned" ? "Up next" : `${number(item.value)}${item.status === "active" && item.target ? ` / ${number(item.target)}` : ""} ${item.unit}`}</span>
+            <span className="stage-count">{item.status === "planned" ? `${Math.round(progressRatio(item.value, item.target) * 1000) / 10}%` : `${number(item.value)}${item.status === "active" && item.target ? ` / ${number(item.target)}` : ""} ${item.unit}`}</span>
           </span>
         </button>
         <p className="stage-note" id={`${id}-note-${item.id}`} role={preview === index ? "tooltip" : undefined}>{noteFor(item)}</p>
         {item.target && <span className="sr-only" role="progressbar" aria-label={item.label} aria-valuemin={0} aria-valuemax={item.target} aria-valuenow={Math.min(item.value, item.target)} aria-valuetext={`${number(item.value)} of ${number(item.target)} ${item.unit}`} />}
       </li>)}</ol>
-      <p className="ring-detail" aria-live="polite">{stage.status === "active" && stage.target ? `${number(Math.max(0, stage.target - stage.value))} ${stage.unit} to the finish line.` : stage.status === "complete" ? `${number(stage.value)} ${stage.unit}. Complete.` : "Up next."}</p>
     </div>
   </div>;
 }

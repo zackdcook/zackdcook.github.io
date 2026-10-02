@@ -13,7 +13,7 @@ Open [the website folder on GitHub](https://github.com/zackdcook/zackdcook.githu
 | Event schedule, shoutouts, Inspo links, social/payment links | `content/site.ts` |
 | Footer wording | `components/site-footer.tsx` |
 | Colors and spacing | `app/globals.css` |
-| Tab icon / favicon and the header home icon | `app/icon.svg` (the header uses `site.icon` in `content/site.ts`) |
+| Tab icon / favicon and the header home icon | `app/icon.png` (the header uses `site.icon` in `content/site.ts`) |
 | Shared-link title and description | `site.title` and `site.description` in `content/site.ts` |
 | Shared-link picture | `app/opengraph-image.tsx` (1200 × 630) |
 | Pictures | `public/images` |
@@ -60,17 +60,17 @@ The Instagram and Threads marks are from Simple Icons. The LinkedIn mark is from
 
 `content/progress.json` lists stages from the center outward. Braindump is the filled center, followed by `0th draft`, `1st revision`, and any stages you add. Change `status` to `active` for your current stage. Its ring is selected automatically. Each stage's `note` is a desktop tooltip and visible mobile subtext. `{target}` in a note is replaced with its target word count. The rings automatically receive lighter-to-darker shades of `ringColor`; no individual stage colors are needed.
 
-The exact palette colors are in `app/globals.css`: peach `#E07A5F`, apricot `#F2CC8F`, teal `#81B29A`, eggshell `#F4F1DE`, and indigo `#3D405B`. Translucent layers of those colors create the matte glass finish.
+The exact palette colors are in `app/globals.css`: peach `#E07A5F`, apricot `#F2CC8F`, teal `#81B29A`, eggshell `#F4F1DE`, and indigo `#3D405B`. Buttons and navigation use solid colors; the Liquid Glass treatment is turned off.
 
-Achiko's designer lists a paid webfont license. To keep this update free, headings use **Grandstander**, a temporary open-source stand-in, through `next/font/google` in `app/layout.tsx`. Its license is in `public/fonts/Grandstander-OFL.txt`. If you have licensed Achiko webfont files, upload them and ask ChatGPT to switch the display font using `next/font/local`.
+Headings and buttons use **Indigo Regular** by Salt & Pepper Designs, matching your reference. The original font is hosted locally through `next/font/local` in `app/layout.tsx`, so visitors do not contact a font service. The unchanged font and its free SIL Open Font License are in `public/fonts/Indigo-Regular.otf` and `public/fonts/Indigo-OFL.txt`. Source: https://www.fontsquirrel.com/fonts/indigo.
 
-When your custom icon is ready, replace `app/icon.svg` with your SVG. Both the browser icon and the header home icon use it. For a PNG instead, ask ChatGPT to put it in the right two places and update the filename.
+Your palette-matched Z logo is in `app/icon.png`. Replacing that PNG changes the browser icon, header home icon, and logo on the generated share image. Use a square PNG and keep the same filename.
 
 ## RSS and sharing
 
 The RSS link opens `/rss`, which explains how to copy `/journal/feed.xml` into a reader. Browsers may display raw XML if you open the feed directly; that is expected. New entries appear in the feed automatically.
 
-The tab icon and shared-link picture are separate. `app/icon.svg` sets the tab icon. Link previews use the title/description in `content/site.ts` and the generated picture in `app/opengraph-image.tsx`. Messaging apps can cache old previews for a while after an update.
+The tab icon and shared-link picture are separate. `app/icon.png` sets the tab icon. Link previews use the title/description in `content/site.ts` and the generated picture in `app/opengraph-image.tsx`. Messaging apps can cache old previews for a while after an update.
 
 ## Spotify is shelved
 

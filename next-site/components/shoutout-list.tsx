@@ -5,7 +5,7 @@ export function ShoutoutList({ people }: { people: Person[] }) {
     <article className="shoutout-card" key={person.url}>
       <div><h3>{person.name}</h3><p>{person.note}</p></div>
       <a className="button" href={person.url} target="_blank" rel="noopener noreferrer">
-        Visit {person.name} <span aria-hidden="true">↗</span>
+        Visit {person.name}
       </a>
     </article>
   ))}</div>;
