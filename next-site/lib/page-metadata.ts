@@ -19,7 +19,12 @@ export const shareRecords: ShareRecord[] = [
 export function pageMetadata(id: string, title?: string): Metadata {
   const record = shareRecords.find(r => r.id === id);
   if (!record) throw new Error("Unknown content metadata record.");
-  const image = { url: `/share/${record.id}`, width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
+  // Preview links must use their own image routes before those routes reach Production.
+  // Canonical URLs still identify Zack's public domain.
+  const imageOrigin = process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL
+    ? `https://${process.env.VERCEL_BRANCH_URL}`
+    : site.url;
+  const image = { url: new URL(`/share/${record.id}`, imageOrigin).toString(), width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
   return {
     title: title || record.title,
     description: record.description,
