@@ -29,13 +29,7 @@ export default function Events() {
         <h2 id="writing-group-title">{writingGroup.title}</h2>
         <p className="event-schedule">{writingGroup.schedule}</p>
         <p>
-          <a
-            href={writingGroup.venueUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {writingGroup.venue}
-          </a>
+          {writingGroup.venue}
           <br />
           {writingGroup.location}
         </p>
@@ -49,9 +43,12 @@ export default function Events() {
           >
             Get directions ↗
           </a>
-          <span className="short-note">{writingGroup.address}</span>
+          <a className="button" href={writingGroup.venueUrl} target="_blank" rel="noopener noreferrer">Pressed Books & Coffee ↗</a>
         </div>
+        <p className="event-address">{writingGroup.address}</p>
       </section>
+      <section id="other-events" aria-labelledby="other-events-heading" className="other-events-section">
+      <h2 id="other-events-heading">Other events</h2>
       {events.length ? (
         events.map((event) => (
           <article className="event-callout" key={event.starts + event.title}>
@@ -66,7 +63,7 @@ export default function Events() {
             <h2>{event.title}</h2>
             <p>{event.location}</p>
             {event.url && (
-              <a className="text-link" href={event.url}>
+              <a className="button" href={event.url}>
                 Event details ↗
               </a>
             )}
@@ -74,13 +71,13 @@ export default function Events() {
         ))
       ) : (
         <div className="empty-note">
-          <h2>Other appearances</h2>
           <p>
             Readings and other events will go here when dates are set. In the
             meantime, you can find me with the writing group on Thursdays.
           </p>
         </div>
       )}
+      </section>
     </div>
   );
 }
