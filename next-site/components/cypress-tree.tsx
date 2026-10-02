@@ -145,7 +145,7 @@ export function CypressTree({initialState,initialEntries,enabled,siteKey}:{initi
     <div className="tree-space" style={{width:treeWidth,height:tree.height,transform:"scale("+scale+")"}}>
      {sections.map(section=><TreeSection key={section} section={section}/>)}
      {entries.map(entry=><CarvingDetails key={entry.id} entry={entry} emphasized={highlight===entry.id}/>)}
-     {!tree.approved_count&&<div className="tree-first-note" style={{top:tree.active_bottom-520}}><p>No carvings yet.</p><p>There’s a little patch of history waiting for you.</p></div>}
+     {!tree.approved_count&&!draft&&<div className="tree-first-note" style={{top:tree.active_bottom-520}}><p>No carvings yet.</p><p>There’s a little patch of history waiting for you.</p></div>}
      {draft&&<><div className="active-bark-hint" style={{top:tree.active_top,height:tree.active_bottom-tree.active_top}} aria-hidden="true"/><div ref={ghost} hidden={draft.x===null} className="placement-ghost" data-valid={selectionValid} style={{left:draft.x??0,top:draft.y??0,width:carvingWidth,height:carvingHeight}}><SignatureArt name={draft.name} note={draft.note} mode={draft.mode} font={draft.font} strokes={draft.strokes} geometry={draft.geometry} carved/><span>Preview · awaiting approval</span></div></>}
     </div>
    </div>
