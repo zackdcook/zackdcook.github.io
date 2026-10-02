@@ -29,7 +29,7 @@
 .tree-space{position:absolute;left:0;top:0;transform-origin:0 0}
 .tree-section{position:absolute;left:0;width:720px;pointer-events:none;isolation:isolate}
 .tree-section-bark{position:absolute;inset:-45px calc((720px - var(--trunk-width))/2);background-image:radial-gradient(260px at var(--light-x,-1000px) var(--light-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.06)),transparent),url('/images/cypress-ridges.webp'),url('/images/cypress-bark.webp');background-size:auto,calc(720px * var(--bark-scale)) 1570px,cover;background-position:center,var(--bark-x) var(--bark-y),center;filter:brightness(var(--section-tone));mask-image:linear-gradient(to bottom,transparent,#000 45px,#000 calc(100% - 45px),transparent);box-shadow:inset 30px 0 45px #201b1650,inset -30px 0 45px #201b1660;border-radius:4% 3% 5% 2%}
-.tree-section:nth-of-type(3n+1) .tree-section-bark{background-image:radial-gradient(260px at var(--light-x,-1000px) var(--light-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.06)),transparent),url('/images/cypress-bark.webp')}
+.tree-section-rugged .tree-section-bark{background-image:radial-gradient(260px at var(--light-x,-1000px) var(--light-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.06)),transparent),url('/images/cypress-bark.webp')}
 .branch-scar{position:absolute;width:140px;height:135px;background:url('/images/cypress-branch-scar.webp') center/cover;mask-image:radial-gradient(ellipse,#000 30%,transparent 71%);transform:rotate(-9deg);opacity:.92}
 .lichen-landmark{position:absolute;width:80px;height:160px;background:url('/images/cypress-world.webp') 70% 35%/450px auto;mask-image:radial-gradient(ellipse,#000 20%,transparent 70%);opacity:.75}
 .cypress-carving{position:absolute;z-index:3}
