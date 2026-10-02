@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/commonplace",
     "/about",
     "/events",
+    "/shoutouts",
   ].map((path) => ({
     url: `${site.url}${path}`,
     changeFrequency: path === "/commonplace" ? "weekly" : "monthly",
