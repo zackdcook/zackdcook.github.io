@@ -117,3 +117,10 @@ spanish-moss.webp. Assets are optimized WebP; no image is generated per signer.
 Handwriting fonts are locally bundled OFL fonts. scripts/build-signature-fonts.py
 builds their numeric outlines and WOFF2 assets with fontTools/Brotli. Runtime
 preview/render/collision use those same outlines.
+
+
+### Kitty discovery photograph and reset
+
+When the empty-window photograph is ready, upload it under `public/images/` and set `home.emptyCatPhoto` in `content/editorial.json` to its `/images/...` path. Until then, the ribbon secret works but uses an explicit photo placeholder. Keep the original cat photo.
+
+The footer Accessibility & preferences button works on every page. Reset timeline and website preferences restores the living palette and entrance, resets the local hack/roll and safe browser bookmark, and restores display defaults. It never deletes public carvings or security identity cookies. Chopping requires no additional provider, paid service, schema, cron or email.
