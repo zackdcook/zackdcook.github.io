@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { lightIntensity, materialLight } from "@/lib/material-light";
+import { approachLight, materialLight } from "@/lib/material-light";
 
-const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.photo-label,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
 
 // Shared mouse/touch light. The animation path never updates React state.
 export function PointerLight() {
@@ -11,7 +11,8 @@ export function PointerLight() {
     const surfaces = new Set<HTMLElement>();
     const visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
-    let x = -1000, y = -1000, lastMove = 0, released = false;
+    let x = -1000, y = -1000, lastMove = 0, released = false, touching = false;
+    let intensity = 0, previousTime = 0;
     let frame = 0, collectionFrame = 0, dirty = true, hasLight = false;
     const reduced = () => document.documentElement.dataset.effects === "reduced";
     const observer = new IntersectionObserver(entries => {
@@ -62,11 +63,14 @@ export function PointerLight() {
     function reset() {
       for (const element of surfaces) resetSurface(element);
       cancelAnimationFrame(frame); frame = 0;
+      intensity = 0; previousTime = 0;
     }
     function tick(now: number) {
       frame = 0;
       if (reduced() || document.hidden) { reset(); return; }
-      const strength = hasLight ? lightIntensity(now - lastMove, released) : 0;
+      const target = hasLight && !released && (touching || now - lastMove <= 240) ? 1 : 0;
+      intensity = approachLight(intensity, target, previousTime ? now - previousTime : 0);
+      previousTime = now;
       if (dirty) {
         // Read all bounds together before writing any style. Re-measure after
         // scroll/resize/pointer motion, including moved ribbons and nested rails.
@@ -75,20 +79,22 @@ export function PointerLight() {
       }
       for (const element of visible) {
         const bounds = rectangles.get(element);
-        if (bounds) paint(element, bounds, strength);
+        if (bounds) paint(element, bounds, intensity);
       }
-      if (strength > 0) frame = requestAnimationFrame(tick);
+      if (intensity > 0 || target > 0) frame = requestAnimationFrame(tick);
+      else previousTime = 0;
     }
     function start() { if (!frame && !reduced()) frame = requestAnimationFrame(tick); }
     const move = (event: PointerEvent) => {
       x = event.clientX; y = event.clientY; lastMove = performance.now();
+      if (event.pointerType !== "mouse") touching = true;
       released = false; dirty = true; hasLight = true; start();
     };
     const release = (event: PointerEvent) => {
       // Mouse clicks do not extinguish a still-hovered light. Touch leaves an
       // afterglow once the finger is lifted.
       if (event.type === "pointerleave" || event.type === "pointercancel" || event.pointerType !== "mouse") {
-        lastMove = performance.now(); released = true; start();
+        lastMove = performance.now(); released = true; touching = false; start();
       }
     };
     const geometry = () => { dirty = true; start(); };

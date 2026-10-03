@@ -91,14 +91,14 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
             ["light", "Light"], ["dark", "Dark"], ["system", "Mirror my device"],
           ] as const).map(([value, label]) => <label key={value}>
             <input type="radio" name="appearance" value={value} checked={preferences.theme === value} onChange={() => update({ theme: value })} />
-            <span>{label}</span>
+            <span className="preference-control">{label}</span>
           </label>)}</div>
         </fieldset>
-        <label className="preference-row"><span>Reduce effects</span><input type="checkbox" checked={preferences.reduceEffects} onChange={e => update({ reduceEffects: e.target.checked })} /></label>
+        <label className="preference-row"><span>Reduce effects</span><span className="checkbox-control"><input type="checkbox" checked={preferences.reduceEffects} onChange={e => update({ reduceEffects: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         {systemReduced && <p className="calendar-help">Your device requests reduced motion, so the motion and lighting are already resting.</p>}
-        <label className="preference-row"><span>Cozy, compact spacing</span><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /></label>
-        <label className="preference-row"><span>Expand project descriptions</span><input type="checkbox" checked={preferences.expandedProjects} onChange={e => update({ expandedProjects: e.target.checked })} /></label>
-        <label className="preference-row"><span>Larger text</span><input type="checkbox" checked={preferences.largeText} onChange={e => update({ largeText: e.target.checked })} /></label>
+        <label className="preference-row"><span>Cozy, compact spacing</span><span className="checkbox-control"><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
+        <label className="preference-row"><span>Expand project descriptions</span><span className="checkbox-control"><input type="checkbox" checked={preferences.expandedProjects} onChange={e => update({ expandedProjects: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
+        <label className="preference-row"><span>Larger text</span><span className="checkbox-control"><input type="checkbox" checked={preferences.largeText} onChange={e => update({ largeText: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
       </div>
     </dialog>
