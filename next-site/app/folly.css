@@ -1,0 +1,65 @@
+/* Words of Folly is a patch of floral-white ground in either site theme. */
+.folly-page { background: #FFF8ED; color: #31031F; min-height: 80svh; padding: 64px 0 36px; }
+.folly-page .collection-heading { color: #31031F; }
+.folly-page .page-intro { margin-bottom: 24px; }
+.folly-tools { display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+.folly-tools p { color: #393313; font-size: 16px; line-height: 1.65; }
+.folly-tools .actions { margin: 0; }
+.folly-ground { position: relative; width: 100%; height: var(--pile-height,760px); perspective: 1200px; isolation: isolate; overflow: clip; touch-action: pan-y; margin-top: 20px; }
+.folly-leaves { margin: 0; padding: 0; list-style: none; }
+.folly-leaves > li { position: static; }
+.pile-leaf { position: absolute; left: 0; top: 0; width: var(--pile-leaf-width,350px); aspect-ratio: 1.6; padding: 0; border: 0; background: transparent; cursor: pointer; color: inherit; font: inherit; transform-style: preserve-3d; pointer-events: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.pile-leaf .leaf-body,.pile-leaf .leaf-words { pointer-events: auto; }
+.pile-leaf .leaf-art { pointer-events: none; }
+.pile-leaf:focus-visible { outline: 3px dashed #66693E; outline-offset: 8px; border-radius: 45%; z-index: 500 !important; }
+.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; color: var(--leaf-ink); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.leaf-art { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(1px var(--leaf-shadow-y,4px) var(--leaf-shadow-blur,5px) #31031F28); }
+.leaf-body { fill: var(--leaf-color); }
+.leaf-stem { stroke: var(--leaf-color); stroke-width: 7; fill: none; stroke-linecap: round; }
+.leaf-veins { stroke: var(--leaf-ink); stroke-width: 2.5; opacity: .16; }
+.leaf-words { position: absolute; left: 20%; top: 25%; width: 61%; height: 48%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--leaf-ink); font-family: var(--display); font-size: 23px; font-weight: 650; line-height: 1.18; letter-spacing: -.02em; text-wrap: balance; transform: rotate(-15deg); }
+.leaf-words-long { font-size: 18px; line-height: 1.2; }
+.quote-leaf-back { position: absolute; inset: 0; transform: rotateY(180deg); }
+.quote-leaf-back .leaf-veins { opacity: .24; }
+.leaf-gust { position: absolute; width: 0; height: 0; pointer-events: none; z-index: 1000; }
+.gust-ring { position: absolute; width: 50px; height: 50px; left: -25px; top: -25px; border: 2px solid #66693E; border-radius: 50%; animation: gust-ring .8s ease-out both; }
+.gust-wisp { position: absolute; width: 90px; height: 30px; left: -45px; top: -15px; animation: gust-wisp .85s cubic-bezier(.12,.65,.28,1) var(--gust-delay) both; }
+.gust-wisp svg { width: 100%; height: 100%; fill: none; stroke: #66693E; stroke-width: 2; stroke-linecap: round; }
+.gust-wisp:nth-child(3n) svg { stroke: #E88F93; }
+@keyframes gust-ring { from { transform: scale(.2); opacity: .6; } to { transform: scale(9); opacity: 0; } }
+@keyframes gust-wisp { from { transform: rotate(var(--gust-angle)) scale(.3); opacity: .8; } to { transform: translate(var(--gust-x),var(--gust-y)) rotate(var(--gust-angle)) scale(1.3); opacity: 0; } }
+.folly-ground-readable { height: auto; min-height: 550px; padding: 20px 0 40px; }
+.folly-ground-readable .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 24px; }
+.folly-ground-readable .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; }
+.leaf-reader { width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: #31031F; background: #FFF8ED; border-radius: 28px; box-shadow: 0 18px 80px #31031F55; }
+.leaf-reader::backdrop { background: #31031F99; backdrop-filter: blur(5px); }
+.leaf-reader-content { position: relative; }
+.leaf-reader-close { display: block; margin-left: auto; }
+.reader-leaf { margin: 0 auto; width: min(100%,1000px); }
+.reader-leaf .leaf-words { font-size: clamp(25px,4.5vw,53px); }
+.reader-leaf .leaf-words-long { font-size: clamp(20px,3.5vw,40px); }
+.leaf-reader[open] .reader-leaf { animation: leaf-read-in .3s cubic-bezier(.15,.8,.25,1) both; }
+.leaf-reader-nav { display: flex; align-items: center; justify-content: center; gap: 16px; font: 500 13px var(--sans); padding: 10px 0; }
+.leaf-reader-nav .button { font-size: 14px; padding: 12px 20px; }
+body:has(.leaf-reader[open]) { overflow: hidden; }
+@keyframes leaf-read-in { from { transform: scale(.72) rotate(-8deg); opacity: .3; } to { transform: none; opacity: 1; } }
+.folly-latest { display: block; width: min(580px,100%); margin: 0 auto; text-decoration: none; transform: rotate(-5deg); }
+.folly-latest .leaf-words { font-size: clamp(24px,3.3vw,38px); }
+.folly-latest .leaf-words-long { font-size: clamp(18px,2.4vw,29px); }
+.folly-latest:focus-visible { border-radius: 45%; outline-offset: 8px; }
+.folly-latest-caption { margin-top: 8px; text-align: center; font-size: 13px; color: var(--muted); }
+@media (max-width:600px) {
+  .folly-page { padding-top: 38px; }
+  .folly-tools { gap: 16px; }
+  .folly-ground { margin-left: calc((100vw - 100%)*-.5); width: 100vw; }
+  .pile-leaf .leaf-words { font-size: 20px; }
+  .pile-leaf .leaf-words-long { font-size: 16px; }
+  .folly-ground-readable { width: 100%; margin-left: 0; }
+  .folly-ground-readable .folly-leaves { gap: 12px; }
+  .leaf-reader { width: 98vw; padding: 12px 8px; }
+  .reader-leaf { width: 100%; }
+  .leaf-reader-nav { gap: 8px; }
+  .leaf-reader-nav .button { padding: 10px 13px; font-size: 12px; }
+}
+@media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf,.gust-ring,.gust-wisp { animation: none; } }
+html[data-effects="reduced"] .leaf-reader[open] .reader-leaf { animation: none; }
