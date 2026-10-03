@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
 import { usePreferences } from "@/components/site-preferences";
-import { createRibbon, ribbonPaths, stepRibbon, ribbonWidth, ribbonHeight, type RibbonBounds, type RibbonGrab } from "@/lib/ribbon-physics";
+import { createRibbon, dropRibbon, ribbonPaths, stepRibbon, ribbonWidth, ribbonHeight, type RibbonBounds, type RibbonGrab } from "@/lib/ribbon-physics";
 
 const restingPaths = ribbonPaths(createRibbon());
 const backLabel = "aka the firing squad";
@@ -70,6 +70,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   function release(resetClock = true) {
     const m = motion.current;
     if (!m.grab) return;
+    dropRibbon(nodes.current);
     m.pointer = null; m.grab = null;
     if (resetClock) m.lastMove = 0;
     start();
