@@ -25,8 +25,6 @@ html[data-timeline="felled"] .site-mark { filter: sepia(.8) saturate(.75) hue-ro
 body :is(.section-label,.collection-heading.section-label,.inspiration-heading.section-label,.desk-copy h2.section-label,.event-callout h2.section-label,.life-copy h2.section-label) { font: 600 11px/1.4 var(--sans); letter-spacing: .09em; text-transform: uppercase; margin: 0 0 20px; max-width: none; }
 .footer-preferences { flex: 0 0 100%; text-align: center; margin: 12px 0; }
 .site-footer .support-callout { flex: 0 0 100%; text-align: center; }
-html[data-text="large"] { font-size: 18px; }
-html[data-text="large"] :is(.hero-detail,.life-copy>p,.prose p,.journal-row p,.shoutout-card p) { font-size: max(1.05rem,18px); }
 /* Reserve the tallest note's geometry. Changing stages cannot move the SVG. */
 .progress-note { display: grid; }
 .progress-note>div { grid-area: 1/1; }

@@ -88,10 +88,25 @@ test("the strip remains continuous through changes between its front and reverse
   const paths = ribbonPaths(nodes);
   assert.ok(paths.front.length > 0 && paths.back.length > 0);
   for (const segment of paths.segments) {
-    const numbers = segment.path.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
-    const corners = Array.from({ length: 4 }, (_, index) => [numbers[index * 2], numbers[index * 2 + 1]]);
-    const area = corners.reduce((sum, [x, y], index) => {
-      const next = corners[(index + 1) % corners.length];
+    // Integrate the cubic outline rather than treating its control points as
+    // polygon corners. A reversed face must still have positive filled area.
+    const tokens = segment.path.match(/[MCLQZ]|-?\d+(?:\.\d+)?/g)!;
+    const points: number[][] = []; let position = [0, 0], cursor = 0;
+    const read = () => [Number(tokens[cursor++]), Number(tokens[cursor++])];
+    while (cursor < tokens.length) {
+      const command = tokens[cursor++];
+      if (command === "M" || command === "L") { position = read(); points.push(position); }
+      if (command === "C" || command === "Q") {
+        const from = position, a = read(), b = read(), c = command === "C" ? read() : b;
+        for (let step = 1; step <= 12; step++) {
+          const t = step / 12, u = 1 - t;
+          position = command === "C" ? [0, 1].map(k => u ** 3 * from[k] + 3 * u ** 2 * t * a[k] + 3 * u * t ** 2 * b[k] + t ** 3 * c[k]) : [0, 1].map(k => u ** 2 * from[k] + 2 * u * t * a[k] + t ** 2 * b[k]);
+          points.push(position);
+        }
+      }
+    }
+    const area = points.reduce((sum, [x, y], index) => {
+      const next = points[(index + 1) % points.length];
       return sum + x * next[1] - y * next[0];
     }, 0) / 2;
     assert.ok(area > 500, "a reversed face must not cross its edges into a bow tie");
@@ -117,4 +132,19 @@ test("tilt handles landscape, angular wrap and malformed sensor readings", () =>
 test("legacy preferences enable available tilt while an explicit opt-out survives", () => {
   assert.equal(normalizePreferences({ theme: "dark" }).tiltLighting, true);
   assert.equal(normalizePreferences({ tiltLighting: false }).tiltLighting, false);
+});
+
+test("quick drags cannot create repeated corkscrew reversals or paper-thin faces", () => {
+  const nodes = createRibbon();
+  for (let frame = 0; frame < 300; frame++) {
+    stepRibbon(nodes, { index: 12, x: 300 + Math.sin(frame / 12) * 130, y: 220 + Math.cos(frame / 19) * 75 }, 16.67);
+    assert.ok(nodes.every(node => node.twist >= 0 && node.twist <= 1.9));
+    for (let i = 1; i < nodes.length; i++) assert.ok(Math.abs(nodes[i].twist - nodes[i - 1].twist) < .27);
+    assert.ok(ribbonPaths(nodes).segments.every(segment => segment.path.includes("C") && Number.isFinite(segment.depth)));
+  }
+});
+test("removed display settings cannot hide project content after a legacy preference load", () => {
+  const preferences = normalizePreferences({ theme: "dark", expandedProjects: false, largeText: true });
+  assert.deepEqual(Object.keys(preferences).sort(), ["compact", "reduceEffects", "theme", "tiltLighting"]);
+  assert.equal(preferences.theme, "dark");
 });

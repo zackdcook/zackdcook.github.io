@@ -54,9 +54,14 @@ export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed
       node.vy = (node.vy + (grab ? 950 : node.z > .2 ? 450 : 0) * dt) * drag;
       node.vz = (node.vz - 1400 * dt) * drag;
       node.x += node.vx * dt; node.y += node.vy * dt; node.z += node.vz * dt;
-      const target = grab ? Math.sin((index - grab.index) * .26 + (grab.phase ?? 0)) * 2.1 + Math.sin(node.age * 1.6 + index * .18) * .35 : Math.round(node.twist / Math.PI) * Math.PI;
-      node.spin = (node.spin + (target - node.twist) * 28 * dt) * Math.exp(-5 * dt);
+      // A held ribbon can gently roll at its free ends, but cannot corkscrew
+      // into alternating triangular faces. One smooth roll per hanging side.
+      const sideLength = index < (grab?.index ?? 12) ? (grab?.index ?? 12) : nodes.length - 1 - (grab?.index ?? 12);
+      const fromGrip = grab ? Math.abs(index - grab.index) / Math.max(1, sideLength) : 0;
+      const target = grab ? Math.pow(fromGrip, 1.5) * 1.8 + Math.sin(node.age * 1.3 + (grab.phase ?? 0)) * .06 * fromGrip : 0;
+      node.spin = (node.spin + (target - node.twist) * 24 * dt) * Math.exp(-9 * dt);
       node.twist += node.spin * dt;
+      node.twist = Math.max(0, Math.min(1.9, node.twist));
       clamp(node);
     }
     const constrain = (a: number, b: number, length: number, stiffness = 1) => {
@@ -73,9 +78,20 @@ export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed
         const a = pass % 2 ? nodes.length - 2 - i : i;
         constrain(a, a + 1, ribbonSpacing);
       }
-      // Weak bending resistance keeps it a satin ribbon rather than a chain.
+      // Satin resists sharp folds. Nonadjacent portions also keep their width
+      // instead of collapsing both hanging ends into the same skinny line.
       if (grab || nodes.some(node => node.z > .2)) {
-        for (let i = 0; i < nodes.length - 2; i++) constrain(i, i + 2, ribbonSpacing * 2, .035);
+        for (let i = 0; i < nodes.length - 2; i++) constrain(i, i + 2, ribbonSpacing * 2, .11);
+        for (let i = 0; i < nodes.length; i++) for (let j = i + 4; j < nodes.length; j++) {
+          if (Math.hypot(nodes[j].x - nodes[i].x, nodes[j].y - nodes[i].y, nodes[j].z - nodes[i].z) < 40) constrain(i, j, 40, .45);
+        }
+      }
+      for (let i = 1; i < nodes.length; i++) {
+        const difference = nodes[i].twist - nodes[i - 1].twist;
+        if (Math.abs(difference) > .24) {
+          const correction = (Math.abs(difference) - .24) * Math.sign(difference) / 2;
+          nodes[i].twist -= correction; nodes[i - 1].twist += correction;
+        }
       }
       for (const node of nodes) clamp(node);
       if (grab) { nodes[grab.index].x = grab.x; nodes[grab.index].y = grab.y; nodes[grab.index].z = 78; }
@@ -84,7 +100,7 @@ export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed
       const before = previous[index], cap = (value: number) => Math.max(-1800, Math.min(1800, value));
       node.vx = cap((node.x - before.x) / dt); node.vy = cap((node.y - before.y) / dt); node.vz = cap((node.z - before.z) / dt);
       if (!grab && node.z < .2 && Math.hypot(node.vx, node.vy) < .6) node.vx = node.vy = node.vz = 0;
-      const flat = Math.round(node.twist / Math.PI) * Math.PI;
+      const flat = 0;
       if (!grab && Math.abs(node.twist - flat) < .002 && Math.abs(node.spin) < .002) { node.twist = flat; node.spin = 0; }
     }
   }
@@ -93,36 +109,48 @@ export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed
 
 type Point = { x: number; y: number };
 const pointString = (p: Point) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+function interval(points: Point[], index: number, reverse = false) {
+  const before = points[Math.max(0, index - 1)], current = points[index];
+  const next = points[index + 1], after = points[Math.min(points.length - 1, index + 2)];
+  const first = { x: current.x + (next.x - before.x) / 6, y: current.y + (next.y - before.y) / 6 };
+  const second = { x: next.x - (after.x - current.x) / 6, y: next.y - (after.y - current.y) / 6 };
+  return reverse ? `C${pointString(second)} ${pointString(first)} ${pointString(current)}` : `C${pointString(first)} ${pointString(second)} ${pointString(next)}`;
+}
 function curve(points: Point[]) {
-  let path = `M${pointString(points[0])}`;
-  for (let index = 0; index < points.length - 1; index++) {
-    const before = points[Math.max(0, index - 1)], current = points[index];
-    const next = points[index + 1], after = points[Math.min(points.length - 1, index + 2)];
-    path += ` C${pointString({ x: current.x + (next.x - before.x) / 6, y: current.y + (next.y - before.y) / 6 })} ${pointString({ x: next.x - (after.x - current.x) / 6, y: next.y - (after.y - current.y) / 6 })} ${pointString(next)}`;
-  }
-  return path;
+  return `M${pointString(points[0])} ${points.slice(0, -1).map((_, index) => interval(points, index)).join(" ")}`;
 }
 
+/** The outline, opaque faces, hit area and text clips use the SAME cubic
+ * edges. No flat polygon underneath a curved outline, no empty reverse clip. */
 export function ribbonPaths(nodes: RibbonNode[]) {
-  const upper: Point[] = [], lower: Point[] = [];
+  const upper: Point[] = [], lower: Point[] = [], normals: Point[] = [];
   nodes.forEach((node, index) => {
     const before = nodes[Math.max(0, index - 1)], after = nodes[Math.min(nodes.length - 1, index + 1)];
     const angle = Math.atan2(after.y - before.y, after.x - before.x);
-    // Twisting changes the visible face, not the ordering of the strip edges.
-    // Signed width would cross the edges into bow-tie holes at face changes.
-    const halfWidth = 19 * Math.abs(Math.cos(node.twist)) * (1 + node.z / 1800);
-    const offsetX = -Math.sin(angle) * halfWidth, offsetY = Math.cos(angle) * halfWidth;
-    upper.push({ x: node.x - offsetX, y: node.y - offsetY });
-    lower.push({ x: node.x + offsetX, y: node.y + offsetY });
+    // The minimum projected width is the tiny physical thickness at edge-on.
+    const halfWidth = Math.max(1.6, 19 * Math.abs(Math.cos(node.twist))) * (1 + node.z / 1800);
+    const normal = { x: -Math.sin(angle), y: Math.cos(angle) };
+    normals.push(normal);
+    upper.push({ x: node.x - normal.x * halfWidth, y: node.y - normal.y * halfWidth });
+    lower.push({ x: node.x + normal.x * halfWidth, y: node.y + normal.y * halfWidth });
   });
-  const segments = nodes.slice(0, -1).map((node, index) => ({
-    path: `M${pointString(upper[index])} L${pointString(upper[index + 1])} L${pointString(lower[index + 1])} L${pointString(lower[index])} Z`,
-    front: Math.cos((node.twist + nodes[index + 1].twist) / 2) >= 0,
-    shade: Math.abs(Math.sin((node.twist + nodes[index + 1].twist) / 2)) * .18,
-  }));
-  const bottom = curve([...lower].reverse());
+  const cap = (index: number, end: Point) => {
+    const node = nodes[index], normal = normals[index], direction = index === 0 ? -1 : 1;
+    return `Q${pointString({ x: node.x + normal.y * direction * 2, y: node.y - normal.x * direction * 2 })} ${pointString(end)}`;
+  };
+  const segments = nodes.slice(0, -1).map((node, index) => {
+    const next = nodes[index + 1], twist = (node.twist + next.twist) / 2;
+    const across = index === nodes.length - 2 ? cap(index + 1, lower[index + 1]) : `L${pointString(lower[index + 1])}`;
+    const close = index === 0 ? cap(0, upper[0]) : `L${pointString(upper[index])}`;
+    return {
+      path: `M${pointString(upper[index])} ${interval(upper, index)} ${across} ${interval(lower, index, true)} ${close} Z`,
+      front: Math.cos(twist) >= 0,
+      depth: (node.z + next.z) / 2,
+    };
+  });
+  const bottom = nodes.slice(0, -1).map((_, index) => interval(lower, nodes.length - 2 - index, true)).join(" ");
   return {
-    body: `${curve(upper)} L${bottom.slice(1)} Z`,
+    body: `${curve(upper)} ${cap(nodes.length - 1, lower[nodes.length - 1])} ${bottom} ${cap(0, upper[0])} Z`,
     lettering: curve(nodes.map(node => ({ x: node.x, y: node.y + 5 }))),
     front: segments.filter(segment => segment.front).map(segment => segment.path).join(" "),
     back: segments.filter(segment => !segment.front).map(segment => segment.path).join(" "),

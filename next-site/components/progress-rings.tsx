@@ -28,7 +28,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
   const preview = hovered ?? focused;
   const current = preview ?? selected;
   const stage = progress.stages[current];
-  const percentage = Math.round(progressRatio(stage.value, stage.target) * 1000) / 10;
+  const percentage = Math.round(progressRatio(stage.value, stage.target) * 100);
   const coreRadius = 61;
   const spacing = 85 / Math.max(1, progress.stages.length - 1);
   const width = Math.min(20, spacing * .58);
@@ -67,7 +67,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         >
           <span className="stage-dot" style={{ background: toneFor(index) }} aria-hidden="true" />
           <span><span className="stage-label"><StageLabel label={item.label} />{item.status === "complete" && <span aria-label="complete"> ✓</span>}</span>
-            <span className="stage-count">{item.status === "planned" ? `${Math.round(progressRatio(item.value, item.target) * 1000) / 10}%` : `${number(item.value)}${item.status === "active" && item.target ? ` / ${number(item.target)}` : ""} ${item.unit}`}</span>
+            <span className="stage-count">{item.status === "planned" ? "Up next" : `${number(item.value)}${item.status === "active" && item.target ? ` / ${number(item.target)}` : ""} ${item.unit}`}</span>
           </span>
         </button>
         {item.target && <span className="sr-only" role="progressbar" aria-label={item.label} aria-valuemin={0} aria-valuemax={item.target} aria-valuenow={Math.min(item.value, item.target)} aria-valuetext={`${number(item.value)} of ${number(item.target)} ${item.unit}`} />}
@@ -116,12 +116,14 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
             <circle cx="160" cy="160" r={radius} fill={index === 0 ? "transparent" : "none"} stroke="transparent" strokeWidth={index === 0 ? 0 : Math.max(width + 10, spacing - 5)} className="ring-hit" />
           </g>;
         })}
+        <g className="ring-center" textAnchor="middle" pointerEvents="none">
+          <text className="ring-percentage" x="160" y="155">{percentage}<tspan className="ring-percent-sign">%</tspan></text>
+          <text className="ring-stage-name" x="160" y="179">{(() => {
+            const ordinal = stage.label.match(/^(\d+)(st|nd|rd|th)(.*)$/);
+            return ordinal ? <>{ordinal[1]}<tspan baselineShift="super" fontSize="8">{ordinal[2]}</tspan>{ordinal[3]}</> : stage.label;
+          })()}</text>
+        </g>
       </svg>
-      <div className="ring-center" aria-hidden="true">
-        <strong>{percentage}<span>%</span></strong>
-        <span><StageLabel label={stage.label} /></span>
-        <small>{stage.status === "planned" ? "Up next" : `${number(stage.value)} ${stage.unit}`}</small>
-      </div>
     </div>
     <div className="progress-note" aria-live="polite" aria-atomic="true">
       {progress.stages.map((item, index) => <div key={item.id} hidden={current !== index} aria-hidden={current !== index}>

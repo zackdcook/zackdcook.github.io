@@ -11,7 +11,6 @@ body:has(.design-preview) > main { padding: 0; }
 .design-preview--everglade .hero h1 em { font-family: "Fraunces Variable", Georgia, serif; }
 .design-preview--olive .hero h1 { font-size: clamp(90px, 12vw, 160px); }
 .design-preview .desk-copy .desk-detail, .design-preview .updated { color: var(--paper); }
-.design-preview .ring-center > span { color: var(--ink); }
 .design-preview .hero h1, .design-preview h2, .design-preview h3, .design-preview .wordmark, .design-preview .footer-name { font-weight: 700; }
 .design-preview .wordmark { font-size: 23px; }
 .design-preview .desk-copy h2 { font-size: 65px; }

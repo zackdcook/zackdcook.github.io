@@ -11,14 +11,36 @@ html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em {
 html[data-compact="true"] :is(.section-space,.page-wrap,.events-section) { margin-top: 32px; padding-top: 28px; padding-bottom: 28px; }
 html[data-compact="true"] .hero { padding-top: 40px; padding-bottom: 40px; }
 html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { padding: 24px; }
-html[data-projects="collapsed"] .project-description { display: none; }
 .copyright-secret { animation: little-secret .3s ease both; }
 .loading-leaf { min-height: 35vh; color: var(--muted); }
-::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) { animation-duration: .42s; animation-timing-function: cubic-bezier(.18,.7,.22,1); }
-::view-transition-new(.leaf-unfurl), ::view-transition-new(.leaf-reshape) { animation: leaf-unfurl .42s cubic-bezier(.18,.7,.22,1) both; transform-origin: 18% 12%; }
-::view-transition-old(.leaf-fold), ::view-transition-old(.leaf-reshape) { animation: leaf-fold .24s ease-out both; transform-origin: 85% 15%; }
-@keyframes leaf-unfurl { from { opacity: 0; transform: scale(.97,.94) rotate(-.6deg); clip-path: inset(0 1% 7% 0 round 42px 8px 80px 12px); } to { opacity: 1; transform: none; clip-path: inset(0 round 0); } }
-@keyframes leaf-fold { to { opacity: 0; transform: scale(.99,.97) rotate(.35deg); } }
+/* Shared objects keep their native geometry interpolation; the route content
+   opens from its anchored top edge, like a leaf spreading from a stem. */
+::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) {
+  animation-duration: .64s;
+  animation-timing-function: cubic-bezier(.2,.72,.22,1);
+}
+::view-transition-image-pair(.leaf-share) { isolation: isolate; }
+::view-transition-old(.leaf-share), ::view-transition-new(.leaf-share) { mix-blend-mode: normal; }
+::view-transition-new(.leaf-unfurl), ::view-transition-new(.leaf-reshape) {
+  animation: leaf-unfurl .64s cubic-bezier(.2,.72,.22,1) both;
+  transform-origin: 12% 0;
+  mix-blend-mode: normal;
+}
+::view-transition-old(.leaf-fold), ::view-transition-old(.leaf-reshape) {
+  animation: leaf-fold .32s cubic-bezier(.4,0,.8,.2) both;
+  transform-origin: 88% 0;
+  mix-blend-mode: normal;
+}
+@keyframes leaf-unfurl {
+  0% { opacity: .1; transform: scale(.975,.96) rotate(-.35deg); clip-path: inset(0 7% 32% 0 round 2px 18% 22% 3%); }
+  24% { opacity: 1; }
+  65% { transform: scale(.998,.995); clip-path: inset(0 1% 4% 0 round 0 5% 8% 0); }
+  100% { opacity: 1; transform: none; clip-path: inset(0 round 0); }
+}
+@keyframes leaf-fold {
+  0% { opacity: 1; transform: none; clip-path: inset(0 round 0); }
+  100% { opacity: 0; transform: scale(.99,.975) rotate(.25deg); clip-path: inset(0 0 18% 4% round 8% 0 18% 12%); }
+}
 @keyframes little-secret { from { opacity: 0; } to { opacity: 1; } }
 html[data-effects="reduced"] { scroll-behavior: auto; }
 html[data-effects="reduced"]::view-transition-group(*), html[data-effects="reduced"]::view-transition-new(*), html[data-effects="reduced"]::view-transition-old(*) { animation: none !important; }

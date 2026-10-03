@@ -36,8 +36,6 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
       root.dataset.theme = initial.theme === "system" ? (theme.matches ? "dark" : "light") : initial.theme;
       root.dataset.effects = initial.reduceEffects || motion.matches ? "reduced" : "full";
       root.dataset.compact = String(initial.compact);
-      root.dataset.projects = initial.expandedProjects ? "expanded" : "collapsed";
-      root.dataset.text = initial.largeText ? "large" : "normal";
       root.dataset.tilt = String(initial.tiltLighting);
       setSystemReduced(motion.matches);
     };
@@ -67,8 +65,6 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     root.dataset.theme = next.theme === "system" ? (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : next.theme;
     root.dataset.effects = next.reduceEffects || systemReduced ? "reduced" : "full";
     root.dataset.compact = String(next.compact);
-    root.dataset.projects = next.expandedProjects ? "expanded" : "collapsed";
-    root.dataset.text = next.largeText ? "large" : "normal";
     root.dataset.tilt = String(next.tiltLighting);
   }
   function changeTimeline(next: LocalTimeline) {
@@ -85,6 +81,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
 
   return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
     {children}
+    {hydrated && <TiltLightingControl prompt enabled={preferences.tiltLighting} reduced={preferences.reduceEffects || systemReduced} resetVersion={resetVersion} onChange={enabled => update({ tiltLighting: enabled })} />}
     <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => { const target = resetting.current ? document.querySelector<HTMLElement>("#main") : opener.current; resetting.current = false; target?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
         <div className="calendar-dialog-heading"><h2 id="preferences-title">Accessibility &amp; Preferences</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
@@ -100,8 +97,6 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
         <label className="preference-row"><span>Reduce effects</span><span className="checkbox-control"><input type="checkbox" checked={preferences.reduceEffects} onChange={e => update({ reduceEffects: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         {systemReduced && <p className="calendar-help">Your device requests reduced motion, so the motion and lighting are already resting.</p>}
         <label className="preference-row"><span>Cozy, compact spacing</span><span className="checkbox-control"><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
-        <label className="preference-row"><span>Expand project descriptions</span><span className="checkbox-control"><input type="checkbox" checked={preferences.expandedProjects} onChange={e => update({ expandedProjects: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
-        <label className="preference-row"><span>Larger text</span><span className="checkbox-control"><input type="checkbox" checked={preferences.largeText} onChange={e => update({ largeText: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <TiltLightingControl enabled={preferences.tiltLighting} reduced={preferences.reduceEffects || systemReduced} resetVersion={resetVersion} onChange={enabled => update({ tiltLighting: enabled })} />
         <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
       </div>
