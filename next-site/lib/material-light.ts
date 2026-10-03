@@ -23,6 +23,8 @@ export function materialLight(bounds: SurfaceBounds, x: number, y: number, inten
   };
 }
 
-export function lightIntensity(elapsed: number, released: boolean) {
-  return Math.max(0, 1 - Math.max(0, elapsed - (released ? 0 : 240)) / 1100);
+/** Equal-speed arrival and departure, including reversals halfway through. */
+export function approachLight(current: number, target: number, elapsed: number) {
+  const distance = Math.max(0, elapsed) / 1100;
+  return current < target ? Math.min(target, current + distance) : Math.max(target, current - distance);
 }
