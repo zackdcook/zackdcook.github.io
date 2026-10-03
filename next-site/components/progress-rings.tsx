@@ -12,6 +12,13 @@ function StageLabel({ label }: { label: string }) {
   return ordinal ? <>{ordinal[1]}<sup>{ordinal[2]}</sup>{ordinal[3]}</> : <>{label}</>;
 }
 
+function OrdinalText({ text }: { text: string }) {
+  return <>{text.split(/(\b\d+(?:st|nd|rd|th)\b)/g).map((part, index) => {
+    const ordinal = part.match(/^(\d+)(st|nd|rd|th)$/);
+    return ordinal ? <span key={index}>{ordinal[1]}<sup>{ordinal[2]}</sup></span> : part;
+  })}</>;
+}
+
 function toneFor(index: number) {
   if (index === 0) return "color-mix(in srgb, var(--progress-hue) 18%, var(--floral))";
   const position = (index - 1) / Math.max(1, progress.stages.length - 2);
@@ -128,7 +135,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
     <div className="progress-note" aria-live="polite" aria-atomic="true">
       {progress.stages.map((item, index) => <div key={item.id} hidden={current !== index} aria-hidden={current !== index}>
         <h3><StageLabel label={item.label} /></h3>
-        <p id={`${id}-note-${item.id}`}>{noteFor(item)}</p>
+        <p id={`${id}-note-${item.id}`}><OrdinalText text={noteFor(item)} /></p>
       </div>)}
     </div>
   </div>;

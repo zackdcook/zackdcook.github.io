@@ -7,9 +7,8 @@ import { usePreferences } from "@/components/site-preferences";
 import { createRibbon, dropRibbon, ribbonPaths, stepRibbon, ribbonWidth, ribbonHeight, type RibbonBounds, type RibbonGrab } from "@/lib/ribbon-physics";
 
 const restingPaths = ribbonPaths(createRibbon());
-const backLabel = "aka the firing squad";
 
-export function EditorialKitties({ emptyPhoto, label = "The editorial kitty committee." }: { emptyPhoto?: string | null; label?: string }) {
+export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committee aka firing squad" }: { emptyPhoto?: string | null; label?: string }) {
   const { reduced } = usePreferences();
   const [escaped, setEscaped] = useState(false);
   const [dismissed, setDismissed] = useState(false);
@@ -130,7 +129,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   return <div className="kitty-discovery">
     <div className="life-photo">
       <div className="tactile-photo kitty-photo">
-        {escaped ? emptyPhoto ? <Image src={emptyPhoto} alt="The sunny window, with the cats gone" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div> : <Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" />}
+        {escaped ? emptyPhoto ? <Image src={emptyPhoto} alt="A sunny window and cat tree, with two cats relaxing" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div> : <Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" />}
       </div>
       <button ref={button} type="button" className="kitty-ribbon" aria-label="Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys." aria-describedby={`${id}-ribbon-label`}
         onPointerDown={event => {
@@ -171,7 +170,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
           } else if (event.key === "Escape") release();
         }}
         onKeyUp={event => { if (event.key.startsWith("Arrow")) release(false); }}>
-        <span id={`${id}-ribbon-label`} className="sr-only">Front: {label} Reverse: {backLabel}. Pick up the strip to see it twist; release it to leave it there.</span>
+        <span id={`${id}-ribbon-label`} className="sr-only">{label}. Pick up the strip to see it twist; release it to leave it there.</span>
         <svg ref={svg} viewBox={`0 0 ${ribbonWidth} ${ribbonHeight}`} aria-hidden="true" focusable="false">
           <defs>
             <path ref={lettering} id={`${id}-lettering`} d={restingPaths.lettering} />
@@ -194,8 +193,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
             <path className="ribbon-face ribbon-front-face" d={segment.path} fill={`url(#${id}-front-satin)`} stroke={`url(#${id}-front-satin)`} />
             <path className="ribbon-face ribbon-back-face" d={segment.path} fill={`url(#${id}-back-satin)`} stroke={`url(#${id}-back-satin)`} />
             <g clipPath={`url(#${id}-patch-${index})`}>
-              <text className="ribbon-lettering ribbon-front-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text>
-              <text className="ribbon-lettering ribbon-back-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{backLabel}</textPath></text>
+              <text className="ribbon-lettering ribbon-front-label" textAnchor="middle" textLength="470" lengthAdjust="spacingAndGlyphs"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text>
             </g>
           </g>)}</g>
           <path ref={hit} className="ribbon-hit" d={restingPaths.body} />
