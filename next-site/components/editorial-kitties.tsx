@@ -14,11 +14,15 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   const [escaped, setEscaped] = useState(false);
   const [dismissed, setDismissed] = useState(false);
   const svg = useRef<SVGSVGElement>(null);
-  const front = useRef<SVGPathElement>(null), back = useRef<SVGPathElement>(null);
-  const frontClip = useRef<SVGPathElement>(null), backClip = useRef<SVGPathElement>(null), sheenClip = useRef<SVGPathElement>(null);
+  const surface = useRef<SVGGElement>(null);
   const edge = useRef<SVGPathElement>(null), shadow = useRef<SVGPathElement>(null), hit = useRef<SVGPathElement>(null);
   const lettering = useRef<SVGPathElement>(null), blur = useRef<SVGFEGaussianBlurElement>(null);
-  const shading = useRef<(SVGPathElement | null)[]>([]);
+  const patches = useRef<(SVGGElement | null)[]>([]);
+  const clips = useRef<(SVGPathElement | null)[]>([]);
+  const gradients = useRef<(SVGLinearGradientElement | null)[]>([]);
+  const currentPaths = useRef(restingPaths);
+  const drawOrder = useRef("");
+  const button = useRef<HTMLButtonElement>(null);
   const nodes = useRef(createRibbon());
   const bounds = useRef<RibbonBounds | undefined>(undefined);
   const motion = useRef({ grab: null as RibbonGrab | null, frame: 0, lastFrame: 0, lastMove: 0, played: 0, pointer: null as number | null, offsetX: 0, offsetY: 0, previousX: 0, previousY: 0 });
@@ -46,19 +50,55 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
     resize.observe(element); return () => resize.disconnect();
   }, []);
 
+  function paintSatin() {
+    const style = button.current?.style;
+    if (!style) return;
+    const lightX = parseFloat(style.getPropertyValue("--ribbon-light-x")) || 380;
+    const lightY = parseFloat(style.getPropertyValue("--ribbon-light-y")) || 0;
+    const strength = parseFloat(style.getPropertyValue("--light-strength")) || 0;
+    currentPaths.current.segments.forEach((segment, index) => {
+      const dx = lightX - segment.center.x, dy = lightY - segment.center.y;
+      const facing = (dx * segment.normal.x + dy * segment.normal.y) / (Math.hypot(dx, dy) || 1);
+      const gradient = gradients.current[index];
+      const stops = gradient?.querySelectorAll("stop");
+      stops?.[1]?.setAttribute("offset", String(.5 + facing * .38));
+      patches.current[index]?.style.setProperty("--satin-strength", String(.07 + strength * .11));
+    });
+  }
+  useEffect(() => {
+    const element = button.current; if (!element) return;
+    // Read inline shared-light variables only: no layout reads or React renders.
+    const observer = new MutationObserver(paintSatin);
+    observer.observe(element, { attributes: true, attributeFilter: ["style"] });
+    return () => observer.disconnect();
+  }, []);
+
   function animate(now: number) {
     const m = motion.current; m.frame = 0;
     const moving = stepRibbon(nodes.current, m.grab, now - (m.lastFrame || now - 16.67), reducedRef.current, bounds.current);
     m.lastFrame = now;
     const paths = ribbonPaths(nodes.current);
-    for (const ref of [edge, shadow, hit, sheenClip]) ref.current?.setAttribute("d", paths.body);
-    front.current?.setAttribute("d", paths.front); frontClip.current?.setAttribute("d", paths.front);
-    back.current?.setAttribute("d", paths.back); backClip.current?.setAttribute("d", paths.back);
+    currentPaths.current = paths;
+    for (const ref of [edge, shadow, hit]) ref.current?.setAttribute("d", paths.body);
     lettering.current?.setAttribute("d", paths.lettering);
     paths.segments.forEach((segment, index) => {
-      shading.current[index]?.setAttribute("d", segment.path);
-      shading.current[index]?.setAttribute("opacity", String(segment.shade));
+      const group = patches.current[index];
+      clips.current[index]?.setAttribute("d", segment.path);
+      group?.setAttribute("data-face", segment.front ? "front" : "back");
+      for (const path of group?.querySelectorAll("path") ?? []) path.setAttribute("d", segment.path);
+      group?.style.setProperty("--fold-shade", String(segment.shade));
+      const gradient = gradients.current[index];
+      gradient?.setAttribute("x1", String(segment.lightStart.x)); gradient?.setAttribute("y1", String(segment.lightStart.y));
+      gradient?.setAttribute("x2", String(segment.lightEnd.x)); gradient?.setAttribute("y2", String(segment.lightEnd.y));
     });
+    // Raised fabric occludes the fabric underneath, including its lettering.
+    const order = paths.segments.map((segment, index) => ({ depth: segment.depth, index })).sort((a, b) => a.depth - b.depth || a.index - b.index).map(item => item.index);
+    const key = order.join(",");
+    if (key !== drawOrder.current) {
+      for (const index of order) { const patch = patches.current[index]; if (patch) surface.current?.appendChild(patch); }
+      drawOrder.current = key;
+    }
+    paintSatin();
     svg.current?.style.setProperty("--ribbon-height", `${paths.height.toFixed(2)}px`);
     blur.current?.setAttribute("stdDeviation", (2 + paths.height / 24).toFixed(2));
     if (moving) m.frame = requestAnimationFrame(animate);
@@ -103,7 +143,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
       <div className="tactile-photo kitty-photo">
         {escaped ? emptyPhoto ? <Image src={emptyPhoto} alt="The sunny window, with the cats gone" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div> : <Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" />}
       </div>
-      <button type="button" className="kitty-ribbon" aria-label="Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys." aria-describedby={`${id}-ribbon-label`}
+      <button ref={button} type="button" className="kitty-ribbon" aria-label="Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys." aria-describedby={`${id}-ribbon-label`}
         onPointerDown={event => {
           if (!event.isPrimary || event.button !== 0 || motion.current.pointer !== null) return;
           event.preventDefault();
@@ -146,21 +186,25 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
         <svg ref={svg} viewBox={`0 0 ${ribbonWidth} ${ribbonHeight}`} aria-hidden="true" focusable="false">
           <defs>
             <path ref={lettering} id={`${id}-lettering`} d={restingPaths.lettering} />
-            <clipPath id={`${id}-front`}><path ref={frontClip} d={restingPaths.front} /></clipPath>
-            <clipPath id={`${id}-back`}><path ref={backClip} d={restingPaths.back} /></clipPath>
-            <clipPath id={`${id}-sheen`}><path ref={sheenClip} d={restingPaths.body} /></clipPath>
-            <linearGradient id={`${id}-satin`} x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="var(--floral)" stopOpacity="0" /><stop offset=".42" stopColor="var(--coral)" stopOpacity=".25" /><stop offset=".5" stopColor="var(--floral)" stopOpacity=".55" /><stop offset=".58" stopColor="var(--coral)" stopOpacity=".25" /><stop offset="1" stopColor="var(--floral)" stopOpacity="0" /></linearGradient>
-            <pattern id={`${id}-weave`} width="3" height="3" patternUnits="userSpaceOnUse"><path d="M0 0h3 M0 0v3" stroke="var(--coral)" strokeWidth=".35" strokeOpacity=".14" /></pattern>
+            {restingPaths.segments.map((segment, index) => <g key={index}>
+              <clipPath id={`${id}-patch-${index}`}><path ref={element => { clips.current[index] = element; }} d={segment.path} /></clipPath>
+              <linearGradient id={`${id}-satin-${index}`} ref={element => { gradients.current[index] = element; }} gradientUnits="userSpaceOnUse" x1={segment.lightStart.x} y1={segment.lightStart.y} x2={segment.lightEnd.x} y2={segment.lightEnd.y}>
+                <stop offset="0" stopColor="var(--coral)" stopOpacity="0" /><stop offset=".5" stopColor="var(--floral)" /><stop offset="1" stopColor="var(--coral)" stopOpacity="0" />
+              </linearGradient>
+            </g>)}
             <filter id={`${id}-soft-shadow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur ref={blur} stdDeviation="2" /></filter>
           </defs>
           <path ref={shadow} className="ribbon-cast" d={restingPaths.body} filter={`url(#${id}-soft-shadow)`} />
-          <path ref={front} className="ribbon-front" d={restingPaths.front} />
-          <path ref={back} className="ribbon-back" d={restingPaths.back} />
-          <g className="ribbon-folds">{restingPaths.segments.map((segment, index) => <path key={index} ref={element => { shading.current[index] = element; }} d={segment.path} opacity={segment.shade} />)}</g>
-          <g clipPath={`url(#${id}-sheen)`}><rect width="2000" height="2000" x="-640" y="-640" fill={`url(#${id}-weave)`} /><g className="ribbon-satin"><rect x="-1500" y="-42" width="3000" height="84" fill={`url(#${id}-satin)`} /></g></g>
-          <path ref={edge} className="ribbon-edge" d={restingPaths.body} />
-          <text className="ribbon-lettering" textAnchor="middle" clipPath={`url(#${id}-front)`}><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text>
-          <text className="ribbon-lettering ribbon-handwriting" textAnchor="middle" clipPath={`url(#${id}-back)`}><textPath href={`#${id}-lettering`} startOffset="50%">{backLabel}</textPath></text>
+          <path ref={edge} className="ribbon-thickness" d={restingPaths.body} />
+          <g ref={surface}>{restingPaths.segments.map((segment, index) => <g key={index} ref={element => { patches.current[index] = element; }} className="ribbon-patch" data-face={segment.front ? "front" : "back"}>
+            <path className="ribbon-face" d={segment.path} />
+            <path className="ribbon-fold" d={segment.path} />
+            <path className="ribbon-satin" d={segment.path} fill={`url(#${id}-satin-${index})`} />
+            <g clipPath={`url(#${id}-patch-${index})`}>
+              <text className="ribbon-lettering ribbon-front-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text>
+              <text className="ribbon-lettering ribbon-back-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{backLabel}</textPath></text>
+            </g>
+          </g>)}</g>
           <path ref={hit} className="ribbon-hit" d={restingPaths.body} />
         </svg>
       </button>
