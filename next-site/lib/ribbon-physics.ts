@@ -145,11 +145,7 @@ export function ribbonPaths(nodes: RibbonNode[]) {
     return {
       path: `M${pointString(upper[index])} ${interval(upper, index)} ${across} ${interval(lower, index, true)} ${close} Z`,
       front: Math.cos(twist) >= 0,
-      shade: Math.abs(Math.sin(twist)) * .13,
       depth: (node.z + next.z) / 2,
-      center: { x: (node.x + next.x) / 2, y: (node.y + next.y) / 2 },
-      normal: normals[index],
-      lightStart: upper[index], lightEnd: lower[index],
     };
   });
   const bottom = nodes.slice(0, -1).map((_, index) => interval(lower, nodes.length - 2 - index, true)).join(" ");
