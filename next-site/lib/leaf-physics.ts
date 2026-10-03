@@ -12,8 +12,8 @@ function randomFor(index: number) {
 }
 export function makeLeafPile(count: number, bounds: LeafBounds): LeafBody[] {
   return Array.from({ length: count }, (_, i) => {
-    const r = randomFor(i), margin = bounds.leafWidth * .48;
-    return { x: margin + r() * Math.max(0, bounds.width - margin * 2), y: 135 + r() * Math.max(10, bounds.height - 270), z: 0,
+    const r = randomFor(i), margin = bounds.leafWidth * .6;
+    return { x: margin + r() * Math.max(0, bounds.width - margin * 2), y: margin + r() * Math.max(0, bounds.height - margin * 2), z: 0,
       rx: r() * 8 - 4, ry: r() * 8 - 4, rz: r() * 100 - 50, vx: 0, vy: 0, vz: 0, wx: 0, wy: 0, wz: 0 };
   });
 }
@@ -32,7 +32,8 @@ export function blowLeaves(leaves: LeafBody[], x: number, y: number) {
 export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBounds) {
   const dt = clamp(elapsed, 0, 1 / 30), air = Math.exp(-2.5 * dt), floor = Math.exp(-7 * dt);
   let moving = false;
-  const marginX = Math.min(bounds.leafWidth * .42, bounds.width / 2), marginY = bounds.leafWidth * .3;
+  // Allow for the whole diagonal of a rotated leaf, including its stem/shadow.
+  const marginX = Math.min(bounds.leafWidth * .6, bounds.width / 2), marginY = bounds.leafWidth * .6;
   for (const leaf of leaves) {
     leaf.x += leaf.vx * dt; leaf.y += leaf.vy * dt; leaf.z += leaf.vz * dt;
     leaf.vz -= 840 * dt;
