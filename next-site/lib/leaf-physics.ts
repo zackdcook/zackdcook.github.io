@@ -4,6 +4,10 @@ const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(ma
 
 function randomFor(index: number) {
   let seed = (index + 11) * 2654435761 >>> 0;
+  // Mix adjacent IDs before drawing positions so they do not form neat rows.
+  seed = Math.imul(seed ^ seed >>> 16, 0x21f0aaad);
+  seed = Math.imul(seed ^ seed >>> 15, 0x735a2d97);
+  seed = (seed ^ seed >>> 15) >>> 0;
   return () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
 }
 export function makeLeafPile(count: number, bounds: LeafBounds): LeafBody[] {
