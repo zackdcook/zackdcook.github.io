@@ -137,6 +137,8 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
               m.previousX = node.x; m.previousY = node.y;
             }
             play(m.grab.x + delta[event.key][0], m.grab.y + delta[event.key][1]);
+            // A quick key tap can finish before the next animation frame.
+            stepRibbon(nodes.current, m.grab, 16.67, reducedRef.current, bounds.current);
           } else if (event.key === "Escape") release();
         }}
         onKeyUp={event => { if (event.key.startsWith("Arrow")) release(false); }}>
