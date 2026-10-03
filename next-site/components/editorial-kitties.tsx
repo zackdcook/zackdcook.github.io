@@ -19,8 +19,7 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   const lettering = useRef<SVGPathElement>(null), blur = useRef<SVGFEGaussianBlurElement>(null);
   const patches = useRef<(SVGGElement | null)[]>([]);
   const clips = useRef<(SVGPathElement | null)[]>([]);
-  const gradients = useRef<(SVGLinearGradientElement | null)[]>([]);
-  const currentPaths = useRef(restingPaths);
+  const frontSatin = useRef<SVGRadialGradientElement>(null), backSatin = useRef<SVGRadialGradientElement>(null);
   const drawOrder = useRef("");
   const button = useRef<HTMLButtonElement>(null);
   const nodes = useRef(createRibbon());
@@ -53,17 +52,12 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   function paintSatin() {
     const style = button.current?.style;
     if (!style) return;
-    const lightX = parseFloat(style.getPropertyValue("--ribbon-light-x")) || 380;
-    const lightY = parseFloat(style.getPropertyValue("--ribbon-light-y")) || 0;
-    const strength = parseFloat(style.getPropertyValue("--light-strength")) || 0;
-    currentPaths.current.segments.forEach((segment, index) => {
-      const dx = lightX - segment.center.x, dy = lightY - segment.center.y;
-      const facing = (dx * segment.normal.x + dy * segment.normal.y) / (Math.hypot(dx, dy) || 1);
-      const gradient = gradients.current[index];
-      const stops = gradient?.querySelectorAll("stop");
-      stops?.[1]?.setAttribute("offset", String(.5 + facing * .38));
-      patches.current[index]?.style.setProperty("--satin-strength", String(.07 + strength * .11));
-    });
+    const x = parseFloat(style.getPropertyValue("--ribbon-light-x"));
+    const y = parseFloat(style.getPropertyValue("--ribbon-light-y"));
+    const lightX = Number.isFinite(x) ? x : 380, lightY = Number.isFinite(y) ? y : 0;
+    for (const gradient of [frontSatin.current, backSatin.current]) {
+      gradient?.setAttribute("cx", lightX.toFixed(2)); gradient?.setAttribute("cy", lightY.toFixed(2));
+    }
   }
   useEffect(() => {
     const element = button.current; if (!element) return;
@@ -78,7 +72,6 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
     const moving = stepRibbon(nodes.current, m.grab, now - (m.lastFrame || now - 16.67), reducedRef.current, bounds.current);
     m.lastFrame = now;
     const paths = ribbonPaths(nodes.current);
-    currentPaths.current = paths;
     for (const ref of [edge, shadow, hit]) ref.current?.setAttribute("d", paths.body);
     lettering.current?.setAttribute("d", paths.lettering);
     paths.segments.forEach((segment, index) => {
@@ -86,10 +79,6 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
       clips.current[index]?.setAttribute("d", segment.path);
       group?.setAttribute("data-face", segment.front ? "front" : "back");
       for (const path of group?.querySelectorAll("path") ?? []) path.setAttribute("d", segment.path);
-      group?.style.setProperty("--fold-shade", String(segment.shade));
-      const gradient = gradients.current[index];
-      gradient?.setAttribute("x1", String(segment.lightStart.x)); gradient?.setAttribute("y1", String(segment.lightStart.y));
-      gradient?.setAttribute("x2", String(segment.lightEnd.x)); gradient?.setAttribute("y2", String(segment.lightEnd.y));
     });
     // Raised fabric occludes the fabric underneath, including its lettering.
     const order = paths.segments.map((segment, index) => ({ depth: segment.depth, index })).sort((a, b) => a.depth - b.depth || a.index - b.index).map(item => item.index);
@@ -186,20 +175,24 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
         <svg ref={svg} viewBox={`0 0 ${ribbonWidth} ${ribbonHeight}`} aria-hidden="true" focusable="false">
           <defs>
             <path ref={lettering} id={`${id}-lettering`} d={restingPaths.lettering} />
-            {restingPaths.segments.map((segment, index) => <g key={index}>
-              <clipPath id={`${id}-patch-${index}`}><path ref={element => { clips.current[index] = element; }} d={segment.path} /></clipPath>
-              <linearGradient id={`${id}-satin-${index}`} ref={element => { gradients.current[index] = element; }} gradientUnits="userSpaceOnUse" x1={segment.lightStart.x} y1={segment.lightStart.y} x2={segment.lightEnd.x} y2={segment.lightEnd.y}>
-                <stop offset="0" stopColor="var(--coral)" stopOpacity="0" /><stop offset=".5" stopColor="var(--floral)" /><stop offset="1" stopColor="var(--coral)" stopOpacity="0" />
-              </linearGradient>
-            </g>)}
+            {restingPaths.segments.map((segment, index) => <clipPath key={index} id={`${id}-patch-${index}`}><path ref={element => { clips.current[index] = element; }} d={segment.path} /></clipPath>)}
+            {/* One continuous opaque satin field per face avoids patch seams.
+                The shared point light moves its very restrained warm sheen. */}
+            <radialGradient id={`${id}-front-satin`} ref={frontSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
+              <stop offset="0" stopColor="color-mix(in srgb,var(--coral) calc(7% + var(--light-strength,0)*11%),var(--midnight))" />
+              <stop offset=".65" stopColor="color-mix(in srgb,var(--coral) 3%,var(--midnight))" /><stop offset="1" stopColor="var(--midnight)" />
+            </radialGradient>
+            <radialGradient id={`${id}-back-satin`} ref={backSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
+              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(5% + var(--light-strength,0)*10%),var(--coral))" />
+              <stop offset=".65" stopColor="var(--coral)" /><stop offset="1" stopColor="color-mix(in srgb,var(--midnight) 6%,var(--coral))" />
+            </radialGradient>
             <filter id={`${id}-soft-shadow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur ref={blur} stdDeviation="2" /></filter>
           </defs>
           <path ref={shadow} className="ribbon-cast" d={restingPaths.body} filter={`url(#${id}-soft-shadow)`} />
           <path ref={edge} className="ribbon-thickness" d={restingPaths.body} />
           <g ref={surface}>{restingPaths.segments.map((segment, index) => <g key={index} ref={element => { patches.current[index] = element; }} className="ribbon-patch" data-face={segment.front ? "front" : "back"}>
-            <path className="ribbon-face" d={segment.path} />
-            <path className="ribbon-fold" d={segment.path} />
-            <path className="ribbon-satin" d={segment.path} fill={`url(#${id}-satin-${index})`} />
+            <path className="ribbon-face ribbon-front-face" d={segment.path} fill={`url(#${id}-front-satin)`} stroke={`url(#${id}-front-satin)`} />
+            <path className="ribbon-face ribbon-back-face" d={segment.path} fill={`url(#${id}-back-satin)`} stroke={`url(#${id}-back-satin)`} />
             <g clipPath={`url(#${id}-patch-${index})`}>
               <text className="ribbon-lettering ribbon-front-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text>
               <text className="ribbon-lettering ribbon-back-label" textAnchor="middle"><textPath href={`#${id}-lettering`} startOffset="50%">{backLabel}</textPath></text>
