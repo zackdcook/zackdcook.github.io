@@ -12,13 +12,15 @@
 .pile-leaf .leaf-body,.pile-leaf .leaf-words { pointer-events: auto; }
 .pile-leaf .leaf-art { pointer-events: none; }
 .pile-leaf:focus-visible { outline: 3px dashed #66693E; outline-offset: 8px; border-radius: 45%; z-index: 500 !important; }
-.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; color: var(--leaf-ink); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; container-type: inline-size; color: var(--leaf-ink); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .leaf-art { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(1px var(--leaf-shadow-y,4px) var(--leaf-shadow-blur,5px) #31031F28); }
 .leaf-body { fill: var(--leaf-color); }
 .leaf-stem { stroke: var(--leaf-color); stroke-width: 7; fill: none; stroke-linecap: round; }
 .leaf-veins { stroke: var(--leaf-ink); stroke-width: 2.5; opacity: .16; }
 .leaf-words { position: absolute; left: 20%; top: 25%; width: 61%; height: 48%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--leaf-ink); font-family: var(--display); font-size: 23px; font-weight: 650; line-height: 1.18; letter-spacing: -.02em; text-wrap: balance; transform: rotate(-15deg); }
 .leaf-words-long { font-size: 18px; line-height: 1.2; }
+.pile-leaf .leaf-words { font-size: clamp(16px,6.5cqw,23px); }
+.pile-leaf .leaf-words-long { font-size: clamp(12px,5cqw,18px); }
 .quote-leaf-back { position: absolute; inset: 0; transform: rotateY(180deg); }
 .quote-leaf-back .leaf-veins { opacity: .24; }
 .leaf-gust { position: absolute; width: 0; height: 0; pointer-events: none; z-index: 1000; }
@@ -36,8 +38,8 @@
 .leaf-reader-content { position: relative; }
 .leaf-reader-close { display: block; margin-left: auto; }
 .reader-leaf { margin: 0 auto; width: min(100%,1000px); }
-.reader-leaf .leaf-words { font-size: clamp(25px,4.5vw,53px); }
-.reader-leaf .leaf-words-long { font-size: clamp(20px,3.5vw,40px); }
+.reader-leaf .leaf-words { font-size: clamp(21px,5.5cqw,53px); }
+.reader-leaf .leaf-words-long { font-size: clamp(16px,5.2cqw,40px); }
 .leaf-reader[open] .reader-leaf { animation: leaf-read-in .3s cubic-bezier(.15,.8,.25,1) both; }
 .leaf-reader-nav { display: flex; align-items: center; justify-content: center; gap: 16px; font: 500 13px var(--sans); padding: 10px 0; }
 .leaf-reader-nav .button { font-size: 14px; padding: 12px 20px; }
@@ -52,8 +54,6 @@ body:has(.leaf-reader[open]) { overflow: hidden; }
   .folly-page { padding-top: 38px; }
   .folly-tools { gap: 16px; }
   .folly-ground { margin-left: calc((100vw - 100%)*-.5); width: 100vw; }
-  .pile-leaf .leaf-words { font-size: 20px; }
-  .pile-leaf .leaf-words-long { font-size: 16px; }
   .folly-ground-readable { width: 100%; margin-left: 0; }
   .folly-ground-readable .folly-leaves { gap: 12px; }
   .leaf-reader { width: 98vw; padding: 12px 8px; }
