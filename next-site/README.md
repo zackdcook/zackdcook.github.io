@@ -37,7 +37,7 @@ Zack requires **no new spending**. The current Vercel project is on Hobby; no pa
 
 The braindump value, **35,834 words**, comes from the counter published on the original homepage. It is not a new word count of a manuscript. The draft is **27,250 / 50,000**. Revision has no invented target. Add more stages to the JSON to create more rings.
 
-The existing “It’s not too late” journal entry is preserved in `content/its-not-too-late.json`. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
+Words of Folly now contains short writing reminders in `content/folly.json`; append a quote there to update the leaf pile, latest-leaf homepage preview, and RSS. The former essay was removed and remains recoverable in Git history. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
 
 Navigation is Creative Works, Words of Folly, Inspo Board, About Me, and Find Me At…. The standing Write On, Lakeland! group appears on the homepage and Find Me At… page: Thursdays, 4–6 p.m. Eastern at Pressed Books & Coffee. Change its details in `content/site.ts`. Additional appearances show when dated entries are added. A newsletter button appears only if `NEXT_PUBLIC_SUBSCRIBE_URL` is a real subscription URL. No donation or payment service is connected.
 
