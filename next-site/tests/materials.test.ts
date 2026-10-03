@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { lightIntensity, materialLight } from "../lib/material-light";
+import { approachLight, materialLight } from "../lib/material-light";
 import { createRibbon, ribbonPaths, stepRibbon } from "../lib/ribbon-physics";
 
 const button = { left: 100, top: 100, width: 160, height: 50 };
@@ -21,9 +21,15 @@ test("the same point lights each surface according to its own position, then res
   const rested = materialLight(button, 999, 999, 0);
   assert.equal(rested.shadowX, 0); assert.equal(rested.shadowY, 5);
   assert.equal(rested.rimX, 0); assert.equal(rested.rimY, 1);
-  assert.equal(lightIntensity(240, false), 1);
-  assert.ok(lightIntensity(240, true) < 1);
-  assert.equal(lightIntensity(1400, false), 0);
+});
+test("light resumes and rests at the same speed without jumping on direction changes", () => {
+  assert.equal(approachLight(0, 1, 550), .5);
+  assert.equal(approachLight(1, 0, 550), .5);
+  assert.equal(approachLight(.4, 1, 110), .5);
+  assert.ok(Math.abs(approachLight(.4, 0, 110) - .3) < 1e-12);
+  assert.equal(approachLight(0, 1, 0), 0);
+  assert.equal(approachLight(.9, 1, 5000), 1);
+  assert.equal(approachLight(.1, 0, 5000), 0);
 });
 test("a grabbed ribbon bends instead of translating rigidly and settles after release", () => {
   const nodes = createRibbon();
