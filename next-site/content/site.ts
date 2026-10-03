@@ -15,23 +15,6 @@ export const site = {
     "Zack Cook is an aspiring author and industrial engineer in Lakeland, Florida. Stay tuned for his first novel, read his ramblings, and explore the things that inspire him.",
 };
 
-export const journalPost = {
-  slug: "its-not-too-late",
-  title: "It’s Not Too Late to Start",
-  date: "2025-10-20",
-  excerpt:
-    "I grew up naturally talented at STEM, but my heart always craved the mess of making things. Here’s what happened when I turned 33.",
-};
-
-export type JournalPost = typeof journalPost;
-
-// Add each published article here. The homepage, archive, and RSS share this list.
-export const journalPosts: JournalPost[] = [journalPost];
-
-export function publishedJournalPosts() {
-  return [...journalPosts].sort((a, b) => b.date.localeCompare(a.date));
-}
-
 export function displayDate(date: string) {
   return new Intl.DateTimeFormat("en-US", {
     year: "numeric",
