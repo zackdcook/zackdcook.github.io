@@ -28,19 +28,28 @@ export function SignaturePad({ onChange }: { onChange: (strokes: Stroke[]) => vo
     if (!el) return;
     const resize = () => {
       const rect = el.getBoundingClientRect();
+      // Activity/dialogs can retain this canvas while it is hidden. A zero
+      // measurement must not erase its backing store or recorded geometry.
+      if (!rect.width || !rect.height || drawingPointer.current !== null) return;
       const ratio = Math.min(2, window.devicePixelRatio || 1);
       el.width = Math.round(rect.width * ratio); el.height = Math.round(rect.width * ratio * signatureHeight / signatureWidth);
       el.getContext("2d")?.setTransform(el.width / signatureWidth, 0, 0, el.height / signatureHeight, 0, 0);
       redraw();
     };
+    // Safari can hand a touch gesture to an ancestor scroller. Keep this
+    // non-passive guard scoped to the drawing surface, never the page.
+    const keepDrawing = (event: TouchEvent) => { if (event.cancelable) event.preventDefault(); };
+    el.addEventListener("touchstart", keepDrawing, { passive: false });
+    el.addEventListener("touchmove", keepDrawing, { passive: false });
     const observer = new ResizeObserver(resize); observer.observe(el); resize();
-    return () => observer.disconnect();
+    return () => { observer.disconnect(); el.removeEventListener("touchstart", keepDrawing); el.removeEventListener("touchmove", keepDrawing); };
   }, []);
   const point = (event: { clientX: number; clientY: number }): Point => {
     const rect = box.current!;
     return [Math.round(Math.min(signatureWidth, Math.max(0, (event.clientX - rect.x) / rect.width * signatureWidth)) * 10) / 10, Math.round(Math.min(signatureHeight, Math.max(0, (event.clientY - rect.y) / rect.height * signatureHeight)) * 10) / 10];
   };
-  const finish = () => {
+  const finish = (event: { pointerId: number }) => {
+    if (event.pointerId !== drawingPointer.current) return;
     if (active.current?.length) {
       if (active.current.length === 1) active.current.push([...active.current[0]]);
       strokes.current.push(active.current); active.current = null;
@@ -51,14 +60,20 @@ export function SignaturePad({ onChange }: { onChange: (strokes: Stroke[]) => vo
   };
   return <div>
     <p className="form-hint" id="drawing-help">Mouse, fingertip, or stylus. Keep your signature and tiny note inside this box. Prefer typing? Choose Type above.</p>
-    <canvas ref={canvas} className="signature-pad" aria-label="Draw your signature" aria-describedby="drawing-help" role="img"
+    <canvas ref={canvas} width={signatureWidth} height={signatureHeight} className="signature-pad" aria-label="Draw your signature" aria-describedby="drawing-help" role="img"
+      style={{ touchAction: "none", userSelect: "none", WebkitUserSelect: "none", WebkitTouchCallout: "none" }}
       onPointerDown={event => {
-        if (event.button !== 0 || drawingPointer.current !== null || strokes.current.length >= 64 || points() >= 1198) { setLimit(true); return; }
-        box.current = event.currentTarget.getBoundingClientRect(); drawingPointer.current = event.pointerId;
+        if (!event.isPrimary || event.button !== 0 || drawingPointer.current !== null) return;
+        event.preventDefault();
+        if (strokes.current.length >= 64 || points() >= 1198) { setLimit(true); return; }
+        const rect = event.currentTarget.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        box.current = rect; drawingPointer.current = event.pointerId;
         active.current = [point(event)]; event.currentTarget.setPointerCapture(event.pointerId); setLimit(false);
       }}
       onPointerMove={event => {
         if (!active.current || event.pointerId !== drawingPointer.current) return;
+        event.preventDefault();
         const samples = event.nativeEvent.getCoalescedEvents?.() || [event.nativeEvent];
         const ctx = canvas.current?.getContext("2d");
         const remaining = 1200 - points();
