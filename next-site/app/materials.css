@@ -90,6 +90,14 @@ body .stage-button .stage-count { opacity: .88; }
   body .stage-button:not(:disabled):hover { --surface-bg: var(--button-hover-bg); color: var(--button-hover-ink); }
 }
 body .stage-button:not(:disabled):active { --surface-bg: var(--coral); color: var(--midnight); }
+body .project-description-toggle {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  margin-block: 8px;
+  border-radius: 14px;
+}
 
 /* Panels retain a solid face. Only the shallow edges and their cast move. */
 body :is(.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.mobile-menu nav) {
