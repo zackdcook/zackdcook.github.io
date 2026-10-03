@@ -28,7 +28,7 @@ html[data-timeline="felled"][data-theme="dark"] {
 
 /* One external shadow, plus two shallow INSET bevels. Hover never increases
    elevation or introduces a second cast. Pointer updates stay untransitioned. */
-body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.mobile-menu summary) {
+body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary) {
   --surface-bg: var(--button-bg);
   --press-depth: 1;
   color: var(--button-ink);
@@ -51,19 +51,19 @@ body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy butto
   text-decoration: none;
   transition: color .18s, background-color .18s;
 }
-body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.mobile-menu summary):not(:disabled):focus-visible {
+body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary):not(:disabled):focus-visible {
   outline: 3px solid var(--coral);
   outline-offset: 4px;
 }
 @media (hover:hover) {
-  body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.mobile-menu summary):not(:disabled):hover {
+  body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary):not(:disabled):hover {
     --surface-bg: var(--button-hover-bg);
     color: var(--button-hover-ink);
     transform: none;
     text-decoration: none;
   }
 }
-body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.mobile-menu summary):not(:disabled):active {
+body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary):not(:disabled):active {
   --surface-bg: var(--button-hover-bg);
   --press-depth: .35;
   color: var(--button-hover-ink);
@@ -199,7 +199,7 @@ body .life-photo .kitty-ribbon:active { cursor: grabbing; }
 .ribbon-lettering { fill: var(--coral); font: 600 18px var(--sans); letter-spacing: 0; }
 .cats-escaped { padding-top: 62px; }
 
-html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.mobile-menu summary,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.mobile-menu nav,.tactile-photo) { --shadow-x: 0px !important; --shadow-y: 3px !important; --shadow-blur: 7px !important; --rim-x: 0px !important; --rim-y: 1px !important; --light-strength: 0 !important; transition: none; }
+html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.mobile-menu nav,.tactile-photo) { --shadow-x: 0px !important; --shadow-y: 3px !important; --shadow-blur: 7px !important; --rim-x: 0px !important; --rim-y: 1px !important; --light-strength: 0 !important; transition: none; }
 @media(max-width:740px) {
   body .life-photo .kitty-ribbon { right: -10px; bottom: -48px; width: min(420px,110%); }
   .preferences-dialog .calendar-dialog-content { padding: 22px; }
