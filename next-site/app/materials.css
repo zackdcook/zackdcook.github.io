@@ -27,7 +27,7 @@ html[data-timeline="felled"][data-theme="dark"] {
 
 /* One external shadow, plus two shallow INSET bevels. Hover never increases
    elevation or introduces a second cast. Pointer updates stay untransitioned. */
-body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control) {
+body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control,.tactile-photo) {
   --surface-bg: var(--button-bg);
   --press-depth: 1;
   color: var(--button-ink);
@@ -41,7 +41,7 @@ body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.
   background-clip: padding-box,border-box;
   border: 1px solid transparent;
   box-shadow:
-    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,5px)*var(--press-depth)) calc(var(--shadow-blur,12px)*var(--press-depth)) var(--material-shadow),
+    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,5px)*var(--press-depth)) calc(var(--cast-blur,var(--shadow-blur,12px))*var(--press-depth)) var(--material-shadow),
     inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--material-cut);
   font-family: var(--sans);
@@ -119,31 +119,32 @@ html[data-theme="dark"] :is(.board-empty,.empty-note,.admin-panel,.moderation-en
 html[data-theme="dark"] :is(.journal-banner,.shoutout-card) { background-color: var(--leaf); color: var(--floral); }
 html[data-theme="dark"] :is(.journal-banner,.shoutout-card) :is(p,time,.shoutout-subtitle) { color: var(--floral); }
 
-/* The opaque photograph covers the content box. Light is painted only in
-   the real colored border band, never on image pixels. */
-.tactile-photo {
+/* The seven-pixel colored band stays solid. Its one-pixel outer edge and
+   inset bevel use the same material paint as buttons. Image pixels never light. */
+body .tactile-photo {
   --photo-frame: var(--khaki);
+  --surface-bg: var(--photo-frame);
   position: relative;
   isolation: isolate;
-  overflow: hidden;
+  overflow: visible;
   border-radius: 28px;
-  border: 8px solid transparent;
-  background-color: var(--photo-frame);
-  background-image: radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),
-    color-mix(in srgb,var(--floral) calc(var(--light-strength,0)*55%),var(--photo-frame)),
-    var(--photo-frame) 65%,
-    color-mix(in srgb,var(--midnight) calc(var(--light-strength,0)*25%),var(--photo-frame)));
-  background-origin: border-box;
-  background-clip: border-box;
-  box-shadow: var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow);
+  padding: 7px;
+  border: 1px solid transparent;
   transform: none;
   transition: none;
 }
 .tactile-photo::after { content: none; }
 body .portrait-frame { border-color: transparent; }
+body .tactile-photo>img { display: block; border-radius: 20px; }
 body .kitty-photo { --photo-frame: var(--coral); aspect-ratio: 1400/1034; }
-.life-photo .kitty-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 0; }
-.commonplace-image.tactile-photo { border-radius: 18px 18px 0 0; border: 0; background-image: none; }
+body .life-photo .kitty-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; }
+body .commonplace-image.tactile-photo { border-radius: 18px 18px 0 0; padding: 0; border: 0; background-image: none; }
+body .commonplace-image.tactile-photo>img { border-radius: 18px 18px 0 0; }
+.life-section,.kitty-discovery,.life-photo { overflow: visible; }
+
+/* A small safe-area gutter keeps upward header casts inside the viewport. */
+.site-header { padding-top: max(12px,env(safe-area-inset-top)); overflow: visible; }
+body .site-header :is(.home-tab,.mobile-menu summary) { --cast-blur: min(10px,var(--shadow-blur,12px)); }
 
 /* Crisp, shallow lettering edges catch the same light as the nearby frame. */
 body .hero h1, body .hero h1 em {
@@ -166,20 +167,26 @@ body .home-tab { --surface-bg: var(--paper); color: var(--ink); font-family: var
 body .mobile-menu nav { background: var(--paper); color: var(--ink); }
 body .mobile-menu nav a { margin-block: 6px; text-decoration: none; }
 
-body .mobile-menu nav a[aria-current="page"] { outline: 1px solid var(--coral); outline-offset: 2px; }
+body .mobile-menu nav a[aria-current="page"] { --surface-bg: var(--button-hover-bg); color: var(--button-hover-ink); outline: none; }
 body .mobile-menu summary { color: var(--midnight); }
 
 /* Fixed SVG geometry: emphasis changes opacity only. No filter, scaling,
    layout shift, or parent elevation when a stage button is hovered/pressed. */
 .rings { color: var(--midnight); }
 .rings::before { background: var(--floral); border-color: var(--floral); }
-.ring-center,.ring-center>span,.ring-center small { color: var(--midnight); }
+.ring-center { fill: var(--midnight); pointer-events: none; }
+.ring-percentage { font: 650 32px var(--sans); letter-spacing: -1px; font-variant-numeric: tabular-nums; }
+.ring-percent-sign { font-size: 16px; letter-spacing: 0; }
+.ring-stage-name { font: 650 13px var(--sans); }
 .ring-layer .ring-fill,.ring-layer .core-fill,.ring-dots { filter: none; }
 .ring-layer.is-selected .ring-highlight { opacity: .85; }
 .ring-layer.is-highlighted .ring-dots { opacity: 1; }
 
-/* Paper backing keeps violet official marks legible on the hover face. */
-.footer-links img { filter: none; padding: 2px; border-radius: 4px; background: var(--floral); box-sizing: content-box; }
+/* Official silhouettes inherit the exact same ink as their button labels. */
+.social-icon { display: inline-block; width: 20px; height: 20px; flex: 0 0 20px; background: currentColor; -webkit-mask: var(--social-mark) center/contain no-repeat; mask: var(--social-mark) center/contain no-repeat; }
+.social-icon-instagram { --social-mark: url("/icons/instagram.svg"); }
+.social-icon-threads { --social-mark: url("/icons/threads.svg"); }
+.social-icon-linkedin { --social-mark: url("/icons/linkedin.svg"); }
 
 .appearance-options { border: 0; padding: 0; margin: 8px 0 24px; min-width: 0; }
 .appearance-options legend { font: 600 16px/1.4 var(--sans); margin-bottom: 12px; padding: 0; }
@@ -225,18 +232,23 @@ body .life-photo .kitty-ribbon {
 .ribbon-hit { fill: transparent; pointer-events: fill; cursor: grab; touch-action: none; }
 .kitty-ribbon:active .ribbon-hit { cursor: grabbing; }
 .kitty-ribbon:focus-visible { outline: none; }
-.kitty-ribbon:focus-visible .ribbon-edge { stroke: var(--floral); stroke-width: 3; stroke-opacity: 1; }
-.ribbon-front { fill: var(--midnight); stroke: var(--midnight); stroke-width: .4; }
-.ribbon-back { fill: var(--coral); stroke: var(--coral); stroke-width: .4; }
-.ribbon-folds { fill: var(--midnight); }
+.kitty-ribbon:focus-visible .ribbon-thickness { stroke: var(--coral); stroke-width: 3; }
+/* Opaque curved patches are painted from low to high. Only the visible face
+   has lettering; empty/edge-on reverse clips can never reveal the back text. */
+.ribbon-face { fill: var(--midnight); stroke: var(--midnight); stroke-width: .65; stroke-linejoin: round; }
+.ribbon-patch[data-face="back"] .ribbon-face { fill: var(--coral); stroke: var(--coral); }
+.ribbon-fold { fill: var(--midnight); opacity: var(--fold-shade,0); }
 .ribbon-cast { fill: var(--midnight); opacity: .3; transform: translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,5px) + var(--ribbon-height,0px)*.15)); }
-.ribbon-edge { fill: none; stroke: var(--coral); stroke-opacity: .28; stroke-width: .8; transform: translate(calc(var(--rim-x,0px)*-.4),calc(var(--rim-y,1px)*-.4)); }
+.ribbon-thickness { fill: var(--khaki); stroke: var(--khaki); stroke-width: 1.2; stroke-linejoin: round; transform: translateY(1.2px); }
 .ribbon-lettering { fill: var(--coral); font: 600 21px var(--sans); letter-spacing: 0; }
-.ribbon-handwriting { fill: var(--midnight); font: 26px "Caveat",cursive; }
-.ribbon-satin { transform: translate(var(--ribbon-light-x,380px),var(--ribbon-light-y,444px)) rotate(var(--light-angle,90deg)); opacity: calc(.25 + var(--light-strength,0)*.5); }
+.ribbon-back-label { display: none; fill: var(--midnight); font: 26px "Caveat",cursive; }
+.ribbon-patch[data-face="back"] .ribbon-front-label { display: none; }
+.ribbon-patch[data-face="back"] .ribbon-back-label { display: inline; }
+.ribbon-satin { opacity: var(--satin-strength,.07); pointer-events: none; }
 .cats-escaped { padding-top: 36px; }
 .tilt-preference { border-top: 1px solid var(--line); padding-block: 14px 24px; }
 .tilt-preference>p:first-child { margin-top: 0; }
+.tilt-lighting-prompt { position: fixed; bottom: max(18px,env(safe-area-inset-bottom)); right: 18px; z-index: 19; display: flex; gap: 8px; max-width: calc(100vw - 36px); }
 
 html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.mobile-menu nav,.tactile-photo) { --shadow-x: 0px !important; --shadow-y: 3px !important; --shadow-blur: 7px !important; --rim-x: 0px !important; --rim-y: 1px !important; --light-strength: 0 !important; transition: none; }
 @media(max-width:740px) {
