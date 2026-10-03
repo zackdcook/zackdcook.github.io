@@ -12,6 +12,15 @@ export function createRibbon(): RibbonNode[] {
   });
 }
 
+/** Fabric loses most projected hand velocity as it lands on the page plane.
+ * Keep a little tail momentum, without throwing the whole strip off its drop. */
+export function dropRibbon(nodes: RibbonNode[]) {
+  for (const node of nodes) {
+    node.vx *= .12; node.vy *= .08;
+    node.vz = Math.min(0, node.vz * .12); node.spin *= .5;
+  }
+}
+
 /** An inextensible strip above the page plane. The grip lifts it; release lands
  * it where it falls. There are deliberately no springs to its original place. */
 export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed: number, reduced = false, bounds?: RibbonBounds) {
@@ -42,7 +51,7 @@ export function stepRibbon(nodes: RibbonNode[], grab: RibbonGrab | null, elapsed
       const drag = Math.exp(-(onPage ? 26 : 2.1) * dt);
       const breeze = grab ? Math.sin(node.age * 2.1 + index * .3 + (grab.phase ?? 0)) * 16 : 0;
       node.vx = (node.vx + breeze * dt) * drag;
-      node.vy = (node.vy + (grab ? 950 : 0) * dt) * drag;
+      node.vy = (node.vy + (grab ? 950 : node.z > .2 ? 450 : 0) * dt) * drag;
       node.vz = (node.vz - 1400 * dt) * drag;
       node.x += node.vx * dt; node.y += node.vy * dt; node.z += node.vz * dt;
       const target = grab ? Math.sin((index - grab.index) * .26 + (grab.phase ?? 0)) * 2.1 + Math.sin(node.age * 1.6 + index * .18) * .35 : Math.round(node.twist / Math.PI) * Math.PI;
