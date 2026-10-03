@@ -235,16 +235,16 @@ body .life-photo .kitty-ribbon {
 .kitty-ribbon:focus-visible .ribbon-thickness { stroke: var(--coral); stroke-width: 3; }
 /* Opaque curved patches are painted from low to high. Only the visible face
    has lettering; empty/edge-on reverse clips can never reveal the back text. */
-.ribbon-face { fill: var(--midnight); stroke: var(--midnight); stroke-width: .65; stroke-linejoin: round; }
-.ribbon-patch[data-face="back"] .ribbon-face { fill: var(--coral); stroke: var(--coral); }
-.ribbon-fold { fill: var(--midnight); opacity: var(--fold-shade,0); }
+.ribbon-face { stroke-width: .65; stroke-linejoin: round; }
+.ribbon-back-face { display: none; }
+.ribbon-patch[data-face="back"] .ribbon-front-face { display: none; }
+.ribbon-patch[data-face="back"] .ribbon-back-face { display: inline; }
 .ribbon-cast { fill: var(--midnight); opacity: .3; transform: translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,5px) + var(--ribbon-height,0px)*.15)); }
 .ribbon-thickness { fill: var(--khaki); stroke: var(--khaki); stroke-width: 1.2; stroke-linejoin: round; transform: translateY(1.2px); }
 .ribbon-lettering { fill: var(--coral); font: 600 21px var(--sans); letter-spacing: 0; }
 .ribbon-back-label { display: none; fill: var(--midnight); font: 26px "Caveat",cursive; }
 .ribbon-patch[data-face="back"] .ribbon-front-label { display: none; }
 .ribbon-patch[data-face="back"] .ribbon-back-label { display: inline; }
-.ribbon-satin { opacity: var(--satin-strength,.07); pointer-events: none; }
 .cats-escaped { padding-top: 36px; }
 .tilt-preference { border-top: 1px solid var(--line); padding-block: 14px 24px; }
 .tilt-preference>p:first-child { margin-top: 0; }
