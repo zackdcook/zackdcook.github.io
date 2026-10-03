@@ -82,6 +82,21 @@ test("reduced effects keeps placement usable without spring oscillation", () => 
   assert.equal(stepRibbon(nodes, null, 16.67, true), false);
   assert.deepEqual(nodes, placed);
 });
+test("the strip remains continuous through changes between its front and reverse", () => {
+  const nodes = createRibbon();
+  nodes.forEach((node, index) => { node.twist = index > 7 && index < 17 ? Math.PI : 0; });
+  const paths = ribbonPaths(nodes);
+  assert.ok(paths.front.length > 0 && paths.back.length > 0);
+  for (const segment of paths.segments) {
+    const numbers = segment.path.match(/-?\d+(?:\.\d+)?/g)!.map(Number);
+    const corners = Array.from({ length: 4 }, (_, index) => [numbers[index * 2], numbers[index * 2 + 1]]);
+    const area = corners.reduce((sum, [x, y], index) => {
+      const next = corners[(index + 1) % corners.length];
+      return sum + x * next[1] - y * next[0];
+    }, 0) / 2;
+    assert.ok(area > 500, "a reversed face must not cross its edges into a bow tie");
+  }
+});
 test("phone lighting centers on the comfortable pose and responds in every direction", () => {
   const neutral = { beta: 55, gamma: 0 };
   assert.deepEqual(tiltLight(neutral, neutral, 0, 400, 800), { x: 200, y: 400 });
