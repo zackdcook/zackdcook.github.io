@@ -108,7 +108,9 @@ export function ribbonPaths(nodes: RibbonNode[]) {
   nodes.forEach((node, index) => {
     const before = nodes[Math.max(0, index - 1)], after = nodes[Math.min(nodes.length - 1, index + 1)];
     const angle = Math.atan2(after.y - before.y, after.x - before.x);
-    const halfWidth = 19 * Math.cos(node.twist) * (1 + node.z / 1800);
+    // Twisting changes the visible face, not the ordering of the strip edges.
+    // Signed width would cross the edges into bow-tie holes at face changes.
+    const halfWidth = 19 * Math.abs(Math.cos(node.twist)) * (1 + node.z / 1800);
     const offsetX = -Math.sin(angle) * halfWidth, offsetY = Math.cos(angle) * halfWidth;
     upper.push({ x: node.x - offsetX, y: node.y - offsetY });
     lower.push({ x: node.x + offsetX, y: node.y + offsetY });
