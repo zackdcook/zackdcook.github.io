@@ -15,6 +15,6 @@ export function QuoteLeaf({ quote, index, reverse = false }: { quote: FollyQuote
         <path d="M124 294 Q118 229 145 149 M201 254 Q201 160 231 107 M282 214 Q291 132 326 79 M368 169 Q402 97 418 72 M455 126 Q492 73 510 65 M123 294 Q168 306 211 299 M201 254 Q241 276 284 281 M282 214 Q324 240 379 240 M368 169 Q408 204 460 190 M455 126 Q492 154 523 145" />
       </g>
     </svg>
-    {!reverse && <span className={`leaf-words ${quote.text.length > 55 ? "leaf-words-long" : ""}`}>{quote.text}</span>}
+    {!reverse && <span className={`leaf-words ${quote.text.length > 40 ? "leaf-words-long" : ""}`}>{quote.text}</span>}
   </span>;
 }
