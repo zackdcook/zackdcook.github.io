@@ -1,19 +1,11 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { journalPost } from "@/content/site";
 import article from "@/content/its-not-too-late.json";
 import { JournalConversation } from "@/components/journal-conversation";
 
-export const metadata: Metadata = {
-  title: journalPost.title,
-  description: journalPost.excerpt,
-  alternates: { canonical: "/journal/its-not-too-late" },
-  openGraph: {
-    type: "article",
-    publishedTime: "2025-10-20",
-    authors: ["Zack Cook"],
-  },
-};
+export const metadata: Metadata = pageMetadata("journal-its-not-too-late", "It’s Not Too Late to Start");
 
 export default function JournalEntry() {
   return (

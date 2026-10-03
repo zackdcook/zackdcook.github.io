@@ -1,13 +1,10 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
+import editorial from "@/content/editorial.json";
 import { site } from "@/content/site";
 
-export const metadata: Metadata = {
-  title: "About Zack Cook",
-  description:
-    "Meet Zack Cook, also known as Zacky C: an engineer & aspiring author, Publix industrial engineer, and University of Florida chemical engineering graduate in Lakeland, Florida.",
-  alternates: { canonical: "/about" },
-};
+export const metadata: Metadata = pageMetadata("about", "About Zack Cook");
 
 export default function About() {
   const person = {
@@ -59,54 +56,26 @@ export default function About() {
             Cook.
           </p>
         </div>
-        <Image
-          className="about-portrait"
+        <div className="portrait-frame tactile-photo"><Image
           src="/images/portrait.webp"
           alt="Zack Cook"
           width={1200}
           height={1200}
           sizes="(max-width: 740px) 90vw, 40vw"
-        />
+        /></div>
       </section>
       <div className="prose section-space">
-        <h2>The engineering part</h2>
-        <p>
-          I’m a Senior Manufacturing Industrial Engineer at Publix in Lakeland,
-          Florida, and a Lean Six Sigma Black Belt. I graduated from the
-          University of Florida in 2012 with a B.S. in Chemical Engineering, cum
-          laude.
-        </p>
-        <p>
-          My work is about understanding how things run, finding the right
-          problem to solve, and making systems work better for the people using
-          them.
-        </p>
-        <h2>The writing part</h2>
-        <p>
-          Making things has always mattered to me. Drawing, music, model kits,
-          stories. Engineering became my career; fiction is something I’m
-          choosing to give room to as well.
-        </p>
-        <p>
-          I’m writing my first novel and learning as I go. I’m drawn to strange
-          worlds, found family, and stories that leave room for humor even when
-          things get dark.
-        </p>
-        <h2>The home part</h2>
-        <p>
-          I live in Lakeland with my wife, Jennifer, and our cats Chemi, Tashi,
-          and Brave. There’s usually music playing, something I’m building, or a
-          bird outside worth getting distracted by.
-        </p>
+        {editorial.aboutSections.map(section => <section key={section.heading}><h2>{section.heading}</h2>{section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</section>)}
       </div>
       <figure className="about-cats">
+        <div className="tactile-photo kitty-photo">
         <Image
           src="/images/cats.webp"
           alt="The three cats at home in a sunny patch by the window"
           width={1400}
           height={1034}
           sizes="90vw"
-        />
+        /></div>
         <figcaption>
           Chemi, Tashi, and Brave. Enthusiastic participants in every
           work-from-home day.

@@ -4,7 +4,7 @@ import { writingGroup } from "@/content/site";
 
 export function WritingGroupCard({ eyebrow = "Find me at…" }: { eyebrow?: string }) {
   return <section className="event-callout writing-group" aria-labelledby="writing-group-title">
-    <p className="eyebrow">{eyebrow}</p>
+    <h2 className="eyebrow section-label">{eyebrow}</h2>
     <h2 id="writing-group-title">{writingGroup.title}</h2>
     <p className="event-schedule">{writingGroup.schedule}</p>
     <p>{writingGroup.venue} · Downtown Lakeland</p>

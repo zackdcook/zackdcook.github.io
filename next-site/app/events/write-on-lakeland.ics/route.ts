@@ -1,6 +1,5 @@
 import { writingGroupCalendar } from "@/lib/calendar";
 
-export const dynamic = "force-dynamic";
 
 export function GET() {
   return new Response(writingGroupCalendar(), {

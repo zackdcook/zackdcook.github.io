@@ -1,19 +1,20 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { ShoutoutList } from "@/components/shoutout-list";
-import { shoutouts } from "@/content/site";
+import { getShoutouts } from "@/lib/community";
+import { ShoutoutForm } from "@/components/shoutout-form";
+import { submissionsConfigured } from "@/lib/submission-config";
 import { CollectionHeading } from "@/components/collection-heading";
 
-export const metadata: Metadata = {
-  title: "Shoutouts",
-  description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.",
-  alternates: { canonical: "/shoutouts" },
-};
+export const metadata: Metadata = pageMetadata("shoutouts", "Shoutouts");
 
-export default function Shoutouts() {
+export default async function Shoutouts() {
+  const shoutouts=await getShoutouts();
   return <div className="shell page-wrap">
     <div className="page-intro">
       <CollectionHeading level={1}>Cool peeps</CollectionHeading>
     </div>
     <ShoutoutList people={shoutouts} />
+    <ShoutoutForm enabled={submissionsConfigured()} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY||""}/>
   </div>;
 }

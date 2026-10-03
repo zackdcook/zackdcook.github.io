@@ -1,15 +1,10 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { CommonplaceCard } from "@/components/commonplace-card";
 import { getCommonplace } from "@/lib/commonplace";
 import { InspirationHeading } from "@/components/collection-heading";
 
-export const metadata: Metadata = {
-  title: "Inspo Board",
-  description:
-    "Things Zack Cook wants to keep around: inspiration, photos, music, and interesting finds.",
-  alternates: { canonical: "/commonplace" },
-};
-export const revalidate = 60;
+export const metadata: Metadata = pageMetadata("commonplace", "Inspo Board");
 
 export default async function Commonplace() {
   const entries = await getCommonplace();

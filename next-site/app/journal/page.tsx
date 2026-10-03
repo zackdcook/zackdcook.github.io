@@ -1,13 +1,10 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { displayDate, publishedJournalPosts } from "@/content/site";
 import { CollectionHeading } from "@/components/collection-heading";
 
-export const metadata: Metadata = {
-  title: "Words of Folly",
-  description: "Writing updates, essays, and occasional notes from Zack Cook.",
-  alternates: { canonical: "/journal" },
-};
+export const metadata: Metadata = pageMetadata("journal", "Words of Folly");
 
 export default function Journal() {
   return (

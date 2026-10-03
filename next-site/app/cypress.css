@@ -1,0 +1,100 @@
+@font-face{font-family:Caveat;src:url('/fonts/Caveat-Variable.woff2') format('woff2');font-display:swap;font-weight:500}
+@font-face{font-family:Handlee;src:url('/fonts/Handlee-Regular.woff2') format('woff2');font-display:swap}
+@font-face{font-family:Allura;src:url('/fonts/Allura-Regular.woff2') format('woff2');font-display:swap}
+@font-face{font-family:Kalam;src:url('/fonts/Kalam-Regular.woff2') format('woff2');font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url('/fonts/PatrickHand-Regular.woff2') format('woff2');font-display:swap}
+.guestbook-invitation{padding:56px;border-radius:28px;background:var(--coral);color:var(--midnight);position:relative;overflow:hidden}
+.guestbook-invitation h2{font-size:clamp(2.5rem,6vw,5rem);line-height:1.05;margin:14px 0 20px}
+.guestbook-invitation h2 em{color:var(--khaki)}
+.guestbook-invitation p:not(.eyebrow){max-width:550px}
+.guestbook-intro{padding:64px 0 36px}
+.guestbook-intro h1{font-size:clamp(3.5rem,8vw,7rem)}
+.tree-controls{position:sticky;top:var(--header-height,90px);z-index:12;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;padding:14px 20px;background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.tree-controls .button{margin:0;min-height:42px}
+.tree-search{padding:22px 0}
+.tree-search form{max-width:540px;margin:auto}
+.tree-search form label{display:block;font-size:.875rem;margin-bottom:8px}
+.tree-search form>div{display:flex;gap:10px}
+.tree-search input{min-width:0;flex:1;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);padding:10px 14px;font:inherit}
+.tree-search ul{display:flex;flex-wrap:wrap;gap:10px;list-style:none;margin:20px 0;padding:0}
+.tree-notice{background:var(--coral);color:var(--midnight);border-radius:16px;padding:18px;position:relative;max-width:700px;margin:20px auto 0}
+.tree-notice .button{margin:8px 16px}
+.notice-dismiss{border:0;background:none;color:inherit;cursor:pointer;font-size:1.5rem;padding:10px}
+.tree-scene{position:relative;isolation:isolate;overflow:clip;background:#2e3b2c}
+.swamp-distance,.swamp-middle,.moss-foreground{position:absolute;inset:0;pointer-events:none}
+.swamp-distance{background:url('/images/cypress-world.webp') center / cover;filter:blur(14px);opacity:.75;position:sticky;height:100vh;top:0;margin-bottom:-100vh;transform:translateY(var(--swamp-drift,0px)) scale(1.05);z-index:-3}
+.swamp-middle{background:url('/images/cypress-swamp.webp') left center / auto 115vh repeat-x;filter:blur(3px);opacity:.32;z-index:-2;transform:translateY(var(--swamp-drift,0px))}
+.moss-foreground{background:url('/images/spanish-moss.webp') left top / min(42vw,460px) auto no-repeat;opacity:.5;position:sticky;height:90vh;top:-50px;margin-bottom:-90vh;z-index:5;filter:blur(2px);transform:translateY(var(--moss-drift,0px))}
+.tree-world{position:relative;width:min(100%,860px);margin:auto;touch-action:pan-y}
+.tree-space{position:absolute;left:0;top:0;transform-origin:0 0}
+.tree-section{position:absolute;left:0;width:720px;pointer-events:none;isolation:isolate}
+.tree-section-bark{position:absolute;inset:-45px calc((720px - var(--trunk-width))/2);background-image:radial-gradient(260px at var(--light-x,-1000px) var(--light-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.06)),transparent),url('/images/cypress-ridges.webp'),url('/images/cypress-bark.webp');background-size:auto,calc(720px * var(--bark-scale)) 1570px,cover;background-position:center,var(--bark-x) var(--bark-y),center;filter:brightness(var(--section-tone));mask-image:linear-gradient(to bottom,transparent,#000 45px,#000 calc(100% - 45px),transparent);box-shadow:inset 30px 0 45px #201b1650,inset -30px 0 45px #201b1660;border-radius:4% 3% 5% 2%}
+.tree-section-rugged .tree-section-bark{background-image:radial-gradient(260px at var(--light-x,-1000px) var(--light-y,-1000px),rgb(255 248 237 / calc(var(--light-strength)*.06)),transparent),url('/images/cypress-bark.webp')}
+.branch-scar{position:absolute;width:140px;height:135px;background:url('/images/cypress-branch-scar.webp') center/cover;mask-image:radial-gradient(ellipse,#000 30%,transparent 71%);transform:rotate(-9deg);opacity:.92}
+.lichen-landmark{position:absolute;width:80px;height:160px;background:url('/images/cypress-world.webp') 70% 35%/450px auto;mask-image:radial-gradient(ellipse,#000 20%,transparent 70%);opacity:.75}
+.cypress-carving{position:absolute;z-index:3}
+.signature-art{display:block;width:100%;height:100%;overflow:visible}
+.carved-edge{transform:translate(calc(1px + var(--cast-x,0px) * var(--light-strength,0) * .10),calc(1.8px + var(--cast-y,0px) * var(--light-strength,0) * .09))}
+.carved-shadow{transform:translate(-.65px,-.8px)}
+.carved-interior{opacity:.92}
+.carving-inspect{display:block;width:100%;height:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:15px;touch-action:pan-y}
+.carving-inspect:focus-visible{outline:2px dashed var(--floral);outline-offset:7px}
+.carving-inspect:hover .carved-edge,.carving-inspect:focus-visible .carved-edge,.carving-found .carved-edge{opacity:1;filter:brightness(1.13)}
+.carving-found{animation:carving-find 2s ease both}
+@keyframes carving-find{0%,100%{filter:none}35%{filter:brightness(1.17)}}
+.carving-info{position:absolute;left:50%;top:100%;transform:translateX(-50%);padding:13px 17px;border-radius:14px;background:var(--floral);color:var(--midnight);box-shadow:0 12px 28px #1d1b1966;min-width:220px;max-width:300px;font-size:14px;z-index:8;pointer-events:none}
+.carving-info strong,.carving-info time,.carving-info span,.carving-info small{display:block}
+.carving-info time,.carving-info small{font-size:12px;line-height:1.5;margin-top:4px}
+.tree-frontier-label{position:relative;z-index:6;text-align:center;color:var(--floral);background:linear-gradient(transparent,#1c2e26bd);padding:28px 16px 35px;font-size:.82rem}
+.tree-frontier-label p{font-family:var(--font-display);font-size:1.7rem;margin:0 0 8px}
+.tree-first-note{position:absolute;left:185px;width:350px;padding:20px 26px;text-align:center;background:color-mix(in srgb,var(--floral) 90.9804%,transparent);color:var(--midnight);border-radius:14px;z-index:4;box-shadow:0 12px 24px #21160e55}
+.tree-first-note p{margin:6px 0;line-height:1.45}
+.tree-minimap{position:sticky;top:30vh;float:right;z-index:10;width:30px;height:180px;margin-bottom:-180px;margin-right:8px;background:#2c271c90;border-radius:20px;display:grid;place-items:center}
+.tree-minimap input{writing-mode:vertical-lr;direction:ltr;width:18px;height:155px;accent-color:var(--coral);cursor:pointer}
+.tree-afterword{font-size:.9rem;color:var(--muted);max-width:660px;text-align:center;padding:32px 0}
+.active-bark-hint{position:absolute;left:78px;right:78px;background:linear-gradient(transparent,rgba(255,248,237,.03) 10%,rgba(255,248,237,.03) 90%,transparent);pointer-events:none;z-index:2}
+.placement-ghost{position:absolute;z-index:7;cursor:grab;touch-action:none;border-radius:12px;outline:1px dashed color-mix(in srgb,var(--floral) 60.0000%,transparent);outline-offset:5px;opacity:.82}
+.placement-ghost:active{cursor:grabbing}
+.placement-ghost[data-valid="false"]{outline-color:#f3969b;filter:sepia(.35)}
+.placement-ghost>span{position:absolute;top:100%;left:0;font-size:13px;background:color-mix(in srgb,var(--floral) 87.4510%,transparent);color:var(--midnight);padding:3px 7px;border-radius:5px;white-space:nowrap;margin-top:9px;pointer-events:none}
+.placement-controls{position:fixed;z-index:35;bottom:18px;left:50%;transform:translateX(-50%);width:min(92vw,640px);padding:17px 20px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:20px;box-shadow:0 12px 45px #21160e60}
+.placement-controls p{font-size:.9rem;line-height:1.4;margin:0 0 9px}
+.placement-controls .actions{gap:10px;margin:12px 0 0}
+.placement-controls .button{font-size:.84rem;padding:8px 14px;min-height:36px}
+.placement-nudges{display:flex;gap:8px}
+.signing-dialog{width:min(92vw,680px);max-height:88dvh;overflow:auto;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:24px;padding:0}
+.signing-dialog::backdrop{background:#261c1be0;backdrop-filter:blur(3px)}
+.signing-content{padding:30px}
+.signing-content h2{font-size:clamp(1.8rem,5vw,2.7rem);line-height:1.1}
+.guestbook-form label,.shoutout-form label{display:block;margin:18px 0 8px;font-size:.92rem}
+.guestbook-form input:not([type="radio"]):not([type="hidden"]),.shoutout-form input,.shoutout-form textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);font:inherit}
+.guestbook-form .honey-field,.shoutout-form .honey-field{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.form-hint{font-size:.84rem;line-height:1.45;color:var(--muted)}
+.form-status{background:color-mix(in srgb,var(--coral) 18%,var(--paper));border-radius:12px;padding:14px;font-size:.9rem;line-height:1.5}
+.signature-modes{display:flex;gap:10px;margin:20px 0}
+.signature-modes button[aria-pressed="true"]{background:var(--midnight);color:var(--coral)}
+.signature-fonts{border:0;padding:0;margin:20px 0;display:flex;flex-wrap:wrap;gap:9px}
+.signature-fonts legend{font:inherit;font-size:.84rem}
+.signature-fonts label{padding:8px 13px;border:1px solid var(--line);border-radius:11px;font-size:1.35rem;margin:0;cursor:pointer;display:flex;align-items:center;gap:8px}
+.signature-fonts input{width:17px;height:17px;accent-color:var(--midnight)}
+.signature-pad{display:block;width:100%;height:auto;aspect-ratio:600/210;background:var(--floral);border:2px solid var(--khaki);border-radius:14px;touch-action:none;margin:18px 0}
+.carving-preview{height:auto;aspect-ratio:600/210;background:url('/images/cypress-ridges.webp') center 45%/cover;border-radius:14px;overflow:hidden;margin:20px 0;border:1px solid #21160e;box-shadow:inset 0 0 28px #21160e80}
+.carving-preview .signature-art{padding:12px}
+.submission-panel{padding:32px;border:1px solid var(--line);border-radius:22px;margin:40px 0}
+.submission-panel h2{font-size:2rem}
+.shoutout-form>p{max-width:620px}
+.semantic-guests{list-style:none;padding:0;display:grid;gap:20px}
+.semantic-guests article{border-bottom:1px solid var(--line);padding:20px 0}
+.semantic-guests h2{font-size:1.8rem}
+.semantic-guests h2 small{font-family:var(--font-body);font-size:.9rem;color:var(--muted)}
+.semantic-guests time{font-size:.9rem;color:var(--muted)}
+.moderation-neighborhood{height:330px;max-width:720px;overflow:hidden;position:relative;border-radius:18px;margin:20px 0;background:#29352b}
+.moderation-tree-space{position:absolute;top:0;left:0;width:720px;height:2000px}
+.moderation-neighbor,.moderation-chosen{position:absolute}
+.moderation-chosen{outline:2px dashed var(--floral);outline-offset:6px}
+.moderation-chosen>span{position:absolute;top:100%;left:0;color:var(--floral);white-space:nowrap;font-size:14px}
+html[data-effects="reduced"] :is(.moss-foreground,.swamp-distance,.swamp-middle){transform:none}
+html[data-effects="reduced"] .carving-found{animation:none}
+html[data-effects="reduced"] .carved-edge{transform:translate(1px,1.8px)}
+@media(prefers-reduced-motion:reduce){.moss-foreground,.swamp-distance,.swamp-middle{transform:none!important}.carving-found{animation:none}}
+@media(max-width:740px){.tree-controls{top:76px;gap:7px;padding:10px 12px}.tree-controls .button{font-size:.73rem;padding:8px 10px;min-height:34px}.guestbook-intro{padding:38px 0 24px}.tree-search{padding:18px 0}.tree-minimap{width:24px;margin-right:2px}.moss-foreground{background-size:55vw auto;opacity:.36}.signing-content{padding:22px}.placement-controls{bottom:8px;padding:13px 15px}.placement-controls p{font-size:.8rem}.guestbook-invitation{padding:30px}.tree-world{width:100%}.carving-info{font-size:19px;min-width:310px;padding:16px}.carving-info time,.carving-info small{font-size:17px}.moderation-tree-space{transform-origin:0 0}.moderation-neighborhood{overflow:auto}}

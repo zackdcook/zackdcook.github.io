@@ -1,0 +1,30 @@
+/* A shared material and motion language; the original identity remains underneath. */
+:root { --midnight: #31031F; --coral: #E88F93; --khaki: #393313; --floral: #FFF8ED; --leaf: #66693E; --light-strength: 0; --cast-x: 0px; --cast-y: 0px; --material-shadow: #31031f28; }
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); --material-shadow: color-mix(in srgb,var(--midnight) 75%,transparent); }
+@media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); --material-shadow: color-mix(in srgb,var(--midnight) 75%,transparent); } }
+html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em { color: var(--coral); }
+.prose { color: var(--ink); }
+.preferences-launcher { display: flex; justify-content: center; margin: -28px auto 50px; }
+.preference-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0; border-top: 1px solid var(--line); }
+.preference-row input[type="checkbox"] { width: 23px; height: 23px; accent-color: var(--leaf); flex-shrink: 0; }
+.preferences-dialog .calendar-help { margin: 0 0 22px; }
+html[data-compact="true"] :is(.section-space,.page-wrap,.events-section) { margin-top: 32px; padding-top: 28px; padding-bottom: 28px; }
+html[data-compact="true"] .hero { padding-top: 40px; padding-bottom: 40px; }
+html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { padding: 24px; }
+html[data-projects="collapsed"] .project-description { display: none; }
+.copyright-secret { animation: little-secret .3s ease both; }
+.loading-leaf { min-height: 35vh; color: var(--muted); }
+::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) { animation-duration: .42s; animation-timing-function: cubic-bezier(.18,.7,.22,1); }
+::view-transition-new(.leaf-unfurl), ::view-transition-new(.leaf-reshape) { animation: leaf-unfurl .42s cubic-bezier(.18,.7,.22,1) both; transform-origin: 18% 12%; }
+::view-transition-old(.leaf-fold), ::view-transition-old(.leaf-reshape) { animation: leaf-fold .24s ease-out both; transform-origin: 85% 15%; }
+@keyframes leaf-unfurl { from { opacity: 0; transform: scale(.97,.94) rotate(-.6deg); clip-path: inset(0 1% 7% 0 round 42px 8px 80px 12px); } to { opacity: 1; transform: none; clip-path: inset(0 round 0); } }
+@keyframes leaf-fold { to { opacity: 0; transform: scale(.99,.97) rotate(.35deg); } }
+@keyframes little-secret { from { opacity: 0; } to { opacity: 1; } }
+html[data-effects="reduced"] { scroll-behavior: auto; }
+html[data-effects="reduced"]::view-transition-group(*), html[data-effects="reduced"]::view-transition-new(*), html[data-effects="reduced"]::view-transition-old(*) { animation: none !important; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  ::view-transition-group(*), ::view-transition-new(*), ::view-transition-old(*) { animation: none !important; }
+  .photo-label,.copyright-secret { animation: none; transition: none; }
+}

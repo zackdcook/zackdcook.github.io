@@ -1,0 +1,19 @@
+[
+  {
+    "slug": "first-novel",
+    "title": "First novel.",
+    "category": "Novel in progress",
+    "status": "0th draft",
+    "summary": "Fantasy, strange things, and people trying to figure out what matters to them. I’m getting the story down before I go back to reshape it.",
+    "description": [
+      "The draft target is 50,000 words. It’s a working estimate based on where I am in the story."
+    ],
+    "beforeDraft": "The braindump came first: 35,834 words of getting ideas out of my head and onto the page. That stage is complete. The zeroth draft is a separate pass, with its own count and goal.",
+    "featured": true,
+    "tags": [
+      "writing",
+      "fantasy"
+    ],
+    "shareTitle": "A novel in the making."
+  }
+]

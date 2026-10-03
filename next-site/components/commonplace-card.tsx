@@ -11,7 +11,7 @@ export function CommonplaceCard({ entry }: { entry: CommonplaceEntry }) {
       className={`commonplace-card ${entry.image_url ? "" : "link-card"}`}
     >
       {entry.image_url && (
-        <div className="commonplace-image">
+        <div className="commonplace-image tactile-photo">
           <Image
             src={entry.image_url}
             alt={entry.title}
