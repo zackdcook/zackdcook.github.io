@@ -26,6 +26,25 @@ export function EditorialKitties({ emptyPhoto, label = "The editorial kitty comm
   const id = useId().replace(/:/g, "");
   useEffect(() => { reducedRef.current = reduced; }, [reduced]);
   useEffect(() => () => cancelAnimationFrame(motion.current.frame), []);
+  useEffect(() => {
+    const element = svg.current; if (!element) return;
+    let previousWidth = element.getBoundingClientRect().width;
+    const resize = new ResizeObserver(() => {
+      const rect = element.getBoundingClientRect();
+      if (!rect.width || Math.abs(rect.width - previousWidth) < 1) return;
+      previousWidth = rect.width;
+      // A dropped strip keeps its shape after a phone rotation, while staying
+      // inside the narrower page. It never creates a horizontal scrollbar.
+      release(); bounds.current = undefined;
+      const scale = rect.width / ribbonWidth;
+      const left = (18 - rect.left) / scale, right = (innerWidth - 18 - rect.left) / scale;
+      const min = Math.min(...nodes.current.map(node => node.x)) - 20;
+      const max = Math.max(...nodes.current.map(node => node.x)) + 20;
+      const dx = min < left ? left - min : max > right ? right - max : 0;
+      if (dx) { for (const node of nodes.current) node.x += dx; start(); }
+    });
+    resize.observe(element); return () => resize.disconnect();
+  }, []);
 
   function animate(now: number) {
     const m = motion.current; m.frame = 0;
