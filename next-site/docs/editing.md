@@ -20,12 +20,15 @@ Open [the website folder on GitHub](https://github.com/zackdcook/zackdcook.githu
 
 ## Add Words of Folly
 
-The homepage displays the newest five real entries. The archive and RSS use the same list.
+Words of Folly is a pile of short writing reminders. Edit `content/folly.json` and append an entry:
 
-1. Copy `app/journal/its-not-too-late/page.tsx` into a new folder, such as `app/journal/my-new-entry/page.tsx`.
-2. Replace its title, date, summary, and paragraphs with your own. The folder name becomes the last part of its web address.
-3. In `content/site.ts`, add an object to `journalPosts` with that folder's `slug`, a `title`, an ISO `date` such as `2026-10-01`, and an `excerpt`. Keep the existing `journalPost` in the list.
-4. Commit the changes. The homepage, archive, RSS, and sitemap pick up the new entry automatically. For now, ask ChatGPT to do these steps with your draft so you don't have to edit JSX yourself.
+```json
+{ "id": "a-unique-short-name", "text": "Your short reminder", "date": "2026-10-03" }
+```
+
+Use a unique, stable `id` and the publication date. Entries are ordered by date; the last entry wins when dates match. The latest quote appears as a leaf on the homepage. Every entry joins the pile and RSS automatically. The four leaf/text palette combinations rotate through the collection. No React or page edits are needed.
+
+Readers can tap the ground to send a gust through the pile, tap a leaf to enlarge it, or use **Read in order**. Reduce Effects presents a calm layout instead of animated gusts. The old essay is removed; its former address redirects to the pile.
 
 ## Add to the Inspo Board
 
