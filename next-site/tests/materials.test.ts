@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { approachLight, materialLight } from "../lib/material-light";
-import { createRibbon, ribbonPaths, ribbonSpacing, stepRibbon } from "../lib/ribbon-physics";
+import { createRibbon, dropRibbon, ribbonPaths, ribbonSpacing, stepRibbon } from "../lib/ribbon-physics";
 import { tiltLight } from "../lib/phone-tilt";
 import { normalizePreferences } from "../lib/preferences";
 
@@ -46,12 +46,23 @@ test("the grip is the apex while free satin ends hang under gravity and expose t
 test("release lands on the page and stays near its drop, without returning to its starting place", () => {
   const nodes = createRibbon();
   for (let i = 0; i < 180; i++) stepRibbon(nodes, { index: 12, x: 300, y: 180, phase: 1 }, 16.67);
+  dropRibbon(nodes);
   let moving = true;
   for (let i = 0; i < 600 && moving; i++) moving = stepRibbon(nodes, null, 16.67);
   assert.equal(moving, false);
   assert.ok(Math.hypot(nodes[12].x - 300, nodes[12].y - 180) < 20);
   assert.ok(nodes[12].y < 220);
   assert.ok(nodes.every(node => node.z < .2));
+});
+test("a quick upward drag drops near the hand rather than flinging the grip up the page", () => {
+  const nodes = createRibbon();
+  for (let i = 0; i < 30; i++) stepRibbon(nodes, { index: 12, x: 380, y: 444 - i * 9, phase: 1 }, 16.67);
+  const released = { x: nodes[12].x, y: nodes[12].y };
+  dropRibbon(nodes);
+  let moving = true;
+  for (let i = 0; i < 600 && moving; i++) moving = stepRibbon(nodes, null, 16.67);
+  assert.equal(moving, false);
+  assert.ok(Math.hypot(nodes[12].x - released.x, nodes[12].y - released.y) < 40);
 });
 test("fast movement carries momentum instead of teleporting the free ends", () => {
   const nodes = createRibbon();
