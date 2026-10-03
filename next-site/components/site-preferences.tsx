@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultPreferences, normalizePreferences, preferenceKey, type Preferences } from "@/lib/preferences";
 import { carvingBookmarkKey, livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
+import { TiltLightingControl } from "@/components/tilt-lighting-control";
 
 const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
 export const usePreferences = () => useContext(PreferenceContext);
@@ -37,6 +38,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
       root.dataset.compact = String(initial.compact);
       root.dataset.projects = initial.expandedProjects ? "expanded" : "collapsed";
       root.dataset.text = initial.largeText ? "large" : "normal";
+      root.dataset.tilt = String(initial.tiltLighting);
       setSystemReduced(motion.matches);
     };
     apply();
@@ -67,6 +69,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     root.dataset.compact = String(next.compact);
     root.dataset.projects = next.expandedProjects ? "expanded" : "collapsed";
     root.dataset.text = next.largeText ? "large" : "normal";
+    root.dataset.tilt = String(next.tiltLighting);
   }
   function changeTimeline(next: LocalTimeline) {
     const safe = normalizeTimeline(next);
@@ -99,6 +102,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
         <label className="preference-row"><span>Cozy, compact spacing</span><span className="checkbox-control"><input type="checkbox" checked={preferences.compact} onChange={e => update({ compact: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <label className="preference-row"><span>Expand project descriptions</span><span className="checkbox-control"><input type="checkbox" checked={preferences.expandedProjects} onChange={e => update({ expandedProjects: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <label className="preference-row"><span>Larger text</span><span className="checkbox-control"><input type="checkbox" checked={preferences.largeText} onChange={e => update({ largeText: e.target.checked })} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
+        <TiltLightingControl enabled={preferences.tiltLighting} reduced={preferences.reduceEffects || systemReduced} resetVersion={resetVersion} onChange={enabled => update({ tiltLighting: enabled })} />
         <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
       </div>
     </dialog>
