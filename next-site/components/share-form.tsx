@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import Link from "next/link";
 import { sourceName } from "@/lib/validation";
 
 export function ShareForm({ initialUrl }: { initialUrl: string }) {
@@ -93,11 +92,6 @@ export function ShareForm({ initialUrl }: { initialUrl: string }) {
       >
         {message}
       </p>
-      {saved && (
-        <Link className="text-link" href="/commonplace">
-          See it on the page
-        </Link>
-      )}
       <p className="share-tip">
         This saves a link back to the original. It works even when Instagram
         doesn’t allow a photo preview.
