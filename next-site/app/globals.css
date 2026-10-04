@@ -399,7 +399,17 @@ h3 {
   margin-top: 12px;
 }
 .journal-feature {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 0;
+}
+.journal-feature > .shell {
+  position: relative;
+}
+.journal-feature > .shell::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 -92px;
+  height: 1px;
+  background: var(--line);
 }
 .journal-feature > .section-heading {
   align-items: center;
@@ -1649,7 +1659,7 @@ h3 {
 
 /* Solid folder tabs use the five supplied palette colors. */
 .site-mark { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 8px; }
-.site-header { background: var(--paper); border-bottom: 0; box-shadow: inset 0 -1px 0 var(--line); }
+.site-header { background: var(--paper); border-bottom: 1px solid var(--line); box-shadow: none; }
 .header-inner { height: 92px; align-items: flex-end; }
 .home-tab { align-self: center; padding: 9px 12px; border: 1px solid transparent; border-radius: 14px; }
 
@@ -1852,7 +1862,15 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .button, .text-link, .rail-controls button, .footer-links a.button,
 .support-callout a.button, .mobile-menu summary { font-family: var(--sans); font-weight: 600; }
 .desktop-nav a[aria-current="page"]:hover { background: var(--paper); color: var(--ink); }
-.desk-inner { grid-template-columns: 210px minmax(0, 1fr); gap: 45px; }
+.desk-inner { grid-template-columns: 210px minmax(0, 1fr); column-gap: 45px; row-gap: 0; }
+.desk-copy { grid-column: 1; grid-row: 1; align-self: end; }
+.desk-inner > .progress-display { grid-column: 2; grid-row: 1 / span 2; }
+.desk-followup { grid-column: 1; grid-row: 2; align-self: start; display: flex; flex-direction: column; align-items: flex-start; }
+.desk-followup .button { order: -1; margin-top: 20px; }
+.bio-section { background: var(--leaf); color: var(--floral); }
+.bio-section .life-section { padding-top: 0; }
+.bio-section :is(.life-copy > p,.identity-aside) { color: var(--floral); }
+.reaction-symbol { font-weight: 900; font-family: var(--sans); }
 .desk-copy h2 { font-size: 57px; }
 .rings { width: 100%; max-width: 320px; min-width: 0; justify-self: center; }
 .stage-count { white-space: normal; font-size: 12px; }
@@ -1867,6 +1885,8 @@ h1, h2, h3, .wordmark { text-shadow: none; }
   .desk-inner { grid-template-columns: 1fr; gap: 35px; }
   .desk-copy h2 br { display: none; }
   .desk-copy { max-width: 600px; }
+  .desk-copy,.desk-inner > .progress-display,.desk-followup { grid-column: 1; grid-row: auto; }
+  .desk-followup .button { order: 0; margin-top: 14px; }
   .progress-display { grid-template-columns: minmax(150px, .9fr) minmax(220px, 1.4fr) minmax(170px, 1fr); gap: 20px; }
 }
 @media (max-width: 740px) {
@@ -1921,6 +1941,7 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .calendar-options .button { width: 100%; }
 @media (max-width: 740px) {
   .life-section { row-gap: 80px; }
+  .journal-feature > .shell::after { bottom: -55px; }
 
   .collection-heading.inspiration-heading { font-size: 17px; }
   .calendar-dialog-content { padding: 24px; }

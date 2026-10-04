@@ -1,21 +1,18 @@
 /* Palette ownership stays here; artwork, casts and reading surfaces all use
    these tokens, including the browser's local felled timeline. */
 :root {
-  --folly-leaf-0: #E88F93; --folly-ink-0: #393313;
-  --folly-leaf-1: #393313; --folly-ink-1: #FFF8ED;
-  --folly-leaf-2: #31031F; --folly-ink-2: #E88F93;
-  --folly-leaf-3: #66693E; --folly-ink-3: #31031F;
+  --leaf-color: var(--leaf); --leaf-ink: var(--floral);
   --folly-ground: #FFF8ED; --folly-ground-ink: #31031F;
   --folly-depth: #31031F; --folly-highlight: #FFF8ED;
 }
 html[data-timeline="felled"] {
-  --folly-leaf-0: var(--camel); --folly-ink-0: var(--coffee);
-  --folly-leaf-1: var(--chocolate); --folly-ink-1: var(--apricot-light);
-  --folly-leaf-2: var(--wine); --folly-ink-2: var(--apricot-light);
-  --folly-leaf-3: var(--apricot-light); --folly-ink-3: var(--wine);
   --folly-ground: var(--apricot-light); --folly-ground-ink: var(--coffee);
   --folly-depth: var(--coffee); --folly-highlight: var(--apricot-light);
 }
+html[data-theme="dark"] { --folly-ground: var(--paper); --folly-ground-ink: var(--ink); }
+.leaf-sheet-felled { display: none; }
+html[data-timeline="felled"] .leaf-sheet-living { display: none; }
+html[data-timeline="felled"] .leaf-sheet-felled { display: inline; }
 .folly-page { background: var(--folly-ground); color: var(--folly-ground-ink); min-height: 80svh; padding: 54px 0 36px; }
 .folly-page .collection-heading { color: var(--folly-ground-ink); }
 .folly-page .page-intro { margin-bottom: 20px; }
@@ -41,6 +38,7 @@ html[data-timeline="felled"] {
 .leaf-vein-rim { stroke: var(--folly-highlight); stroke-width: 1.2; opacity: .14; fill: none; stroke-linecap: round; }
 .leaf-tip-fold { fill: var(--leaf-ink); opacity: .1; }
 .leaf-hit { fill: transparent; pointer-events: fill; }
+.leaf-hit,.leaf-art,.quote-leaf { touch-action: none; -webkit-touch-callout: none; }
 .leaf-lettering { font-family: var(--display); font-weight: 650; fill: var(--leaf-ink); pointer-events: none; }
 .folly-ground-readable { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
 .folly-ground-readable .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
@@ -52,10 +50,11 @@ html[data-timeline="felled"] {
 .leaf-reader-close { display: block; position: relative; z-index: 3; margin-left: auto; }
 .reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.48; margin: 0 auto; overflow: clip; isolation: isolate; }
 .reader-leaf { position: absolute; inset: 4% 4% 8%; transform-style: flat; transform-origin: 50% 45%; pointer-events: none; }
-.reader-leaf-current { z-index: 2; }
-.reader-leaf-underneath { z-index: 1; transform: translate(-1.5%,4%) rotate(-5deg) scale(.98); transition: transform 180ms ease-out; }
+.reader-leaf-current { z-index: 3; }
+.reader-leaf-underneath { z-index: 2; transform: translate(-1.5%,4%) rotate(-5deg) scale(.98); transition: transform 180ms ease-out; }
+.reader-leaf-retiring { z-index: 1; transform: translate(-3%,7%) rotate(-9deg) scale(.96); }
 .leaf-reader[open] .reader-leaf-falling { animation: leaf-fall-in 1.45s linear both, leaf-bank-in 1.45s ease-in-out both; }
-.leaf-reader[open] .reader-leaf-retiring { animation: leaf-buried-away var(--leaf-retire-time,150ms) ease-out both; }
+.leaf-reader[open] .reader-leaf-retiring { animation: leaf-buried-away var(--leaf-retire-time,1900ms) linear both; }
 .leaf-reader-nav { display: grid; grid-template-columns: 44px minmax(0,1fr) auto minmax(0,1fr) 44px; align-items: center; gap: 12px; width: min(100%,560px); margin: 0 auto; font: 500 13px var(--sans); padding: 10px 0; }
 .leaf-reader-nav .button { justify-self: center; font-size: 14px; padding: 12px 20px; white-space: nowrap; min-height: 44px; }
 .leaf-reader-nav .leaf-reader-end { width: 44px; padding: 10px 0; }
@@ -82,7 +81,7 @@ body:has(.leaf-reader[open]) .folly-ground { visibility: hidden; }
   100% { transform: perspective(1600px) translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1); }
 }
 @keyframes leaf-buried-away {
-  from { opacity: 1; }
+  0%,58% { opacity: 1; }
   to { opacity: 0; }
 }
 .journal-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }

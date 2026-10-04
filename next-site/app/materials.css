@@ -6,21 +6,24 @@
   --button-ink: var(--midnight);
   --button-hover-bg: var(--midnight);
   --button-hover-ink: var(--coral);
-  --card-pink: color-mix(in srgb,var(--coral) 24%,var(--floral));
+  --card-pink: var(--coral);
   --panel-bg: var(--card-pink);
   --panel-ink: var(--midnight);
   --material-shadow: color-mix(in srgb,var(--midnight) 28%,transparent);
   --material-edge: color-mix(in srgb,var(--floral) 58%,transparent);
-  --material-cut: color-mix(in srgb,var(--midnight) 32%,transparent);
+  --material-cut: color-mix(in srgb,var(--khaki) 32%,transparent);
   --light-strength: 0;
 }
 html[data-theme="dark"] {
   --panel-bg: var(--leaf);
   --panel-ink: var(--floral);
-  --material-shadow: color-mix(in srgb,var(--midnight) 78%,transparent);
+  /* Neutral occlusion makes the cast visible on the darkest palette surface. */
+  --material-shadow: rgb(0 0 0 / .48);
   --line: color-mix(in srgb,var(--coral) 45%,transparent);
 }
 html[data-timeline="felled"][data-theme="dark"] {
+  --material-shadow: rgb(0 0 0 / .48);
+  --material-cut: color-mix(in srgb,var(--coffee) 45%,transparent);
   --button-hover-bg: var(--midnight);
   --button-hover-ink: var(--coral);
 }
@@ -163,7 +166,16 @@ body .desktop-nav a:not([aria-current="page"]) { background-color: var(--coral);
 body .desktop-nav a { background-image: none; box-shadow: inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge); transform: none; }
 body .desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) { background-color: var(--midnight); color: var(--coral); }
 body .desktop-nav a[aria-current="page"] { background-color: var(--paper); color: var(--ink); box-shadow: none; border-bottom-color: transparent; }
-body .home-tab { --surface-bg: var(--paper); color: var(--ink); font-family: var(--display); font-weight: 650; }
+body .home-tab { font-family: var(--display); font-weight: 650; }
+/* Both modal close controls are plain, generous X targets. Keyboard focus
+   changes the face color rather than adding an outline around the glyph. */
+body :is(.preferences-dialog,.leaf-reader) .dialog-close {
+  width: 44px; min-height: 44px; padding: 0; border: 0; border-radius: 50%;
+  background: transparent; color: var(--ink); box-shadow: none; font-size: 28px;
+}
+body :is(.preferences-dialog,.leaf-reader) .dialog-close:is(:hover,:focus-visible) {
+  background: var(--coral); color: var(--midnight); outline: none; box-shadow: none;
+}
 body .mobile-menu nav { background: var(--paper); color: var(--ink); }
 body .mobile-menu nav a { margin-block: 6px; text-decoration: none; }
 
