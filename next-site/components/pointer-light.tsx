@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { approachLight, materialLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section,.quote-leaf-front";
+const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section,.quote-leaf";
 
 // One shared light: mouse on desktop, permission-gated orientation on phones.
 // Sensor readings never leave the browser or enter React's animation path.
@@ -48,17 +48,27 @@ export function PointerLight() {
       const leaf = leafSurfaces.get(element);
       if (leaf) {
         const holder = element.parentElement;
-        const angle = -(parseFloat(holder?.style.getPropertyValue("--leaf-rz") || "0")) * Math.PI / 180;
+        const ax=parseFloat(holder?.style.getPropertyValue("--leaf-rx") || "0")*Math.PI/180;
+        const ay=parseFloat(holder?.style.getPropertyValue("--leaf-ry") || "0")*Math.PI/180;
+        const az=parseFloat(holder?.style.getPropertyValue("--leaf-rz") || "0")*Math.PI/180;
         const scale = parseFloat(holder?.style.getPropertyValue("--leaf-scale") || "1");
         const lift = parseFloat(holder?.style.getPropertyValue("--leaf-lift") || "0");
-        const c = Math.cos(angle), s = Math.sin(angle), sx = light.shadowX, sy = light.shadowY + lift * .12;
-        // Counter-rotate the cast so rotating a leaf does not rotate the sun.
-        element.style.setProperty("--leaf-cast-x", px((sx*c - sy*s) / scale));
-        element.style.setProperty("--leaf-cast-y", px((sx*s + sy*c) / scale));
+        const reverse=element.classList.contains("quote-leaf-back") ? -1 : 1;
+        const local=(vx:number,vy:number,vz:number) => {
+          const ry=vy*Math.cos(ax)+vz*Math.sin(ax), rz=-vy*Math.sin(ax)+vz*Math.cos(ax);
+          const rx=vx*Math.cos(ay)-rz*Math.sin(ay);
+          return {x:(rx*Math.cos(az)+ry*Math.sin(az))*reverse/scale,y:(-rx*Math.sin(az)+ry*Math.cos(az))/scale};
+        };
+        // Invert all three rotations, including the underside, so tumbling
+        // changes the material's angle without moving the shared light source.
+        const cast=local(light.shadowX,light.shadowY+lift*.12,0);
+        element.style.setProperty("--leaf-cast-x",px(cast.x));
+        element.style.setProperty("--leaf-cast-y",px(cast.y));
         const dx = x - bounds.left - bounds.width / 2, dy = y - bounds.top - bounds.height / 2;
         const limit = (value: number) => Math.max(-1,Math.min(2,value));
-        leaf.gradient.setAttribute("cx", String(limit(.5 + (dx*c - dy*s) / Math.max(1,leaf.width*scale))));
-        leaf.gradient.setAttribute("cy", String(limit(.5 + (dx*s + dy*c) / Math.max(1,leaf.height*scale))));
+        const point=local(dx,dy,120);
+        leaf.gradient.setAttribute("cx", String(limit(.5 + point.x / Math.max(1,leaf.width))));
+        leaf.gradient.setAttribute("cy", String(limit(.5 + point.y / Math.max(1,leaf.height))));
       }
       if (element.classList.contains("kitty-ribbon") && bounds.width) {
         element.style.setProperty("--ribbon-light-x", px(light.lightX * 640 / bounds.width));
@@ -81,7 +91,7 @@ export function PointerLight() {
       }
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
-        const gradient = element.classList.contains("quote-leaf-front") ? element.querySelector<SVGRadialGradientElement>(".leaf-edge-light") : null;
+        const gradient = element.classList.contains("quote-leaf") ? element.querySelector<SVGRadialGradientElement>(".leaf-edge-light") : null;
         if (gradient) leafSurfaces.set(element, { gradient, width: 0, height: 0 });
         observer.observe(element); resize.observe(element);
       }
