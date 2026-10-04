@@ -1,16 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ProgressRings } from "@/components/progress-rings";
-import { CommonplaceCard } from "@/components/commonplace-card";
-import { ContentRail } from "@/components/content-rail";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
-import { CollectionHeading, InspirationHeading } from "@/components/collection-heading";
+import { CollectionHeading } from "@/components/collection-heading";
 import { displayDate } from "@/content/site";
 import { follyQuotes, latestFolly } from "@/content/folly";
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { getShoutouts } from "@/lib/community";
-import { getCommonplace } from "@/lib/commonplace";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import progress from "@/content/progress.json";
@@ -19,7 +16,7 @@ import { EditorialKitties } from "@/components/editorial-kitties";
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
-  const [entries, events, shoutouts] = await Promise.all([getCommonplace(), getUpcomingEvents(), getShoutouts()]);
+  const [events, shoutouts] = await Promise.all([getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
   return (
     <>
@@ -79,37 +76,30 @@ export default async function Home() {
       </section>}
 
       <section id="about-me" className="life-section shell section-space">
-        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
         <div className="life-copy">
-          <h2 className="eyebrow section-label">Aboot Zack</h2>
+          <h2 className="eyebrow section-label">BIO1990</h2>
           <h2>
             Who am I?
             <sub className="identity-aside">no really // plz help // idk who I am</sub>
           </h2>
           {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
           <Link className="button" href="/about">
-            A lil more about me
+            A lil history
           </Link>
         </div>
+        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
       </section>
 
       <section id="words-of-folly" className="journal-feature section-space"><div className="shell">
-        <div className="section-heading"><CollectionHeading>Notes from my noggin</CollectionHeading></div>
+        <div className="section-heading"><div className="life-copy">
+          <CollectionHeading>Words of Folly</CollectionHeading>
+          <h2>Note to self:</h2>
+        </div></div>
         <div className="folly-latest" role="img" aria-label={latestFolly.text}>
           <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} instance="latest" />
         </div>
-        <div className="rail-more"><Link className="button button-outline" href="/journal">More Words of Folly</Link></div>
+        <div className="rail-more"><Link className="button button-outline" href="/journal">The whole pile</Link></div>
       </div></section>
-
-      <section id="inspo-board" className="commonplace-section section-space">
-        <div className="shell">
-          <div className="section-heading"><InspirationHeading /></div>
-          {entries.length ? <ContentRail label="Recent inspiration" count={entries.slice(0, 5).length}>
-            {entries.slice(0, 5).map(entry => <CommonplaceCard key={entry.id} entry={entry} />)}
-          </ContentRail> : <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
-          <div className="rail-more"><Link className="button button-outline" href="/commonplace">Further inspiration</Link></div>
-        </div>
-      </section>
 
       <section id="shoutouts" className="shoutouts-section shell section-space">
         <CollectionHeading>Cool peeps</CollectionHeading>

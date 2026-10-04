@@ -591,8 +591,15 @@ h3 {
   padding-top: 30px;
   display: grid;
   grid-template-columns: 1.2fr 1fr;
+  grid-template-areas: "cats bio";
   gap: 75px;
   align-items: center;
+}
+.life-section > .kitty-discovery {
+  grid-area: cats;
+}
+.life-section > .life-copy {
+  grid-area: bio;
 }
 .life-photo {
   position: relative;
@@ -1331,6 +1338,7 @@ h3 {
   }
   .life-section {
     grid-template-columns: 1fr;
+    grid-template-areas: "bio" "cats";
     gap: 44px;
     padding-top: 15px;
   }
