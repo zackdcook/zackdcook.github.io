@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { makeLeafPile, pushLeaves, stepLeaves, leafProjectedBounds, leafProjection, leafBankLimit, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
+import { makeLeafPile, moveLeaf, pushLeaves, stepLeaves, leafProjectedBounds, leafProjection, leafBankLimit, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
 import { leafLettering,leafTextArea,leafTextWidth } from "../lib/leaf-lettering";
 import entries from "../content/folly.json";
 
@@ -26,6 +26,35 @@ test("a tap without travel leaves every blade undisturbed",()=>{
   const bounds={width:375,height:480,leafWidth:165},leaves=makeLeafPile(7,bounds),before=structuredClone(leaves);
   assert.equal(pushLeaves(leaves,{x:180,y:240},{x:180,y:240},.1,bounds),false);
   assert.deepEqual(leaves,before);
+});
+test("grabbing a leaf follows the contact point and leaves every neighbour alone",()=>{
+  for (const bounds of [{width:1000,height:720,leafWidth:300},{width:337,height:480,leafWidth:148}]) {
+    const leaves=makeLeafPile(19,bounds,7),before=structuredClone(leaves),leaf=leaves[6];
+    const target={x:bounds.width*.68,y:bounds.height*.7};
+    moveLeaf(leaf,target,{x:28,y:12},.07,bounds);
+    assert.equal(leaf.x,target.x); assert.equal(leaf.y,target.y);
+    assert.ok(leaf.z>leaf.base && Math.abs(leaf.rx)+Math.abs(leaf.ry)>0);
+    assert.deepEqual(leaves.slice(0,6),before.slice(0,6));
+    assert.deepEqual(leaves.slice(7),before.slice(7));
+    const held=structuredClone(leaf);
+    for(let i=0;i<120;i++) stepLeaves(leaves,1/60,bounds,leaf);
+    assert.deepEqual(leaf,held,"a held blade must not drift away from the finger");
+    for(let i=0;i<300;i++) stepLeaves(leaves,1/60,bounds);
+    assert.equal(leaf.x,target.x); assert.equal(leaf.y,target.y);
+    assert.equal(leaf.z,leaf.base);
+    assert.equal(leaf.rx,0); assert.equal(leaf.ry,0);
+    inside(leaves,bounds);
+  }
+});
+test("individual arrangement keeps the full blade and cast within a phone frame",()=>{
+  const bounds={width:337,height:480,leafWidth:148},leaf=makeLeafPile(1,bounds)[0];
+  for(const target of [{x:-1000,y:-1000},{x:10000,y:10000},{x:-1000,y:10000},{x:10000,y:-1000}]) {
+    moveLeaf(leaf,target,{x:300,y:-300},.001,bounds); inside([leaf],bounds);
+    for(let i=0;i<300;i++) {stepLeaves([leaf],1/60,bounds);inside([leaf],bounds);}
+  }
+  const before=structuredClone(leaf);
+  moveLeaf(leaf,{x:NaN,y:10},{x:0,y:0},.01,bounds);
+  assert.deepEqual(leaf,before);
 });
 test("a short phone stroke creates visible lift and gentle banking",()=>{
   const bounds={width:337,height:480,leafWidth:148},mouse=makeLeafPile(1,bounds),touch=structuredClone(mouse);
