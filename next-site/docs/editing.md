@@ -28,7 +28,7 @@ Words of Folly is a pile of short writing reminders. Edit `content/folly.json` a
 
 Use a unique, stable `id` and the publication date. Entries are ordered by date; the last entry wins when dates match. The latest quote appears as a leaf on the homepage. Every entry joins the pile and RSS automatically. The four leaf/text palette combinations rotate through the collection. No React or page edits are needed.
 
-Readers can drag within the frame to push the pile around, or tap a leaf to enlarge it. Reduce Effects presents a neat array with the newest leaf at the top left. The leaf edges and cast shadows use the same shared cursor/phone-tilt light as the buttons. The old essay is removed; its former address redirects to the pile.
+Readers can drag within the frame to fluff the pile into short airborne tumbles, or tap a lettered leaf to enlarge it. Small unlettered leaves fill out the pile. The reader runs from oldest to newest: left/right arrow keys, previous/new leaf, and first/last controls stop at the ends. Changing notes lets the old leaf fall away and the new one flutter into place. Reduce Effects (including the device's reduced-motion setting) presents a neat array with the newest leaf at the top left and immediate reader changes. Normal visits default to the pile. The leaf edges and cast shadows use the same shared cursor/phone-tilt light as the buttons. The newest homepage leaf rests on Floral White in either theme. The old essay is removed; its former address redirects to the pile.
 
 ## Add to the Inspo Board
 
