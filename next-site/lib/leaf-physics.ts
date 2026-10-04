@@ -88,10 +88,23 @@ export function pushLeaves(leaves: LeafBody[], from: LeafPoint, to: LeafPoint, e
   }
   return touched;
 }
-export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBounds) {
+/** A grabbed blade follows its contact point, without imparting a brush impulse
+ * to its neighbours. Releasing it lets only its lift and banking settle. */
+export function moveLeaf(leaf: LeafBody, target: LeafPoint, travel: LeafPoint, elapsed: number, bounds: LeafBounds) {
+  if (![target.x,target.y,travel.x,travel.y,elapsed].every(Number.isFinite)) return;
+  const dt=clamp(elapsed,1/120,.08), bank=20;
+  leaf.x=target.x; leaf.y=target.y;
+  leaf.z=leaf.base+Math.min(24,bounds.leafWidth*.09);
+  leaf.rx+=(clamp(-travel.y/dt*.035,-bank,bank)-leaf.rx)*.45;
+  leaf.ry+=(clamp(travel.x/dt*.035,-bank,bank)-leaf.ry)*.45;
+  leaf.vx=leaf.vy=leaf.vz=leaf.wx=leaf.wy=leaf.wz=0;
+  containLeaf(leaf,bounds);
+}
+export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBounds, held?: LeafBody) {
   const dt=clamp(elapsed,0,1/30);
   let moving=false;
   for (const leaf of leaves) {
+    if (leaf===held) continue;
     const airborne=leaf.z>leaf.base+.1 || leaf.vz>0;
     leaf.x+=leaf.vx*dt; leaf.y+=leaf.vy*dt;
     if (airborne) {
