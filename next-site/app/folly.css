@@ -20,8 +20,8 @@
 .leaf-veins { stroke: var(--leaf-ink); stroke-width: 2; opacity: .12; }
 .leaf-center-vein { stroke-width: 3; }
 .leaf-hit { fill: transparent; pointer-events: fill; }
-.leaf-lettering { position: absolute; inset: 0; font-family: var(--display); font-size: clamp(10px,6.5cqw,38px); font-weight: 650; line-height: 1.15; letter-spacing: -.015em; color: var(--leaf-ink); }
-.leaf-lettering-long { font-size: clamp(9px,5.2cqw,30px); }
+.leaf-lettering { position: absolute; inset: 0; font-family: var(--display); font-size: clamp(8px,6.5cqw,38px); font-weight: 650; line-height: 1.15; letter-spacing: -.015em; color: var(--leaf-ink); }
+.leaf-lettering-long { font-size: clamp(7px,5.2cqw,30px); }
 .leaf-words { position: absolute; left: 23%; width: 56%; height: 22%; display: flex; align-items: center; justify-content: center; text-align: center; text-wrap: balance; }
 .leaf-words-above { top: 25%; }
 .leaf-words-below { top: 53%; }
