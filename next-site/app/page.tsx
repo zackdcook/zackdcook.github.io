@@ -22,7 +22,7 @@ export default async function Home() {
     <>
       <section className="hero shell">
         <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">{editorial.home.eyebrow}</p>
+          <p className="eyebrow hero-eyebrow">Engineer <strong className="reaction-symbol">⇌</strong> Author</p>
           <h1>Zack<br /> <em>Cook.</em></h1>
           <p className="hero-intro">{editorial.home.intro}</p>
           {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
@@ -54,28 +54,29 @@ export default async function Home() {
               Let him
               <br /> <em>Cook.</em>
             </h2>
-            <Link className="button" href="/writing">
-              More deets
-            </Link>
+          </div>
+          <ProgressRings />
+          <div className="desk-followup">
             <p className="updated">
               Progress updated{" "}
               <time dateTime={progress.updated}>{displayDate(progress.updated)}</time>
             </p>
+            <Link className="button" href="/writing">
+              More deets
+            </Link>
           </div>
-          <ProgressRings />
         </div>
       </section>
 
       <section id="find-me-at" className="events-section shell">
-        <WritingGroupCard />
-        <div className="rail-more"><Link className="button" href="/events#other-events">Other events</Link></div>
+        <WritingGroupCard><div className="rail-more"><Link className="button" href="/events#other-events">Other events</Link></div></WritingGroupCard>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
         <Link className="button" href="/events">Event details</Link>
       </section>}
 
-      <section id="about-me" className="life-section shell section-space">
+      <section id="about-me" className="bio-section section-space"><div className="life-section shell">
         <div className="life-copy">
           <h2 className="eyebrow section-label">BIO1990</h2>
           <h2>
@@ -88,7 +89,7 @@ export default async function Home() {
           </Link>
         </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
-      </section>
+      </div></section>
 
       <section id="words-of-folly" className="journal-feature section-space"><div className="shell">
         <div className="section-heading"><div className="life-copy">

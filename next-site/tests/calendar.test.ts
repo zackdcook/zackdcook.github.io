@@ -24,7 +24,7 @@ test("calendar file carries the full weekly 4–6 p.m. Eastern series and reques
   assert.match(unfolded, /RRULE:FREQ=WEEKLY;BYDAY=TH/);
   assert.match(unfolded, /SUMMARY:Write On\\, Lakeland!/);
   assert.match(unfolded, /DESCRIPTION:Creative writing group\. Come as you are\./);
-  assert.match(unfolded, /LOCATION:Pressed Books & Coffee\\, 213 E Bay St\.\\, Lakeland\\, FL 33801/);
+  assert.match(unfolded, /LOCATION:Pressed Books & Coffee\\, 213 E Bay Street\\, Lakeland\\, FL 33801/);
   assert.match(unfolded, /BEGIN:VTIMEZONE/);
   assert.match(unfolded, /TZOFFSETTO:-0400/);
   assert.match(unfolded, /TZOFFSETTO:-0500/);

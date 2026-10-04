@@ -100,6 +100,35 @@ export function moveLeaf(leaf: LeafBody, target: LeafPoint, travel: LeafPoint, e
   leaf.vx=leaf.vy=leaf.vz=leaf.wx=leaf.wy=leaf.wz=0;
   containLeaf(leaf,bounds);
 }
+/** Store the contact in the leaf's own coordinates, including its current bank. */
+export function leafGrabPoint(leaf: LeafBody, point: LeafPoint): LeafPoint {
+  const {a,b,c,d}=leafProjection(leaf), determinant=a*d-b*c;
+  const x=point.x-leaf.x,y=point.y-leaf.y;
+  return {x:(d*x-c*y)/determinant,y:(a*y-b*x)/determinant};
+}
+/** Gravity acts around the actual grip; movement supplies torque and momentum.
+ * Reproject the same grip after rotation so it remains beneath the finger. */
+export function dragLeaf(leaf: LeafBody, contact: LeafPoint, grip: LeafPoint, travel: LeafPoint, elapsed: number, bounds: LeafBounds) {
+  if(![contact.x,contact.y,grip.x,grip.y,travel.x,travel.y,elapsed].every(Number.isFinite)) return;
+  const dt=clamp(elapsed,1/120,1/30),{a,b,c,d}=leafProjection(leaf);
+  const gx=grip.x*a+grip.y*c,gy=grip.x*b+grip.y*d;
+  const vx=clamp(travel.x/dt,-700,700),vy=clamp(travel.y/dt,-700,700);
+  const inertia=Math.max(160,(bounds.leafWidth*leaf.scale)**2*.09);
+  const gravity=-gx*480/inertia/radians;
+  const impulse=-(gx*(vy-leaf.vy)-gy*(vx-leaf.vx))/inertia/radians*.35;
+  leaf.wz=clamp(leaf.wz+clamp(gravity,-340,340)*dt+clamp(impulse,-85,85),-220,220)*Math.exp(-5*dt);
+  leaf.rz+=leaf.wz*dt;
+  leaf.vx+=(vx-leaf.vx)*.42;leaf.vy+=(vy-leaf.vy)*.42;
+  leaf.vz=leaf.wx=leaf.wy=0;
+  leaf.z=leaf.base+Math.min(32,bounds.leafWidth*.12);
+  const easing=1-Math.exp(-12*dt);
+  leaf.rx+=(clamp(-vy*.025,-20,20)-leaf.rx)*easing;
+  leaf.ry+=(clamp(vx*.025,-20,20)-leaf.ry)*easing;
+  const projected=leafProjection(leaf);
+  leaf.x=contact.x-(grip.x*projected.a+grip.y*projected.c);
+  leaf.y=contact.y-(grip.x*projected.b+grip.y*projected.d);
+  containLeaf(leaf,bounds);
+}
 export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBounds, held?: LeafBody) {
   const dt=clamp(elapsed,0,1/30);
   let moving=false;

@@ -1,8 +1,9 @@
 import { MapIcon } from "@/components/icons";
 import { CalendarMenu } from "@/components/calendar-menu";
 import { writingGroup } from "@/content/site";
+import type { ReactNode } from "react";
 
-export function WritingGroupCard({ eyebrow = "Find me at…" }: { eyebrow?: string }) {
+export function WritingGroupCard({ eyebrow = "Find me at…", children }: { eyebrow?: string; children?: ReactNode }) {
   return <section className="event-callout writing-group" aria-labelledby="writing-group-title">
     <h2 className="eyebrow section-label">{eyebrow}</h2>
     <h2 id="writing-group-title">{writingGroup.title}</h2>
@@ -14,5 +15,6 @@ export function WritingGroupCard({ eyebrow = "Find me at…" }: { eyebrow?: stri
       <CalendarMenu />
     </div>
     <p className="event-description">{writingGroup.description}</p>
+    {children}
   </section>;
 }

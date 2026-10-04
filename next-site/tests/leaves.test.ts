@@ -1,8 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { makeLeafPile, moveLeaf, pushLeaves, stepLeaves, leafProjectedBounds, leafProjection, leafBankLimit, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
+import { makeLeafPile, moveLeaf, dragLeaf, leafGrabPoint, pushLeaves, stepLeaves, leafProjectedBounds, leafProjection, leafBankLimit, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
 import { leafLettering,leafTextArea,leafTextWidth } from "../lib/leaf-lettering";
 import entries from "../content/folly.json";
+import shapes from "../content/leaf-shapes.json";
 
 function inside(leaves: LeafBody[], bounds: LeafBounds) {
   for (const leaf of leaves) {
@@ -107,13 +108,39 @@ test("a hidden-tab resume or extreme pointer jump cannot explode the simulation"
   pushLeaves(leaves,{x:0,y:0},{x:1000000,y:1000000},.00001,bounds);
   stepLeaves(leaves,600,bounds);inside(leaves,bounds);
 });
-test("every full quote fits its two reading bands with the central vein clear",()=>{
+test("every quote fits a tapered reading field without losing any words",()=>{
   for(const {text} of [...entries,{text:"A longer future reminder with unexpected details can still fit inside the leaf without escaping its edges"}]) {
-    const {size,lines,lineHeight}=leafLettering(text);
-    assert.equal(lines.flat().join(" "),text);
-    for(const band of lines) {
-      assert.ok(band.length*lineHeight<=leafTextArea.height+.001);
-      for(const line of band) assert.ok(leafTextWidth(line,size)<=leafTextArea.width+.001);
+    for(const shape of shapes) {
+    const {size,lines,lineHeight,capacities}=leafLettering(text,shape);
+    assert.equal(lines.join(" "),text);
+    assert.ok(lines.length*lineHeight<=leafTextArea.height+.001);
+    lines.forEach((line,index)=>assert.ok(leafTextWidth(line,size)<=capacities[index]+.001));
     }
   }
+  const newest=leafLettering(entries.at(-1)!.text).lines;
+  assert.deepEqual(newest,["Build the","system, enter the","environment, and let","the words flow"]);
+});
+test("opposite edge grips swing in opposite directions while tracking the contact",()=>{
+  const bounds={width:1000,height:720,leafWidth:300};
+  for(const side of [-1,1]) {
+    const leaf=makeLeafPile(1,bounds)[0];leaf.x=500;leaf.y=360;leaf.rx=leaf.ry=leaf.rz=0;
+    const contact={x:500+side*85,y:360},grip=leafGrabPoint(leaf,contact);
+    for(let i=0;i<60;i++) dragLeaf(leaf,contact,grip,{x:0,y:0},1/60,bounds);
+    assert.equal(Math.sign(leaf.rz),-side);assert.ok(Math.abs(leaf.rz)>20);
+    const {a,b,c,d}=leafProjection(leaf);
+    assert.ok(Math.abs(leaf.x+grip.x*a+grip.y*c-contact.x)<.001);
+    assert.ok(Math.abs(leaf.y+grip.x*b+grip.y*d-contact.y)<.001);
+    inside([leaf],bounds);
+  }
+});
+test("a dragged leaf carries release momentum, settles, and stays inside a phone",()=>{
+  const bounds={width:337,height:480,leafWidth:148},leaf=makeLeafPile(1,bounds)[0];
+  const contact={x:leaf.x+35,y:leaf.y},grip=leafGrabPoint(leaf,contact);
+  dragLeaf(leaf,{x:contact.x+22,y:contact.y+12},grip,{x:22,y:12},.03,bounds);
+  const released=structuredClone(leaf);assert.ok(leaf.vx>0 && leaf.vy>0 && leaf.wz!==0);
+  stepLeaves([leaf],1/60,bounds);
+  assert.notEqual(leaf.x,released.x);assert.notEqual(leaf.rz,released.rz);
+  let moving=true;
+  for(let i=0;i<900&&moving;i++){moving=stepLeaves([leaf],1/60,bounds);inside([leaf],bounds);}
+  assert.equal(moving,false);assert.equal(leaf.z,leaf.base);
 });

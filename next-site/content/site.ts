@@ -2,7 +2,7 @@ export const site = {
   name: "Zack Cook",
   email: "hi@zackdcook.com",
   url: "https://zackdcook.com",
-  title: "Zack Cook ⇌ Aspiring Author + Engineer",
+  title: "Zack Cook: Engineer ⇌ Author",
   icon: "/icon.png",
   // These control the footer. Add only your own public profile/payment links.
   instagram: "https://www.instagram.com/zackyc.xyz/",
@@ -54,12 +54,12 @@ export const writingGroup = {
   schedule: "Every Thursday · 4–6 p.m. Eastern",
   venue: "Pressed Books & Coffee",
   location: "Downtown Lakeland, Florida",
-  address: "213 E Bay St., Lakeland, FL 33801",
+  address: "213 E Bay Street, Lakeland, FL 33801",
   description:
     "Join us as we talk through the ups and downs of creative writing, brainstorm together, and body-double to get some writing in. Bring whatever you’re working on, and come as you are.",
   venueUrl: "https://www.pressedbooksandcoffee.com/",
   directionsUrl:
-    "https://www.google.com/maps/search/?api=1&query=Pressed+Books+%26+Coffee+213+E+Bay+St+Lakeland+FL+33801",
+    "https://www.google.com/maps/search/?api=1&query=Pressed+Books+%26+Coffee+213+E+Bay+Street+Lakeland+FL+33801",
   calendar: {
     timeZone: "America/New_York",
     weekday: 4,

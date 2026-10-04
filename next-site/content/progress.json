@@ -9,7 +9,7 @@
       "target": 35834,
       "unit": "words",
       "status": "complete",
-      "note": "I took a three-year braindump while absorbing every possible lesson on the craft of writing."
+      "note": "I took a three-year braindump from mid-2023 to 2026 and captured over 35k words. I spent most of this time absorbing every possible lesson on the craft of writing."
     },
     {
       "id": "draft",
@@ -18,7 +18,7 @@
       "target": 50000,
       "unit": "words",
       "status": "active",
-      "note": "Now, as of September 1st, 2026, I’m working on my zeroth draft with a current target of {target} words."
+      "note": "Since September 1st, 2026, I’ve been working on my zeroth draft with a target of {target} words."
     },
     {
       "id": "revision",

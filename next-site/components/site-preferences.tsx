@@ -84,7 +84,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     {hydrated && <TiltLightingControl prompt enabled={preferences.tiltLighting} reduced={preferences.reduceEffects || systemReduced} resetVersion={resetVersion} onChange={enabled => update({ tiltLighting: enabled })} />}
     <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => { const target = resetting.current ? document.querySelector<HTMLElement>("#main") : opener.current; resetting.current = false; target?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
-        <div className="calendar-dialog-heading"><h2 id="preferences-title">Accessibility &amp; Preferences</h2><button className="button calendar-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
+        <div className="calendar-dialog-heading"><h2 id="preferences-title">Accessibility &amp; Preferences</h2><button className="button calendar-close dialog-close" aria-label="Close preferences" onClick={() => dialog.current?.close()}>×</button></div>
         <fieldset className="appearance-options">
           <legend>Appearance</legend>
           <div className="appearance-selector">{([

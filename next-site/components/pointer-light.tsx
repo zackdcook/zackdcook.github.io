@@ -132,7 +132,7 @@ export function PointerLight() {
     function start() { if (!frame && !reduced()) frame = requestAnimationFrame(tick); }
     const move = (event: PointerEvent) => {
       // Touches remain ordinary taps/scrolling, never a hold-to-light gesture.
-      if (event.pointerType !== "mouse") return;
+      if (event.pointerType !== "mouse" || source === "tilt" || reduced()) return;
       x = event.clientX; y = event.clientY; lastMove = performance.now();
       source = "mouse"; released = false; dirty = true; hasLight = true; start();
     };
@@ -151,6 +151,8 @@ export function PointerLight() {
       const point = tiltLight(reading, reference!, angle, innerWidth, innerHeight);
       if (!point) return;
       if (first) {
+        // A valid sensor reading claims the shared source until tilt is disabled.
+        reset(); source = "tilt";
         x = point.x; y = point.y;
         document.documentElement.dataset.tiltStatus = "active";
         window.dispatchEvent(new Event(tiltStatusEvent));
@@ -171,7 +173,11 @@ export function PointerLight() {
       if (enabled) window.addEventListener("deviceorientation", orientation, { passive: true });
       else {
         window.removeEventListener("deviceorientation", orientation);
-        if (source === "tilt") { released = true; start(); }
+        if (source === "tilt") {
+          reset(); source = "mouse"; hasLight = false; released = true;
+        }
+        delete document.documentElement.dataset.tiltStatus;
+        window.dispatchEvent(new Event(tiltStatusEvent));
       }
     };
     const geometry = () => { dirty = true; start(); };
