@@ -4,18 +4,21 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { usePreferences } from "@/components/site-preferences";
 import { follyQuotes } from "@/content/folly";
-import { makeLeafPile, pushLeaves, stepLeaves, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
+import { makeLeafPile, pushLeaves, stepLeaves, leafPerspective, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
 import { materialGeometryEvent } from "@/lib/material-light";
 
-type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; rect: DOMRect };
+type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect };
+const litterCount=12;
 export function FollyPile() {
   const { reduced } = usePreferences();
   const stage = useRef<HTMLDivElement>(null), dialog = useRef<HTMLDialogElement>(null);
-  const buttons = useRef<(HTMLButtonElement | null)[]>([]), bodies = useRef<LeafBody[]>([]);
+  const buttons = useRef<(HTMLElement | null)[]>([]), bodies = useRef<LeafBody[]>([]);
   const bounds = useRef<LeafBounds>({ width: 1000, height: 720, leafWidth: 370 });
   const frame = useRef(0), last = useRef(0), gesture = useRef<Gesture | null>(null), suppressClick = useRef(false);
-  const opener = useRef<HTMLButtonElement | null>(null), reducedRef = useRef(reduced);
+  const opener = useRef<HTMLElement | null>(null), reducedRef = useRef(reduced);
+  const exitTimer = useRef<ReturnType<typeof setTimeout> | null>(null), selectedRef=useRef(follyQuotes.length-1);
   const [selected, setSelected] = useState(follyQuotes.length - 1);
+  const [outgoing,setOutgoing]=useState<number | null>(null), [turn,setTurn]=useState(0);
   reducedRef.current = reduced;
 
   function paint() {
@@ -24,9 +27,11 @@ export function FollyPile() {
       button.style.left = button.style.top = "0px";
       button.style.transform = `translate3d(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px,${leaf.z.toFixed(2)}px) translate(-50%,-50%) rotateX(${leaf.rx.toFixed(2)}deg) rotateY(${leaf.ry.toFixed(2)}deg) rotateZ(${leaf.rz.toFixed(2)}deg) scale(${leaf.scale.toFixed(3)})`;
       button.style.setProperty("--leaf-rz", String(leaf.rz));
+      button.style.setProperty("--leaf-rx", String(leaf.rx));
+      button.style.setProperty("--leaf-ry", String(leaf.ry));
       button.style.setProperty("--leaf-scale", String(leaf.scale));
-      button.style.setProperty("--leaf-lift", `${leaf.z.toFixed(1)}px`);
-      button.style.zIndex = String(i + 1);
+      button.style.setProperty("--leaf-lift", `${Math.max(0,leaf.z-leaf.base).toFixed(1)}px`);
+      button.style.zIndex = String(Math.round(leaf.z*100)+leaf.order);
     });
     window.dispatchEvent(new Event(materialGeometryEvent));
   }
@@ -38,16 +43,29 @@ export function FollyPile() {
   }
   function start() { if (!frame.current) { last.current = 0; frame.current = requestAnimationFrame(animate); } }
   function openLeaf(index: number, source?: HTMLButtonElement) {
-    opener.current = source || buttons.current[index]; setSelected(index);
+    if (exitTimer.current) clearTimeout(exitTimer.current);
+    opener.current = source || buttons.current[index]; selectedRef.current=index; setSelected(index); setOutgoing(null); setTurn(value=>value+1);
     if (!dialog.current?.open) dialog.current?.showModal();
+  }
+  function changeLeaf(index: number) {
+    const next=Math.max(0,Math.min(follyQuotes.length-1,index)), previous=selectedRef.current;
+    if (next===previous) return;
+    if (exitTimer.current) clearTimeout(exitTimer.current);
+    setOutgoing(reducedRef.current ? null : previous); selectedRef.current=next;
+    setSelected(next); setTurn(value=>value+1);
+    exitTimer.current=setTimeout(()=>setOutgoing(null),700);
+    // A boundary can hide the button that initiated this change. Keep focus
+    // inside the native dialog instead of leaving it on an invisible control.
+    const nav=document.activeElement?.getAttribute("data-leaf-nav");
+    if ((next===0 && (nav==="previous" || nav==="first")) || (next===follyQuotes.length-1 && (nav==="new" || nav==="last"))) dialog.current?.querySelector<HTMLButtonElement>(".leaf-reader-close")?.focus({preventScroll:true});
   }
   function move(event: PointerEvent<HTMLDivElement>) {
     const g = gesture.current; if (!g || g.id !== event.pointerId) return;
     const point = { x: event.clientX - g.rect.left, y: event.clientY - g.rect.top }, now = performance.now();
-    if (!g.dragging && Math.hypot(point.x - g.origin.x, point.y - g.origin.y) < 7) return;
+    if (!g.dragging && Math.hypot(point.x - g.origin.x, point.y - g.origin.y) < (g.touch ? 4 : 7)) return;
     if (!g.dragging) { g.dragging = true; suppressClick.current = true; event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.dataset.dragging = "true"; }
     event.preventDefault();
-    if (pushLeaves(bodies.current, g.previous, point, (now - g.time) / 1000, bounds.current)) start();
+    if (pushLeaves(bodies.current, g.previous, point, (now - g.time) / 1000, bounds.current,g.touch)) start();
     g.previous = point; g.time = now;
   }
   function release(event: PointerEvent<HTMLDivElement>) {
@@ -60,25 +78,29 @@ export function FollyPile() {
     const layout = () => {
       cancelAnimationFrame(frame.current); frame.current = 0; gesture.current = null;
       const width = element.clientWidth, height = element.clientHeight;
-      const leafWidth = Math.min(370, width * .52, height * .6);
+      const leafWidth = Math.min(370, width * .44, height * .54);
       const previous = bounds.current;
+      let moving=false;
       bounds.current = { width, height, leafWidth };
-      if (!bodies.current.length) bodies.current = makeLeafPile(follyQuotes.length, bounds.current);
+      if (!bodies.current.length) bodies.current = makeLeafPile(follyQuotes.length+litterCount, bounds.current,follyQuotes.length);
       else {
         // Opening a reader changes the scrollbar gutter on some browsers.
         // Preserve the visitor's pile instead of creating it again.
         for (const leaf of bodies.current) { leaf.x *= width / Math.max(1,previous.width); leaf.y *= height / Math.max(1,previous.height); }
-        stepLeaves(bodies.current,0,bounds.current);
+        moving=stepLeaves(bodies.current,0,bounds.current);
       }
       element.style.setProperty("--pile-leaf-width", `${leafWidth}px`); paint();
+      // A scrollbar/viewport resize must not freeze leaves in mid-flight.
+      if (moving && !reducedRef.current) start();
     };
     const observer = new ResizeObserver(layout); observer.observe(element); layout();
-    return () => { observer.disconnect(); cancelAnimationFrame(frame.current); };
+    return () => { observer.disconnect(); cancelAnimationFrame(frame.current); if (exitTimer.current) clearTimeout(exitTimer.current); };
   }, []);
   useEffect(() => {
     if (!reduced) return;
     cancelAnimationFrame(frame.current); frame.current = 0; gesture.current = null;
-    bodies.current.forEach(leaf => { leaf.z = leaf.rx = leaf.ry = leaf.vx = leaf.vy = leaf.vz = leaf.wx = leaf.wy = leaf.wz = 0; }); paint();
+    setOutgoing(null);
+    bodies.current.forEach(leaf => { leaf.z=leaf.base; leaf.rx = leaf.ry = leaf.vx = leaf.vy = leaf.vz = leaf.wx = leaf.wy = leaf.wz = 0; }); paint();
   }, [reduced]);
   useEffect(() => {
     const fromHash = () => {
@@ -91,13 +113,13 @@ export function FollyPile() {
 
   return <>
     <p className="folly-label">notes I wrote to myself while writing</p>
-    <span id="leaf-instructions" className="sr-only">Drag inside the pile to push the leaves. Click or tap a leaf to read it. With a leaf focused, arrow keys push it; Enter opens it. Reduce Effects arranges the leaves in order, newest first.</span>
-    <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
+    <span id="leaf-instructions" className="sr-only">Drag inside the pile to fluff and push the leaves. Click or tap a leaf to read it. With a leaf focused, arrow keys push it; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
+    <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions" style={{perspective:leafPerspective}}
       onPointerDown={event => {
         if (reducedRef.current || !event.isPrimary || event.button !== 0) return;
         suppressClick.current = false;
         const rect = event.currentTarget.getBoundingClientRect(), point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, rect };
+        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect };
       }} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
       onPointerLeave={event => { if (!gesture.current?.dragging) release(event); }}>
       <ol className="folly-leaves" aria-label="Words of Folly, newest first">
@@ -114,13 +136,30 @@ export function FollyPile() {
             }}><QuoteLeaf quote={entry} index={index} /><QuoteLeaf quote={entry} index={index} reverse /></button></li>;
         })}
       </ol>
+      <div className="folly-litter" aria-hidden="true">{Array.from({length:litterCount},(_,i)=><span key={i} className="pile-leaf" ref={element=>{buttons.current[follyQuotes.length+i]=element;}}>
+        <QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank /><QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank reverse />
+      </span>)}</div>
     </div>
-    <dialog className="leaf-reader" ref={dialog} aria-label="A Word of Folly" onClose={() => opener.current?.focus({ preventScroll: true })}
+    <dialog className="leaf-reader" ref={dialog} aria-label="A Word of Folly" onClose={() => { if (exitTimer.current) clearTimeout(exitTimer.current); setOutgoing(null); opener.current?.focus({ preventScroll: true }); }}
+      onKeyDown={event=>{
+        const destination=event.key==="ArrowLeft" ? selectedRef.current-1 : event.key==="ArrowRight" ? selectedRef.current+1 : event.key==="Home" ? 0 : event.key==="End" ? follyQuotes.length-1 : null;
+        if (destination!==null) {event.preventDefault(); changeLeaf(destination);}
+      }}
       onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
       <div className="leaf-reader-content">
         <button className="button leaf-reader-close" autoFocus aria-label="Close leaf" onClick={() => dialog.current?.close()}>Close</button>
-        <div className="reader-leaf" role="img" aria-label={follyQuotes[selected].text}><QuoteLeaf quote={follyQuotes[selected]} index={selected} instance="reader" /></div>
-        <div className="leaf-reader-nav"><button className="button" onClick={() => setSelected(index => (index + 1) % follyQuotes.length)}>Newer leaf</button><span>{selected + 1} of {follyQuotes.length}</span><button className="button" onClick={() => setSelected(index => (index - 1 + follyQuotes.length) % follyQuotes.length)}>Older leaf</button></div>
+        <div className="reader-leaf-stage">
+          {outgoing!==null && <div key={`out-${turn}`} className="reader-leaf reader-leaf-out" aria-hidden="true"><QuoteLeaf quote={follyQuotes[outgoing]} index={outgoing} instance={`reader-out-${turn}`} /></div>}
+          <div key={`in-${turn}`} className="reader-leaf reader-leaf-in" role="img" aria-label={follyQuotes[selected].text}><QuoteLeaf quote={follyQuotes[selected]} index={selected} instance={`reader-${turn}`} /></div>
+        </div>
+        <div className="leaf-reader-nav">
+          <button className="button leaf-reader-end" data-leaf-nav="first" aria-label="First leaf" title="first" disabled={selected===0} onClick={()=>changeLeaf(0)}>{"|<"}</button>
+          <button className="button" data-leaf-nav="previous" style={{visibility:selected===0 ? "hidden" : undefined}} aria-hidden={selected===0 || undefined} tabIndex={selected===0 ? -1 : 0} disabled={selected===0} onClick={()=>changeLeaf(selected-1)}>previous</button>
+          <span className="leaf-reader-count">{selected+1} of {follyQuotes.length}</span>
+          <button className="button" data-leaf-nav="new" style={{visibility:selected===follyQuotes.length-1 ? "hidden" : undefined}} aria-hidden={selected===follyQuotes.length-1 || undefined} tabIndex={selected===follyQuotes.length-1 ? -1 : 0} disabled={selected===follyQuotes.length-1} onClick={()=>changeLeaf(selected+1)}>new leaf</button>
+          <button className="button leaf-reader-end" data-leaf-nav="last" aria-label="Last leaf" title="last" disabled={selected===follyQuotes.length-1} onClick={()=>changeLeaf(follyQuotes.length-1)}>{">|"}</button>
+        </div>
+        <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">Leaf {selected+1} of {follyQuotes.length}: {follyQuotes[selected].text}</p>
       </div>
     </dialog>
   </>;
