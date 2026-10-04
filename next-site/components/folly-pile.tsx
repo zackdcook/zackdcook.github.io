@@ -4,10 +4,11 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { usePreferences } from "@/components/site-preferences";
 import { follyQuotes } from "@/content/folly";
-import { makeLeafPile, pushLeaves, stepLeaves, leafProjection, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
+import { makeLeafPile, moveLeaf, pushLeaves, stepLeaves, leafProjection, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
+import { createLeafReader, requestReaderLeaf, beginReaderFall, leafRetireMs, type LeafReaderStack } from "@/lib/leaf-reader";
 import { materialGeometryEvent } from "@/lib/material-light";
 
-type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect };
+type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect; leafIndex: number | null; offset: LeafPoint };
 const litterCount=12;
 export function FollyPile() {
   const { reduced } = usePreferences();
@@ -16,9 +17,10 @@ export function FollyPile() {
   const bounds = useRef<LeafBounds>({ width: 1000, height: 720, leafWidth: 370 });
   const frame = useRef(0), last = useRef(0), gesture = useRef<Gesture | null>(null), suppressClick = useRef(false);
   const opener = useRef<HTMLElement | null>(null), reducedRef = useRef(reduced);
-  const exitTimer = useRef<ReturnType<typeof setTimeout> | null>(null), selectedRef=useRef(follyQuotes.length-1);
+  const retireTimer = useRef<ReturnType<typeof setTimeout> | null>(null), selectedRef=useRef(follyQuotes.length-1);
   const [selected, setSelected] = useState(follyQuotes.length - 1);
-  const [outgoing,setOutgoing]=useState<number | null>(null), [turn,setTurn]=useState(0);
+  const [reader, setReader] = useState<LeafReaderStack>(()=>createLeafReader(follyQuotes.length-1));
+  const readerRef = useRef(reader);
   reducedRef.current = reduced;
 
   function paint() {
@@ -36,24 +38,28 @@ export function FollyPile() {
   }
   function animate(now: number) {
     frame.current = 0; if (reducedRef.current || dialog.current?.open || document.hidden) return;
-    const moving = stepLeaves(bodies.current, Math.min((now - (last.current || now - 16.67)) / 1000, 1 / 30), bounds.current);
+    const g=gesture.current, held=g?.dragging && g.leafIndex!==null ? bodies.current[g.leafIndex] : undefined;
+    const moving = stepLeaves(bodies.current, Math.min((now - (last.current || now - 16.67)) / 1000, 1 / 30), bounds.current, held);
     last.current = now; paint();
     if (moving) frame.current = requestAnimationFrame(animate);
   }
   function start() { if (!frame.current && !dialog.current?.open && !document.hidden && !reducedRef.current) { last.current = 0; frame.current = requestAnimationFrame(animate); } }
+  function clearRetirement() { if (retireTimer.current) clearTimeout(retireTimer.current); retireTimer.current=null; }
+  function updateReader(stack: LeafReaderStack) { readerRef.current=stack; setReader(stack); }
   function openLeaf(index: number, source?: HTMLButtonElement) {
-    if (exitTimer.current) clearTimeout(exitTimer.current);
+    clearRetirement();
     cancelAnimationFrame(frame.current); frame.current=0; gesture.current=null;
-    opener.current = source || buttons.current[index]; selectedRef.current=index; setSelected(index); setOutgoing(null); setTurn(value=>value+1);
+    opener.current = source || buttons.current[index]; selectedRef.current=index; setSelected(index);
+    updateReader(createLeafReader(index,!reducedRef.current,readerRef.current.serial+1));
     if (!dialog.current?.open) dialog.current?.showModal();
   }
   function changeLeaf(index: number) {
     const next=Math.max(0,Math.min(follyQuotes.length-1,index)), previous=selectedRef.current;
     if (next===previous) return;
-    if (exitTimer.current) clearTimeout(exitTimer.current);
-    setOutgoing(reducedRef.current ? null : previous); selectedRef.current=next;
-    setSelected(next); setTurn(value=>value+1);
-    exitTimer.current=setTimeout(()=>setOutgoing(null),950);
+    clearRetirement(); selectedRef.current=next; setSelected(next);
+    const stack=requestReaderLeaf(readerRef.current,next,reducedRef.current);
+    updateReader(stack);
+    if (stack.pending!==null) retireTimer.current=setTimeout(()=>{retireTimer.current=null;updateReader(beginReaderFall(readerRef.current));},leafRetireMs);
     // A boundary can hide the button that initiated this change. Keep focus
     // inside the native dialog instead of leaving it on an invisible control.
     const nav=document.activeElement?.getAttribute("data-leaf-nav");
@@ -63,15 +69,22 @@ export function FollyPile() {
     const g = gesture.current; if (!g || g.id !== event.pointerId) return;
     const point = { x: event.clientX - g.rect.left, y: event.clientY - g.rect.top }, now = performance.now();
     if (!g.dragging && Math.hypot(point.x - g.origin.x, point.y - g.origin.y) < (g.touch ? 4 : 7)) return;
-    if (!g.dragging) { g.dragging = true; suppressClick.current = true; event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.dataset.dragging = "true"; }
+    if (!g.dragging) {
+      g.dragging = true; suppressClick.current = true; event.currentTarget.setPointerCapture(event.pointerId); event.currentTarget.dataset.dragging = "true";
+      if(g.leafIndex!==null) bodies.current[g.leafIndex].order=1+Math.max(...bodies.current.map(leaf=>leaf.order));
+    }
     event.preventDefault();
-    if (pushLeaves(bodies.current, g.previous, point, (now - g.time) / 1000, bounds.current,g.touch)) start();
+    if (g.leafIndex!==null) {
+      moveLeaf(bodies.current[g.leafIndex],{x:point.x+g.offset.x,y:point.y+g.offset.y},{x:point.x-g.previous.x,y:point.y-g.previous.y},(now-g.time)/1000,bounds.current);
+      paint(); start();
+    } else if (pushLeaves(bodies.current, g.previous, point, (now - g.time) / 1000, bounds.current,g.touch)) start();
     g.previous = point; g.time = now;
   }
   function release(event: PointerEvent<HTMLDivElement>) {
     if (gesture.current?.id !== event.pointerId) return;
     gesture.current = null; delete event.currentTarget.dataset.dragging;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    start();
   }
   useEffect(() => {
     const element = stage.current; if (!element) return;
@@ -96,12 +109,12 @@ export function FollyPile() {
     const visibility=()=>{ if(document.hidden){cancelAnimationFrame(frame.current);frame.current=0;}else start(); };
     const observer = new ResizeObserver(layout); observer.observe(element); layout();
     document.addEventListener("visibilitychange",visibility);
-    return () => { observer.disconnect(); document.removeEventListener("visibilitychange",visibility); cancelAnimationFrame(frame.current); if (exitTimer.current) clearTimeout(exitTimer.current); };
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange",visibility); cancelAnimationFrame(frame.current); clearRetirement(); };
   }, []);
   useEffect(() => {
     if (!reduced) return;
     cancelAnimationFrame(frame.current); frame.current = 0; gesture.current = null;
-    setOutgoing(null);
+    clearRetirement(); updateReader(createLeafReader(selectedRef.current,false,readerRef.current.serial+1));
     bodies.current.forEach(leaf => { leaf.z=leaf.base; leaf.rx = leaf.ry = leaf.vx = leaf.vy = leaf.vz = leaf.wx = leaf.wy = leaf.wz = 0; }); paint();
   }, [reduced]);
   useEffect(() => {
@@ -115,34 +128,37 @@ export function FollyPile() {
 
   return <>
     <p className="folly-label">notes I wrote to myself while writing</p>
-    <span id="leaf-instructions" className="sr-only">Drag inside the pile to fluff and push the leaves. Click or tap a leaf to read it. With a leaf focused, arrow keys push it; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
+    <span id="leaf-instructions" className="sr-only">Drag a leaf to arrange it. Drag from empty space into the pile to fluff and scatter the leaves. Click or tap a leaf to read it. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
     <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
       onPointerDown={event => {
         if (reducedRef.current || !event.isPrimary || event.button !== 0) return;
         suppressClick.current = false;
         const rect = event.currentTarget.getBoundingClientRect(), point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
-        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect };
+        const hit=(event.target as Element).closest<HTMLElement>("[data-leaf-index]");
+        const leafIndex=hit ? Number(hit.dataset.leafIndex) : null, leaf=leafIndex===null ? null : bodies.current[leafIndex];
+        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect, leafIndex:leaf ? leafIndex : null, offset:leaf ? {x:leaf.x-point.x,y:leaf.y-point.y} : {x:0,y:0} };
       }} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
       onPointerLeave={event => { if (!gesture.current?.dragging) release(event); }}>
       <ol className="folly-leaves" aria-label="Words of Folly, newest first">
         {[...follyQuotes].reverse().map((entry, position) => {
           const index = follyQuotes.length - 1 - position;
-          return <li key={entry.id}><button id={`leaf-${entry.id}`} ref={element => { buttons.current[index] = element; }} className="pile-leaf" type="button" aria-label={`Read: ${entry.text}`} aria-haspopup="dialog"
+          return <li key={entry.id}><button id={`leaf-${entry.id}`} data-leaf-index={index} ref={element => { buttons.current[index] = element; }} className="pile-leaf" type="button" aria-label={`Read: ${entry.text}`} aria-haspopup="dialog"
             style={{ left: `${43 + index % 3 * 7}%`, top: `${210 + index % 3 * 70}px`, zIndex: index + 1, transform: `translate(-50%,-50%) rotate(${index * 51 - 130}deg)` } as CSSProperties}
             onClick={event => { if (event.detail !== 0 && suppressClick.current) { suppressClick.current = false; return; } openLeaf(index, event.currentTarget); }}
             onKeyDown={event => {
               if (reducedRef.current) return;
               const moves: Record<string,[number,number]> = { ArrowLeft:[-20,0],ArrowRight:[20,0],ArrowUp:[0,-20],ArrowDown:[0,20] };
               const delta = moves[event.key], leaf = bodies.current[index]; if (!delta || !leaf) return;
-              event.preventDefault(); pushLeaves(bodies.current, { x:leaf.x,y:leaf.y }, { x:leaf.x+delta[0],y:leaf.y+delta[1] }, .06, bounds.current); start();
+              event.preventDefault(); leaf.order=1+Math.max(...bodies.current.map(item=>item.order));
+              moveLeaf(leaf,{x:leaf.x+delta[0],y:leaf.y+delta[1]},{x:delta[0],y:delta[1]},.06,bounds.current); paint(); start();
             }}><QuoteLeaf quote={entry} index={index} /></button></li>;
         })}
       </ol>
-      <div className="folly-litter" aria-hidden="true">{Array.from({length:litterCount},(_,i)=><span key={i} className="pile-leaf" ref={element=>{buttons.current[follyQuotes.length+i]=element;}}>
+      <div className="folly-litter" aria-hidden="true">{Array.from({length:litterCount},(_,i)=><span key={i} className="pile-leaf" data-leaf-index={follyQuotes.length+i} ref={element=>{buttons.current[follyQuotes.length+i]=element;}}>
         <QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank />
       </span>)}</div>
     </div>
-    <dialog className="leaf-reader" ref={dialog} aria-label="A Word of Folly" onClose={() => { if (exitTimer.current) clearTimeout(exitTimer.current); setOutgoing(null); opener.current?.focus({ preventScroll: true }); start(); }}
+    <dialog className="leaf-reader" ref={dialog} style={{"--leaf-retire-time":`${leafRetireMs}ms`} as CSSProperties} aria-label="A Word of Folly" onClose={() => { clearRetirement(); updateReader(createLeafReader(selectedRef.current,false,readerRef.current.serial+1)); opener.current?.focus({ preventScroll: true }); start(); }}
       onKeyDown={event=>{
         const destination=event.key==="ArrowLeft" ? selectedRef.current-1 : event.key==="ArrowRight" ? selectedRef.current+1 : event.key==="Home" ? 0 : event.key==="End" ? follyQuotes.length-1 : null;
         if (destination!==null) {event.preventDefault(); changeLeaf(destination);}
@@ -151,8 +167,11 @@ export function FollyPile() {
       <div className="leaf-reader-content">
         <button className="button leaf-reader-close" autoFocus aria-label="Close leaf" onClick={() => dialog.current?.close()}>Close</button>
         <div className="reader-leaf-stage">
-          {outgoing!==null && <div key={`out-${turn}`} className="reader-leaf reader-leaf-out" aria-hidden="true"><QuoteLeaf quote={follyQuotes[outgoing]} index={outgoing} instance={`reader-out-${turn}`} /></div>}
-          <div key={`in-${turn}`} className="reader-leaf reader-leaf-in" role="img" aria-label={follyQuotes[selected].text}><QuoteLeaf quote={follyQuotes[selected]} index={selected} instance={`reader-${turn}`} /></div>
+          {[reader.underneath,reader.current].map(layer=>layer && <div key={layer.key}
+            className={`reader-leaf ${layer===reader.current ? `reader-leaf-current${layer.falling ? " reader-leaf-falling" : ""}` : `reader-leaf-underneath${reader.pending!==null ? " reader-leaf-retiring" : ""}`}`}
+            role={layer===reader.current ? "img" : undefined} aria-label={layer===reader.current ? follyQuotes[layer.index].text : undefined} aria-hidden={layer===reader.current ? undefined : true}>
+            <QuoteLeaf quote={follyQuotes[layer.index]} index={layer.index} instance={`reader-${layer.key}`} />
+          </div>)}
         </div>
         <div className="leaf-reader-nav">
           <button className="button leaf-reader-end" data-leaf-nav="first" aria-label="First leaf" title="first" disabled={selected===0} onClick={()=>changeLeaf(0)}>{"|<"}</button>
