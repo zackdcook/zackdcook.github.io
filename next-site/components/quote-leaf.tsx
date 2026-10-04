@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { leafPalettes, type FollyQuote } from "@/content/folly";
+import type { FollyQuote } from "@/content/folly";
 import { leafLettering, leafTextArea } from "@/lib/leaf-lettering";
 
 // Broad, irregular blades with little serrations and rolled tips. Every
@@ -14,33 +14,37 @@ const branches = [
   "M142 199 Q151 175 148 159 M187 199 Q205 155 196 123 M240 199 Q263 143 252 100 M299 199 Q321 131 310 83 M360 199 Q385 143 378 105 M424 199 Q445 156 439 135 M483 200 Q507 175 500 155",
   "M142 201 Q158 233 151 245 M190 201 Q213 252 203 276 M242 201 Q266 267 258 300 M300 201 Q323 272 315 313 M361 201 Q388 259 382 291 M426 201 Q449 249 445 275 M484 200 Q511 219 506 243",
 ];
-export function QuoteLeaf({ quote, index, reverse = false, instance = "pile", blank = false }: { quote: FollyQuote; index: number; reverse?: boolean; instance?: string; blank?: boolean }) {
-  const palette = leafPalettes[index % leafPalettes.length], outline = outlines[index % outlines.length];
-  const id = `folly-${quote.id}-${instance}-${reverse ? "back" : "front"}`, lettering = leafLettering(quote.text);
-  return <span className={`quote-leaf ${reverse ? "quote-leaf-back" : "quote-leaf-front"}`} style={{ "--leaf-color": palette.leaf, "--leaf-ink": palette.ink } as CSSProperties}>
+export function QuoteLeaf({ quote, index, instance = "pile", blank = false }: { quote: FollyQuote; index: number; instance?: string; blank?: boolean }) {
+  const palette = index % 4, outline = outlines[index % outlines.length];
+  const id = `folly-${quote.id}-${instance}`, lettering = leafLettering(quote.text);
+  return <span className="quote-leaf" style={{ "--leaf-color": `var(--folly-leaf-${palette})`, "--leaf-ink": `var(--folly-ink-${palette})` } as CSSProperties}>
     <svg className="leaf-art" viewBox="0 0 640 400" aria-hidden="true" focusable="false">
       <defs>
-        <clipPath id={`${id}-clip`}><path d={outline} /></clipPath>
         <linearGradient id={`${id}-fold`} x1=".1" y1="0" x2=".6" y2="1">
-          <stop offset="0" stopColor="#FFF8ED" stopOpacity=".17" /><stop offset=".47" stopColor="#FFF8ED" stopOpacity="0" /><stop offset=".51" stopColor="#31031F" stopOpacity=".14" /><stop offset="1" stopColor="#31031F" stopOpacity=".03" />
+          <stop offset="0" stopColor="var(--folly-highlight)" stopOpacity=".17" /><stop offset=".47" stopColor="var(--folly-highlight)" stopOpacity="0" /><stop offset=".51" stopColor="var(--folly-depth)" stopOpacity=".14" /><stop offset="1" stopColor="var(--folly-depth)" stopOpacity=".03" />
         </linearGradient>
         <radialGradient id={`${id}-light`} className="leaf-edge-light" cx=".5" cy="0" r=".95">
-          <stop offset="0" stopColor="#FFF8ED" stopOpacity=".8" /><stop offset=".65" stopColor="var(--leaf-color)" stopOpacity=".25" /><stop offset="1" stopColor="var(--leaf-ink)" stopOpacity=".3" />
+          <stop offset="0" stopColor="var(--folly-highlight)" stopOpacity=".8" /><stop offset=".65" stopColor="var(--leaf-color)" stopOpacity=".25" /><stop offset="1" stopColor="var(--leaf-ink)" stopOpacity=".3" />
         </radialGradient>
       </defs>
+      {/* A vector cast avoids a filtered bitmap per leaf on mobile Safari. */}
+      <g className="leaf-shadow" transform="translate(0 10)" fill="var(--folly-depth)" stroke="var(--folly-depth)" strokeLinejoin="round" aria-hidden="true">
+        <path d={outline} strokeWidth="16" opacity=".025" /><path d={outline} strokeWidth="8" opacity=".045" /><path d={outline} strokeWidth="0" opacity=".12" />
+        <path d="M21 217 Q45 222 76 200" fill="none" strokeWidth="14" strokeLinecap="round" opacity=".12" />
+      </g>
       <path className="leaf-stem-depth" d="M21 221 Q45 222 76 200" />
       <path className="leaf-stem" d="M21 217 Q45 222 76 200" />
       <path className="leaf-thickness" d={outline} />
       <path className="leaf-body" d={outline} />
       <path d={outline} fill={`url(#${id}-fold)`} />
-      <g clipPath={`url(#${id}-clip)`}>
+      <g>
         <g className="leaf-veins" fill="none" strokeLinecap="round">{branches.map((path,i) => <path key={i} d={path} />)}</g>
         <path className="leaf-center-vein" d="M72 200 Q312 194 579 200" />
         <path className="leaf-vein-rim" d="M76 197 Q312 192 579 197" />
         <path className="leaf-tip-fold" d="M572 178 Q582 197 613 200 Q582 207 567 225 Q582 201 572 178Z" />
       </g>
       <path className="leaf-edge" d={outline} fill="none" stroke={`url(#${id}-light)`} />
-      {!reverse && !blank && <g className="leaf-lettering" fontSize={lettering.size} textAnchor="middle">
+      {!blank && <g className="leaf-lettering" fontSize={lettering.size} textAnchor="middle">
         {lettering.lines.map((lines,band) => <text key={band} x={leafTextArea.centerX} y={leafTextArea.centersY[band] - (lines.length-1)*lettering.lineHeight/2 + lettering.size*.33}>
           {lines.map((line,i) => <tspan key={i} x={leafTextArea.centerX} dy={i ? lettering.lineHeight : 0}>{line}</tspan>)}
         </text>)}

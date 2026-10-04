@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { usePreferences } from "@/components/site-preferences";
 import { follyQuotes } from "@/content/folly";
-import { makeLeafPile, pushLeaves, stepLeaves, leafPerspective, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
+import { makeLeafPile, pushLeaves, stepLeaves, leafProjection, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
 import { materialGeometryEvent } from "@/lib/material-light";
 
 type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect };
@@ -24,26 +24,26 @@ export function FollyPile() {
   function paint() {
     bodies.current.forEach((leaf, i) => {
       const button = buttons.current[i]; if (!button) return;
+      const projection=leafProjection(leaf);
       button.style.left = button.style.top = "0px";
-      button.style.transform = `translate3d(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px,${leaf.z.toFixed(2)}px) translate(-50%,-50%) rotateX(${leaf.rx.toFixed(2)}deg) rotateY(${leaf.ry.toFixed(2)}deg) rotateZ(${leaf.rz.toFixed(2)}deg) scale(${leaf.scale.toFixed(3)})`;
-      button.style.setProperty("--leaf-rz", String(leaf.rz));
-      button.style.setProperty("--leaf-rx", String(leaf.rx));
-      button.style.setProperty("--leaf-ry", String(leaf.ry));
-      button.style.setProperty("--leaf-scale", String(leaf.scale));
+      button.style.transform = `translate(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px) translate(-50%,-50%) matrix(${projection.a.toFixed(5)},${projection.b.toFixed(5)},${projection.c.toFixed(5)},${projection.d.toFixed(5)},0,0)`;
+      for (const [axis,value] of Object.entries(projection)) button.style.setProperty(`--leaf-${axis}`,String(value));
       button.style.setProperty("--leaf-lift", `${Math.max(0,leaf.z-leaf.base).toFixed(1)}px`);
-      button.style.zIndex = String(Math.round(leaf.z*100)+leaf.order);
+      // Whole blades occlude one another; altitude cannot split their faces.
+      button.style.zIndex = String(leaf.order);
     });
     window.dispatchEvent(new Event(materialGeometryEvent));
   }
   function animate(now: number) {
-    frame.current = 0; if (reducedRef.current) return;
+    frame.current = 0; if (reducedRef.current || dialog.current?.open || document.hidden) return;
     const moving = stepLeaves(bodies.current, Math.min((now - (last.current || now - 16.67)) / 1000, 1 / 30), bounds.current);
     last.current = now; paint();
     if (moving) frame.current = requestAnimationFrame(animate);
   }
-  function start() { if (!frame.current) { last.current = 0; frame.current = requestAnimationFrame(animate); } }
+  function start() { if (!frame.current && !dialog.current?.open && !document.hidden && !reducedRef.current) { last.current = 0; frame.current = requestAnimationFrame(animate); } }
   function openLeaf(index: number, source?: HTMLButtonElement) {
     if (exitTimer.current) clearTimeout(exitTimer.current);
+    cancelAnimationFrame(frame.current); frame.current=0; gesture.current=null;
     opener.current = source || buttons.current[index]; selectedRef.current=index; setSelected(index); setOutgoing(null); setTurn(value=>value+1);
     if (!dialog.current?.open) dialog.current?.showModal();
   }
@@ -53,7 +53,7 @@ export function FollyPile() {
     if (exitTimer.current) clearTimeout(exitTimer.current);
     setOutgoing(reducedRef.current ? null : previous); selectedRef.current=next;
     setSelected(next); setTurn(value=>value+1);
-    exitTimer.current=setTimeout(()=>setOutgoing(null),700);
+    exitTimer.current=setTimeout(()=>setOutgoing(null),950);
     // A boundary can hide the button that initiated this change. Keep focus
     // inside the native dialog instead of leaving it on an invisible control.
     const nav=document.activeElement?.getAttribute("data-leaf-nav");
@@ -93,8 +93,10 @@ export function FollyPile() {
       // A scrollbar/viewport resize must not freeze leaves in mid-flight.
       if (moving && !reducedRef.current) start();
     };
+    const visibility=()=>{ if(document.hidden){cancelAnimationFrame(frame.current);frame.current=0;}else start(); };
     const observer = new ResizeObserver(layout); observer.observe(element); layout();
-    return () => { observer.disconnect(); cancelAnimationFrame(frame.current); if (exitTimer.current) clearTimeout(exitTimer.current); };
+    document.addEventListener("visibilitychange",visibility);
+    return () => { observer.disconnect(); document.removeEventListener("visibilitychange",visibility); cancelAnimationFrame(frame.current); if (exitTimer.current) clearTimeout(exitTimer.current); };
   }, []);
   useEffect(() => {
     if (!reduced) return;
@@ -114,7 +116,7 @@ export function FollyPile() {
   return <>
     <p className="folly-label">notes I wrote to myself while writing</p>
     <span id="leaf-instructions" className="sr-only">Drag inside the pile to fluff and push the leaves. Click or tap a leaf to read it. With a leaf focused, arrow keys push it; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
-    <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions" style={{perspective:leafPerspective}}
+    <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
       onPointerDown={event => {
         if (reducedRef.current || !event.isPrimary || event.button !== 0) return;
         suppressClick.current = false;
@@ -133,14 +135,14 @@ export function FollyPile() {
               const moves: Record<string,[number,number]> = { ArrowLeft:[-20,0],ArrowRight:[20,0],ArrowUp:[0,-20],ArrowDown:[0,20] };
               const delta = moves[event.key], leaf = bodies.current[index]; if (!delta || !leaf) return;
               event.preventDefault(); pushLeaves(bodies.current, { x:leaf.x,y:leaf.y }, { x:leaf.x+delta[0],y:leaf.y+delta[1] }, .06, bounds.current); start();
-            }}><QuoteLeaf quote={entry} index={index} /><QuoteLeaf quote={entry} index={index} reverse /></button></li>;
+            }}><QuoteLeaf quote={entry} index={index} /></button></li>;
         })}
       </ol>
       <div className="folly-litter" aria-hidden="true">{Array.from({length:litterCount},(_,i)=><span key={i} className="pile-leaf" ref={element=>{buttons.current[follyQuotes.length+i]=element;}}>
-        <QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank /><QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank reverse />
+        <QuoteLeaf quote={follyQuotes[0]} index={i+1} instance={`litter-${i}`} blank />
       </span>)}</div>
     </div>
-    <dialog className="leaf-reader" ref={dialog} aria-label="A Word of Folly" onClose={() => { if (exitTimer.current) clearTimeout(exitTimer.current); setOutgoing(null); opener.current?.focus({ preventScroll: true }); }}
+    <dialog className="leaf-reader" ref={dialog} aria-label="A Word of Folly" onClose={() => { if (exitTimer.current) clearTimeout(exitTimer.current); setOutgoing(null); opener.current?.focus({ preventScroll: true }); start(); }}
       onKeyDown={event=>{
         const destination=event.key==="ArrowLeft" ? selectedRef.current-1 : event.key==="ArrowRight" ? selectedRef.current+1 : event.key==="Home" ? 0 : event.key==="End" ? follyQuotes.length-1 : null;
         if (destination!==null) {event.preventDefault(); changeLeaf(destination);}

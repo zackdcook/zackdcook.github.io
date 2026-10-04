@@ -13,7 +13,7 @@ export function PointerLight() {
     const surfaces = new Set<HTMLElement>();
     const visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
-    const leafSurfaces = new Map<HTMLElement, { gradient: SVGRadialGradientElement; width: number; height: number }>();
+    const leafSurfaces = new Map<HTMLElement, { gradient: SVGRadialGradientElement; shadow: SVGGElement | null; width: number; height: number; inPile: boolean }>();
     let x = -1000, y = -1000, lastMove = 0, released = false;
     let source: "mouse" | "tilt" = "mouse";
     let reference: TiltReading | null = null, tiltX = 0, tiltY = 0, significantX = 0, significantY = 0;
@@ -48,25 +48,18 @@ export function PointerLight() {
       const leaf = leafSurfaces.get(element);
       if (leaf) {
         const holder = element.parentElement;
-        const ax=parseFloat(holder?.style.getPropertyValue("--leaf-rx") || "0")*Math.PI/180;
-        const ay=parseFloat(holder?.style.getPropertyValue("--leaf-ry") || "0")*Math.PI/180;
-        const az=parseFloat(holder?.style.getPropertyValue("--leaf-rz") || "0")*Math.PI/180;
-        const scale = parseFloat(holder?.style.getPropertyValue("--leaf-scale") || "1");
+        const a=parseFloat(holder?.style.getPropertyValue("--leaf-a") || "1"), b=parseFloat(holder?.style.getPropertyValue("--leaf-b") || "0");
+        const c=parseFloat(holder?.style.getPropertyValue("--leaf-c") || "0"), d=parseFloat(holder?.style.getPropertyValue("--leaf-d") || "1");
         const lift = parseFloat(holder?.style.getPropertyValue("--leaf-lift") || "0");
-        const reverse=element.classList.contains("quote-leaf-back") ? -1 : 1;
-        const local=(vx:number,vy:number,vz:number) => {
-          const ry=vy*Math.cos(ax)+vz*Math.sin(ax), rz=-vy*Math.sin(ax)+vz*Math.cos(ax);
-          const rx=vx*Math.cos(ay)-rz*Math.sin(ay);
-          return {x:(rx*Math.cos(az)+ry*Math.sin(az))*reverse/scale,y:(-rx*Math.sin(az)+ry*Math.cos(az))/scale};
-        };
-        // Invert all three rotations, including the underside, so tumbling
-        // changes the material's angle without moving the shared light source.
-        const cast=local(light.shadowX,light.shadowY+lift*.12,0);
-        element.style.setProperty("--leaf-cast-x",px(cast.x));
-        element.style.setProperty("--leaf-cast-y",px(cast.y));
+        const determinant=a*d-b*c;
+        const local=(vx:number,vy:number) => ({x:(d*vx-c*vy)/determinant,y:(a*vy-b*vx)/determinant});
+        // Invert the exact flat projection used by the physics, so the cast
+        // moves opposite the shared light even on a gently banked blade.
+        const cast=local(light.shadowX,light.shadowY+lift*.12), units=640/Math.max(1,leaf.width);
+        leaf.shadow?.setAttribute("transform",`translate(${(cast.x*units).toFixed(2)} ${(cast.y*units).toFixed(2)})`);
         const dx = x - bounds.left - bounds.width / 2, dy = y - bounds.top - bounds.height / 2;
         const limit = (value: number) => Math.max(-1,Math.min(2,value));
-        const point=local(dx,dy,120);
+        const point=local(dx,dy);
         leaf.gradient.setAttribute("cx", String(limit(.5 + point.x / Math.max(1,leaf.width))));
         leaf.gradient.setAttribute("cy", String(limit(.5 + point.y / Math.max(1,leaf.height))));
       }
@@ -80,7 +73,8 @@ export function PointerLight() {
     }
     function resetSurface(element: HTMLElement) {
       element.style.setProperty("--light-strength", "0");
-      for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y", "--leaf-cast-x", "--leaf-cast-y"]) element.style.removeProperty(name);
+      for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y"]) element.style.removeProperty(name);
+      leafSurfaces.get(element)?.shadow?.setAttribute("transform","translate(0 10)");
     }
     function collect() {
       collectionFrame = 0;
@@ -92,7 +86,7 @@ export function PointerLight() {
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
         const gradient = element.classList.contains("quote-leaf") ? element.querySelector<SVGRadialGradientElement>(".leaf-edge-light") : null;
-        if (gradient) leafSurfaces.set(element, { gradient, width: 0, height: 0 });
+        if (gradient) leafSurfaces.set(element, { gradient, shadow: element.querySelector<SVGGElement>(".leaf-shadow"), width: 0, height: 0, inPile: Boolean(element.closest(".folly-ground")) });
         observer.observe(element); resize.observe(element);
       }
       // A stage label changing must not extinguish the light on every surface.
@@ -115,10 +109,12 @@ export function PointerLight() {
         x += (tiltX - x) * easing; y += (tiltY - y) * easing;
       }
       previousTime = now;
+      const readerOpen=Boolean(document.querySelector(".leaf-reader[open]"));
       if (dirty) {
         // Read all bounds together before writing any style. Re-measure after
         // scroll/resize/pointer motion, including moved ribbons and nested rails.
         for (const element of visible) {
+          if (readerOpen && leafSurfaces.get(element)?.inPile) continue;
           rectangles.set(element, element.getBoundingClientRect());
           const leaf = leafSurfaces.get(element);
           if (leaf) { leaf.width = element.clientWidth; leaf.height = element.clientHeight; }
@@ -126,6 +122,7 @@ export function PointerLight() {
         dirty = false;
       }
       for (const element of visible) {
+        if (readerOpen && leafSurfaces.get(element)?.inPile) continue;
         const bounds = rectangles.get(element);
         if (bounds) paint(element, bounds, intensity);
       }
@@ -185,7 +182,7 @@ export function PointerLight() {
     const settings = new MutationObserver(() => { syncTilt(); if (reduced()) reset(); else { dirty = true; start(); } });
     collect();
     changes.observe(document.body, { subtree: true, childList: true });
-    settings.observe(document.documentElement, { attributes: true, attributeFilter: ["data-effects", "data-theme", "data-tilt"] });
+    settings.observe(document.documentElement, { attributes: true, attributeFilter: ["data-effects", "data-theme", "data-timeline", "data-tilt"] });
     syncTilt(); coarse.addEventListener("change", syncTilt);
     window.addEventListener(recenterTiltEvent, recenter);
     window.addEventListener("pointermove", move, { passive: true });

@@ -1,66 +1,95 @@
-/* Floral-white ground, folded blades, and the site's shared material light. */
-.folly-page { background: #FFF8ED; color: #31031F; min-height: 80svh; padding: 54px 0 36px; }
-.folly-page .collection-heading { color: #31031F; }
+/* Palette ownership stays here; artwork, casts and reading surfaces all use
+   these tokens, including the browser's local felled timeline. */
+:root {
+  --folly-leaf-0: #E88F93; --folly-ink-0: #393313;
+  --folly-leaf-1: #393313; --folly-ink-1: #FFF8ED;
+  --folly-leaf-2: #31031F; --folly-ink-2: #E88F93;
+  --folly-leaf-3: #66693E; --folly-ink-3: #31031F;
+  --folly-ground: #FFF8ED; --folly-ground-ink: #31031F;
+  --folly-depth: #31031F; --folly-highlight: #FFF8ED;
+}
+html[data-timeline="felled"] {
+  --folly-leaf-0: var(--camel); --folly-ink-0: var(--coffee);
+  --folly-leaf-1: var(--chocolate); --folly-ink-1: var(--apricot-light);
+  --folly-leaf-2: var(--wine); --folly-ink-2: var(--apricot-light);
+  --folly-leaf-3: var(--apricot-light); --folly-ink-3: var(--wine);
+  --folly-ground: var(--apricot-light); --folly-ground-ink: var(--coffee);
+  --folly-depth: var(--coffee); --folly-highlight: var(--apricot-light);
+}
+.folly-page { background: var(--folly-ground); color: var(--folly-ground-ink); min-height: 80svh; padding: 54px 0 36px; }
+.folly-page .collection-heading { color: var(--folly-ground-ink); }
 .folly-page .page-intro { margin-bottom: 20px; }
-.folly-label { color: #393313; font: 400 16px/1.6 var(--sans); margin: 0; }
+.folly-label { color: var(--folly-ground-ink); font: 400 16px/1.6 var(--sans); margin: 0; }
 .folly-ground { position: relative; width: 100%; height: clamp(440px,62vw,720px); isolation: isolate; overflow: hidden; touch-action: none; margin-top: 12px; cursor: grab; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .folly-ground[data-dragging] { cursor: grabbing; }
 .folly-leaves { margin: 0; padding: 0; list-style: none; }
-.folly-leaves,.folly-leaves > li,.folly-litter { transform-style: preserve-3d; }
+.folly-leaves,.folly-leaves > li,.folly-litter { transform-style: flat; }
 .folly-leaves > li { position: static; }
-.pile-leaf { position: absolute; left: 0; top: 0; width: var(--pile-leaf-width,370px); aspect-ratio: 1.6; padding: 0; border: 0; background: transparent; cursor: grab; color: inherit; font: inherit; transform-style: preserve-3d; pointer-events: none; touch-action: none; }
+.pile-leaf { position: absolute; left: 0; top: 0; width: var(--pile-leaf-width,370px); aspect-ratio: 1.6; padding: 0; border: 0; background: transparent; cursor: grab; color: inherit; font: inherit; transform-style: flat; pointer-events: none; touch-action: none; }
 .pile-leaf .leaf-hit { pointer-events: fill; }
 .pile-leaf .leaf-art { pointer-events: none; }
-.pile-leaf:focus-visible { outline: 3px dashed #66693E; outline-offset: 8px; border-radius: 45%; z-index: 100000 !important; }
-.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; color: var(--leaf-ink); backface-visibility: hidden; -webkit-backface-visibility: hidden; transform: translateZ(.8px); }
-.leaf-art { display: block; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(var(--leaf-cast-x,0px) var(--leaf-cast-y,5px) calc(var(--shadow-blur,12px)*.42 + var(--leaf-lift,0px)*.035) #31031F38); }
-.leaf-thickness { fill: color-mix(in srgb,var(--leaf-color),#31031F 26%); stroke: color-mix(in srgb,var(--leaf-color),#31031F 26%); stroke-width: 4; stroke-linejoin: round; transform: translateY(2px); }
+.pile-leaf:focus-visible { outline: 3px dashed var(--leaf); outline-offset: 8px; border-radius: 45%; z-index: 100000 !important; }
+.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; color: var(--leaf-ink); }
+.leaf-art { display: block; width: 100%; height: 100%; overflow: visible; }
+.leaf-thickness { fill: color-mix(in srgb,var(--leaf-color),var(--folly-depth) 26%); stroke: color-mix(in srgb,var(--leaf-color),var(--folly-depth) 26%); stroke-width: 4; stroke-linejoin: round; transform: translateY(2px); }
 .leaf-body { fill: var(--leaf-color); }
 .leaf-edge { stroke-width: 2.5; stroke-linejoin: round; opacity: calc(.18 + var(--light-strength,0)*.72); }
 .leaf-stem,.leaf-stem-depth { stroke: var(--leaf-color); stroke-width: 8; fill: none; stroke-linecap: round; }
-.leaf-stem-depth { stroke: color-mix(in srgb,var(--leaf-color),#31031F 28%); stroke-width: 9; }
+.leaf-stem-depth { stroke: color-mix(in srgb,var(--leaf-color),var(--folly-depth) 28%); stroke-width: 9; }
 .leaf-veins { stroke: var(--leaf-ink); stroke-width: 1.4; opacity: .1; }
 .leaf-center-vein { stroke: var(--leaf-ink); stroke-width: 3; opacity: .18; fill: none; stroke-linecap: round; }
-.leaf-vein-rim { stroke: #FFF8ED; stroke-width: 1.2; opacity: .14; fill: none; stroke-linecap: round; }
+.leaf-vein-rim { stroke: var(--folly-highlight); stroke-width: 1.2; opacity: .14; fill: none; stroke-linecap: round; }
 .leaf-tip-fold { fill: var(--leaf-ink); opacity: .1; }
 .leaf-hit { fill: transparent; pointer-events: fill; }
 .leaf-lettering { font-family: var(--display); font-weight: 650; fill: var(--leaf-ink); pointer-events: none; }
-.quote-leaf-back { position: absolute; inset: 0; transform: rotateY(180deg) translateZ(.8px); }
-.quote-leaf-back .leaf-veins { opacity: .16; }
 .folly-ground-readable { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
 .folly-ground-readable .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
 .folly-ground-readable .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
 .folly-ground-readable .folly-litter { display: none; }
-.folly-ground-readable .quote-leaf-back { display: none; }
-.leaf-reader { width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: #31031F; background: #FFF8ED; border-radius: 28px; box-shadow: 0 18px 80px #31031F55; }
-.leaf-reader::backdrop { background: #31031F99; backdrop-filter: blur(5px); }
+.leaf-reader { width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: var(--folly-ground-ink); background: var(--folly-ground); border-radius: 28px; box-shadow: 0 18px 80px color-mix(in srgb,var(--folly-depth) 33%,transparent); }
+.leaf-reader::backdrop { background: color-mix(in srgb,var(--folly-depth) 60%,transparent); }
 .leaf-reader-content { position: relative; }
 .leaf-reader-close { display: block; margin-left: auto; }
-.reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.6; margin: 0 auto; perspective: 1600px; overflow: hidden; }
-.reader-leaf { position: absolute; inset: 0; width: 100%; transform-style: preserve-3d; }
-.leaf-reader[open] .reader-leaf-in { animation: leaf-fall-in .75s cubic-bezier(.17,.65,.3,1) both; }
-.leaf-reader[open] .reader-leaf-out { animation: leaf-fall-out .65s cubic-bezier(.38,.02,.78,.6) both; pointer-events: none; }
+.reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.6; margin: 0 auto; overflow: hidden; }
+.reader-leaf { position: absolute; inset: 0; width: 100%; transform-style: flat; }
+.leaf-reader[open] .reader-leaf-in { animation: leaf-fall-in 1.15s linear both, leaf-sway-in 1.15s ease-in-out both; }
+.leaf-reader[open] .reader-leaf-out { animation: leaf-fall-out .9s ease-in both, leaf-sway-out .9s ease-in-out both; pointer-events: none; }
 .leaf-reader-nav { display: grid; grid-template-columns: 44px minmax(0,1fr) auto minmax(0,1fr) 44px; align-items: center; gap: 12px; width: min(100%,560px); margin: 0 auto; font: 500 13px var(--sans); padding: 10px 0; }
 .leaf-reader-nav .button { justify-self: center; font-size: 14px; padding: 12px 20px; white-space: nowrap; min-height: 44px; }
 .leaf-reader-nav .leaf-reader-end { width: 44px; padding: 10px 0; }
 .leaf-reader-nav .button:disabled { opacity: .45; cursor: default; }
 .leaf-reader-count { white-space: nowrap; }
 body:has(.leaf-reader[open]) { overflow: hidden; }
+body:has(.leaf-reader[open]) .folly-ground { visibility: hidden; }
+/* A broadside, alternating traverse: steady descent, gentle banking, no
+   corkscrew or extra 3D layers. Only these two reader leaves can animate. */
 @keyframes leaf-fall-in {
-  0% { transform: translate3d(-7%,-115%,90px) rotateX(48deg) rotateY(-28deg) rotateZ(-18deg); opacity: 0; }
-  24% { transform: translate3d(5%,-70%,70px) rotateX(-20deg) rotateY(22deg) rotateZ(12deg); opacity: 1; }
-  58% { transform: translate3d(-2%,-24%,28px) rotateX(12deg) rotateY(-12deg) rotateZ(-6deg); }
-  82% { transform: translate3d(1%,-4%,8px) rotateX(-4deg) rotateY(4deg) rotateZ(2deg); }
-  100% { transform: none; opacity: 1; }
+  0% { translate: 0 -110%; opacity: 0; }
+  18% { opacity: 1; }
+  100% { translate: 0 0; opacity: 1; }
+}
+@keyframes leaf-sway-in {
+  0% { transform: translateX(7%) rotate(7deg) scale(.96); }
+  20% { transform: translateX(-7%) rotate(-6deg) scale(.97); }
+  45% { transform: translateX(6%) rotate(6deg) scale(.98); }
+  70% { transform: translateX(-4%) rotate(-4deg) scale(.99); }
+  87% { transform: translateX(1.5%) rotate(2deg); }
+  100% { transform: none; }
 }
 @keyframes leaf-fall-out {
-  0% { transform: none; opacity: 1; }
-  35% { transform: translate3d(5%,12%,30px) rotateX(-12deg) rotateY(20deg) rotateZ(12deg); opacity: 1; }
-  70% { transform: translate3d(-4%,62%,45px) rotateX(30deg) rotateY(-24deg) rotateZ(-16deg); opacity: .8; }
-  100% { transform: translate3d(8%,130%,-20px) rotateX(-36deg) rotateY(32deg) rotateZ(24deg); opacity: 0; }
+  0% { translate: 0 0; opacity: 1; }
+  60% { opacity: 1; }
+  100% { translate: 0 135%; opacity: 0; }
 }
-.journal-feature { background: #FFF8ED; color: #31031F; }
-.journal-feature .collection-heading { color: #31031F; }
+@keyframes leaf-sway-out {
+  0% { transform: none; }
+  25% { transform: translateX(-5%) rotate(-6deg); }
+  55% { transform: translateX(6%) rotate(7deg); }
+  80% { transform: translateX(-4%) rotate(-5deg); }
+  100% { transform: translateX(3%) rotate(4deg); }
+}
+.journal-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }
+.journal-feature .collection-heading { color: var(--folly-ground-ink); }
 .journal-feature .section-heading { padding-top: 0; margin-bottom: 40px; }
 .folly-latest { display: block; width: min(580px,100%); margin: 0 auto; text-decoration: none; }
 .folly-latest:focus-visible { border-radius: 45%; outline-offset: 8px; }
@@ -79,7 +108,7 @@ body:has(.leaf-reader[open]) { overflow: hidden; }
 html[data-effects="reduced"] .folly-ground { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
 html[data-effects="reduced"] .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
 html[data-effects="reduced"] .folly-leaves .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
-html[data-effects="reduced"] .folly-litter,html[data-effects="reduced"] .folly-ground .quote-leaf-back { display: none; }
+html[data-effects="reduced"] .folly-litter { display: none; }
 html[data-effects="reduced"] .leaf-reader[open] .reader-leaf { animation: none; }
 html[data-effects="reduced"] .reader-leaf-out { display: none; }
 @media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf { animation: none; } .reader-leaf-out { display: none; } }

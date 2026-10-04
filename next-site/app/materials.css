@@ -183,10 +183,6 @@ body .mobile-menu summary { color: var(--midnight); }
 .ring-layer.is-highlighted .ring-dots { opacity: 1; }
 
 /* Official silhouettes inherit the exact same ink as their button labels. */
-.social-icon { display: inline-block; width: 20px; height: 20px; flex: 0 0 20px; background: currentColor; -webkit-mask: var(--social-mark) center/contain no-repeat; mask: var(--social-mark) center/contain no-repeat; }
-.social-icon-instagram { --social-mark: url("/icons/instagram.svg"); }
-.social-icon-threads { --social-mark: url("/icons/threads.svg"); }
-.social-icon-linkedin { --social-mark: url("/icons/linkedin.svg"); }
 
 .appearance-options { border: 0; padding: 0; margin: 8px 0 24px; min-width: 0; }
 .appearance-options legend { font: 600 16px/1.4 var(--sans); margin-bottom: 12px; padding: 0; }

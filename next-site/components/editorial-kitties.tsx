@@ -200,6 +200,6 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
         </svg>
       </button>
     </div>
-    {escaped && !dismissed && <div className="cats-escaped" role="status"><p>The cats chased a shadow and got outside. Follow them?</p><div className="actions"><Link href="/tree" className="button">Yes</Link><button className="button" onClick={() => setDismissed(true)}>No</button></div></div>}
+    {escaped && !dismissed && <div className="cats-escaped" role="status"><p>Brave chased a shadow and got outside. Follow him?</p><div className="actions"><Link href="/tree" className="button">Yes</Link><button className="button" onClick={() => setDismissed(true)}>No</button></div></div>}
   </div>;
 }

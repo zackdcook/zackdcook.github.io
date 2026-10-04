@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { makeLeafPile, pushLeaves, stepLeaves, leafProjectedBounds, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
+import { makeLeafPile, pushLeaves, stepLeaves, leafProjectedBounds, leafProjection, leafBankLimit, type LeafBounds, type LeafBody } from "../lib/leaf-physics";
 import { leafLettering,leafTextArea,leafTextWidth } from "../lib/leaf-lettering";
 import entries from "../content/folly.json";
 
@@ -8,6 +8,9 @@ function inside(leaves: LeafBody[], bounds: LeafBounds) {
   for (const leaf of leaves) {
     const box=leafProjectedBounds(leaf,bounds);
     assert.ok(Object.values(leaf).every(Number.isFinite));
+    assert.ok(Math.abs(leaf.rx)<=leafBankLimit && Math.abs(leaf.ry)<=leafBankLimit,"banking must never flip a blade edge-on");
+    const {a,b,c,d}=leafProjection(leaf);
+    assert.ok(a*d-b*c>=leaf.scale*leaf.scale*.8,"the projected reading surface must remain front-facing and substantial");
     assert.ok(box.left>=-.02 && box.right<=bounds.width+.02,`horizontal cast escaped: ${JSON.stringify(box)}`);
     assert.ok(box.top>=-.02 && box.bottom<=bounds.height+.02,`vertical cast escaped: ${JSON.stringify(box)}`);
   }
@@ -24,7 +27,7 @@ test("a tap without travel leaves every blade undisturbed",()=>{
   assert.equal(pushLeaves(leaves,{x:180,y:240},{x:180,y:240},.1,bounds),false);
   assert.deepEqual(leaves,before);
 });
-test("a short phone stroke creates visible lift and out-of-plane tumbling",()=>{
+test("a short phone stroke creates visible lift and gentle banking",()=>{
   const bounds={width:337,height:480,leafWidth:148},mouse=makeLeafPile(1,bounds),touch=structuredClone(mouse);
   const start={x:touch[0].x,y:touch[0].y},end={x:start.x+28,y:start.y+12};
   pushLeaves(mouse,start,end,.07,bounds); pushLeaves(touch,start,end,.07,bounds,true);
@@ -37,7 +40,20 @@ test("a short phone stroke creates visible lift and out-of-plane tumbling",()=>{
     tilt=Math.max(tilt,Math.hypot(touch[0].rx,touch[0].ry));
     spin=Math.max(spin,Math.abs(touch[0].rz-rz));
   }
-  assert.ok(lift>30,`lift ${lift}`); assert.ok(tilt>35,`tilt ${tilt}`); assert.ok(spin>1,`spin ${spin}`);
+  assert.ok(lift>30,`lift ${lift}`); assert.ok(tilt>8,`tilt ${tilt}`); assert.ok(spin>1,`spin ${spin}`);
+});
+test("flight preserves whole-leaf paint order and projects identically anywhere in the frame",()=>{
+  const bounds={width:1000,height:720,leafWidth:300},leaves=makeLeafPile(7,bounds);
+  const leaf=leaves[0];
+  pushLeaves(leaves,{x:leaf.x,y:leaf.y},{x:leaf.x+70,y:leaf.y-30},.03,bounds);
+  const orders=leaves.map(item=>item.order);
+  for(let i=0;i<180;i++) {
+    stepLeaves(leaves,1/60,bounds);inside(leaves,bounds);
+    assert.deepEqual(leaves.map(item=>item.order),orders,"changing altitude must not reorder neighbours");
+    const here=leafProjectedBounds(leaf,bounds),elsewhere=leafProjectedBounds({...leaf,x:leaf.x+90,y:leaf.y-40},bounds);
+    assert.ok(Math.abs((elsewhere.left-here.left)-90)<.001);
+    assert.ok(Math.abs((elsewhere.bottom-here.bottom)+40)<.001);
+  }
 });
 test("repeated fast strokes keep all rotated silhouettes and shadows inside a phone frame",()=>{
   const bounds={width:337,height:480,leafWidth:148},leaves=makeLeafPile(30,bounds,7);
