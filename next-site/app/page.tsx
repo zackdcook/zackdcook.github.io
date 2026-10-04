@@ -96,9 +96,8 @@ export default async function Home() {
       <section id="words-of-folly" className="journal-feature shell section-space">
         <div className="section-heading"><CollectionHeading>Notes from my noggin</CollectionHeading></div>
         <Link className="folly-latest" href={`/journal#leaf-${latestFolly.id}`} aria-label={`Read the newest Word of Folly: ${latestFolly.text}`}>
-          <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} />
+          <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} instance="latest" />
         </Link>
-        <p className="folly-latest-caption">The newest leaf from my writing pile.</p>
         <div className="rail-more"><Link className="button button-outline" href="/journal">More Words of Folly</Link></div>
       </section>
 
