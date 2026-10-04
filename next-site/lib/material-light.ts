@@ -1,3 +1,5 @@
+export const materialGeometryEvent = "zack-material-geometry";
+
 export type SurfaceBounds = { left: number; top: number; width: number; height: number };
 
 /** A soft light above the page. Each surface casts away from that same source. */

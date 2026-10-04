@@ -6,7 +6,9 @@ import { ContentRail } from "@/components/content-rail";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
 import { CollectionHeading, InspirationHeading } from "@/components/collection-heading";
-import { displayDate, publishedJournalPosts } from "@/content/site";
+import { displayDate } from "@/content/site";
+import { follyQuotes, latestFolly } from "@/content/folly";
+import { QuoteLeaf } from "@/components/quote-leaf";
 import { getShoutouts } from "@/lib/community";
 import { getCommonplace } from "@/lib/commonplace";
 import editorial from "@/content/editorial.json";
@@ -19,7 +21,6 @@ export const metadata = { alternates: { canonical: "/" } };
 export default async function Home() {
   const [entries, events, shoutouts] = await Promise.all([getCommonplace(), getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
-  const posts = publishedJournalPosts().slice(0, 5);
   return (
     <>
       <section className="hero shell">
@@ -94,14 +95,10 @@ export default async function Home() {
 
       <section id="words-of-folly" className="journal-feature shell section-space">
         <div className="section-heading"><CollectionHeading>Notes from my noggin</CollectionHeading></div>
-        <ContentRail label="Recent Words of Folly" count={posts.length}>
-          {posts.map(post => <Link className="journal-banner" key={post.slug} href={`/journal/${post.slug}`}>
-            <time dateTime={post.date}>{displayDate(post.date)}</time>
-            <h3>{post.title}</h3><p>{post.excerpt}</p>
-            <span className="button card-button">Read more</span>
-          </Link>)}
-        </ContentRail>
-        <div className="rail-more"><Link className="button button-outline" href="/journal">Older rants and rambles</Link></div>
+        <Link className="folly-latest" href={`/journal#leaf-${latestFolly.id}`} aria-label={`Read the newest Word of Folly: ${latestFolly.text}`}>
+          <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} instance="latest" />
+        </Link>
+        <div className="rail-more"><Link className="button button-outline" href="/journal">More Words of Folly</Link></div>
       </section>
 
       <section id="inspo-board" className="commonplace-section section-space">
