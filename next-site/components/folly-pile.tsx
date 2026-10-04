@@ -56,8 +56,8 @@ export function FollyPile() {
     exitTimer.current=setTimeout(()=>setOutgoing(null),700);
     // A boundary can hide the button that initiated this change. Keep focus
     // inside the native dialog instead of leaving it on an invisible control.
-    const active=document.activeElement;
-    if ((next===0 && active?.getAttribute("data-leaf-nav")==="previous") || (next===follyQuotes.length-1 && active?.getAttribute("data-leaf-nav")==="new")) dialog.current?.querySelector<HTMLButtonElement>(".leaf-reader-close")?.focus({preventScroll:true});
+    const nav=document.activeElement?.getAttribute("data-leaf-nav");
+    if ((next===0 && (nav==="previous" || nav==="first")) || (next===follyQuotes.length-1 && (nav==="new" || nav==="last"))) dialog.current?.querySelector<HTMLButtonElement>(".leaf-reader-close")?.focus({preventScroll:true});
   }
   function move(event: PointerEvent<HTMLDivElement>) {
     const g = gesture.current; if (!g || g.id !== event.pointerId) return;
@@ -80,15 +80,18 @@ export function FollyPile() {
       const width = element.clientWidth, height = element.clientHeight;
       const leafWidth = Math.min(370, width * .44, height * .54);
       const previous = bounds.current;
+      let moving=false;
       bounds.current = { width, height, leafWidth };
       if (!bodies.current.length) bodies.current = makeLeafPile(follyQuotes.length+litterCount, bounds.current,follyQuotes.length);
       else {
         // Opening a reader changes the scrollbar gutter on some browsers.
         // Preserve the visitor's pile instead of creating it again.
         for (const leaf of bodies.current) { leaf.x *= width / Math.max(1,previous.width); leaf.y *= height / Math.max(1,previous.height); }
-        stepLeaves(bodies.current,0,bounds.current);
+        moving=stepLeaves(bodies.current,0,bounds.current);
       }
       element.style.setProperty("--pile-leaf-width", `${leafWidth}px`); paint();
+      // A scrollbar/viewport resize must not freeze leaves in mid-flight.
+      if (moving && !reducedRef.current) start();
     };
     const observer = new ResizeObserver(layout); observer.observe(element); layout();
     return () => { observer.disconnect(); cancelAnimationFrame(frame.current); if (exitTimer.current) clearTimeout(exitTimer.current); };
@@ -150,11 +153,11 @@ export function FollyPile() {
           <div key={`in-${turn}`} className="reader-leaf reader-leaf-in" role="img" aria-label={follyQuotes[selected].text}><QuoteLeaf quote={follyQuotes[selected]} index={selected} instance={`reader-${turn}`} /></div>
         </div>
         <div className="leaf-reader-nav">
-          <button className="button leaf-reader-end" aria-label="First leaf" title="first" disabled={selected===0} onClick={()=>changeLeaf(0)}>{"|<"}</button>
+          <button className="button leaf-reader-end" data-leaf-nav="first" aria-label="First leaf" title="first" disabled={selected===0} onClick={()=>changeLeaf(0)}>{"|<"}</button>
           <button className="button" data-leaf-nav="previous" style={{visibility:selected===0 ? "hidden" : undefined}} aria-hidden={selected===0 || undefined} tabIndex={selected===0 ? -1 : 0} disabled={selected===0} onClick={()=>changeLeaf(selected-1)}>previous</button>
           <span className="leaf-reader-count">{selected+1} of {follyQuotes.length}</span>
           <button className="button" data-leaf-nav="new" style={{visibility:selected===follyQuotes.length-1 ? "hidden" : undefined}} aria-hidden={selected===follyQuotes.length-1 || undefined} tabIndex={selected===follyQuotes.length-1 ? -1 : 0} disabled={selected===follyQuotes.length-1} onClick={()=>changeLeaf(selected+1)}>new leaf</button>
-          <button className="button leaf-reader-end" aria-label="Last leaf" title="last" disabled={selected===follyQuotes.length-1} onClick={()=>changeLeaf(follyQuotes.length-1)}>{">|"}</button>
+          <button className="button leaf-reader-end" data-leaf-nav="last" aria-label="Last leaf" title="last" disabled={selected===follyQuotes.length-1} onClick={()=>changeLeaf(follyQuotes.length-1)}>{">|"}</button>
         </div>
         <p className="sr-only" role="status" aria-live="polite" aria-atomic="true">Leaf {selected+1} of {follyQuotes.length}: {follyQuotes[selected].text}</p>
       </div>
