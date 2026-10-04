@@ -49,11 +49,13 @@ html[data-timeline="felled"] {
 .leaf-reader { width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: var(--folly-ground-ink); background: var(--folly-ground); border-radius: 28px; box-shadow: 0 18px 80px color-mix(in srgb,var(--folly-depth) 33%,transparent); }
 .leaf-reader::backdrop { background: color-mix(in srgb,var(--folly-depth) 60%,transparent); }
 .leaf-reader-content { position: relative; }
-.leaf-reader-close { display: block; margin-left: auto; }
-.reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.6; margin: 0 auto; overflow: hidden; }
-.reader-leaf { position: absolute; inset: 0; width: 100%; transform-style: flat; }
-.leaf-reader[open] .reader-leaf-in { animation: leaf-fall-in 1.15s linear both, leaf-sway-in 1.15s ease-in-out both; }
-.leaf-reader[open] .reader-leaf-out { animation: leaf-fall-out .9s ease-in both, leaf-sway-out .9s ease-in-out both; pointer-events: none; }
+.leaf-reader-close { display: block; position: relative; z-index: 3; margin-left: auto; }
+.reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.48; margin: 0 auto; overflow: clip; isolation: isolate; }
+.reader-leaf { position: absolute; inset: 4% 4% 8%; transform-style: flat; transform-origin: 50% 45%; pointer-events: none; }
+.reader-leaf-current { z-index: 2; }
+.reader-leaf-underneath { z-index: 1; transform: translate(-1.5%,4%) rotate(-5deg) scale(.98); transition: transform 180ms ease-out; }
+.leaf-reader[open] .reader-leaf-falling { animation: leaf-fall-in 1.45s linear both, leaf-bank-in 1.45s ease-in-out both; }
+.leaf-reader[open] .reader-leaf-retiring { animation: leaf-buried-away var(--leaf-retire-time,150ms) ease-out both; }
 .leaf-reader-nav { display: grid; grid-template-columns: 44px minmax(0,1fr) auto minmax(0,1fr) 44px; align-items: center; gap: 12px; width: min(100%,560px); margin: 0 auto; font: 500 13px var(--sans); padding: 10px 0; }
 .leaf-reader-nav .button { justify-self: center; font-size: 14px; padding: 12px 20px; white-space: nowrap; min-height: 44px; }
 .leaf-reader-nav .leaf-reader-end { width: 44px; padding: 10px 0; }
@@ -61,38 +63,32 @@ html[data-timeline="felled"] {
 .leaf-reader-count { white-space: nowrap; }
 body:has(.leaf-reader[open]) { overflow: hidden; }
 body:has(.leaf-reader[open]) .folly-ground { visibility: hidden; }
-/* A broadside, alternating traverse: steady descent, gentle banking, no
-   corkscrew or extra 3D layers. Only these two reader leaves can animate. */
+/* Each complete SVG banks in its own flat paint layer. Local perspective gives
+   depth without a shared 3D scene that could split intersecting blades. */
 @keyframes leaf-fall-in {
-  0% { translate: 0 -110%; opacity: 0; }
-  18% { opacity: 1; }
+  0% { translate: 0 min(-100svh,-140%); opacity: 0; }
+  20% { translate: 0 -92%; opacity: .15; }
+  42% { translate: 0 -42%; opacity: .9; }
+  68% { translate: 0 -13%; opacity: 1; }
+  87% { translate: 0 -2%; }
   100% { translate: 0 0; opacity: 1; }
 }
-@keyframes leaf-sway-in {
-  0% { transform: translateX(7%) rotate(7deg) scale(.96); }
-  20% { transform: translateX(-7%) rotate(-6deg) scale(.97); }
-  45% { transform: translateX(6%) rotate(6deg) scale(.98); }
-  70% { transform: translateX(-4%) rotate(-4deg) scale(.99); }
-  87% { transform: translateX(1.5%) rotate(2deg); }
-  100% { transform: none; }
+@keyframes leaf-bank-in {
+  0% { transform: perspective(1600px) translate3d(7%,0,100px) rotateX(18deg) rotateY(-20deg) rotateZ(11deg) scale(1.35); }
+  22% { transform: perspective(1600px) translate3d(-8%,0,75px) rotateX(-12deg) rotateY(18deg) rotateZ(-9deg) scale(1.22); }
+  46% { transform: perspective(1600px) translate3d(6%,0,45px) rotateX(10deg) rotateY(-14deg) rotateZ(7deg) scale(1.12); }
+  70% { transform: perspective(1600px) translate3d(-3%,0,20px) rotateX(-6deg) rotateY(8deg) rotateZ(-4deg) scale(1.05); }
+  88% { transform: perspective(1600px) translate3d(1%,0,5px) rotateX(3deg) rotateY(-3deg) rotateZ(1.5deg) scale(1.01); }
+  100% { transform: perspective(1600px) translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1); }
 }
-@keyframes leaf-fall-out {
-  0% { translate: 0 0; opacity: 1; }
-  60% { opacity: 1; }
-  100% { translate: 0 135%; opacity: 0; }
-}
-@keyframes leaf-sway-out {
-  0% { transform: none; }
-  25% { transform: translateX(-5%) rotate(-6deg); }
-  55% { transform: translateX(6%) rotate(7deg); }
-  80% { transform: translateX(-4%) rotate(-5deg); }
-  100% { transform: translateX(3%) rotate(4deg); }
+@keyframes leaf-buried-away {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 .journal-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }
 .journal-feature .collection-heading { color: var(--folly-ground-ink); }
 .journal-feature .section-heading { padding-top: 0; margin-bottom: 40px; }
-.folly-latest { display: block; width: min(580px,100%); margin: 0 auto; text-decoration: none; }
-.folly-latest:focus-visible { border-radius: 45%; outline-offset: 8px; }
+.folly-latest { display: block; width: min(580px,100%); margin: 0 auto; }
 @media (max-width:600px) {
   .folly-page { padding-top: 34px; }
   .journal-feature .section-heading { margin-bottom: 25px; }
@@ -110,5 +106,5 @@ html[data-effects="reduced"] .folly-leaves { display: grid; grid-template-column
 html[data-effects="reduced"] .folly-leaves .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
 html[data-effects="reduced"] .folly-litter { display: none; }
 html[data-effects="reduced"] .leaf-reader[open] .reader-leaf { animation: none; }
-html[data-effects="reduced"] .reader-leaf-out { display: none; }
-@media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf { animation: none; } .reader-leaf-out { display: none; } }
+html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
+@media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf { animation: none; } .reader-leaf-underneath { transition: none; } }
