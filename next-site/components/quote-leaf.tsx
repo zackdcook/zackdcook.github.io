@@ -4,8 +4,8 @@ import { leafLettering } from "@/lib/leaf-lettering";
 
 // Crop the original uploaded art in SVG and map its two inks to exact palette
 // values. Every leaf reuses the same cached PNG sheets.
-function PaletteFilter({ id, colors }: { id: string; colors: number[][] }) {
-  return <filter id={id} x="0" y="0" width="100%" height="100%" colorInterpolationFilters="sRGB">
+function PaletteFilter({ id, colors, crop }: { id: string; colors: number[][]; crop: number[] }) {
+  return <filter id={id} filterUnits="userSpaceOnUse" x={crop[0]} y={crop[1]} width={crop[2]} height={crop[3]} colorInterpolationFilters="sRGB">
     <feColorMatrix type="matrix" values=".638 2.146 .216 0 -.2 .638 2.146 .216 0 -.2 .638 2.146 .216 0 -.2 0 0 0 1 0" />
     <feComponentTransfer>
       <feFuncR type="discrete" tableValues={colors.map(color => color[0]/255).join(" ")} />
@@ -23,8 +23,8 @@ export function QuoteLeaf({ quote, index, instance = "pile", blank = false }: { 
     <svg className="leaf-art" viewBox="0 0 640 400" aria-hidden="true" focusable="false">
       <defs>
         <clipPath id={`${id}-crop`}><rect x={x} y={y} width={width} height={height} /></clipPath>
-        <PaletteFilter id={`${id}-living`} colors={[[57,51,19],[102,105,62]]} />
-        <PaletteFilter id={`${id}-felled`} colors={[[67,40,24],[153,88,42]]} />
+        <PaletteFilter id={`${id}-living`} crop={shape.crop} colors={[[57,51,19],[102,105,62]]} />
+        <PaletteFilter id={`${id}-felled`} crop={shape.crop} colors={[[67,40,24],[153,88,42]]} />
         <radialGradient id={`${id}-light`} className="leaf-edge-light" cx=".5" cy="0" r=".95">
           <stop offset="0" stopColor="var(--folly-highlight)" stopOpacity=".6" /><stop offset="1" stopColor="var(--folly-highlight)" stopOpacity="0" />
         </radialGradient>
