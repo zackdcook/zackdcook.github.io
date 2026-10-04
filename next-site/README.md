@@ -39,7 +39,7 @@ The braindump value, **35,834 words**, comes from the counter published on the o
 
 Words of Folly now contains short writing reminders in `content/folly.json`; append a quote there to update the leaf pile, latest-leaf homepage preview, and RSS. The former essay was removed and remains recoverable in Git history. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
 
-Navigation is Creative Works, Words of Folly, Inspo Board, About Me, and Find Me At…. The standing Write On, Lakeland! group appears on the homepage and Find Me At… page: Thursdays, 4–6 p.m. Eastern at Pressed Books & Coffee. Change its details in `content/site.ts`. Additional appearances show when dated entries are added. A newsletter button appears only if `NEXT_PUBLIC_SUBSCRIBE_URL` is a real subscription URL. No donation or payment service is connected.
+Navigation is Home, Creative Works, Events, About Me, Words of Folly, and Shoutouts. The Inspo Board is shelved; its original page, homepage section, menu entry, and sharing metadata are saved in [archive/inspo-board](archive/inspo-board/README.md). The standing Write On, Lakeland! group appears on the homepage and Find Me At… page: Thursdays, 4–6 p.m. Eastern at Pressed Books & Coffee. Change its details in `content/site.ts`. Additional appearances show when dated entries are added. A newsletter button appears only if `NEXT_PUBLIC_SUBSCRIBE_URL` is a real subscription URL. No donation or payment service is connected.
 
 ## Local preview
 
