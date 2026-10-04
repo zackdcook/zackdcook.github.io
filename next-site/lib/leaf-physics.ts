@@ -1,7 +1,7 @@
 export type LeafBody = { x: number; y: number; z: number; rx: number; ry: number; rz: number; scale: number; vx: number; vy: number; vz: number; wx: number; wy: number; wz: number; base: number; phase: number; order: number };
 export type LeafBounds = { width: number; height: number; leafWidth: number };
 export type LeafPoint = { x: number; y: number };
-export const leafPerspective = 1600;
+export const leafBankLimit = 26;
 const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 const radians = Math.PI / 180;
 
@@ -13,32 +13,34 @@ function randomFor(index: number) {
   return () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
 }
 
-/** Project the complete blade, stem and cast, including airborne XYZ rotation. */
-export function leafProjectedBounds(leaf: LeafBody, bounds: LeafBounds) {
+/** Orthographic banking keeps each blade in one paint layer. A shared CSS 3D
+ * scene lets intersecting planes split their lettering and strains iOS Safari.
+ * The same flat projection drives drawing, containment and surface lighting. */
+export function leafProjection(leaf: LeafBody) {
   const ax=leaf.rx*radians, ay=leaf.ry*radians, az=leaf.rz*radians;
   const cx=Math.cos(ax), sx=Math.sin(ax), cy=Math.cos(ay), sy=Math.sin(ay), cz=Math.cos(az), sz=Math.sin(az);
-  const halfWidth=bounds.leafWidth*leaf.scale/2, halfHeight=halfWidth/1.6;
+  const scale=leaf.scale*(1+Math.max(0,leaf.z-leaf.base)/1400);
+  return {a:cy*cz*scale,b:(sx*sy*cz+cx*sz)*scale,c:-cy*sz*scale,d:(cx*cz-sx*sy*sz)*scale};
+}
+/** Project the complete blade, stem and cast without a shared perspective. */
+export function leafProjectedBounds(leaf: LeafBody, bounds: LeafBounds) {
+  const {a,b,c,d}=leafProjection(leaf);
+  const halfWidth=bounds.leafWidth/2, halfHeight=halfWidth/1.6;
   let left=Infinity, right=-Infinity, top=Infinity, bottom=-Infinity;
   for (const dx of [-halfWidth,halfWidth]) for (const dy of [-halfHeight,halfHeight]) {
-    // CSS applies rotateZ, then rotateY, then rotateX to the local surface.
-    const u=dx*cz-dy*sz, v=dx*sz+dy*cz, q=-u*sy;
-    const x=u*cy, y=v*cx-q*sx, z=v*sx+q*cx;
-    const projection=leafPerspective/(leafPerspective-leaf.z-z);
-    const px=bounds.width/2+(leaf.x-bounds.width/2+x)*projection;
-    const py=bounds.height/2+(leaf.y-bounds.height/2+y)*projection;
+    const px=leaf.x+dx*a+dy*c, py=leaf.y+dx*b+dy*d;
     left=Math.min(left,px); right=Math.max(right,px); top=Math.min(top,py); bottom=Math.max(bottom,py);
   }
   const shadow=26+Math.max(0,leaf.z-leaf.base)*.13;
   return { left:left-shadow, right:right+shadow, top:top-shadow, bottom:bottom+shadow };
 }
 function containLeaf(leaf: LeafBody, bounds: LeafBounds) {
-  // Two small corrections account for corners at different perspective depths.
   for (let pass=0; pass<3; pass++) {
-    const box=leafProjectedBounds(leaf,bounds), projection=leafPerspective/(leafPerspective-leaf.z);
+    const box=leafProjectedBounds(leaf,bounds);
     const dx=box.left<0 ? -box.left : box.right>bounds.width ? bounds.width-box.right : 0;
     const dy=box.top<0 ? -box.top : box.bottom>bounds.height ? bounds.height-box.bottom : 0;
     if (!dx && !dy) break;
-    leaf.x+=dx/projection; leaf.y+=dy/projection;
+    leaf.x+=dx; leaf.y+=dy;
     if (dx && leaf.vx*dx<0) leaf.vx*=.15;
     if (dy && leaf.vy*dy<0) leaf.vy*=.15;
   }
@@ -78,20 +80,13 @@ export function pushLeaves(leaves: LeafBody[], from: LeafPoint, to: LeafPoint, e
     leaf.vy=clamp(leaf.vy+dy/distance*speed*grip*.24*gain,-650,650);
     leaf.z=Math.max(leaf.z,leaf.base+3);
     leaf.vz=Math.max(leaf.vz,Math.min(Math.sqrt(2*560*lift)*.9,(150+speed*.48)*grip*gain));
-    const turn=Math.min(460,speed/Math.max(140,bounds.leafWidth)*150)*grip;
+    const turn=Math.min(140,speed/Math.max(140,bounds.leafWidth)*70)*grip;
     leaf.wx=(dy/distance*.85+Math.sin(leaf.phase)*.45)*turn;
     leaf.wy=(-dx/distance*.9+Math.cos(leaf.phase)*.3)*turn;
-    leaf.wz=clamp(leaf.wz+(ox*dy-oy*dx)/Math.max(60,bounds.leafWidth)*grip*6+Math.sin(leaf.phase+dx/distance)*turn*.18,-300,300);
+    leaf.wz=clamp(leaf.wz+(ox*dy-oy*dx)/Math.max(60,bounds.leafWidth)*grip*3+Math.sin(leaf.phase+dx/distance)*turn*.18,-100,100);
     leaf.order=++order; containLeaf(leaf,bounds);
   }
   return touched;
-}
-function landingAngles(leaf: LeafBody) {
-  // Choose the nearest FRONT-up plane, even after a complete tumble. The
-  // unlettered underside is only exposed during flight, not left hiding notes.
-  const flatX=Math.round(leaf.rx/360)*360, flatY=Math.round(leaf.ry/360)*360;
-  const flippedX=Math.round((leaf.rx-180)/360)*360+180, flippedY=Math.round((leaf.ry-180)/360)*360+180;
-  return Math.abs(flatX-leaf.rx)+Math.abs(flatY-leaf.ry) <= Math.abs(flippedX-leaf.rx)+Math.abs(flippedY-leaf.ry) ? [flatX,flatY] : [flippedX,flippedY];
 }
 export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBounds) {
   const dt=clamp(elapsed,0,1/30);
@@ -108,21 +103,24 @@ export function stepLeaves(leaves: LeafBody[], elapsed: number, bounds: LeafBoun
       leaf.z+=leaf.vz*dt;
       const ceiling=leaf.base+Math.min(170,bounds.leafWidth*.58)*Math.sqrt(leaf.scale);
       if (leaf.z>ceiling) { leaf.z=ceiling; leaf.vz=Math.min(0,leaf.vz)*.2; }
-      leaf.wx=(leaf.wx+Math.sin(leaf.phase*10)*65*dt)*Math.exp(-.9*dt);
-      leaf.wy=(leaf.wy+Math.cos(leaf.phase*8)*55*dt)*Math.exp(-.9*dt);
+      // A flexible blade banks into the air, then rights itself. Never flip it
+      // edge-on or through a neighbour's paint layer.
+      leaf.wx=(leaf.wx+(-leaf.rx*16+Math.sin(leaf.phase*10)*22)*dt)*Math.exp(-3*dt);
+      leaf.wy=(leaf.wy+(-leaf.ry*16+Math.cos(leaf.phase*8)*18)*dt)*Math.exp(-3*dt);
       leaf.rx+=leaf.wx*dt; leaf.ry+=leaf.wy*dt;
     }
     let lean=0;
     if (leaf.z<=leaf.base || !airborne) {
       leaf.z=leaf.base; leaf.vz=0;
-      const [targetX,targetY]=landingAngles(leaf);
-      leaf.wx=(leaf.wx+(targetX-leaf.rx)*110*dt)*Math.exp(-18*dt);
-      leaf.wy=(leaf.wy+(targetY-leaf.ry)*110*dt)*Math.exp(-18*dt);
+      leaf.wx=(leaf.wx-leaf.rx*110*dt)*Math.exp(-18*dt);
+      leaf.wy=(leaf.wy-leaf.ry*110*dt)*Math.exp(-18*dt);
       leaf.rx+=leaf.wx*dt; leaf.ry+=leaf.wy*dt;
-      if (Math.abs(targetX-leaf.rx)<.08 && Math.abs(leaf.wx)<.1) { leaf.rx=targetX; leaf.wx=0; }
-      if (Math.abs(targetY-leaf.ry)<.08 && Math.abs(leaf.wy)<.1) { leaf.ry=targetY; leaf.wy=0; }
-      lean=Math.abs(targetX-leaf.rx)+Math.abs(targetY-leaf.ry);
+      if (Math.abs(leaf.rx)<.08 && Math.abs(leaf.wx)<.1) { leaf.rx=0; leaf.wx=0; }
+      if (Math.abs(leaf.ry)<.08 && Math.abs(leaf.wy)<.1) { leaf.ry=0; leaf.wy=0; }
+      lean=Math.abs(leaf.rx)+Math.abs(leaf.ry);
     }
+    if (Math.abs(leaf.rx)>leafBankLimit) { leaf.rx=clamp(leaf.rx,-leafBankLimit,leafBankLimit); leaf.wx*=.1; }
+    if (Math.abs(leaf.ry)>leafBankLimit) { leaf.ry=clamp(leaf.ry,-leafBankLimit,leafBankLimit); leaf.wy*=.1; }
     const drag=Math.exp(-(leaf.z>leaf.base ? 1.7 : 7)*dt);
     leaf.vx*=drag; leaf.vy*=drag; leaf.wz*=drag; leaf.rz+=leaf.wz*dt;
     containLeaf(leaf,bounds);
