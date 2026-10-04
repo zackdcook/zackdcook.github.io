@@ -6,6 +6,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
   if (process.env.SITE_LIVE !== "true" || process.env.VERCEL_ENV === "preview") return [];
   return shareRecords.map(({ path }) => ({
     url: `${site.url}${path}`,
-    changeFrequency: path === "/commonplace" ? "weekly" : "monthly",
+    changeFrequency: "monthly",
   }));
 }
