@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
-import { approachLight, materialLight } from "@/lib/material-light";
+import { approachLight, materialLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section,.quote-leaf-front";
 
 // One shared light: mouse on desktop, permission-gated orientation on phones.
 // Sensor readings never leave the browser or enter React's animation path.
@@ -13,6 +13,7 @@ export function PointerLight() {
     const surfaces = new Set<HTMLElement>();
     const visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
+    const leafSurfaces = new Map<HTMLElement, { gradient: SVGRadialGradientElement; width: number; height: number }>();
     let x = -1000, y = -1000, lastMove = 0, released = false;
     let source: "mouse" | "tilt" = "mouse";
     let reference: TiltReading | null = null, tiltX = 0, tiltY = 0, significantX = 0, significantY = 0;
@@ -44,6 +45,21 @@ export function PointerLight() {
       element.style.setProperty("--rim-x", px(light.rimX));
       element.style.setProperty("--rim-y", px(light.rimY));
       element.style.setProperty("--light-angle", `${Math.atan2(light.rimY, light.rimX) * 180 / Math.PI}deg`);
+      const leaf = leafSurfaces.get(element);
+      if (leaf) {
+        const holder = element.parentElement;
+        const angle = -(parseFloat(holder?.style.getPropertyValue("--leaf-rz") || "0")) * Math.PI / 180;
+        const scale = parseFloat(holder?.style.getPropertyValue("--leaf-scale") || "1");
+        const lift = parseFloat(holder?.style.getPropertyValue("--leaf-lift") || "0");
+        const c = Math.cos(angle), s = Math.sin(angle), sx = light.shadowX, sy = light.shadowY + lift * .12;
+        // Counter-rotate the cast so rotating a leaf does not rotate the sun.
+        element.style.setProperty("--leaf-cast-x", px((sx*c - sy*s) / scale));
+        element.style.setProperty("--leaf-cast-y", px((sx*s + sy*c) / scale));
+        const dx = x - bounds.left - bounds.width / 2, dy = y - bounds.top - bounds.height / 2;
+        const limit = (value: number) => Math.max(-1,Math.min(2,value));
+        leaf.gradient.setAttribute("cx", String(limit(.5 + (dx*c - dy*s) / Math.max(1,leaf.width*scale))));
+        leaf.gradient.setAttribute("cy", String(limit(.5 + (dx*s + dy*c) / Math.max(1,leaf.height*scale))));
+      }
       if (element.classList.contains("kitty-ribbon") && bounds.width) {
         element.style.setProperty("--ribbon-light-x", px(light.lightX * 640 / bounds.width));
         element.style.setProperty("--ribbon-light-y", px(light.lightY * 640 / bounds.width));
@@ -54,17 +70,19 @@ export function PointerLight() {
     }
     function resetSurface(element: HTMLElement) {
       element.style.setProperty("--light-strength", "0");
-      for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y"]) element.style.removeProperty(name);
+      for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y", "--leaf-cast-x", "--leaf-cast-y"]) element.style.removeProperty(name);
     }
     function collect() {
       collectionFrame = 0;
       const next = new Set(document.querySelectorAll<HTMLElement>(surfacesSelector));
       for (const element of surfaces) if (!next.has(element)) {
         observer.unobserve(element); resize.unobserve(element);
-        surfaces.delete(element); visible.delete(element); rectangles.delete(element);
+        surfaces.delete(element); visible.delete(element); rectangles.delete(element); leafSurfaces.delete(element);
       }
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
+        const gradient = element.classList.contains("quote-leaf-front") ? element.querySelector<SVGRadialGradientElement>(".leaf-edge-light") : null;
+        if (gradient) leafSurfaces.set(element, { gradient, width: 0, height: 0 });
         observer.observe(element); resize.observe(element);
       }
       // A stage label changing must not extinguish the light on every surface.
@@ -90,7 +108,11 @@ export function PointerLight() {
       if (dirty) {
         // Read all bounds together before writing any style. Re-measure after
         // scroll/resize/pointer motion, including moved ribbons and nested rails.
-        for (const element of visible) rectangles.set(element, element.getBoundingClientRect());
+        for (const element of visible) {
+          rectangles.set(element, element.getBoundingClientRect());
+          const leaf = leafSurfaces.get(element);
+          if (leaf) { leaf.width = element.clientWidth; leaf.height = element.clientHeight; }
+        }
         dirty = false;
       }
       for (const element of visible) {
@@ -163,6 +185,7 @@ export function PointerLight() {
     document.documentElement.addEventListener("pointerleave", release, { passive: true });
     document.addEventListener("scroll", geometry, { passive: true, capture: true });
     window.addEventListener("resize", geometry, { passive: true });
+    window.addEventListener(materialGeometryEvent, geometry, { passive: true });
     document.addEventListener("visibilitychange", visibility);
     return () => {
       reset(); cancelAnimationFrame(collectionFrame);
@@ -173,6 +196,7 @@ export function PointerLight() {
       window.removeEventListener("pointerup", release); window.removeEventListener("pointercancel", release);
       document.documentElement.removeEventListener("pointerleave", release);
       document.removeEventListener("scroll", geometry, true); window.removeEventListener("resize", geometry);
+      window.removeEventListener(materialGeometryEvent, geometry);
       document.removeEventListener("visibilitychange", visibility);
     };
   }, []);

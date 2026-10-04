@@ -1,20 +1,43 @@
 import type { CSSProperties } from "react";
 import { leafPalettes, type FollyQuote } from "@/content/folly";
 
-// A broad, softly serrated leaf: simple vector artwork, no external assets.
-const outline = "M51 332 C43 302 45 280 55 250 L86 263 L65 225 Q67 204 88 180 L117 194 L108 151 Q120 131 145 116 L169 139 L174 99 Q204 80 231 74 L250 100 L269 63 Q299 53 326 52 L337 82 L361 49 Q390 44 418 44 L425 72 L454 41 Q483 39 510 42 L510 65 L557 36 Q580 38 612 32 C589 71 583 90 565 113 L538 107 L551 135 Q535 160 510 179 L477 168 L482 201 Q459 227 425 242 L400 223 L390 259 Q359 279 329 286 L309 261 L291 299 Q260 311 226 313 L211 289 L181 323 Q149 335 118 331 L106 309 L84 337 Q66 337 51 332 Z";
-
-export function QuoteLeaf({ quote, index, reverse = false }: { quote: FollyQuote; index: number; reverse?: boolean }) {
-  const palette = leafPalettes[index % leafPalettes.length];
+// Four soft variations of the same simple leaf. Its vein is the reading axis.
+const outlines = [
+  "M66 200 C143 42 350 26 611 200 C414 372 201 363 66 200Z",
+  "M66 200 C166 48 399 67 611 200 C436 323 242 368 66 200Z",
+  "M66 200 C177 27 376 69 611 200 C447 365 222 327 66 200Z",
+  "M66 200 C136 62 335 25 611 200 C410 326 195 366 66 200Z",
+];
+function lettering(text: string) {
+  const words = text.split(" ");
+  let split = 1, score = Infinity;
+  for (let i = 1; i < words.length; i++) {
+    const difference = Math.abs(words.slice(0,i).join(" ").length - words.slice(i).join(" ").length);
+    if (difference < score) { score = difference; split = i; }
+  }
+  return [words.slice(0,split).join(" "), words.slice(split).join(" ")];
+}
+export function QuoteLeaf({ quote, index, reverse = false, instance = "pile" }: { quote: FollyQuote; index: number; reverse?: boolean; instance?: string }) {
+  const palette = leafPalettes[index % leafPalettes.length], outline = outlines[index % outlines.length];
+  const id = `folly-${quote.id}-${instance}-${reverse ? "back" : "front"}`, [above, below] = lettering(quote.text);
   return <span className={`quote-leaf ${reverse ? "quote-leaf-back" : "quote-leaf-front"}`} style={{ "--leaf-color": palette.leaf, "--leaf-ink": palette.ink } as CSSProperties}>
     <svg className="leaf-art" viewBox="0 0 640 400" aria-hidden="true" focusable="false">
-      <path className="leaf-stem" d="M25 366 Q36 346 64 324 L555 83" />
+      <defs>
+        <clipPath id={`${id}-leaf-clip`}><path d={outline} /></clipPath>
+        <radialGradient id={`${id}-leaf-light`} className="leaf-edge-light" cx=".5" cy="0" r=".95">
+          <stop offset="0" stopColor="var(--floral,#FFF8ED)" stopOpacity=".8" /><stop offset=".65" stopColor="var(--leaf-color)" stopOpacity=".25" /><stop offset="1" stopColor="var(--leaf-ink)" stopOpacity=".3" />
+        </radialGradient>
+      </defs>
+      <path className="leaf-stem" d="M25 205 Q44 211 77 200" />
+      <path className="leaf-thickness" d={outline} />
       <path className="leaf-body" d={outline} />
-      <g className="leaf-veins" fill="none" strokeLinecap="round">
-        <path d="M62 324 Q253 232 566 70" />
-        <path d="M124 294 Q118 229 145 149 M201 254 Q201 160 231 107 M282 214 Q291 132 326 79 M368 169 Q402 97 418 72 M455 126 Q492 73 510 65 M123 294 Q168 306 211 299 M201 254 Q241 276 284 281 M282 214 Q324 240 379 240 M368 169 Q408 204 460 190 M455 126 Q492 154 523 145" />
+      <path className="leaf-edge" d={outline} fill="none" stroke={`url(#${id}-leaf-light)`} />
+      <g className="leaf-veins" clipPath={`url(#${id}-leaf-clip)`} fill="none" strokeLinecap="round">
+        <path className="leaf-center-vein" d="M70 200 Q326 194 565 200" />
+        <path d="M170 199 Q135 145 127 131 M260 197 Q225 104 221 92 M364 197 Q337 105 323 83 M463 198 Q442 133 429 120 M170 199 Q150 260 144 282 M260 197 Q243 287 240 310 M364 197 Q354 276 349 308 M463 198 Q447 251 438 274" />
       </g>
+      <path className="leaf-hit" d={outline} />
     </svg>
-    {!reverse && <span className={`leaf-words ${quote.text.length > 40 ? "leaf-words-long" : ""}`}>{quote.text}</span>}
+    {!reverse && <span className={`leaf-lettering ${quote.text.length > 40 ? "leaf-lettering-long" : ""}`} aria-hidden="true"><span className="leaf-words leaf-words-above">{above}</span><span className="leaf-words leaf-words-below">{below}</span></span>}
   </span>;
 }
