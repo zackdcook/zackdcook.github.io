@@ -148,9 +148,9 @@ export function FollyPile() {
         // Capture at contact, before a long press can become a native gesture.
         event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId);
         gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect, leafIndex:leaf ? leafIndex : null, grip:leaf ? leafGrabPoint(leaf,point) : {x:0,y:0} };
-      }} onPointerMove={move} onPointerUp={release} onPointerCancel={release} onLostPointerCapture={release}
-      onContextMenu={event => { if (!reducedRef.current) event.preventDefault(); }}
-      onPointerLeave={event => { if (!gesture.current?.dragging) release(event); }}>
+      }} onPointerMove={move} onPointerUp={release} onPointerCancel={release}
+      onLostPointerCapture={event => { if (event.target === event.currentTarget) release(event); }}
+      onContextMenu={event => { if (!reducedRef.current) event.preventDefault(); }}>
       <ol className="folly-leaves" aria-label="Words of Folly, newest first">
         {[...follyQuotes].reverse().map((entry, position) => {
           const index = follyQuotes.length - 1 - position;
