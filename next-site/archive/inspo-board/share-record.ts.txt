@@ -1,0 +1,1 @@
+  { id: "commonplace", path: "/commonplace", title: "Further inspiration.", description: "Things Zack Cook wants to keep around: inspiration, photos, music, and interesting finds.", category: "Inspo Board" },
