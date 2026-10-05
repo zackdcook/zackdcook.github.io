@@ -125,7 +125,7 @@ export function SiteHeader() {
                 <span className="theme-toggle-knob" />
               </button>
 
-              <span className="theme-icon theme-moon" aria-hidden="true">☾</span>
+<span className="theme-icon theme-moon" aria-hidden="true">🌙</span>
             </div>
           </nav>
         </details>
