@@ -14,9 +14,9 @@ import { usePreferences } from "@/components/site-preferences";
  * 360ms means roughly one viewport every .36 seconds.
  * Very tall pages are capped so About Me doesn't take forever.
  */
-const MS_PER_VIEWPORT = 360;
-const MIN_DURATION = 650;
-const MAX_DURATION = 1800;
+const MS_PER_VIEWPORT = 180;
+const MIN_DURATION = 325;
+const MAX_DURATION = 900;
 
 export function OrganicTransition({
   children,
