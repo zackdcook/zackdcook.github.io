@@ -21,14 +21,35 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 }
 ::view-transition-image-pair(.leaf-share) { isolation: isolate; }
 ::view-transition-old(.leaf-share), ::view-transition-new(.leaf-share) { mix-blend-mode: normal; }
-::view-transition-new(.leaf-unfurl), ::view-transition-new(.leaf-reshape) {
+::view-transition-new(.leaf-unfurl) {
   animation: leaf-unfurl .64s cubic-bezier(.2,.72,.22,1) both;
   transform-origin: 12% 0;
   mix-blend-mode: normal;
 }
-::view-transition-old(.leaf-fold), ::view-transition-old(.leaf-reshape) {
+
+::view-transition-old(.leaf-fold) {
   animation: leaf-fold .32s cubic-bezier(.4,0,.8,.2) both;
   transform-origin: 88% 0;
+  mix-blend-mode: normal;
+}
+
+/* Page navigation:
+   new page grows down from the top while pushing the old page away. */
+::view-transition-image-pair(.leaf-reshape) {
+  isolation: isolate;
+  overflow: clip;
+}
+
+::view-transition-old(.leaf-reshape) {
+  z-index: 1;
+  animation: page-push-down .62s cubic-bezier(.22,.8,.22,1) both;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(.leaf-reshape) {
+  z-index: 2;
+  animation: page-grow-down .62s cubic-bezier(.22,.8,.22,1) both;
+  transform-origin: top center;
   mix-blend-mode: normal;
 }
 @keyframes leaf-unfurl {
@@ -41,6 +62,27 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
   0% { opacity: 1; transform: none; clip-path: inset(0 round 0); }
   100% { opacity: 0; transform: scale(.99,.975) rotate(.25deg); clip-path: inset(0 0 18% 4% round 8% 0 18% 12%); }
 }
+
+@keyframes page-grow-down {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes page-push-down {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100vh);
+  }
+}
+
 @keyframes little-secret { from { opacity: 0; } to { opacity: 1; } }
 html[data-effects="reduced"] { scroll-behavior: auto; }
 html[data-effects="reduced"]::view-transition-group(*), html[data-effects="reduced"]::view-transition-new(*), html[data-effects="reduced"]::view-transition-old(*) { animation: none !important; }
