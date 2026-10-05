@@ -18,7 +18,7 @@ export default function AboutMe() {
     knowsAbout: ["Fiction writing", "Industrial engineering", "Chemical engineering", "Lean Six Sigma"],
     sameAs: ["https://github.com/zackdcook", site.linkedin, site.instagram, site.threads],
   };
-  return <div className="shell page-wrap about-me-page">
+  return <div className="page-wrap about-me-page"><div className="shell">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
       "@context": "https://schema.org", "@type": "ProfilePage", mainEntity: person,
     }).replace(/</g, "\\u003c") }} />
@@ -29,7 +29,7 @@ export default function AboutMe() {
       </div>
       <div className="portrait-frame tactile-photo"><Image src="/images/portrait.webp" alt="Zack Cook" width={1200} height={1200} sizes="(max-width: 740px) 90vw, 40vw" priority /></div>
     </section>
-    <div className="prose about-story">
+    </div><section className="about-biography section-space"><div className="shell"><div className="prose about-story">
       <p>You may know me as Zack D. Cook, Zachary Cook, Zacky C, or even, one time, as accidentally written on a birthday cake, Zacak. But never Zach (I hate even writing it here)!</p>
       <p>By day, I’m an industrial engineer for Publix Manufacturing, classically trained as a chemical engineer at the University of Florida. During the times of dawn and dusk, I’m an aspiring author, self-taught. And at play, I’m a collector of hobbies.</p>
       <p>I grew up in Fort Myers, Florida to a wonderful family full of smarty-pants creatives. Most of my childhood revolved around LEGO, Pokemon, Star Wars—actually, no, I should say most of my <i>life</i>, because those interests persist to this day. Also classic 90&apos;s cartoons, of course! And you can&apos;t leave out Jurassic Park—my childhood dream was to dig up dinosaur bones. Now, I&apos;m an avid dinosaur-watcher (in the form of birds).</p>
@@ -39,5 +39,5 @@ export default function AboutMe() {
       <p>I get a lot of fulfillment out of my career, but I figured I needed a good creative outlet, so I took on the masochistic challenge of aspiring to be an author! Yay! And that leads us here. I&apos;m working to finish writing the rough draft of my first novel before the end of 2026, and then move on to revision early 2027. Stay tuned!</p>
     </div>
     <figure className="about-name-art"><div className="portrait-frame tactile-photo"><Image src="/images/name-doodles.webp" alt="A page of handwritten Zack Cook and Zacky C lettering" width={1200} height={1600} sizes="(max-width: 740px) 90vw, 520px" /></div></figure>
-  </div>;
+  </div></section></div>;
 }
