@@ -148,3 +148,12 @@ test("removed display settings cannot hide project content after a legacy prefer
   assert.deepEqual(Object.keys(preferences).sort(), ["compact", "reduceEffects", "theme", "tiltLighting"]);
   assert.equal(preferences.theme, "dark");
 });
+
+test("a tall card is fully illuminated at its edge, like a nearby control", () => {
+  const card = materialLight({ left: 100, top: 100, width: 800, height: 2200 }, 180, 125, 1);
+  const control = materialLight(button, 180, 125, 1);
+  assert.equal(card.strength, control.strength);
+  assert.equal(card.blur, control.blur);
+  const away = materialLight({ left: 100, top: 100, width: 800, height: 2200 }, -1500, 125, 1);
+  assert.equal(away.strength, 0);
+});
