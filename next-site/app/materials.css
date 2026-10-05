@@ -1065,7 +1065,7 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
  * This intentionally comes last so section-specific inherited button tokens
  * cannot turn buttons khaki on desktop hover.
  */
-@media (hover: hover) and (pointer: fine) {
+@media (any-hover: hover) {
   body :is(
     .button,
     .text-link,
