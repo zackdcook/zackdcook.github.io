@@ -13,14 +13,79 @@ html[data-compact="true"] .hero { padding-top: 40px; padding-bottom: 40px; }
 html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { padding: 24px; }
 .copyright-secret { animation: little-secret .3s ease both; }
 .loading-leaf { min-height: 35vh; color: var(--muted); }
-/* Shared objects keep their native geometry interpolation; the route content
-   opens from its anchored top edge, like a leaf spreading from a stem. */
-  ::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) {
-  animation-duration: 1.15s;
-  animation-timing-function: cubic-bezier(.45,0,.2,1);
+
+::view-transition {
+  background: var(--paper);
 }
-::view-transition-image-pair(.leaf-share) { isolation: isolate; }
-::view-transition-old(.leaf-share), ::view-transition-new(.leaf-share) { mix-blend-mode: normal; }
+/* -------------------------------------------------------------------------
+   PAGE-STACK ROUTE TRANSITION
+
+   Think of the incoming route as a complete page sitting immediately above
+   the current route. Both snapshots move downward together as one continuous
+   vertical stack until the incoming page occupies the viewport.
+   ------------------------------------------------------------------------- */
+
+::view-transition-group(.leaf-reshape) {
+  animation-duration: 1.05s;
+  animation-timing-function: cubic-bezier(.65, 0, .25, 1);
+}
+
+::view-transition-image-pair(.leaf-reshape) {
+  isolation: isolate;
+  overflow: visible;
+}
+
+/* The current page begins normally and travels one viewport downward. */
+::view-transition-old(.leaf-reshape) {
+  z-index: 1;
+  animation: page-stack-old 1.05s cubic-bezier(.65, 0, .25, 1) both;
+  mix-blend-mode: normal;
+}
+
+/* The destination begins exactly one viewport above its final position.
+   It travels downward by the exact same distance and at the exact same rate. */
+::view-transition-new(.leaf-reshape) {
+  z-index: 2;
+  animation: page-stack-new 1.05s cubic-bezier(.65, 0, .25, 1) both;
+  mix-blend-mode: normal;
+}
+
+@keyframes page-stack-old {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes page-stack-new {
+  from {
+    transform: translateY(-100vh);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Keep ordinary shared/enter/exit transitions available for things that
+   aren't a full route change. */
+::view-transition-group(.leaf-share) {
+  animation-duration: .64s;
+  animation-timing-function: cubic-bezier(.2,.72,.22,1);
+}
+
+::view-transition-image-pair(.leaf-share) {
+  isolation: isolate;
+}
+
+::view-transition-old(.leaf-share),
+::view-transition-new(.leaf-share) {
+  mix-blend-mode: normal;
+}
+
 ::view-transition-new(.leaf-unfurl) {
   animation: leaf-unfurl .64s cubic-bezier(.2,.72,.22,1) both;
   transform-origin: 12% 0;
@@ -33,64 +98,40 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
   mix-blend-mode: normal;
 }
 
-/* Page navigation:
-   the incoming page travels downward from the top while its leading edge
-   physically pushes the outgoing page toward the bottom of the viewport. */
-::view-transition-image-pair(.leaf-reshape) {
-  isolation: isolate;
-  overflow: clip;
-}
-
-::view-transition-old(.leaf-reshape) {
-  z-index: 1;
-  animation: page-push-down 1.15s cubic-bezier(.45,0,.2,1) both;
-  mix-blend-mode: normal;
-}
-
-::view-transition-new(.leaf-reshape) {
-  z-index: 2;
-  animation: page-slide-grow-down 1.15s cubic-bezier(.45,0,.2,1) both;
-  transform-origin: top center;
-  mix-blend-mode: normal;
-}
-
-@keyframes page-slide-grow-down {
+@keyframes leaf-unfurl {
   0% {
-    transform: translateY(-18vh);
-    clip-path: inset(0 0 100% 0);
+    opacity: .1;
+    transform: scale(.975,.96) rotate(-.35deg);
+    clip-path: inset(0 7% 32% 0 round 2px 18% 22% 3%);
   }
 
-  20% {
-    transform: translateY(-10vh);
-    clip-path: inset(0 0 82% 0);
+  24% {
+    opacity: 1;
   }
 
-  55% {
-    transform: translateY(-3vh);
-    clip-path: inset(0 0 42% 0);
+  65% {
+    transform: scale(.998,.995);
+    clip-path: inset(0 1% 4% 0 round 0 5% 8% 0);
   }
 
   100% {
-    transform: translateY(0);
-    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 round 0);
   }
 }
 
-@keyframes page-push-down {
+@keyframes leaf-fold {
   0% {
-    transform: translateY(0);
-  }
-
-  20% {
-    transform: translateY(18vh);
-  }
-
-  55% {
-    transform: translateY(58vh);
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 round 0);
   }
 
   100% {
-    transform: translateY(100vh);
+    opacity: 0;
+    transform: scale(.99,.975) rotate(.25deg);
+    clip-path: inset(0 0 18% 4% round 8% 0 18% 12%);
   }
 }
 
