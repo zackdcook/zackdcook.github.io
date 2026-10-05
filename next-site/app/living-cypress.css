@@ -34,7 +34,8 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 }
 
 /* Page navigation:
-   new page grows down from the top while pushing the old page away. */
+   the incoming page travels downward from the top while its leading edge
+   physically pushes the outgoing page toward the bottom of the viewport. */
 ::view-transition-image-pair(.leaf-reshape) {
   isolation: isolate;
   overflow: clip;
@@ -42,43 +43,53 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 
 ::view-transition-old(.leaf-reshape) {
   z-index: 1;
-    animation: page-push-down 1.15s cubic-bezier(.45,0,.2,1) both;
+  animation: page-push-down 1.15s cubic-bezier(.45,0,.2,1) both;
   mix-blend-mode: normal;
 }
 
 ::view-transition-new(.leaf-reshape) {
   z-index: 2;
-    animation: page-grow-down 1.15s cubic-bezier(.45,0,.2,1) both;
+  animation: page-slide-grow-down 1.15s cubic-bezier(.45,0,.2,1) both;
   transform-origin: top center;
   mix-blend-mode: normal;
 }
-@keyframes leaf-unfurl {
-  0% { opacity: .1; transform: scale(.975,.96) rotate(-.35deg); clip-path: inset(0 7% 32% 0 round 2px 18% 22% 3%); }
-  24% { opacity: 1; }
-  65% { transform: scale(.998,.995); clip-path: inset(0 1% 4% 0 round 0 5% 8% 0); }
-  100% { opacity: 1; transform: none; clip-path: inset(0 round 0); }
-}
-@keyframes leaf-fold {
-  0% { opacity: 1; transform: none; clip-path: inset(0 round 0); }
-  100% { opacity: 0; transform: scale(.99,.975) rotate(.25deg); clip-path: inset(0 0 18% 4% round 8% 0 18% 12%); }
-}
 
-@keyframes page-grow-down {
-  from {
+@keyframes page-slide-grow-down {
+  0% {
+    transform: translateY(-18vh);
     clip-path: inset(0 0 100% 0);
   }
 
-  to {
+  20% {
+    transform: translateY(-10vh);
+    clip-path: inset(0 0 82% 0);
+  }
+
+  55% {
+    transform: translateY(-3vh);
+    clip-path: inset(0 0 42% 0);
+  }
+
+  100% {
+    transform: translateY(0);
     clip-path: inset(0 0 0 0);
   }
 }
 
 @keyframes page-push-down {
-  from {
+  0% {
     transform: translateY(0);
   }
 
-  to {
+  20% {
+    transform: translateY(18vh);
+  }
+
+  55% {
+    transform: translateY(58vh);
+  }
+
+  100% {
     transform: translateY(100vh);
   }
 }
