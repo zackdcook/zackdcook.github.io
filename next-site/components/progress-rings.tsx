@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import progress from "@/content/progress.json";
+import { displayDate } from "@/content/site";
 import { progressRatio } from "@/lib/validation";
 
 const activeIndex = Math.max(0, progress.stages.findIndex(stage => stage.status === "active"));
@@ -20,7 +21,7 @@ function OrdinalText({ text }: { text: string }) {
 }
 
 function toneFor(index: number) {
-  if (index === 0) return "var(--soft-leaf)";
+  if (index === 0) return "var(--midnight)";
   const position = (index - 1) / Math.max(1, progress.stages.length - 2);
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
@@ -57,7 +58,6 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
   return <div
     ref={container}
     className={`progress-display ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
-    style={{ "--progress-hue": progress.ringColor } as CSSProperties}
   >
     <div className="progress-details">
       <ol className="stage-list">{progress.stages.map((item, index) => <li key={item.id}>
@@ -80,7 +80,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         {item.target && <span className="sr-only" role="progressbar" aria-label={item.label} aria-valuemin={0} aria-valuemax={item.target} aria-valuenow={Math.min(item.value, item.target)} aria-valuetext={`${number(item.value)} of ${number(item.target)} ${item.unit}`} />}
       </li>)}</ol>
     </div>
-    <div className="rings" onPointerLeave={() => setHovered(null)}>
+    <div className="progress-chart"><div className="rings" onPointerLeave={() => setHovered(null)}>
       <svg viewBox="0 0 320 320" aria-hidden="true">
         <defs>{progress.stages.map((item, index) => {
           const tone = toneFor(index);
@@ -131,7 +131,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           })()}</text>
         </g>
       </svg>
-    </div>
+    </div><p className="project-updated">Progress updated <time dateTime={progress.updated}>{displayDate(progress.updated)}</time></p></div>
     <div className="progress-note" aria-live="polite" aria-atomic="true">
       {progress.stages.map((item, index) => <div key={item.id} hidden={current !== index} aria-hidden={current !== index}>
         <h3><StageLabel label={item.label} /></h3>

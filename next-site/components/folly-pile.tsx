@@ -20,6 +20,7 @@ export function FollyPile() {
   const [selected, setSelected] = useState(follyQuotes.length - 1);
   const [reader, setReader] = useState<LeafReaderStack>(()=>createLeafReader(follyQuotes.length-1));
   const readerRef = useRef(reader);
+  const settlingPoses = useRef(new Map<number, CSSProperties>());
   reducedRef.current = reduced;
 
   function paint() {
@@ -46,6 +47,7 @@ export function FollyPile() {
   function updateReader(stack: LeafReaderStack) { readerRef.current=stack; setReader(stack); }
   function openLeaf(index: number, source?: HTMLButtonElement) {
     clearRetirement();
+    settlingPoses.current.clear();
     cancelAnimationFrame(frame.current); frame.current=0; gesture.current=null;
     opener.current = source || buttons.current[index]; selectedRef.current=index; setSelected(index);
     updateReader(createLeafReader(index,!reducedRef.current,readerRef.current.serial+1));
@@ -55,7 +57,19 @@ export function FollyPile() {
     const next=Math.max(0,Math.min(follyQuotes.length-1,index)), previous=selectedRef.current;
     if (next===previous) return;
     clearRetirement(); selectedRef.current=next; setSelected(next);
+    // Capture once at navigation time, including an interrupted landing. The
+    // old leaf settles from its visible pose instead of jumping to an angle.
+    const poses = new Map<number, CSSProperties>();
+    if (!reducedRef.current) for (const element of dialog.current?.querySelectorAll<HTMLElement>("[data-reader-key]") ?? []) {
+      const style = getComputedStyle(element);
+      poses.set(Number(element.dataset.readerKey), {
+        "--reader-from-transform": style.transform,
+        "--reader-from-translate": style.translate,
+        "--reader-from-opacity": style.opacity,
+      } as CSSProperties);
+    }
     const stack=requestReaderLeaf(readerRef.current,next,reducedRef.current);
+    settlingPoses.current = new Map([stack.underneath,stack.retiring].flatMap(layer => layer && poses.has(layer.key) ? [[layer.key,poses.get(layer.key)!] as const] : []));
     updateReader(stack);
     if (!reducedRef.current) retireTimer.current=setTimeout(()=>{retireTimer.current=null;updateReader(finishReaderFall(readerRef.current));},leafRetireMs);
     // A boundary can hide the button that initiated this change. Keep focus
@@ -131,7 +145,7 @@ export function FollyPile() {
       touchHold.current = null; touchArmed.current = false;
       delete element.dataset.grabReady;
     };
-    const cancel = () => { clearHold(); gesture.current = null; delete element.dataset.dragging; start(); };
+    const cancel = () => { clearHold(); gesture.current = null; suppressClick.current = true; delete element.dataset.dragging; start(); };
     const begin = (event: TouchEvent) => {
       if (reducedRef.current || event.touches.length !== 1) return;
       const hit = (event.target as Element).closest<HTMLElement>("[data-leaf-index]");
@@ -153,7 +167,7 @@ export function FollyPile() {
       const touch = Array.from(event.touches).find(t => t.identifier === g.id); if (!touch) return;
       const point = {x:touch.clientX-g.rect.left,y:touch.clientY-g.rect.top};
       if (!touchArmed.current) {
-        if (Math.hypot(point.x-g.origin.x,point.y-g.origin.y) > 8) cancel();
+        if (Math.hypot(point.x-g.origin.x,point.y-g.origin.y) > 12) cancel();
         return;
       }
       if (!event.cancelable) { cancel(); return; }
@@ -166,9 +180,9 @@ export function FollyPile() {
       if (g.dragging && g.leafIndex !== null) {
         const leaf = bodies.current[g.leafIndex]; leaf.vx *= .35; leaf.vy *= .35;
         suppressClick.current = true; if (event.cancelable) event.preventDefault(); start();
-      } else if (g.leafIndex !== null) {
-        suppressClick.current = true; if (event.cancelable) event.preventDefault(); openLeaf(g.leafIndex);
       }
+      // A tap uses the native button click. Only an actual held drag consumes
+      // touchend, so Safari can distinguish activation from ordinary scrolling.
     };
     element.addEventListener("touchstart",begin,{passive:true});
     element.addEventListener("touchmove",move,{passive:false});
@@ -192,9 +206,8 @@ export function FollyPile() {
   }, []);
 
   return <>
-    <p className="folly-label">stuff I write to myself while I write other stuff</p>
+    <p className="folly-label">Notes I leave myself while I write.</p>
     <span id="leaf-instructions" className="sr-only">Drag a leaf to arrange it. Drag from empty space into the pile to fluff and scatter the leaves. Click or tap a leaf to read it. On touch screens, swipe to scroll, or hold a leaf to pick it up. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
-    <p className="folly-touch-hint">Swipe to scroll. Hold a leaf to pick it up.</p>
     <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
       onPointerDown={event => {
         if (event.pointerType !== "mouse" || reducedRef.current || !event.isPrimary || event.button !== 0) return;
@@ -234,7 +247,7 @@ export function FollyPile() {
       <div className="leaf-reader-toolbar"><button className="button leaf-reader-close dialog-close" autoFocus aria-label="Close leaf" onClick={() => dialog.current?.close()}>×</button></div>
       <div className="leaf-reader-content">
         <div className="reader-leaf-stage">
-          {[reader.retiring,reader.underneath,reader.current].map(layer=>layer && <div key={layer.key}
+          {[reader.retiring,reader.underneath,reader.current].map(layer=>layer && <div key={layer.key} data-reader-key={layer.key} style={settlingPoses.current.get(layer.key)}
             className={`reader-leaf ${layer===reader.current ? `reader-leaf-current${layer.falling ? " reader-leaf-falling" : ""}` : layer===reader.retiring ? "reader-leaf-retiring" : "reader-leaf-underneath"}`}
             role={layer===reader.current ? "img" : undefined} aria-label={layer===reader.current ? follyQuotes[layer.index].text : undefined} aria-hidden={layer===reader.current ? undefined : true}>
             <QuoteLeaf quote={follyQuotes[layer.index]} index={layer.index} />

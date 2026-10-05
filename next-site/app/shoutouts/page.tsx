@@ -7,10 +7,11 @@ export const metadata: Metadata = pageMetadata("shoutouts", "Shoutouts");
 
 export default async function Shoutouts() {
   const shoutouts=await getShoutouts();
-  return <div className="shell page-wrap">
+  return <div className="shoutouts-page page-wrap"><div className="shell">
     <div className="page-intro">
+      <p className="eyebrow">Shoutouts</p>
       <h1>Cool peeps</h1>
     </div>
     <ShoutoutList people={shoutouts} />
-  </div>;
+  </div></div>;
 }
