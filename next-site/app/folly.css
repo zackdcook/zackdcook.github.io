@@ -35,7 +35,7 @@ body .folly-panel {
 .folly-ground-readable .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
 .folly-ground-readable .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
 .folly-ground-readable .folly-litter { display: none; }
-body .leaf-reader { --dialog-bg: var(--floral); --dialog-ink: var(--khaki); --button-bg: var(--leaf); --button-ink: var(--midnight); --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral); width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: var(--dialog-ink); background: var(--dialog-bg); border-radius: 28px; box-shadow: 0 18px 80px rgb(0 0 0 / .25); }
+body .leaf-reader { --dialog-bg: var(--floral); --dialog-ink: var(--khaki); --button-bg: var(--stage-bg); --button-ink: var(--midnight); --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral); width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: var(--dialog-ink); background: var(--dialog-bg); border-radius: 28px; box-shadow: 0 18px 80px rgb(0 0 0 / .25); }
 .leaf-reader::backdrop { background: rgb(0 0 0 / .12); }
 .leaf-reader-content { position: relative; }
 .leaf-reader-toolbar { position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; padding: 0 0 8px; background: var(--dialog-bg); isolation: isolate; }
@@ -124,7 +124,7 @@ body .folly-panel {
   background: var(--folly-card-bg);
   color: var(--folly-card-ink);
   border: 1px solid color-mix(in srgb,var(--folly-card-ink) 20%,transparent);
-  box-shadow: 0 12px 30px var(--shadow-color), inset 0 1px 0 var(--surface-edge);
+  box-shadow: var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow), inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--surface-edge), inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--surface-cut);
   --button-bg: var(--stage-bg);
   --button-ink: var(--stage-ink);
   --button-hover-bg: var(--selected-bg);
@@ -157,4 +157,12 @@ body .leaf-reader .leaf-reader-end { border-radius: 12px; }
 
 @media (max-width:600px) {
   body .folly-panel .folly-label { font-size: clamp(38px,12vw,58px); }
+}
+
+body .folly-page-heading {
+  font: 650 var(--feature-heading-size)/1.04 var(--display);
+  letter-spacing: -.04em;
+  color: var(--page-ink);
+  margin: 0;
+  max-width: 18ch;
 }
