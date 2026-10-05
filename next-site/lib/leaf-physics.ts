@@ -31,7 +31,7 @@ export function leafProjectedBounds(leaf: LeafBody, bounds: LeafBounds) {
     const px=leaf.x+dx*a+dy*c, py=leaf.y+dx*b+dy*d;
     left=Math.min(left,px); right=Math.max(right,px); top=Math.min(top,py); bottom=Math.max(bottom,py);
   }
-  const shadow=26+Math.max(0,leaf.z-leaf.base)*.13;
+  const shadow=10+Math.max(0,leaf.z-leaf.base)*.08;
   return { left:left-shadow, right:right+shadow, top:top-shadow, bottom:bottom+shadow };
 }
 function containLeaf(leaf: LeafBody, bounds: LeafBounds) {
