@@ -1108,9 +1108,9 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
 
   html[data-theme="light"]
   body .desktop-nav a:not([aria-current="page"]):hover {
-    --surface-bg: var(--coral);
-    background-color: var(--coral);
-    color: var(--midnight);
+    --surface-bg: var(--midnight);
+    background-color: var(--midnight);
+    color: var(--coral);
   }
 
   html[data-theme="dark"]
@@ -1128,5 +1128,47 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
   body .desktop-nav a[aria-current="page"]:hover {
     background-color: var(--selected-bg);
     color: var(--selected-ink);
+  }
+
+
+  /* ---------------------------------------------------------------
+     LIGHT MODE
+     Footer + Menu + dropdown navigation:
+     Midnight Violet with Light Coral text.
+     --------------------------------------------------------------- */
+
+  html[data-theme="light"]
+  body .site-footer .button:hover,
+  html[data-theme="light"]
+  body .mobile-menu summary:hover,
+  html[data-theme="light"]
+  body .mobile-menu nav a:hover {
+    --surface-bg: var(--midnight);
+    --button-hover-bg: var(--midnight);
+    --button-hover-ink: var(--coral);
+
+    background-color: var(--midnight);
+    color: var(--coral);
+  }
+
+
+  /* ---------------------------------------------------------------
+     DARK MODE
+     Footer + Menu + dropdown navigation:
+     Dark Khaki with Floral White text.
+     --------------------------------------------------------------- */
+
+  html[data-theme="dark"]
+  body .site-footer .button:hover,
+  html[data-theme="dark"]
+  body .mobile-menu summary:hover,
+  html[data-theme="dark"]
+  body .mobile-menu nav a:hover {
+    --surface-bg: var(--khaki);
+    --button-hover-bg: var(--khaki);
+    --button-hover-ink: var(--floral);
+
+    background-color: var(--khaki);
+    color: var(--floral);
   }
 }
