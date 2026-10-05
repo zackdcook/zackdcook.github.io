@@ -17,7 +17,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const project = getProject(slug);
   if (!project) notFound();
   return <div className="shell page-wrap">
-    <Link className="button button-small" href="/writing">Creative Works</Link>
+    <Link className="button button-small" href="/creativeworks">Creative Works</Link>
     <OrganicTransition name={`project-${project.slug}`}><section className="writing-panel project-detail-surface">
       <div className="page-intro"><p className="eyebrow">{project.category} · {project.status}</p><h1>{project.title}</h1><p>{project.summary}</p>{project.description.map(p => <p key={p}>{p}</p>)}</div>
       <ProgressRings compact />

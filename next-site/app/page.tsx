@@ -27,7 +27,7 @@ export default async function Home() {
           <p className="hero-intro">{editorial.home.intro}</p>
           {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
           <div className="actions">
-            <Link className="button" href="/writing">
+            <Link className="button" href="/creativeworks">
               Creative works
             </Link>
           </div>
@@ -61,7 +61,7 @@ export default async function Home() {
               Progress updated{" "}
               <time dateTime={progress.updated}>{displayDate(progress.updated)}</time>
             </p>
-            <Link className="button" href="/writing">
+            <Link className="button" href="/creativeworks">
               More deets
             </Link>
           </div>
@@ -69,7 +69,7 @@ export default async function Home() {
       </section>
 
       <section id="find-me-at" className="events-section shell">
-        <WritingGroupCard><div className="rail-more"><Link className="button" href="/events#other-events">Other events</Link></div></WritingGroupCard>
+        <WritingGroupCard><div className="rail-more"><Link className="button" href="/events">Other events</Link></div></WritingGroupCard>
       </section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
@@ -84,7 +84,7 @@ export default async function Home() {
             <sub className="identity-aside">no really // plz help // idk who I am</sub>
           </h2>
           {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-          <Link className="button" href="/about">
+          <Link className="button" href="/aboutme">
             A lil history
           </Link>
         </div>
@@ -97,7 +97,7 @@ export default async function Home() {
           <h2>Note to self:</h2>
         </div></div>
         <div className="folly-latest" role="img" aria-label={latestFolly.text}>
-          <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} instance="latest" />
+          <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} />
         </div>
         <div className="rail-more"><Link className="button button-outline" href="/journal">The whole pile</Link></div>
       </div></section>

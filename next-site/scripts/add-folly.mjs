@@ -12,6 +12,7 @@ const entries = JSON.parse(await readFile(file,"utf8"));
 const slug = text.normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"").slice(0,60) || "note";
 let id=slug, suffix=2;
 while(entries.some(entry=>entry.id===id)) id=`${slug}-${suffix++}`;
-entries.push({id,text:text.trim(),date,shape:randomInt(5)});
+const shapes = JSON.parse(await readFile(new URL("../content/leaf-shapes.json", import.meta.url),"utf8"));
+entries.push({id,text:text.trim(),date,shape:randomInt(shapes.length)});
 await writeFile(file,JSON.stringify(entries,null,2)+"\n");
 console.log(`Added leaf-${id}; its randomly chosen shape is saved with the note.`);

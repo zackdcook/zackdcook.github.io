@@ -30,14 +30,14 @@ Zack requires **no new spending**. The current Vercel project is on Hobby; no pa
 | Writing stages, word counts, goals, update date, ring colors | `content/progress.json` |
 | Commonplace photo captions, public contact address, events   | `content/site.ts`       |
 | Homepage introduction and section copy                       | `app/page.tsx`          |
-| Bio and profile information                                  | `app/about/page.tsx`    |
-| Writing description and future works                         | `app/writing/page.tsx`  |
+| Bio and profile information                                  | `app/aboutme/page.tsx`    |
+| Writing description and future works                         | `app/creativeworks/page.tsx`  |
 | Colors, typography, spacing                                  | `app/globals.css`       |
 | Photos                                                       | `public/images/`        |
 
 The braindump value, **35,834 words**, comes from the counter published on the original homepage. It is not a new word count of a manuscript. The draft is **27,250 / 50,000**. Revision has no invented target. Add more stages to the JSON to create more rings.
 
-Words of Folly now contains short writing reminders in `content/folly.json`; run `npm run add:folly -- "Your new note" YYYY-MM-DD` to update the leaf pile, latest-leaf homepage preview, and RSS. The command randomly chooses one of five supplied leaf shapes and saves its `shape` value with the entry; retain that value when editing the note. Direct additions to the JSON should also include a randomly chosen `shape` from 0 through 4. The former essay was removed and remains recoverable in Git history. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
+Words of Folly now contains short writing reminders in `content/folly.json`; run `npm run add:folly -- "Your new note" YYYY-MM-DD` to update the leaf pile, latest-leaf homepage preview, and RSS. The command randomly chooses one of four vector leaf shapes and saves its `shape` value with the entry; retain that value when editing the note. Direct additions to the JSON should also include a randomly chosen `shape` from 0 through 4. The former essay was removed and remains recoverable in Git history. Other first-person copy and photo captions are proposed drafts: review them for accuracy, voice, contact details, and what you want public. Add only actual profile links to the bio's `sameAs` list. Search metadata helps identify you; no search position can be guaranteed.
 
 Navigation is Home, Creative Works, Events, About Me, Words of Folly, and Shoutouts. The Inspo Board is shelved; its original page, homepage section, menu entry, and sharing metadata are saved in [archive/inspo-board](archive/inspo-board/README.md). The standing Write On, Lakeland! group appears on the homepage and Find Me At… page: Thursdays, 4–6 p.m. Eastern at Pressed Books & Coffee. Change its details in `content/site.ts`. Additional appearances show when dated entries are added. A newsletter button appears only if `NEXT_PUBLIC_SUBSCRIBE_URL` is a real subscription URL. No donation or payment service is connected.
 

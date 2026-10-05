@@ -5,7 +5,7 @@ const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 const advances = [.728,.696,.680,.776,.645,.603,.743,.824,.391,.507,.776,.615,.923,.763,.770,.680,.767,.737,.593,.681,.738,.721,1.065,.722,.683,.625,.528,.576,.492,.584,.501,.380,.540,.603,.298,.293,.585,.297,.901,.604,.557,.587,.571,.453,.462,.372,.589,.534,.812,.541,.542,.478,.659,.449,.602,.555,.611,.571,.609,.525,.609,.611,.196,.265,.272,.304,.539,.815,.513,.235,.186,.462,.467,.348,.346,.460,.265,.276,.362];
 const widths = new Map([...alphabet].map((character, index) => [character, advances[index]]));
 export const leafTextWidth = (text: string, size: number) => [...text].reduce((sum, character) => sum + (widths.get(character) ?? 1), 0) * size;
-export const leafTextArea = { width: 300, height: 162, centerX: 397, centerY: 206 };
+export const leafTextArea = { width: 300, height: 162, centerX: 320, centerY: 200 };
 
 function partition(words: string[], size: number, capacities: number[]) {
   const memo = new Map<string,{lines:string[];score:number}|null>();

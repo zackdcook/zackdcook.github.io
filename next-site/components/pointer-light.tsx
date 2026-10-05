@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { approachLight, materialLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section,.quote-leaf";
+const surfacesSelector = ".button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
 
 // One shared light: mouse on desktop, permission-gated orientation on phones.
 // Sensor readings never leave the browser or enter React's animation path.
@@ -13,7 +13,6 @@ export function PointerLight() {
     const surfaces = new Set<HTMLElement>();
     const visible = new Set<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
-    const leafSurfaces = new Map<HTMLElement, { gradient: SVGRadialGradientElement; shadow: SVGGElement | null; width: number; height: number; inPile: boolean }>();
     let x = -1000, y = -1000, lastMove = 0, released = false;
     let source: "mouse" | "tilt" = "mouse";
     let reference: TiltReading | null = null, tiltX = 0, tiltY = 0, significantX = 0, significantY = 0;
@@ -45,24 +44,6 @@ export function PointerLight() {
       element.style.setProperty("--rim-x", px(light.rimX));
       element.style.setProperty("--rim-y", px(light.rimY));
       element.style.setProperty("--light-angle", `${Math.atan2(light.rimY, light.rimX) * 180 / Math.PI}deg`);
-      const leaf = leafSurfaces.get(element);
-      if (leaf) {
-        const holder = element.parentElement;
-        const a=parseFloat(holder?.style.getPropertyValue("--leaf-a") || "1"), b=parseFloat(holder?.style.getPropertyValue("--leaf-b") || "0");
-        const c=parseFloat(holder?.style.getPropertyValue("--leaf-c") || "0"), d=parseFloat(holder?.style.getPropertyValue("--leaf-d") || "1");
-        const lift = parseFloat(holder?.style.getPropertyValue("--leaf-lift") || "0");
-        const determinant=a*d-b*c;
-        const local=(vx:number,vy:number) => ({x:(d*vx-c*vy)/determinant,y:(a*vy-b*vx)/determinant});
-        // Invert the exact flat projection used by the physics, so the cast
-        // moves opposite the shared light even on a gently banked blade.
-        const cast=local(light.shadowX,light.shadowY+lift*.12), units=640/Math.max(1,leaf.width);
-        leaf.shadow?.setAttribute("transform",`translate(${(cast.x*units).toFixed(2)} ${(cast.y*units).toFixed(2)})`);
-        const dx = x - bounds.left - bounds.width / 2, dy = y - bounds.top - bounds.height / 2;
-        const limit = (value: number) => Math.max(-1,Math.min(2,value));
-        const point=local(dx,dy);
-        leaf.gradient.setAttribute("cx", String(limit(.5 + point.x / Math.max(1,leaf.width))));
-        leaf.gradient.setAttribute("cy", String(limit(.5 + point.y / Math.max(1,leaf.height))));
-      }
       if (element.classList.contains("kitty-ribbon") && bounds.width) {
         element.style.setProperty("--ribbon-light-x", px(light.lightX * 640 / bounds.width));
         element.style.setProperty("--ribbon-light-y", px(light.lightY * 640 / bounds.width));
@@ -74,19 +55,16 @@ export function PointerLight() {
     function resetSurface(element: HTMLElement) {
       element.style.setProperty("--light-strength", "0");
       for (const name of ["--shadow-x", "--shadow-y", "--shadow-blur", "--rim-x", "--rim-y", "--cast-x", "--cast-y"]) element.style.removeProperty(name);
-      leafSurfaces.get(element)?.shadow?.setAttribute("transform","translate(0 10)");
     }
     function collect() {
       collectionFrame = 0;
       const next = new Set(document.querySelectorAll<HTMLElement>(surfacesSelector));
       for (const element of surfaces) if (!next.has(element)) {
         observer.unobserve(element); resize.unobserve(element);
-        surfaces.delete(element); visible.delete(element); rectangles.delete(element); leafSurfaces.delete(element);
+        surfaces.delete(element); visible.delete(element); rectangles.delete(element);
       }
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
-        const gradient = element.classList.contains("quote-leaf") ? element.querySelector<SVGRadialGradientElement>(".leaf-edge-light") : null;
-        if (gradient) leafSurfaces.set(element, { gradient, shadow: element.querySelector<SVGGElement>(".leaf-shadow"), width: 0, height: 0, inPile: Boolean(element.closest(".folly-ground")) });
         observer.observe(element); resize.observe(element);
       }
       // A stage label changing must not extinguish the light on every surface.
@@ -109,20 +87,15 @@ export function PointerLight() {
         x += (tiltX - x) * easing; y += (tiltY - y) * easing;
       }
       previousTime = now;
-      const readerOpen=Boolean(document.querySelector(".leaf-reader[open]"));
       if (dirty) {
         // Read all bounds together before writing any style. Re-measure after
         // scroll/resize/pointer motion, including moved ribbons and nested rails.
         for (const element of visible) {
-          if (readerOpen && leafSurfaces.get(element)?.inPile) continue;
           rectangles.set(element, element.getBoundingClientRect());
-          const leaf = leafSurfaces.get(element);
-          if (leaf) { leaf.width = element.clientWidth; leaf.height = element.clientHeight; }
         }
         dirty = false;
       }
       for (const element of visible) {
-        if (readerOpen && leafSurfaces.get(element)?.inPile) continue;
         const bounds = rectangles.get(element);
         if (bounds) paint(element, bounds, intensity);
       }

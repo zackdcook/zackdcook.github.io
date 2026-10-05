@@ -52,7 +52,8 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" scroll={false} onNavigate={goHome} className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={visiblePath === "/" ? "page" : undefined}>
-          <Image className="site-mark" src={site.icon} alt="" width={34} height={34} unoptimized />
+          <Image className="site-mark site-mark-living" src={site.homeIcon} alt="" width={34} height={34} unoptimized />
+          <Image className="site-mark site-mark-felled" src="/images/brand/home-felled.webp" alt="" width={34} height={34} unoptimized />
           Zack Cook
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
