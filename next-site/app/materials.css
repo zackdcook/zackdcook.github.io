@@ -1054,3 +1054,79 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
+/* -------------------------------------------------------------------------
+   FINAL DESKTOP HOVER PALETTE
+   ------------------------------------------------------------------------- */
+
+/*
+ * Ordinary controls, both themes:
+ * Midnight Violet face + Light Coral text.
+ *
+ * This intentionally comes last so section-specific inherited button tokens
+ * cannot turn buttons khaki on desktop hover.
+ */
+@media (hover: hover) and (pointer: fine) {
+  body :is(
+    .button,
+    .text-link,
+    .stage-button:not(:disabled),
+    .rail-controls button:not(:disabled),
+    .feed-copy button:not(:disabled),
+    .project-description-toggle:not(:disabled),
+    .preference-control
+  ):hover {
+    --surface-bg: var(--midnight);
+    --button-hover-bg: var(--midnight);
+    --button-hover-ink: var(--coral);
+
+    background-color: var(--midnight);
+    color: var(--coral);
+  }
+
+
+  /* ---------------------------------------------------------------
+     HEADER HOME BUTTON
+     Zack Cook always becomes Light Coral on hover.
+     --------------------------------------------------------------- */
+
+  body .site-header .home-tab:hover {
+    --surface-bg: var(--coral);
+    --button-hover-bg: var(--coral);
+    --button-hover-ink: var(--midnight);
+
+    background-color: var(--coral);
+    color: var(--midnight);
+  }
+
+
+  /* ---------------------------------------------------------------
+     DESKTOP FOLDER TABS
+
+     Light mode -> Light Coral
+     Dark mode  -> Dark Khaki
+     --------------------------------------------------------------- */
+
+  html[data-theme="light"]
+  body .desktop-nav a:not([aria-current="page"]):hover {
+    --surface-bg: var(--coral);
+    background-color: var(--coral);
+    color: var(--midnight);
+  }
+
+  html[data-theme="dark"]
+  body .desktop-nav a:not([aria-current="page"]):hover {
+    --surface-bg: var(--khaki);
+    background-color: var(--khaki);
+    color: var(--floral);
+  }
+
+
+  /*
+   * Keep the currently selected folder visually attached to its page.
+   * Hovering it should not make the active tab suddenly change material.
+   */
+  body .desktop-nav a[aria-current="page"]:hover {
+    background-color: var(--selected-bg);
+    color: var(--selected-ink);
+  }
+}
