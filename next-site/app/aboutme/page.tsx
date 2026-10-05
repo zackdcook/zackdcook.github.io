@@ -37,7 +37,7 @@ export default function AboutMe() {
       <p>I graduated top 10 from Estero High School in 2008, and then began my studies at UF. My original plan was to be a 3D animator, doing CGI stuff, but that wasn&apos;t an option at the time. So I went with what I was best at: math, science, chemistry... chemical engineering! It was also &quot;the toughest major&quot; so I, naturally, took on the challenge. I graduated cum laude in 2012. (Fun fact: this is where I met my wife, Jennifer)</p>
       <p>After UF, I went on to work for a bit on Siesta Key, then went mad and moved to Niagara Falls, NY because a couple of dudes wearing barrels at a recruiting event convinced me that their plant best knew how to party (they, in fact, <i>did</i> know how to party). I had a great time there but missed Florida, and my family, so I moved back after a few years. I&apos;ve been in Polk County ever since (pronounced &quot;Poke&quot;, if you&apos;re of the more-civilized class), and now work for Publix, which is such a great place to work!</p>
       <p>I get a lot of fulfillment out of my career, but I figured I needed a good creative outlet, so I took on the masochistic challenge of aspiring to be an author! Yay! And that leads us here. I&apos;m working to finish writing the rough draft of my first novel before the end of 2026, and then move on to revision early 2027. Stay tuned!</p>
-    </div>
-    <figure className="about-name-art"><div className="portrait-frame tactile-photo"><Image src="/images/name-doodles.webp" alt="A page of handwritten Zack Cook and Zacky C lettering" width={1200} height={1600} sizes="(max-width: 740px) 90vw, 520px" /></div></figure>
-  </div></section></div>;
+    </div></div></section>
+    <div className="about-name-art-band"><figure className="about-name-art shell"><div className="portrait-frame tactile-photo"><Image src="/images/name-doodles.webp" alt="A page of handwritten Zack Cook and Zacky C lettering" width={1200} height={1600} sizes="(max-width: 740px) 90vw, 520px" /></div></figure></div>
+  </div>;
 }
