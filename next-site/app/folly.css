@@ -121,10 +121,9 @@ html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
 }
 body .journal-feature { background: var(--folly-bg); color: var(--page-ink); }
 body .folly-panel {
-  background: var(--folly-card-bg);
+  background-color: var(--folly-card-bg);
   color: var(--folly-card-ink);
   border: 1px solid color-mix(in srgb,var(--folly-card-ink) 20%,transparent);
-  box-shadow: var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow), inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--surface-edge), inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--surface-cut);
   --button-bg: var(--stage-bg);
   --button-ink: var(--stage-ink);
   --button-hover-bg: var(--selected-bg);
@@ -160,9 +159,15 @@ body .leaf-reader .leaf-reader-end { border-radius: 12px; }
 }
 
 body .folly-page-heading {
-  font: 650 var(--feature-heading-size)/1.04 var(--display);
+  font: 650 var(--page-heading-size)/1.04 var(--display);
   letter-spacing: -.04em;
   color: var(--page-ink);
   margin: 0;
   max-width: 18ch;
 }
+
+body .folly-page .folly-panel { padding: 12px; }
+body .folly-page .page-intro { margin-bottom: var(--section-gap); }
+body .folly-page-heading em { color: var(--page-heading-accent); font-style: normal; }
+body .folly-page .folly-ground { margin-top: 0; }
+@media(max-width:740px) { body .folly-page .folly-panel { padding: 8px; } }

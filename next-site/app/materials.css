@@ -672,3 +672,80 @@ html[data-timeline="felled"] body .home-tab { --button-bg: var(--stage-bg); }
 body .shoutouts-page { background: var(--page-bg); color: var(--page-ink); }
 body .hero h1 { font-size: clamp(80px,9.8vw,136px); }
 @media(max-width:740px) { body .hero h1 { font-size: clamp(66px,19vw,106px); } }
+
+/* One material paint for every registered card, box and control. These three
+   properties intentionally override legacy face/state shorthand declarations;
+   colors and press depth remain controlled by the semantic state tokens. */
+body [data-material="surface"] {
+  background-image:
+    linear-gradient(var(--surface-bg),var(--surface-bg)),
+    radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),
+      color-mix(in srgb,var(--floral) calc(25% + var(--light-strength,0)*65%),var(--surface-bg)),
+      var(--material-cut) 90%) !important;
+  background-origin: padding-box,border-box;
+  background-clip: padding-box,border-box;
+  border: 1px solid transparent !important;
+  box-shadow:
+    calc(var(--shadow-x,0px)*var(--press-depth,1)) calc(var(--shadow-y,5px)*var(--press-depth,1)) calc(var(--shadow-blur,12px)*var(--press-depth,1)) var(--material-shadow),
+    inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge),
+    inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--material-cut) !important;
+}
+body .desk-section > .shell { --surface-bg: var(--active-bg); }
+body :is(.bio-section > .life-section,.about-biography > .shell) { --surface-bg: var(--bio-bg); }
+body .shoutouts-section > .shell { --surface-bg: var(--shoutouts-bg); }
+body :is(.event-callout,.writing-panel) { --surface-bg: var(--event-card-bg); }
+body .shoutout-card { --surface-bg: var(--shoutouts-card-bg); }
+body .folly-panel { --surface-bg: var(--folly-card-bg); }
+body .mobile-menu nav { --surface-bg: var(--page-bg); }
+body :is(.submission-panel,.signature-pad) { --surface-bg: var(--panel-bg); }
+body .tactile-photo { --surface-bg: var(--photo-frame); }
+
+/* Dark selected controls use the same khaki/white pair as the open Menu. */
+html[data-theme="dark"], html[data-timeline="felled"][data-theme="dark"] {
+  --selected-bg: var(--khaki); --selected-ink: var(--floral);
+  --nav-selected-bg: var(--khaki); --nav-selected-ink: var(--floral);
+  --chart-plate: color-mix(in srgb,var(--khaki) 60%,var(--midnight) 40%);
+  --progress-core: var(--khaki);
+  --progress-dark: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
+  --progress-hue: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
+  --progress-track: color-mix(in srgb,var(--leaf) 45%,var(--khaki) 55%);
+}
+body .stage-button[aria-pressed="true"] { --surface-bg: var(--selected-bg); }
+body .stage-button:not(:disabled):is(:hover,:active) { --surface-bg: var(--selected-bg); }
+body .desktop-nav a:not([aria-current="page"]) { --surface-bg: var(--button-bg); }
+
+/* One page display scale; only the last emphasized word carries the accent. */
+:root { --page-heading-size: clamp(80px,9.8vw,136px); --page-heading-accent: var(--leaf); --section-gap: 36px; }
+html[data-theme="dark"] { --page-heading-accent: var(--coral); }
+body :is(.page-intro h1:not(.page-label),.hero h1,.folly-page-heading) {
+  font: 650 var(--page-heading-size)/1.04 var(--display); letter-spacing: -.04em;
+}
+body .page-intro :is(h1,h2) em, body .hero h1 em { color: var(--page-heading-accent); font-style: normal; }
+body .creative-works-page .title-plain { color: var(--page-ink); }
+html[data-theme="dark"] body .events-page .page-intro > p:not(.eyebrow) { color: var(--floral); }
+
+/* The same clear gap above and below the footer divider and between cards. */
+body .page-wrap { padding-bottom: var(--section-gap); min-height: 0; }
+body .page-intro { margin-bottom: var(--section-gap); }
+body .hero { padding-bottom: var(--section-gap); }
+body :is(.desk-section,.events-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) {
+  margin-top: 0; padding-block: 0 var(--section-gap); border-bottom: 0;
+}
+body .about-biography { padding-top: var(--section-gap); }
+body .about-story { padding-bottom: 0; }
+body .about-name-art-band { padding-block: 0; }
+body .about-name-art { margin-bottom: 0; }
+body .creative-works-page .desk-section { padding-bottom: 0; }
+body .shoutout-list { gap: var(--section-gap); }
+body .site-footer { margin: 0; padding-top: var(--section-gap); border-top: 1px solid var(--line); }
+html[data-compact="true"] body :is(.section-space,.events-section,.desk-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) {
+  margin-top: 0; padding-block: 0 var(--section-gap);
+}
+html[data-compact="true"] body .about-biography { padding-top: var(--section-gap); }
+html[data-compact="true"] body .creative-works-page .desk-section { padding-bottom: 0; }
+@media(max-width:740px) {
+  :root { --page-heading-size: clamp(80px,22vw,112px); --section-gap: 30px; }
+}
+
+body :is(.calendar-dialog,.preferences-dialog,.signing-dialog,.leaf-reader) { --surface-bg: var(--dialog-bg); }
+body :is(.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section,.placement-controls) { --surface-bg: var(--panel-bg); }

@@ -1952,8 +1952,8 @@ body :is(.hero h1,.project-title,.writing-group h2:not(.section-label),.life-cop
 .events-section { background: var(--paper); padding-top: 64px; margin-top: 0; }
 .bio-section,.journal-feature,.shoutouts-section,.about-biography { margin-top: 0; padding-block: 80px; }
 .about-biography { margin-top: 72px; }
-.shoutouts-section { border-bottom: 1px solid var(--line); }
-body:has(#shoutouts) .site-footer { border-top: 0; margin-top: 0; }
+
+
 .shoutout-card { flex-direction: column; align-items: flex-start; }
 .shoutout-card h3 { overflow-wrap: anywhere; }
 .shoutout-card .button { margin-top: 12px; }
