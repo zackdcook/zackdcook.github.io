@@ -62,7 +62,7 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 
 @keyframes page-stack-new {
   from {
-    transform: translateY(-100vh);
+    transform: translateY(-100%);
   }
 
   to {
