@@ -38,7 +38,7 @@ html[data-timeline="felled"][data-theme="dark"] {
   --button-bg: var(--panel-button-bg); --button-ink: var(--panel-button-ink);
   --button-hover-bg: var(--khaki); --button-hover-ink: var(--floral);
 }
-:is(.desk-section,dialog) { --button-hover-bg: var(--leaf); }
+body :is(.desk-section,dialog) { --button-hover-bg: var(--leaf); }
 
 /* One external shadow, plus two shallow INSET bevels. Hover never increases
    elevation or introduces a second cast. Pointer updates stay untransitioned. */
