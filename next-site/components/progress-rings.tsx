@@ -20,7 +20,7 @@ function OrdinalText({ text }: { text: string }) {
 }
 
 function toneFor(index: number) {
-  if (index === 0) return "color-mix(in srgb, var(--progress-hue) 18%, var(--floral))";
+  if (index === 0) return "var(--soft-leaf)";
   const position = (index - 1) / Math.max(1, progress.stages.length - 2);
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
