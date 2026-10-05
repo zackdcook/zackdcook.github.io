@@ -617,9 +617,6 @@ h3 {
 .life-copy h2 {
   margin: 16px 0 24px;
 }
-.journal-feature .life-copy h2:not(.section-label) {
-  font-size: clamp(36px, 4.5vw, 58px);
-}
 .life-copy > p:not(.eyebrow) {
   color: var(--muted);
   font-size: 15px;
@@ -1356,9 +1353,6 @@ h3 {
   .life-copy h2 {
     font-size: 43px;
     margin-block: 15px 20px;
-  }
-  .journal-feature .life-copy h2:not(.section-label) {
-    font-size: 43px;
   }
   .life-copy h2 br {
     display: none;
