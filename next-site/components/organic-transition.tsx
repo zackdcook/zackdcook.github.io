@@ -46,24 +46,11 @@ export function OrganicTransition({
         const duration =
           (pageHeight / viewportHeight) * VIEWPORT_DURATION;
 
-        /*
-         * The old page only needs to travel one viewport before it is
-         * completely gone. This percentage tells its animation when
-         * that should happen relative to the complete incoming-page pan.
-         */
-        const oldExitPercent =
-          Math.min(100, (viewportHeight / pageHeight) * 100);
-
         const root = document.documentElement;
 
         root.style.setProperty(
           "--page-pan-duration",
           `${duration}ms`,
-        );
-
-        root.style.setProperty(
-          "--old-page-exit",
-          `${oldExitPercent}%`,
         );
       }
     }
