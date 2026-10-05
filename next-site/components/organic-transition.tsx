@@ -33,10 +33,10 @@ export function OrganicTransition({
 
   useLayoutEffect(() => {
     if (routeChange && name === "zacks-corner") {
-      const main = document.getElementById("main");
+      const pageSheet = document.getElementById("page-sheet");
       const header = document.querySelector<HTMLElement>(".site-header");
 
-      if (main) {
+      if (pageSheet) {
         /*
          * The sticky header remains stationary above the transition.
          * Its bottom edge becomes the top edge of our virtual page viewport.
@@ -56,7 +56,7 @@ export function OrganicTransition({
          * that the View Transition API snapshots.
          */
         const incomingPageHeight = Math.max(
-          main.getBoundingClientRect().height,
+          pageSheet.getBoundingClientRect().height,
           availableViewportHeight,
         );
 
