@@ -37,12 +37,15 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 }
 
 /*
- * View Transitions normally live above everything, including position:sticky.
- * Clip the transition at the exact bottom edge of the header so the moving
- * pages can never draw across Zack Cook / Menu.
+ * Keep the transition layer transparent over the stationary header.
+ * Only the moving route snapshots themselves are clipped below the
+ * measured header line.
  */
 ::view-transition {
-  background: var(--paper);
+  background: transparent;
+}
+
+::view-transition-group(.leaf-reshape) {
   clip-path:
     inset(
       var(--page-pan-top)
