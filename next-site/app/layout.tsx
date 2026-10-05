@@ -12,6 +12,7 @@ import "./folly.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
+import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { preferenceBootstrap } from "@/lib/preferences";
 
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     template: `%s · ${site.title}`,
   },
   description: site.description,
-  icons: { icon: site.icon, apple: site.icon },
+  icons: { icon: { url: site.icon, type: "image/svg+xml", sizes: "any" }, apple: { url: site.appleIcon, sizes: "180x180", type: "image/png" } },
   authors: [{ name: site.name }],
   openGraph: {
     type: "website",
@@ -71,6 +72,7 @@ export default function RootLayout({
         </a>
         <SitePreferences>
           <PointerLight />
+          <SiteIcons />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
           <OrganicTransition name="zacks-corner"><main id="main" tabIndex={-1}><Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense></main></OrganicTransition>
           <SiteFooter />

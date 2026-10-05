@@ -1946,3 +1946,24 @@ h1, h2, h3, .wordmark { text-shadow: none; }
   .collection-heading.inspiration-heading { font-size: 17px; }
   .calendar-dialog-content { padding: 24px; }
 }
+
+/* Gaps around full-width bands remain present with either spacing preference. */
+.events-section { padding-bottom: clamp(48px,6vw,80px); }
+html[data-compact="true"] .events-section { padding-bottom: 40px; }
+.events-page { padding-bottom: 72px; }
+.active-project-panel { gap: 30px; }
+.active-project-panel h2.section-label { font: 600 11px/1.4 var(--sans); margin: 0; }
+.active-project-panel .progress-note p { max-width: none; }
+.active-project-panel .project-updated { max-width: none; margin: 0; }
+.working-title { padding-block: 64px 32px; }
+.working-title h2 { margin-bottom: 18px; }
+.novel-title { font: 650 clamp(30px,4vw,48px)/1.2 var(--display); max-width: 920px; }
+.alternate-title { font-size: 16px; margin-top: 20px; }
+.about-story { padding-block: 72px; }
+.about-name-art { max-width: 520px; margin: 0 auto 40px; }
+.about-name-art img { width: 100%; height: auto; }
+@media (max-width:740px) {
+  .active-project-panel { padding: 28px; gap: 24px; }
+  .working-title { padding-top: 44px; }
+  .about-story { padding-block: 48px; }
+}
