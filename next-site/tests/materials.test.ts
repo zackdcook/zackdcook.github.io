@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { approachLight, materialLight } from "../lib/material-light";
+import { approachLight, materialLight, panelLight } from "../lib/material-light";
 import { createRibbon, dropRibbon, ribbonPaths, ribbonSpacing, stepRibbon } from "../lib/ribbon-physics";
 import { tiltLight } from "../lib/phone-tilt";
 import { normalizePreferences } from "../lib/preferences";
@@ -117,13 +117,13 @@ test("phone lighting centers on the comfortable pose and responds in every direc
   assert.deepEqual(tiltLight(neutral, neutral, 0, 400, 800), { x: 200, y: 400 });
   for (const [roll, pitch] of [[15, 0], [-15, 0], [0, 15], [0, -15], [15, 15], [-15, -15], [-15, 15], [15, -15]]) {
     const light = tiltLight({ beta: 55 + pitch, gamma: roll }, neutral, 0, 400, 800)!;
-    if (roll) assert.equal(Math.sign(light.x - 200), Math.sign(roll));
+    if (roll) assert.equal(Math.sign(light.x - 200), -Math.sign(roll));
     if (pitch) assert.equal(Math.sign(light.y - 400), -Math.sign(pitch));
   }
 });
 test("tilt handles landscape, angular wrap and malformed sensor readings", () => {
   const landscape = tiltLight({ beta: 20, gamma: 0 }, { beta: 0, gamma: 0 }, 90, 800, 400)!;
-  assert.ok(landscape.x > 400); assert.ok(Math.abs(landscape.y - 200) < .0001);
+  assert.ok(landscape.x < 400); assert.ok(Math.abs(landscape.y - 200) < .0001);
   const wrap = tiltLight({ beta: -179, gamma: 0 }, { beta: 179, gamma: 0 }, 0, 400, 800)!;
   assert.ok(wrap.y < 400 && wrap.y > 350);
   assert.equal(tiltLight({ beta: NaN, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 400, 800), null);
@@ -156,4 +156,25 @@ test("a tall card is fully illuminated at its edge, like a nearby control", () =
   assert.equal(card.blur, control.blur);
   const away = materialLight({ left: 100, top: 100, width: 800, height: 2200 }, -1500, 125, 1);
   assert.equal(away.strength, 0);
+});
+
+test("offscreen panel height cannot pin its lighting to the bottom edge", () => {
+  const bounds = { left: 20, top: -1200, width: 360, height: 3000 };
+  const panel = panelLight(bounds, 300, 600, 1, 800);
+  const visible = materialLight({ left: 20, top: 0, width: 360, height: 800 }, 300, 600, 1);
+  assert.equal(panel.shadowX, visible.shadowX);
+  assert.equal(panel.shadowY, visible.shadowY);
+  assert.ok(panel.shadowY < 0);
+  assert.equal(panel.lightY, 1800);
+  assert.deepEqual(panelLight(button, 180, 125, 1, 800), materialLight(button, 180, 125, 1));
+});
+
+test("panel bounds accept DOMRect-style prototype getters", () => {
+  class Rect {
+    get left() { return 20; } get top() { return -1200; }
+    get width() { return 360; } get height() { return 3000; }
+  }
+  const light = panelLight(new Rect(), 300, 600, 1, 800);
+  assert.ok(Object.values(light).every(Number.isFinite));
+  assert.ok(light.shadowY < 0);
 });
