@@ -15,6 +15,14 @@ export function SiteHeader() {
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
   const explicitHome = useRef(false);
+  const { update } = usePreferences();
+  const toggleTheme = () => {
+    const current =
+      document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+    update({
+      theme: current === "dark" ? "light" : "dark",
+    });
+  };
   // Only a deliberate Home navigation resets scroll. popstate clears this intent,
   // leaving Next/browser history restoration in charge of Back and Forward.
   useEffect(() => {
@@ -104,6 +112,18 @@ export function SiteHeader() {
                 {label}
               </Link>
             ))}
+
+            <button
+              type="button"
+              className="button mobile-theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle light and dark mode"
+            >
+              <span>Light / dark mode</span>
+              <span className="theme-toggle-track" aria-hidden="true">
+                <span className="theme-toggle-knob" />
+              </span>
+            </button>
           </nav>
         </details>
       </div>
