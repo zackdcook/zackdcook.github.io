@@ -182,12 +182,12 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
             {/* One continuous opaque satin field per face avoids patch seams.
                 The shared point light moves its very restrained warm sheen. */}
             <radialGradient id={`${id}-front-satin`} ref={frontSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
-              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(3% + var(--light-strength,0)*5%),var(--khaki))" />
-              <stop offset=".65" stopColor="var(--khaki)" /><stop offset="1" stopColor="var(--khaki)" />
+              <stop offset="0" stopColor="color-mix(in srgb,var(--ribbon-face-highlight) 82%,var(--ribbon-face-bg) 18%)" />
+              <stop offset=".65" stopColor="var(--ribbon-face-bg)" /><stop offset="1" stopColor="var(--ribbon-face-bg)" />
             </radialGradient>
             <radialGradient id={`${id}-back-satin`} ref={backSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
-              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(3% + var(--light-strength,0)*5%),var(--khaki))" />
-              <stop offset=".65" stopColor="var(--khaki)" /><stop offset="1" stopColor="var(--khaki)" />
+              <stop offset="0" stopColor="color-mix(in srgb,var(--ribbon-face-highlight) 82%,var(--ribbon-face-bg) 18%)" />
+              <stop offset=".65" stopColor="var(--ribbon-face-bg)" /><stop offset="1" stopColor="var(--ribbon-face-bg)" />
             </radialGradient>
             <filter id={`${id}-soft-shadow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur ref={blur} stdDeviation="2" /></filter>
           </defs>
