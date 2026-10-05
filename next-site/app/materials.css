@@ -545,6 +545,10 @@ body .project-title-prefix {
 }
 body .project-title > i {
   display: block;
+  color: var(--midnight);
+}
+
+html[data-theme="dark"] body .project-title > i {
   color: var(--floral);
 }
 
