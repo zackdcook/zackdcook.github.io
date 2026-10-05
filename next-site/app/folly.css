@@ -171,3 +171,15 @@ body .folly-page .page-intro { margin-bottom: var(--section-gap); }
 body .folly-page-heading em { color: var(--page-heading-accent); font-style: normal; }
 body .folly-page .folly-ground { margin-top: 0; }
 @media(max-width:740px) { body .folly-page .folly-panel { padding: 8px; } }
+/* The Words of Folly playground is part of the page itself, not a material card.
+   Leaves remain fully interactive, but the giant cursor-reactive box is gone. */
+body .folly-page .folly-panel {
+  --surface-bg: transparent;
+
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+
+  padding: 0;
+}
