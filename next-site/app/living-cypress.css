@@ -15,9 +15,9 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 .loading-leaf { min-height: 35vh; color: var(--muted); }
 /* Shared objects keep their native geometry interpolation; the route content
    opens from its anchored top edge, like a leaf spreading from a stem. */
-::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) {
-  animation-duration: .64s;
-  animation-timing-function: cubic-bezier(.2,.72,.22,1);
+  ::view-transition-group(.leaf-reshape), ::view-transition-group(.leaf-share) {
+  animation-duration: 1.15s;
+  animation-timing-function: cubic-bezier(.45,0,.2,1);
 }
 ::view-transition-image-pair(.leaf-share) { isolation: isolate; }
 ::view-transition-old(.leaf-share), ::view-transition-new(.leaf-share) { mix-blend-mode: normal; }
@@ -42,13 +42,13 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 
 ::view-transition-old(.leaf-reshape) {
   z-index: 1;
-  animation: page-push-down .62s cubic-bezier(.22,.8,.22,1) both;
+    animation: page-push-down 1.15s cubic-bezier(.45,0,.2,1) both;
   mix-blend-mode: normal;
 }
 
 ::view-transition-new(.leaf-reshape) {
   z-index: 2;
-  animation: page-grow-down .62s cubic-bezier(.22,.8,.22,1) both;
+    animation: page-grow-down 1.15s cubic-bezier(.45,0,.2,1) both;
   transform-origin: top center;
   mix-blend-mode: normal;
 }
