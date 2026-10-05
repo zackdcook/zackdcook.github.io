@@ -14,72 +14,147 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 .copyright-secret { animation: little-secret .3s ease both; }
 .loading-leaf { min-height: 35vh; color: var(--muted); }
 
-::view-transition {
-  background: var(--paper);
-}
 /* -------------------------------------------------------------------------
    PAGE-STACK ROUTE TRANSITION
 
-   React measures the incoming page and sets --page-pan-duration so every
-   route moves at the same physical pixels-per-second velocity.
+   One animated distance drives both page snapshots. This keeps the bottom
+   edge of the incoming page physically attached to the top edge of the
+   outgoing page even while the movement accelerates and decelerates.
    ------------------------------------------------------------------------- */
 
+@property --page-pan-y {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
 :root {
-  --page-pan-duration: 1.05s;
+  --page-pan-top: 75px;
+  --page-pan-viewport: calc(100vh - 75px);
+  --page-pan-distance: 100vh;
+  --page-pan-duration: 900ms;
+  --page-pan-y: 0px;
 }
 
+/*
+ * View Transitions normally live above everything, including position:sticky.
+ * Clip the transition at the exact bottom edge of the header so the moving
+ * pages can never draw across Zack Cook / Menu.
+ */
+::view-transition {
+  background: var(--paper);
+  clip-path:
+    inset(
+      var(--page-pan-top)
+      0
+      0
+      0
+    );
+}
+
+/*
+ * This is the ONE actual movement animation.
+ *
+ * Because --page-pan-y is inherited by both snapshots, old and new pages
+ * always use the exact same physical displacement at every instant.
+ */
 ::view-transition-group(.leaf-reshape) {
-  animation-duration: var(--page-pan-duration);
-  animation-timing-function: linear;
+  animation:
+    page-stack-distance
+    var(--page-pan-duration)
+    cubic-bezier(.42, 0, .18, 1)
+    both;
 }
 
+/*
+ * Blur the moving stack very slightly at speed, then return to perfect
+ * sharpness as it settles. Applying this to the pair keeps the seam intact.
+ */
 ::view-transition-image-pair(.leaf-reshape) {
   isolation: isolate;
   overflow: visible;
+
+  animation:
+    page-stack-blur
+    var(--page-pan-duration)
+    ease-in-out
+    both;
 }
 
 /*
- * The outgoing page moves exactly one viewport downward.
- *
- * Its duration is always one viewport's worth of our standard velocity:
- * 1.05 seconds. It therefore leaves at exactly the same physical speed
- * regardless of how tall the incoming page is.
+ * OLD PAGE
+
+ * It follows the shared distance until it has moved one available viewport.
+ * After that it simply remains below the screen while the incoming page
+ * continues its journey.
  */
 ::view-transition-old(.leaf-reshape) {
   z-index: 1;
-  animation:
-    page-stack-old 1.05s linear both;
+
+  animation: none;
+
+  transform:
+    translateY(
+      min(
+        var(--page-pan-y),
+        var(--page-pan-viewport)
+      )
+    );
+
   mix-blend-mode: normal;
 }
 
 /*
- * The incoming page begins with its bottom edge at the top of the viewport
- * and pans through its complete height at the measured constant velocity.
+ * NEW PAGE
+
+ * At --page-pan-y: 0px its bottom edge is exactly at the header line.
+ * At --page-pan-y: page height it has reached its normal final position.
  */
 ::view-transition-new(.leaf-reshape) {
   z-index: 2;
-  animation:
-    page-stack-new var(--page-pan-duration) linear both;
+
+  animation: none;
+
+  transform:
+    translateY(
+      calc(
+        var(--page-pan-y) -
+        var(--page-pan-distance)
+      )
+    );
+
   mix-blend-mode: normal;
 }
 
-@keyframes page-stack-old {
+@keyframes page-stack-distance {
   from {
-    transform: translateY(0);
+    --page-pan-y: 0px;
   }
 
   to {
-    transform: translateY(100vh);
+    --page-pan-y: var(--page-pan-distance);
   }
 }
 
-@keyframes page-stack-new {
-  from {
-    transform: translateY(-100%);
+@keyframes page-stack-blur {
+  0% {
+    filter: blur(0);
   }
 
-  to {
-    transform: translateY(0);
+  14% {
+    filter: blur(.45px);
+  }
+
+  50% {
+    filter: blur(.8px);
+  }
+
+  86% {
+    filter: blur(.45px);
+  }
+
+  100% {
+    filter: blur(0);
   }
 }
 
