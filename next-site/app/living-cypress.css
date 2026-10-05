@@ -20,14 +20,17 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 /* -------------------------------------------------------------------------
    PAGE-STACK ROUTE TRANSITION
 
-   Think of the incoming route as a complete page sitting immediately above
-   the current route. Both snapshots move downward together as one continuous
-   vertical stack until the incoming page occupies the viewport.
+   React measures the incoming page and sets --page-pan-duration so every
+   route moves at the same physical pixels-per-second velocity.
    ------------------------------------------------------------------------- */
 
+:root {
+  --page-pan-duration: 1.05s;
+}
+
 ::view-transition-group(.leaf-reshape) {
-  animation-duration: 1.05s;
-  animation-timing-function: cubic-bezier(.65, 0, .25, 1);
+  animation-duration: var(--page-pan-duration);
+  animation-timing-function: linear;
 }
 
 ::view-transition-image-pair(.leaf-reshape) {
@@ -35,18 +38,28 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
   overflow: visible;
 }
 
-/* The current page begins normally and travels one viewport downward. */
+/*
+ * The outgoing page moves exactly one viewport downward.
+ *
+ * Its duration is always one viewport's worth of our standard velocity:
+ * 1.05 seconds. It therefore leaves at exactly the same physical speed
+ * regardless of how tall the incoming page is.
+ */
 ::view-transition-old(.leaf-reshape) {
   z-index: 1;
-  animation: page-stack-old 1.05s cubic-bezier(.65, 0, .25, 1) both;
+  animation:
+    page-stack-old 1.05s linear both;
   mix-blend-mode: normal;
 }
 
-/* The destination begins exactly one viewport above its final position.
-   It travels downward by the exact same distance and at the exact same rate. */
+/*
+ * The incoming page begins with its bottom edge at the top of the viewport
+ * and pans through its complete height at the measured constant velocity.
+ */
 ::view-transition-new(.leaf-reshape) {
   z-index: 2;
-  animation: page-stack-new 1.05s cubic-bezier(.65, 0, .25, 1) both;
+  animation:
+    page-stack-new var(--page-pan-duration) linear both;
   mix-blend-mode: normal;
 }
 
