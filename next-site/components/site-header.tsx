@@ -82,6 +82,21 @@ export function SiteHeader() {
               {label}
             </Link>
           ))}
+
+          <div className="desktop-theme-control">
+            <span className="theme-icon theme-sun" aria-hidden="true">☀</span>
+
+            <button
+              type="button"
+              className="desktop-theme-toggle"
+              onClick={toggleTheme}
+              aria-label="Toggle light and dark mode"
+            >
+              <span className="theme-toggle-knob" />
+            </button>
+
+            <span className="theme-icon theme-moon" aria-hidden="true">🌙</span>
+          </div>
         </nav>
         <details
           className="mobile-menu"
