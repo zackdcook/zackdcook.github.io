@@ -38,10 +38,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       { source: "/index.html", destination: "/", permanent: true },
-      { source: "/bio.html", destination: "/about", permanent: true },
-      { source: "/about.html", destination: "/about", permanent: true },
-      { source: "/works.html", destination: "/writing", permanent: true },
-      { source: "/writing.html", destination: "/writing", permanent: true },
+      { source: "/writing", destination: "/creativeworks", permanent: true },
+      { source: "/about", destination: "/aboutme", permanent: true },
+      { source: "/bio.html", destination: "/aboutme", permanent: true },
+      { source: "/about.html", destination: "/aboutme", permanent: true },
+      { source: "/works.html", destination: "/creativeworks", permanent: true },
+      { source: "/writing.html", destination: "/creativeworks", permanent: true },
       { source: "/blog/index.html", destination: "/journal", permanent: true },
       { source: "/field-notes.html", destination: "/journal", permanent: true },
       {
@@ -49,7 +51,7 @@ const nextConfig: NextConfig = {
         destination: "/journal/its-not-too-late",
         permanent: true,
       },
-      { source: "/beta.html", destination: "/writing", permanent: false },
+      { source: "/beta.html", destination: "/creativeworks", permanent: false },
     ];
   },
 };
