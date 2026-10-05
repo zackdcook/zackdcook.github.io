@@ -12,6 +12,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   const { reduced } = usePreferences();
   const [escaped, setEscaped] = useState(false);
   const [dismissed, setDismissed] = useState(false);
+  const [secretReady, setSecretReady] = useState(!emptyPhoto);
   const svg = useRef<SVGSVGElement>(null);
   const surface = useRef<SVGGElement>(null);
   const edge = useRef<SVGPathElement>(null), shadow = useRef<SVGPathElement>(null), hit = useRef<SVGPathElement>(null);
@@ -128,8 +129,11 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   }
   return <div className="kitty-discovery">
     <div className="life-photo">
-      <div className="tactile-photo kitty-photo">
-        {escaped ? emptyPhoto ? <Image src={emptyPhoto} alt="A sunny window and cat tree, with two cats relaxing" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div> : <Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" />}
+      <div className="tactile-photo kitty-photo" data-escaped={escaped && secretReady ? "true" : undefined}>
+        <div className="kitty-photo-layer kitty-photo-original" aria-hidden={escaped && secretReady || undefined}><Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /></div>
+        <div className="kitty-photo-layer kitty-photo-secret" aria-hidden={!escaped || !secretReady}>
+          {emptyPhoto ? <Image src={emptyPhoto} alt="A sunny window and cat tree, with two cats relaxing" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" onLoad={() => setSecretReady(true)} /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div>}
+        </div>
       </div>
       <button ref={button} type="button" className="kitty-ribbon" aria-label="Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys." aria-describedby={`${id}-ribbon-label`}
         onPointerDown={event => {
@@ -178,12 +182,12 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
             {/* One continuous opaque satin field per face avoids patch seams.
                 The shared point light moves its very restrained warm sheen. */}
             <radialGradient id={`${id}-front-satin`} ref={frontSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
-              <stop offset="0" stopColor="color-mix(in srgb,var(--coral) calc(7% + var(--light-strength,0)*11%),var(--midnight))" />
-              <stop offset=".65" stopColor="color-mix(in srgb,var(--coral) 3%,var(--midnight))" /><stop offset="1" stopColor="var(--midnight)" />
+              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(3% + var(--light-strength,0)*5%),var(--khaki))" />
+              <stop offset=".65" stopColor="var(--khaki)" /><stop offset="1" stopColor="var(--khaki)" />
             </radialGradient>
             <radialGradient id={`${id}-back-satin`} ref={backSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460">
-              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(5% + var(--light-strength,0)*10%),var(--coral))" />
-              <stop offset=".65" stopColor="var(--coral)" /><stop offset="1" stopColor="color-mix(in srgb,var(--midnight) 6%,var(--coral))" />
+              <stop offset="0" stopColor="color-mix(in srgb,var(--floral) calc(3% + var(--light-strength,0)*5%),var(--khaki))" />
+              <stop offset=".65" stopColor="var(--khaki)" /><stop offset="1" stopColor="var(--khaki)" />
             </radialGradient>
             <filter id={`${id}-soft-shadow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur ref={blur} stdDeviation="2" /></filter>
           </defs>

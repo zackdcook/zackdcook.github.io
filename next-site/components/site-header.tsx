@@ -1,11 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { navigation } from "@/content/navigation";
-import { site } from "@/content/site";
 
 const links = navigation.map(({ title, href }) => [title, href]);
 
@@ -44,6 +42,17 @@ export function SiteHeader() {
     window.addEventListener("scroll", closeOnScroll, { passive: true });
     return () => window.removeEventListener("scroll", closeOnScroll);
   }, []);
+  useEffect(() => {
+    const dismissOutside = (event: Event) => {
+      if (menu.current?.open && event.target instanceof Node && !menu.current.contains(event.target)) menu.current.open = false;
+    };
+    document.addEventListener("pointerdown", dismissOutside);
+    document.addEventListener("focusin", dismissOutside);
+    return () => {
+      document.removeEventListener("pointerdown", dismissOutside);
+      document.removeEventListener("focusin", dismissOutside);
+    };
+  }, []);
   const current = (href: string) =>
     visiblePath === href || visiblePath.startsWith(`${href}/`)
       ? ("page" as const)
@@ -52,9 +61,11 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="header-inner">
         <Link href="/" scroll={false} onNavigate={goHome} className="wordmark home-tab" aria-label="Zack Cook, home" aria-current={visiblePath === "/" ? "page" : undefined}>
-          <Image className="site-mark site-mark-living" src={site.homeIcon} alt="" width={34} height={34} unoptimized />
-          <Image className="site-mark site-mark-felled" src="/images/brand/home-felled.webp" alt="" width={34} height={34} unoptimized />
-          Zack Cook
+          <svg className="site-mark" viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
+            <rect width="1280" height="1280" rx="200" fill="var(--midnight)" />
+            <path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="var(--coral)" />
+          </svg>
+          <span className="wordmark-name"><span className="wordmark-zack">Zack</span> <span className="wordmark-cook">Cook</span></span>
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
           {links.map(([label, href]) => (
