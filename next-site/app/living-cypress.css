@@ -56,16 +56,17 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 }
 
 /*
- * This is the ONE actual movement animation.
+ * One shared movement timeline drives both snapshots.
  *
- * Because --page-pan-y is inherited by both snapshots, old and new pages
- * always use the exact same physical displacement at every instant.
+ * 0–25%: gradual acceleration
+ * 25–75%: fast travel
+ * 75–100%: gradual deceleration
  */
 ::view-transition-group(.leaf-reshape) {
   animation:
     page-stack-distance
     var(--page-pan-duration)
-    cubic-bezier(.42, 0, .18, 1)
+    linear
     both;
 }
 
@@ -130,11 +131,22 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 }
 
 @keyframes page-stack-distance {
-  from {
+  0% {
     --page-pan-y: 0px;
+    animation-timing-function: cubic-bezier(.55, 0, .85, .45);
   }
 
-  to {
+  25% {
+    --page-pan-y: calc(var(--page-pan-distance) * .12);
+    animation-timing-function: cubic-bezier(.15, .65, .25, 1);
+  }
+
+  75% {
+    --page-pan-y: calc(var(--page-pan-distance) * .88);
+    animation-timing-function: cubic-bezier(.15, .55, .35, 1);
+  }
+
+  100% {
     --page-pan-y: var(--page-pan-distance);
   }
 }
@@ -144,16 +156,28 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
     filter: blur(0);
   }
 
-  14% {
-    filter: blur(.45px);
+  18% {
+    filter: blur(.35px);
   }
 
-  50% {
+  25% {
     filter: blur(.8px);
   }
 
-  86% {
-    filter: blur(.45px);
+  38% {
+    filter: blur(1.8px);
+  }
+
+  62% {
+    filter: blur(1.8px);
+  }
+
+  75% {
+    filter: blur(.8px);
+  }
+
+  88% {
+    filter: blur(.35px);
   }
 
   100% {
