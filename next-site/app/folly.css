@@ -94,7 +94,7 @@ body:has(.leaf-reader[open]) { overflow: hidden; }
   .folly-ground { height: min(64svh,540px); min-height: 400px; }
   .folly-ground-readable { height: auto; min-height: 0; }
   .folly-ground-readable .folly-leaves { gap: 24px; }
-  body .leaf-reader { --dialog-bg: var(--floral); --dialog-ink: var(--khaki); --button-bg: var(--leaf); --button-ink: var(--midnight); --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral); width: 98vw; padding: 12px 8px; }
+  body .leaf-reader { width: 98vw; padding: 12px 8px; }
   .leaf-reader-nav { gap: 6px; }
   .leaf-reader-nav .button { padding: 10px 9px; font-size: 12px; }
   .leaf-reader-nav .leaf-reader-end { padding: 10px 0; }
