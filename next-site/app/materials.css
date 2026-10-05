@@ -494,3 +494,105 @@ body .home-tab .wordmark-cook { color: var(--midnight); }
   body .site-footer { padding-top: 38px; }
   body .site-footer-inner .footer-links { gap: 12px; }
 }
+
+/* -------------------------------------------------------------------------
+   Cozy floating section cards
+
+   The light timeline reads best when the green material is a card within the
+   paper page, rather than one uninterrupted wall of color. The same geometry
+   is used for the felled timeline so the two stories stay related without
+   forcing their palettes to match.
+   ------------------------------------------------------------------------- */
+body .desk-section,
+body .bio-section,
+body .shoutouts-section,
+body .about-biography {
+  background: var(--page-bg);
+}
+body .desk-section > .shell,
+body .bio-section > .life-section,
+body .shoutouts-section > .shell,
+body .about-biography > .shell {
+  border-radius: 28px;
+  box-shadow: 0 12px 30px var(--shadow-color), inset 0 1px 0 var(--surface-edge);
+}
+body .desk-section > .shell {
+  background: var(--active-bg);
+  color: var(--active-ink);
+  padding: clamp(30px,5vw,70px);
+}
+body .bio-section > .life-section {
+  background: var(--bio-bg);
+  color: var(--bio-ink);
+  padding: clamp(30px,5vw,70px);
+}
+body .shoutouts-section > .shell {
+  background: var(--shoutouts-bg);
+  color: var(--page-ink);
+  padding: clamp(30px,5vw,70px);
+}
+body .about-biography > .shell {
+  background: var(--bio-bg);
+  color: var(--bio-ink);
+  padding: clamp(30px,5vw,70px);
+}
+
+/* Keep the active project's two-line title intentional and easy to scan. */
+body .project-title-prefix {
+  display: block;
+  color: var(--coral);
+  margin-bottom: 10px;
+}
+body .project-title > i {
+  display: block;
+  color: var(--active-ink);
+}
+
+/* The kitty committee ribbon is a dark-pink label in both themes. Its cast
+   uses the same neutral shadow family as the rest of the tactile surfaces. */
+body .kitty-ribbon {
+  --ribbon-face-bg: var(--midnight);
+  --ribbon-face-ink: var(--coral);
+  --ribbon-face-highlight: color-mix(in srgb,var(--midnight) 82%,var(--coral) 18%);
+  --ribbon-shadow: color-mix(in srgb,var(--midnight) 20%,transparent);
+}
+html[data-theme="dark"] body .kitty-ribbon { --ribbon-shadow: rgb(0 0 0 / .32); }
+.ribbon-cast { fill: var(--ribbon-shadow); opacity: 1; }
+.ribbon-thickness { fill: var(--ribbon-face-bg); stroke: var(--ribbon-face-bg); }
+.ribbon-lettering { fill: var(--ribbon-face-ink); }
+
+/* In dark mode the active draft ring uses the warm accent, not the khaki
+   card behind it, so the progress chart remains readable. */
+html[data-theme="dark"] { --progress-hue: var(--coral); }
+
+/* The home tab and mobile Menu share one face in dark mode. */
+body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 68%,var(--floral) 32%); }
+html[data-theme="dark"] body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 82%,var(--khaki) 18%); }
+
+/* Active navigation always has a distinct selected face, including inside
+   the mobile dropdown. */
+body .desktop-nav a[aria-current="page"],
+body .mobile-menu nav a[aria-current="page"] {
+  --surface-bg: var(--selected-bg);
+  background: var(--selected-bg);
+  color: var(--selected-ink);
+  border-color: transparent;
+}
+
+html[data-theme="dark"] body .events-section .event-description { color: var(--floral); }
+
+/* Footer rows use one rhythm instead of inheriting three different margins. */
+body .site-footer-inner { gap: 16px; }
+body .site-footer-inner .footer-links { gap: 12px; margin: 0; padding: 0; }
+body .site-footer-inner .support-callout,
+body .site-footer-inner .footer-preferences { flex: 0 0 100%; margin: 0; text-align: center; }
+body .site-footer-inner .support-callout .button,
+body .site-footer-inner .footer-preferences .button { min-height: 48px; }
+
+@media (max-width:740px) {
+  body .desk-section > .shell,
+  body .bio-section > .life-section,
+  body .shoutouts-section > .shell,
+  body .about-biography > .shell { padding: 26px 22px; border-radius: 22px; }
+  body .site-footer-inner { gap: 14px; }
+}
