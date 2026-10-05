@@ -115,14 +115,15 @@ export function SiteHeader() {
 
             <button
               type="button"
-              className="button mobile-theme-toggle"
+              className="mobile-theme-toggle"
               onClick={toggleTheme}
               aria-label="Toggle light and dark mode"
             >
-              <span>Light / dark mode</span>
+              <span className="theme-icon" aria-hidden="true">☼</span>
               <span className="theme-toggle-track" aria-hidden="true">
                 <span className="theme-toggle-knob" />
               </span>
+              <span className="theme-icon" aria-hidden="true">☾</span>
             </button>
           </nav>
         </details>
