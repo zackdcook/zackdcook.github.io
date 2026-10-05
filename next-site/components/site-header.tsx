@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useSelectedLayoutSegment } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { navigation } from "@/content/navigation";
+import { usePreferences } from "@/components/site-preferences";
 
 const links = navigation.map(({ title, href }) => [title, href]);
 
