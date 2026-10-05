@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { approachLight, materialLight, materialGeometryEvent } from "@/lib/material-light";
+import { approachLight, materialLight, panelLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
 const surfacesSelector = ".calendar-dialog,.preferences-dialog,.signing-dialog,.leaf-reader,.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section,.placement-controls,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+
+const panelsSelector = ".desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section";
 
 // One shared light: mouse on desktop, permission-gated orientation on phones.
 // Sensor readings never leave the browser or enter React's animation path.
@@ -33,7 +35,9 @@ export function PointerLight() {
     const resize = new ResizeObserver(() => { dirty = true; start(); });
 
     function paint(element: HTMLElement, bounds: DOMRect, strength: number) {
-      const light = materialLight(bounds, x, y, strength);
+      const light = element.dataset.materialKind === "panel"
+        ? panelLight(bounds, x, y, strength, window.innerHeight)
+        : materialLight(bounds, x, y, strength);
       const px = (value: number) => `${value.toFixed(2)}px`;
       element.style.setProperty("--light-strength", light.strength.toFixed(3));
       element.style.setProperty("--light-x", px(light.lightX));
@@ -66,6 +70,7 @@ export function PointerLight() {
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
         if (!element.matches(".hero h1,.kitty-ribbon,.cypress-carving,.tree-section")) element.dataset.material = "surface";
+        if (element.matches(panelsSelector)) element.dataset.materialKind = "panel";
         observer.observe(element); resize.observe(element);
       }
       // A stage label changing must not extinguish the light on every surface.
