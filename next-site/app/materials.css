@@ -749,3 +749,17 @@ html[data-compact="true"] body .creative-works-page .desk-section { padding-bott
 
 body :is(.calendar-dialog,.preferences-dialog,.signing-dialog,.leaf-reader) { --surface-bg: var(--dialog-bg); }
 body :is(.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section,.placement-controls) { --surface-bg: var(--panel-bg); }
+
+/* Give floating faces their own paint order: positioned preceding sections
+   must not mask a cast that extends upward into the shared page gutter.
+   Menus/dialogs retain their existing overlay positioning and z-index. */
+body [data-material-kind="panel"] {
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  background-image:
+    linear-gradient(var(--surface-bg),var(--surface-bg)),
+    radial-gradient(circle 240px at var(--light-x,50%) var(--light-y,0%),
+      color-mix(in srgb,var(--floral) calc(25% + var(--light-strength,0)*65%),var(--surface-bg)),
+      var(--material-cut) 90%) !important;
+}
