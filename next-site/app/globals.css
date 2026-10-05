@@ -404,13 +404,7 @@ h3 {
 .journal-feature > .shell {
   position: relative;
 }
-.journal-feature > .shell::after {
-  content: "";
-  position: absolute;
-  inset: auto 0 -92px;
-  height: 1px;
-  background: var(--line);
-}
+
 .journal-feature > .section-heading {
   align-items: center;
   margin-bottom: 40px;
@@ -767,7 +761,7 @@ h3 {
   display: grid;
   grid-template-columns: 1.15fr 1fr;
   gap: 75px;
-  align-items: center;
+  align-items: start;
 }
 .about-intro .page-intro {
   margin-bottom: 0;
@@ -1862,16 +1856,7 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .button, .text-link, .rail-controls button, .footer-links a.button,
 .support-callout a.button, .mobile-menu summary { font-family: var(--sans); font-weight: 600; }
 .desktop-nav a[aria-current="page"]:hover { background: var(--paper); color: var(--ink); }
-.desk-inner { grid-template-columns: 210px minmax(0, 1fr); column-gap: 45px; row-gap: 0; }
-.desk-copy { grid-column: 1; grid-row: 1; align-self: end; }
-.desk-inner > .progress-display { grid-column: 2; grid-row: 1 / span 2; }
-.desk-followup { grid-column: 1; grid-row: 2; align-self: start; display: flex; flex-direction: column; align-items: flex-start; }
-.desk-followup .button { order: -1; margin-top: 20px; }
-.bio-section { background: var(--leaf); color: var(--floral); }
-.bio-section .life-section { padding-top: 0; }
-.bio-section :is(.life-copy > p,.identity-aside) { color: var(--floral); }
-.reaction-symbol { font-weight: 900; font-family: var(--sans); }
-.desk-copy h2 { font-size: 57px; }
+.hero-eyebrow .reaction-symbol { font-weight: 400; font-family: var(--sans); font-size: 1.25em; line-height: 1; }
 .rings { width: 100%; max-width: 320px; min-width: 0; justify-self: center; }
 .stage-count { white-space: normal; font-size: 12px; }
 .events-section { margin-top: 64px; }
@@ -1882,11 +1867,6 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .compact .rings { width: 100%; max-width: 320px; }
 
 @media (max-width: 1100px) {
-  .desk-inner { grid-template-columns: 1fr; gap: 35px; }
-  .desk-copy h2 br { display: none; }
-  .desk-copy { max-width: 600px; }
-  .desk-copy,.desk-inner > .progress-display,.desk-followup { grid-column: 1; grid-row: auto; }
-  .desk-followup .button { order: 0; margin-top: 14px; }
   .progress-display { grid-template-columns: minmax(150px, .9fr) minmax(220px, 1.4fr) minmax(170px, 1fr); gap: 20px; }
 }
 @media (max-width: 740px) {
@@ -1941,7 +1921,6 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .calendar-options .button { width: 100%; }
 @media (max-width: 740px) {
   .life-section { row-gap: 80px; }
-  .journal-feature > .shell::after { bottom: -55px; }
 
   .collection-heading.inspiration-heading { font-size: 17px; }
   .calendar-dialog-content { padding: 24px; }
@@ -1951,19 +1930,54 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .events-section { padding-bottom: clamp(48px,6vw,80px); }
 html[data-compact="true"] .events-section { padding-bottom: 40px; }
 .events-page { padding-bottom: 72px; }
-.active-project-panel { gap: 30px; }
-.active-project-panel h2.section-label { font: 600 11px/1.4 var(--sans); margin: 0; }
-.active-project-panel .progress-note p { max-width: none; }
-.active-project-panel .project-updated { max-width: none; margin: 0; }
-.working-title { padding-block: 64px 32px; }
-.working-title h2 { margin-bottom: 18px; }
-.novel-title { font: 650 clamp(30px,4vw,48px)/1.2 var(--display); max-width: 920px; }
-.alternate-title { font-size: 16px; margin-top: 20px; }
-.about-story { padding-block: 72px; }
+.about-story { max-width: none; margin-inline: 0; padding-bottom: 72px; }
 .about-name-art { max-width: 520px; margin: 0 auto 40px; }
 .about-name-art img { width: 100%; height: auto; }
 @media (max-width:740px) {
-  .active-project-panel { padding: 28px; gap: 24px; }
-  .working-title { padding-top: 44px; }
-  .about-story { padding-block: 48px; }
+  .about-story { padding-bottom: 48px; }
 }
+
+/* The display scale and page-label baseline are shared across destinations. */
+:root { --feature-heading-size: clamp(80px,9.8vw,136px); }
+body :is(.hero h1,.project-title,.writing-group h2:not(.section-label),.life-copy h2:not(.section-label),.shoutout-card h3) {
+  font-family: var(--display); font-size: var(--feature-heading-size); font-weight: 650;
+  line-height: 1.04; letter-spacing: -.04em; max-width: none;
+}
+.page-intro .page-label { font: 600 11px/1.4 var(--sans); letter-spacing: .13em; text-transform: uppercase; margin: 0 0 23px; }
+.active-project { min-width: 0; }
+.active-project .section-label { margin-bottom: 24px; }
+.project-title { margin: 0; }
+.project-title-prefix { display: block; font-size: .4em; letter-spacing: -.02em; margin-bottom: 18px; }
+.project-subtitle { font: 500 11px/1.5 var(--sans); letter-spacing: 0; margin-top: 18px; }
+.project-subtitle sup { font-size: .7em; }
+.active-project .progress-display { margin-top: 48px; }
+.progress-chart { display: grid; justify-items: center; min-width: 0; gap: 22px; }
+.progress-chart .project-updated { font: 500 11px/1.5 var(--sans); margin: 0; max-width: none; text-align: center; }
+.desk-followup { margin-top: 28px; }
+.desk-followup .button { margin-top: 0; }
+.events-section { background: var(--paper); padding-top: 64px; margin-top: 0; }
+.bio-section,.journal-feature,.shoutouts-section,.about-biography { margin-top: 0; padding-block: 80px; }
+.about-biography { margin-top: 72px; }
+.shoutouts-section { border-bottom: 1px solid var(--line); }
+body:has(#shoutouts) .site-footer { border-top: 0; margin-top: 0; }
+.shoutout-card { flex-direction: column; align-items: flex-start; }
+.shoutout-card h3 { overflow-wrap: anywhere; }
+.shoutout-card .button { margin-top: 12px; }
+.about-name-art { margin-bottom: 0; }
+@media(max-width:740px) {
+  :root { --feature-heading-size: clamp(66px,19vw,106px); }
+  .project-title-prefix { font-size: .46em; }
+  .bio-section,.journal-feature,.shoutouts-section,.about-biography { padding-block: 50px; }
+  .about-biography { margin-top: 48px; }
+  .events-section { padding-top: 40px; }
+  .active-project .progress-display { margin-top: 36px; }
+  .progress-chart { gap: 16px; }
+}
+@media(max-width:430px) {
+  .active-project .progress-display { grid-template-columns: 1fr; gap: 30px; }
+  .active-project .progress-details { order: 1; }
+  .active-project .progress-chart { order: 2; width: 100%; }
+  .active-project .progress-note { order: 3; }
+}
+html[data-compact="true"] :is(.bio-section,.journal-feature,.shoutouts-section,.about-biography) { margin-top: 0; padding-block: 36px; }
+html[data-compact="true"] .about-biography { margin-top: 36px; }

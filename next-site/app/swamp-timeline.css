@@ -1,23 +1,12 @@
 /* Semantic material tokens. The local story changes these, not the content. */
-:root {
-  --button-bg: var(--coral); --button-ink: var(--midnight);
-  --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral);
-  --frame-ink: var(--khaki);
-  --material-edge: color-mix(in srgb,var(--floral) 45%,transparent);
-  --material-cut: color-mix(in srgb,var(--khaki) 24%,transparent);
-  --material-gloss: color-mix(in srgb,var(--floral) 23%,transparent);
-}
 html[data-timeline="felled"] {
   --chocolate: #99582A; --camel: #BB9457; --wine: #6F1D1B; --apricot-light: #FFE6A7; --coffee: #432818;
   --midnight: var(--wine); --coral: var(--camel); --khaki: var(--coffee); --floral: var(--apricot-light); --leaf: var(--chocolate);
   --paper: var(--apricot-light); --ink: var(--coffee); --muted: var(--wine); --line: #99582A66;
   --green: var(--coffee); --sage: var(--camel); --olive: var(--chocolate); --gold: var(--camel);
   --violet: var(--wine); --peach: var(--camel); --apricot: var(--camel); --teal: var(--chocolate); --progress-dark: var(--coffee);
-  --material-shadow: #43281830; --button-ink: var(--coffee); --button-hover-ink: var(--apricot-light);
 }
-html[data-timeline="felled"][data-theme="dark"] { --paper: var(--coffee); --ink: var(--apricot-light); --muted: var(--camel); --line: #BB945766; --material-shadow: color-mix(in srgb,var(--coffee) 80%,transparent); }
-html[data-timeline="felled"] .progress-display { --progress-hue: var(--chocolate) !important; }
-html[data-timeline="felled"] .site-mark { filter: sepia(.8) saturate(.75) hue-rotate(338deg); }
+html[data-timeline="felled"][data-theme="dark"] { --paper: var(--wine); --ink: var(--apricot-light); --muted: var(--camel); --line: #BB945766; --material-shadow: color-mix(in srgb,var(--coffee) 80%,transparent); }
 .cats-escaped { padding-top: 50px; }
 .cats-escaped p { margin: 0; }
 .empty-window-placeholder { display: grid; place-items: center; height: 100%; padding: 35px; text-align: center; background: color-mix(in srgb,var(--coral) 15%,var(--paper)); color: var(--ink); font-size: .9rem; }

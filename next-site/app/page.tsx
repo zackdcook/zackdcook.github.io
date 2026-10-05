@@ -1,16 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ProgressRings } from "@/components/progress-rings";
+import { ActiveProject } from "@/components/active-project";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
 import { CollectionHeading } from "@/components/collection-heading";
-import { displayDate } from "@/content/site";
 import { follyQuotes, latestFolly } from "@/content/folly";
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { getShoutouts } from "@/lib/community";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
-import progress from "@/content/progress.json";
 import { EditorialKitties } from "@/components/editorial-kitties";
 
 export const metadata = { alternates: { canonical: "/" } };
@@ -22,15 +20,10 @@ export default async function Home() {
     <>
       <section className="hero shell">
         <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">Engineer <strong className="reaction-symbol">⇌</strong> Author</p>
+          <p className="eyebrow hero-eyebrow">Engineer <span className="reaction-symbol">⇌</span> Author</p>
           <h1>Zack<br /> <em>Cook.</em></h1>
           <p className="hero-intro">{editorial.home.intro}</p>
           {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
-          <div className="actions">
-            <Link className="button" href="/creativeworks">
-              Creative works
-            </Link>
-          </div>
         </div>
         <div className="hero-photo">
           <div className="portrait-frame tactile-photo">
@@ -47,30 +40,12 @@ export default async function Home() {
       </section>
 
       <section id="creative-works" className="desk-section">
-        <div className="shell desk-inner">
-          <div className="desk-copy">
-            <h2 className="eyebrow section-label">Active Project</h2>
-            <h2>
-              Let him
-              <br /> <em>Cook.</em>
-            </h2>
-          </div>
-          <ProgressRings />
-          <div className="desk-followup">
-            <p className="updated">
-              Progress updated{" "}
-              <time dateTime={progress.updated}>{displayDate(progress.updated)}</time>
-            </p>
-            <Link className="button" href="/creativeworks">
-              More deets
-            </Link>
-          </div>
-        </div>
+        <div className="shell"><ActiveProject detailsLink /></div>
       </section>
 
-      <section id="find-me-at" className="events-section shell">
+      <section id="find-me-at" className="events-section"><div className="shell">
         <WritingGroupCard><div className="rail-more"><Link className="button" href="/events">Other events</Link></div></WritingGroupCard>
-      </section>
+      </div></section>
       {event && <section className="event-callout shell upcoming-callout">
         <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
         <Link className="button" href="/events">Event details</Link>
@@ -91,7 +66,7 @@ export default async function Home() {
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
       </div></section>
 
-      <section id="words-of-folly" className="journal-feature section-space"><div className="shell">
+      <section id="words-of-folly" className="journal-feature section-space"><div className="shell folly-panel">
         <div className="section-heading"><div className="life-copy">
           <CollectionHeading>Words of Folly</CollectionHeading>
           <h2>Note to self:</h2>
@@ -102,11 +77,11 @@ export default async function Home() {
         <div className="rail-more"><Link className="button button-outline" href="/journal">The whole pile</Link></div>
       </div></section>
 
-      <section id="shoutouts" className="shoutouts-section shell section-space">
+      <section id="shoutouts" className="shoutouts-section section-space"><div className="shell">
         <CollectionHeading>Cool peeps</CollectionHeading>
         <ShoutoutList people={shoutouts.slice(0, 3)} />
         <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
-      </section>
+      </div></section>
       {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
         <section className="subscribe-callout shell">
           <h2>Keep in touch.</h2>
