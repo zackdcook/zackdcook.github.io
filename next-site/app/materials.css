@@ -853,32 +853,88 @@ html[data-theme="dark"] body .page-intro > p.hero-detail {
 /* Mobile-menu-only light/dark switch. */
 .mobile-theme-toggle {
   width: 100%;
-  margin-top: 12px;
-  justify-content: space-between;
+  min-height: 54px;
+  margin-top: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  appearance: none;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+
+  color: var(--button-ink);
+  font-family: var(--display);
+  cursor: pointer;
+}
+
+.theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+
+  color: currentColor;
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 400;
 }
 
 .theme-toggle-track {
   position: relative;
-  width: 42px;
-  height: 24px;
-  flex: 0 0 42px;
+  width: 46px;
+  height: 26px;
+  flex: 0 0 46px;
+
   border-radius: 999px;
-  background: color-mix(in srgb, var(--midnight) 22%, transparent);
-  box-shadow: inset 0 0 0 1px
-    color-mix(in srgb, var(--midnight) 18%, transparent);
+  background: var(--midnight);
+  box-shadow:
+    inset 0 0 0 1px
+      color-mix(in srgb, var(--midnight) 35%, transparent);
+  transition:
+    background-color .28s ease,
+    box-shadow .28s ease;
 }
 
 .theme-toggle-knob {
   position: absolute;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   left: 3px;
   top: 3px;
+
   border-radius: 50%;
   background: var(--floral);
-  transition: transform 0.2s ease;
+  box-shadow: 0 1px 4px
+    color-mix(in srgb, var(--midnight) 28%, transparent);
+
+  transform: translateX(0);
+  transition: transform .28s cubic-bezier(.22,1,.36,1);
+}
+
+/* Light mode = dark-pink switch, knob beside the sun. */
+html[data-theme="light"] .theme-toggle-track {
+  background: var(--midnight);
+}
+
+/* Dark mode = green switch, knob beside the moon. */
+html[data-theme="dark"] .theme-toggle-track {
+  background: color-mix(
+    in srgb,
+    var(--leaf) 65%,
+    var(--floral) 35%
+  );
 }
 
 html[data-theme="dark"] .theme-toggle-knob {
-  transform: translateX(18px);
+  transform: translateX(20px);
+}
+
+.mobile-theme-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 12px;
 }
