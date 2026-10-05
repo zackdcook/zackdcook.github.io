@@ -763,3 +763,118 @@ body [data-material-kind="panel"] {
       color-mix(in srgb,var(--floral) calc(25% + var(--light-strength,0)*65%),var(--surface-bg)),
       var(--material-cut) 90%) !important;
 }
+
+/* -------------------------------------------------------------------------
+   Final UI corrections
+   ------------------------------------------------------------------------- */
+
+/* Header controls should react only to the shared material light.
+   Don't simultaneously fade them into a different hover color, which makes
+   their response appear delayed/reversed relative to the rest of the page. */
+body .site-header :is(.home-tab, .mobile-menu summary) {
+  --button-hover-bg: var(--button-bg);
+  --button-hover-ink: var(--button-ink);
+  transition: none;
+}
+
+/* The ribbon lives inside .life-section, which is itself a z-index:1 material
+   panel. Raise that stacking context above later material panels, then keep
+   the ribbon at the very top of it. */
+body .bio-section > .life-section {
+  z-index: 5;
+}
+
+body .life-photo .kitty-ribbon {
+  z-index: 50;
+}
+
+/* Light-mode project/shoutout ink = the dark pink / Midnight Violet. */
+html[data-theme="light"] body .project-title {
+  color: var(--midnight);
+}
+
+:root {
+  --shoutouts-card-ink: var(--midnight);
+}
+
+/* Dark-mode palette corrections. */
+html[data-theme="dark"] {
+  /* Selected Active Project stage:
+     dark pink face + light pink type. */
+  --selected-bg: var(--midnight);
+  --selected-ink: var(--coral);
+
+  /* Individual shoutouts use the same medium-pink face as Words of Folly. */
+  --shoutouts-card-bg: var(--folly-card-bg);
+  --shoutouts-card-ink: var(--floral);
+
+  /* ...with the same light-green family used by your other controls. */
+  --shoutout-button-bg:
+    color-mix(in srgb, var(--leaf) 45%, var(--floral) 55%);
+  --shoutout-button-ink: var(--midnight);
+}
+
+/* Preserve the shoutout/folly match in the alternate felled timeline too. */
+html[data-timeline="felled"][data-theme="dark"] {
+  --shoutouts-card-bg: var(--folly-card-bg);
+}
+
+/* The three "Greetings..." lines are hero-detail paragraphs. */
+html[data-theme="dark"] body .hero-detail {
+  color: var(--floral);
+}
+
+/* Reuse the exact same typography on the Events intro sentence.
+   The extra specificity is necessary because .page-intro > p currently wins
+   over the ordinary .hero-detail rule. */
+body .page-intro > p.hero-detail {
+  font-size: 15px;
+  color: var(--muted);
+  max-width: 385px;
+  margin-top: 17px;
+}
+
+html[data-theme="dark"] body .page-intro > p.hero-detail {
+  color: var(--floral);
+}
+
+@media (max-width: 740px) {
+  body .page-intro > p.hero-detail {
+    font-size: 14px;
+    max-width: 360px;
+  }
+}
+
+
+/* Mobile-menu-only light/dark switch. */
+.mobile-theme-toggle {
+  width: 100%;
+  margin-top: 12px;
+  justify-content: space-between;
+}
+
+.theme-toggle-track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex: 0 0 42px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--midnight) 22%, transparent);
+  box-shadow: inset 0 0 0 1px
+    color-mix(in srgb, var(--midnight) 18%, transparent);
+}
+
+.theme-toggle-knob {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  top: 3px;
+  border-radius: 50%;
+  background: var(--floral);
+  transition: transform 0.2s ease;
+}
+
+html[data-theme="dark"] .theme-toggle-knob {
+  transform: translateX(18px);
+}
