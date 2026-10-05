@@ -138,12 +138,17 @@ html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { p
 
   25% {
     --page-pan-y: calc(var(--page-pan-distance) * .12);
-    animation-timing-function: cubic-bezier(.15, .65, .25, 1);
+    animation-timing-function: cubic-bezier(.2, .6, .4, 1);
   }
 
-  75% {
-    --page-pan-y: calc(var(--page-pan-distance) * .88);
-    animation-timing-function: cubic-bezier(.15, .55, .35, 1);
+  72% {
+    --page-pan-y: calc(var(--page-pan-distance) * .86);
+    animation-timing-function: cubic-bezier(.25, .75, .35, 1);
+  }
+
+  88% {
+    --page-pan-y: calc(var(--page-pan-distance) * .97);
+    animation-timing-function: cubic-bezier(.35, .7, .5, 1);
   }
 
   100% {
