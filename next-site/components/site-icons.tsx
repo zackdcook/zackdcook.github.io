@@ -5,10 +5,11 @@ import { usePreferences } from "@/components/site-preferences";
 
 export function SiteIcons() {
   const { timeline, hydrated } = usePreferences();
+  const palette = timeline.kind;
   useEffect(() => {
     if (!hydrated) return;
-    const icon = `/images/brand/favicon-${timeline}.svg`;
-    const apple = `/images/brand/apple-${timeline}.png`;
+    const icon = `/images/brand/favicon-${palette}.svg`;
+    const apple = `/images/brand/apple-${palette}.png`;
     const update = () => {
       for (const link of document.head.querySelectorAll<HTMLLinkElement>('link[rel="icon"],link[rel="apple-touch-icon"]')) {
         const href = link.rel === "icon" ? icon : apple;
@@ -22,6 +23,6 @@ export function SiteIcons() {
     const observer = new MutationObserver(update);
     observer.observe(document.head, { childList: true });
     return () => observer.disconnect();
-  }, [timeline, hydrated]);
+  }, [palette, hydrated]);
   return null;
 }

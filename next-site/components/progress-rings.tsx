@@ -86,7 +86,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           const tone = toneFor(index);
           return <linearGradient key={item.id} id={`${id}-tone-${index}`} x1="0" y1="0" x2="1" y2="1">
             <stop offset="0" stopColor={tone} />
-            <stop offset="1" stopColor={`color-mix(in srgb, ${tone} 88%, var(--progress-dark))`} />
+            <stop offset="1" stopColor={index === 0 ? tone : `color-mix(in srgb, ${tone} 88%, var(--progress-dark))`} />
           </linearGradient>;
         })}</defs>
         {progress.stages.map((item, index) => {
