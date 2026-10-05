@@ -10,7 +10,7 @@ export default async function Shoutouts() {
   return <div className="shoutouts-page page-wrap"><div className="shell">
     <div className="page-intro">
       <p className="eyebrow">Shoutouts</p>
-      <h1>Cool peeps</h1>
+      <h1>Cool <em>peeps:</em></h1>
     </div>
     <ShoutoutList people={shoutouts} />
   </div></div>;
