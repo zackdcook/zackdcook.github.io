@@ -851,90 +851,104 @@ html[data-theme="dark"] body .page-intro > p.hero-detail {
 
 
 /* Mobile-menu-only light/dark switch. */
-.mobile-theme-toggle {
+body .mobile-menu nav .mobile-theme-control {
   width: 100%;
   min-height: 54px;
   margin-top: 8px;
-  padding: 8px 12px;
+
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 14px;
+
+  color: var(--button-ink);
+}
+
+body .mobile-menu nav .theme-icon {
+  display: block;
+  flex: 0 0 28px;
+  width: 28px;
+
+  color: currentColor;
+  font-family: var(--sans);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  text-align: center;
+}
+
+body .mobile-menu nav button.mobile-theme-toggle {
+  position: relative;
+
+  display: block;
+  flex: 0 0 52px;
+  width: 52px;
+  min-width: 52px;
+  max-width: 52px;
+  height: 28px;
+  min-height: 28px;
+
+  margin: 0;
+  padding: 0;
 
   appearance: none;
   border: 0;
-  background: transparent;
-  box-shadow: none;
-
-  color: var(--button-ink);
-  font-family: var(--display);
-  cursor: pointer;
-}
-
-.theme-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-
-  color: currentColor;
-  font-size: 25px;
-  line-height: 1;
-  font-weight: 400;
-}
-
-.theme-toggle-track {
-  position: relative;
-  width: 46px;
-  height: 26px;
-  flex: 0 0 46px;
-
   border-radius: 999px;
+
   background: var(--midnight);
+  background-image: none !important;
+
   box-shadow:
     inset 0 0 0 1px
       color-mix(in srgb, var(--midnight) 35%, transparent);
+
+  cursor: pointer;
+
   transition:
     background-color .28s ease,
     box-shadow .28s ease;
 }
 
-.theme-toggle-knob {
+body .mobile-menu nav .theme-toggle-knob {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  display: block;
+
+  width: 22px;
+  height: 22px;
   left: 3px;
   top: 3px;
 
   border-radius: 50%;
   background: var(--floral);
-  box-shadow: 0 1px 4px
+
+  box-shadow:
+    0 1px 4px
     color-mix(in srgb, var(--midnight) 28%, transparent);
 
   transform: translateX(0);
   transition: transform .28s cubic-bezier(.22,1,.36,1);
 }
 
-/* Light mode = dark-pink switch, knob beside the sun. */
-html[data-theme="light"] .theme-toggle-track {
+/* Light mode: dark-pink track, knob toward the sun. */
+html[data-theme="light"] body .mobile-menu nav button.mobile-theme-toggle {
   background: var(--midnight);
 }
 
-/* Dark mode = green switch, knob beside the moon. */
-html[data-theme="dark"] .theme-toggle-track {
+/* Dark mode: light-green track, knob toward the moon. */
+html[data-theme="dark"] body .mobile-menu nav button.mobile-theme-toggle {
   background: color-mix(
     in srgb,
-    var(--leaf) 65%,
-    var(--floral) 35%
+    var(--leaf) 45%,
+    var(--floral) 55%
   );
 }
 
-html[data-theme="dark"] .theme-toggle-knob {
-  transform: translateX(20px);
+html[data-theme="dark"] body .mobile-menu nav .theme-toggle-knob {
+  transform: translateX(24px);
 }
 
-.mobile-theme-toggle:focus-visible {
+body .mobile-menu nav button.mobile-theme-toggle:focus-visible {
   outline: 2px solid currentColor;
-  outline-offset: 3px;
-  border-radius: 12px;
+  outline-offset: 4px;
 }
