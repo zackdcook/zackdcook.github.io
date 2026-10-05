@@ -34,3 +34,14 @@ export function approachLight(current: number, target: number, elapsed: number) 
   const distance = Math.max(0, elapsed) / 1100;
   return current < target ? Math.min(target, current + distance) : Math.max(target, current - distance);
 }
+
+/** Large panels light the portion the visitor can see, rather than an
+ * offscreen midpoint several screens away. Keep face coordinates local to
+ * the whole panel so the highlight stays under the shared light source. */
+export function panelLight(bounds: SurfaceBounds, x: number, y: number, intensity: number, viewportHeight: number) {
+  const top = Math.max(0, bounds.top);
+  const bottom = Math.min(viewportHeight, bounds.top + bounds.height);
+  if (bottom <= top) return materialLight(bounds, x, y, intensity);
+  const light = materialLight({ left: bounds.left, width: bounds.width, top, height: bottom - top }, x, y, intensity);
+  return { ...light, lightX: x - bounds.left, lightY: y - bounds.top };
+}
