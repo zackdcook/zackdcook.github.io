@@ -112,3 +112,49 @@ html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
 .folly-ground[data-grab-ready],.folly-ground[data-dragging] { cursor: grabbing; }
 .quote-leaf,.leaf-art,.leaf-hit { -webkit-user-select: none; user-select: none; }
 .leaf-reader-content { z-index: 0; }
+
+/* Final surface pass: the playground sits on a gentle panel while the page
+   itself keeps the same paper/ink treatment as the rest of the site. */
+:root {
+  --folly-ground: var(--folly-bg);
+  --folly-ground-ink: var(--page-ink);
+}
+body .journal-feature { background: var(--folly-bg); color: var(--page-ink); }
+body .folly-panel {
+  background: var(--folly-card-bg);
+  color: var(--folly-card-ink);
+  border: 1px solid color-mix(in srgb,var(--folly-card-ink) 20%,transparent);
+  box-shadow: 0 12px 30px var(--shadow-color), inset 0 1px 0 var(--surface-edge);
+  --button-bg: var(--stage-bg);
+  --button-ink: var(--stage-ink);
+  --button-hover-bg: var(--selected-bg);
+  --button-hover-ink: var(--selected-ink);
+}
+body .folly-panel .folly-label {
+  font-family: var(--display);
+  font-size: var(--feature-heading-size);
+  font-weight: 650;
+  line-height: 1.04;
+  letter-spacing: -.04em;
+  color: var(--folly-card-ink);
+  margin: 0 0 22px;
+  max-width: 18ch;
+}
+body .folly-panel .folly-ground { margin-top: 0; }
+body .folly-panel .rail-more { margin-top: 22px; }
+body .folly-panel .button { background: var(--stage-bg); color: var(--stage-ink); }
+body .folly-panel .button:hover { background: var(--selected-bg); color: var(--selected-ink); }
+
+/* Reader paper is bright enough to read without recoloring the page behind it. */
+body .leaf-reader {
+  --dialog-bg: var(--floral);
+  --dialog-ink: var(--khaki);
+  background: var(--dialog-bg);
+  color: var(--dialog-ink);
+}
+body .leaf-reader .dialog-close,
+body .leaf-reader .leaf-reader-end { border-radius: 12px; }
+
+@media (max-width:600px) {
+  body .folly-panel .folly-label { font-size: clamp(38px,12vw,58px); }
+}

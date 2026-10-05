@@ -306,3 +306,191 @@ body .desktop-nav a[aria-current="page"]:hover { background: var(--selected-bg);
 html[data-effects="reduced"] .kitty-photo-layer { transition: none; }
 @media(prefers-reduced-motion:reduce) { .kitty-photo-layer { transition: none; } }
 .stage-dot { border: 1px solid currentColor; }
+
+/* -------------------------------------------------------------------------
+   Cozy surface system
+
+   The timeline palettes provide the five base pigments.  These semantic
+   roles keep every surface legible while allowing each timeline to inherit
+   its own colors without repeating a second set of one-off hex values.
+   Light mode is paper-forward; dark mode is ink-forward and uses softened
+   mixes so a large section never feels like a solid neon block.
+   ------------------------------------------------------------------------- */
+:root {
+  --page-bg: var(--floral);
+  --page-ink: var(--midnight);
+  --active-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
+  --active-ink: var(--midnight);
+  --event-bg: var(--floral);
+  --event-card-bg: color-mix(in srgb,var(--coral) 42%,var(--floral) 58%);
+  --event-card-ink: var(--midnight);
+  --bio-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
+  --bio-ink: var(--midnight);
+  --folly-bg: var(--floral);
+  --folly-card-bg: color-mix(in srgb,var(--coral) 48%,var(--floral) 52%);
+  --folly-card-ink: var(--khaki);
+  --shoutouts-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
+  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 52%,var(--floral) 48%);
+  --shoutouts-card-ink: var(--khaki);
+  --footer-bg: var(--floral);
+  --footer-ink: var(--midnight);
+  --button-bg: color-mix(in srgb,var(--leaf) 68%,var(--floral) 32%);
+  --button-ink: var(--midnight);
+  --button-hover-bg: color-mix(in srgb,var(--leaf) 84%,var(--khaki) 16%);
+  --button-hover-ink: var(--midnight);
+  --selected-bg: var(--midnight);
+  --selected-ink: var(--coral);
+  --stage-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
+  --stage-ink: var(--midnight);
+  --photo-border: var(--midnight);
+  --kitty-border: var(--midnight);
+  --chart-plate: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
+  --progress-hue: var(--khaki);
+  --shadow-color: color-mix(in srgb,var(--midnight) 18%,transparent);
+  --surface-edge: color-mix(in srgb,var(--floral) 35%,transparent);
+  --surface-cut: color-mix(in srgb,var(--khaki) 18%,transparent);
+  --soft-leaf: color-mix(in srgb,var(--leaf) 55%,var(--floral) 45%);
+  --line: color-mix(in srgb,var(--midnight) 24%,transparent);
+}
+
+html[data-theme="dark"] {
+  --page-bg: color-mix(in srgb,var(--midnight) 93%,var(--khaki) 7%);
+  --page-ink: var(--floral);
+  --active-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
+  --active-ink: var(--floral);
+  --event-bg: var(--page-bg);
+  --event-card-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
+  --event-card-ink: var(--floral);
+  --bio-bg: color-mix(in srgb,var(--khaki) 92%,var(--midnight) 8%);
+  --bio-ink: var(--floral);
+  --folly-bg: var(--page-bg);
+  --folly-card-bg: color-mix(in srgb,var(--coral) 68%,var(--midnight) 32%);
+  --folly-card-ink: var(--khaki);
+  --shoutouts-bg: color-mix(in srgb,var(--khaki) 94%,var(--midnight) 6%);
+  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 92%,var(--khaki) 8%);
+  --shoutouts-card-ink: var(--midnight);
+  --footer-bg: var(--page-bg);
+  --footer-ink: var(--floral);
+  --button-bg: color-mix(in srgb,var(--leaf) 82%,var(--khaki) 18%);
+  --button-ink: var(--midnight);
+  --button-hover-bg: var(--khaki);
+  --button-hover-ink: var(--floral);
+  --selected-bg: var(--midnight);
+  --selected-ink: var(--coral);
+  --stage-bg: color-mix(in srgb,var(--leaf) 76%,var(--khaki) 24%);
+  --stage-ink: var(--midnight);
+  --photo-border: var(--coral);
+  --kitty-border: var(--floral);
+  --chart-plate: color-mix(in srgb,var(--leaf) 72%,var(--khaki) 28%);
+  --progress-hue: var(--leaf);
+  --shadow-color: rgb(0 0 0 / .32);
+  --surface-edge: color-mix(in srgb,var(--floral) 22%,transparent);
+  --surface-cut: color-mix(in srgb,var(--midnight) 36%,transparent);
+  --line: color-mix(in srgb,var(--floral) 26%,transparent);
+}
+
+/* Keep felled mode pleasantly earthy at the same contrast ratios. */
+html[data-timeline="felled"] {
+  --active-bg: color-mix(in srgb,var(--leaf) 78%,var(--floral) 22%);
+  --bio-bg: color-mix(in srgb,var(--leaf) 78%,var(--floral) 22%);
+  --event-card-bg: color-mix(in srgb,var(--coral) 46%,var(--floral) 54%);
+  --folly-card-bg: color-mix(in srgb,var(--coral) 42%,var(--floral) 58%);
+  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
+}
+html[data-timeline="felled"][data-theme="dark"] {
+  --active-bg: color-mix(in srgb,var(--khaki) 88%,var(--midnight) 12%);
+  --bio-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
+  --event-card-bg: color-mix(in srgb,var(--khaki) 88%,var(--midnight) 12%);
+  --folly-card-bg: color-mix(in srgb,var(--coral) 64%,var(--midnight) 36%);
+  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 88%,var(--khaki) 12%);
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--page-ink);
+}
+
+/* Section bands are full-bleed; their shells only constrain the content. */
+body .desk-section { background: var(--active-bg); color: var(--active-ink); }
+body .events-section { background: var(--event-bg); color: var(--page-ink); }
+body .bio-section { background: var(--bio-bg); color: var(--bio-ink); }
+body .journal-feature { background: var(--folly-bg); color: var(--page-ink); }
+body .shoutouts-section { background: var(--shoutouts-bg); color: var(--page-ink); }
+body .about-biography { background: var(--bio-bg); color: var(--bio-ink); }
+body .about-name-art-band { background: var(--page-bg); color: var(--page-ink); padding-block: clamp(38px,6vw,86px); }
+body :is(.event-callout,.writing-panel) { background: var(--event-card-bg); color: var(--event-card-ink); }
+body .folly-panel { background: var(--folly-card-bg); color: var(--folly-card-ink); }
+body .shoutout-card { background: var(--shoutouts-card-bg); color: var(--shoutouts-card-ink); }
+body :is(.event-callout,.writing-panel,.folly-panel,.shoutout-card) { border-color: color-mix(in srgb,var(--page-ink) 24%,transparent); }
+body :is(.desk-section,.events-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) :is(p,.eyebrow,.section-label,.project-subtitle,.project-updated,.identity-aside) { color: inherit; }
+body .event-callout :is(p,time,.event-description,.event-schedule,.event-address),
+body .shoutout-card :is(p,time,.shoutout-subtitle) { color: inherit; }
+
+/* A button face is always a deliberate mix, never the same paint as its band. */
+body :is(.button,.text-link,.project-description-toggle,.home-tab,.mobile-menu summary,.mobile-menu nav a) {
+  --surface-bg: var(--button-bg);
+  background-image: none;
+  background-color: var(--surface-bg);
+  color: var(--button-ink);
+  border-color: color-mix(in srgb,var(--button-ink) 25%,transparent);
+  box-shadow: 0 5px 14px var(--shadow-color), inset 0 1px 0 var(--surface-edge);
+}
+body :is(.button,.text-link,.project-description-toggle,.home-tab,.mobile-menu summary,.mobile-menu nav a):not(:disabled):hover {
+  --surface-bg: var(--button-hover-bg);
+  background-color: var(--surface-bg);
+  color: var(--button-hover-ink);
+}
+body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 72%,var(--floral) 28%); --button-hover-bg: color-mix(in srgb,var(--leaf) 82%,var(--khaki) 18%); }
+body .desktop-nav a:not([aria-current="page"]) { background-color: var(--button-bg); color: var(--button-ink); }
+body .desktop-nav a[aria-current="page"] { background-color: var(--selected-bg); color: var(--selected-ink); }
+body .mobile-menu nav { background: var(--page-bg); color: var(--page-ink); border-color: var(--line); }
+body .mobile-menu nav a[aria-current="page"] { background: var(--selected-bg); color: var(--selected-ink); }
+
+body .stage-button {
+  --surface-bg: var(--stage-bg);
+  background: var(--stage-bg);
+  color: var(--stage-ink);
+  border-color: color-mix(in srgb,var(--stage-ink) 22%,transparent);
+  box-shadow: 0 5px 14px var(--shadow-color), inset 0 1px 0 var(--surface-edge);
+}
+body .stage-button[aria-pressed="true"],
+body .stage-button:not(:disabled):hover,
+body .stage-button:not(:disabled):active { background: var(--selected-bg); color: var(--selected-ink); }
+
+/* The hero remains the largest statement; section headings are a single,
+   readable family size instead of competing with Zack Cook. */
+:root { --feature-heading-size: clamp(46px,5.7vw,76px); }
+body :is(.project-title,.writing-group h2:not(.section-label),.life-copy h2:not(.section-label)) {
+  font-family: var(--display); font-size: var(--feature-heading-size); font-weight: 650;
+  line-height: 1.04; letter-spacing: -.04em; max-width: 26ch;
+}
+body .shoutout-card h3 { font-family: var(--display); font-size: clamp(28px,3.5vw,42px); line-height: 1.08; letter-spacing: -.03em; }
+body .project-title-prefix { font-size: .34em; margin-bottom: 12px; }
+body .folly-label { font-family: var(--display); font-size: var(--feature-heading-size); font-weight: 650; line-height: 1.04; letter-spacing: -.04em; color: var(--folly-card-ink); margin: 0 0 22px; max-width: 18ch; }
+
+body .hero-eyebrow .reaction-symbol { color: inherit; font-weight: 400; font-size: 1.25em; line-height: 1; }
+body .portrait-frame { --photo-frame: var(--photo-border); border-color: transparent; }
+body .kitty-photo { --photo-frame: var(--kitty-border); }
+body .rings { color: var(--midnight); }
+body .ring-center { fill: var(--coral); }
+
+/* The footer is a true full-width bottom band even though its contents use a shell. */
+body .site-footer {
+  width: 100%; max-width: none; margin: 0; padding: 48px 0 30px;
+  display: block; background: var(--footer-bg); color: var(--footer-ink); border-top: 1px solid var(--line);
+}
+body .site-footer-inner { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 24px; }
+body .site-footer-inner .footer-links { width: 100%; justify-content: center; flex-wrap: wrap; }
+body .site-footer-inner .copyright { width: 100%; text-align: center; }
+
+/* The brand icon keeps its two-tone mark while the surrounding home control
+   remains part of the green button family. */
+body .home-tab .wordmark-zack { color: var(--floral); }
+body .home-tab .wordmark-cook { color: var(--midnight); }
+
+@media (max-width:740px) {
+  :root { --feature-heading-size: clamp(38px,12vw,58px); }
+  body .folly-label { font-size: clamp(38px,12vw,58px); }
+  body .site-footer { padding-top: 38px; }
+  body .site-footer-inner .footer-links { gap: 12px; }
+}
