@@ -113,18 +113,20 @@ export function SiteHeader() {
               </Link>
             ))}
 
-            <button
-              type="button"
-              className="mobile-theme-toggle"
-              onClick={toggleTheme}
-              aria-label="Toggle light and dark mode"
-            >
-              <span className="theme-icon" aria-hidden="true">☼</span>
-              <span className="theme-toggle-track" aria-hidden="true">
+            <div className="mobile-theme-control">
+              <span className="theme-icon theme-sun" aria-hidden="true">☀</span>
+
+              <button
+                type="button"
+                className="mobile-theme-toggle"
+                onClick={toggleTheme}
+                aria-label="Toggle light and dark mode"
+              >
                 <span className="theme-toggle-knob" />
-              </span>
-              <span className="theme-icon" aria-hidden="true">☾</span>
-            </button>
+              </button>
+
+              <span className="theme-icon theme-moon" aria-hidden="true">☾</span>
+            </div>
           </nav>
         </details>
       </div>
