@@ -206,7 +206,6 @@ export function FollyPile() {
   }, []);
 
   return <>
-    <h2 className="folly-label">Notes I leave myself while I write.</h2>
     <span id="leaf-instructions" className="sr-only">Drag a leaf to arrange it. Drag from empty space into the pile to fluff and scatter the leaves. Click or tap a leaf to read it. On touch screens, swipe to scroll, or hold a leaf to pick it up. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
     <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
       onPointerDown={event => {

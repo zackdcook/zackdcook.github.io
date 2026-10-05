@@ -21,7 +21,7 @@ function OrdinalText({ text }: { text: string }) {
 }
 
 function toneFor(index: number) {
-  if (index === 0) return "var(--midnight)";
+  if (index === 0) return "var(--progress-core)";
   const position = (index - 1) / Math.max(1, progress.stages.length - 2);
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
@@ -101,7 +101,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
             onClick={() => { setSelected(index); setHovered(null); setFocused(null); }}
           >
             {index === 0 ? <circle className="core-fill" cx="160" cy="160" r={coreRadius} fill={`url(#${id}-tone-${index})`} /> : <>
-              <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--midnight)" strokeOpacity=".1" strokeWidth={width} />
+              <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--progress-track)" strokeWidth={width} />
               {item.status === "planned" ? <g className="ring-dots" fill={`url(#${id}-tone-${index})`}>{Array.from({ length: 40 }, (_, dot) => {
                 const angle = dot * Math.PI * 2 / 40 - Math.PI / 2;
                 // Fixed world geometry avoids Safari's dashed-stroke resampling
