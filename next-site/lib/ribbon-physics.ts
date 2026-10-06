@@ -9,13 +9,23 @@ export function createRibbon():RibbonNode[]{return Array.from({length:25},(_,ind
 export function dropRibbon(nodes:RibbonNode[]){for(const node of nodes){node.vx*=.12;node.vy*=.08;node.vz=Math.min(0,node.vz*.12);node.spin*=.5;}}
 
 export function stepRibbon(nodes:RibbonNode[],grab:RibbonGrab|null,elapsed:number,reduced=false,bounds?:RibbonBounds,wind=0){
+  // Scroll wind can start before the ribbon has ever been dragged/resized.
+  // Give it a real left wall in SVG space even in that untouched state.
+  if(!bounds && wind>.001) bounds={left:18,right:ribbonWidth-18,top:18,bottom:ribbonHeight-18};
   const clamp=(node:RibbonNode)=>{
     node.z=Math.max(0,node.z);
     if(!bounds)return;
     // The right/top/bottom edges remain ordinary limits. The left edge is a
     // cloth wall: penetration is stopped, horizontal velocity is killed, but
     // neighboring nodes are allowed to pile vertically and in Z.
-    if(node.x<bounds.left){node.x=bounds.left;node.vx=Math.max(0,node.vx)*.08;}
+    if(node.x<bounds.left){
+      const penetration=bounds.left-node.x;
+      node.x=bounds.left;
+      node.vx=Math.max(0,node.vx)*.03;
+      node.vy+=(node.age%0.7<0.35?-1:1)*Math.min(420,penetration*55);
+      node.vz+=Math.min(520,penetration*70);
+      node.spin+=(node.age%0.9<0.45?-1:1)*Math.min(4.2,penetration*.45);
+    }
     node.x=Math.min(bounds.right,node.x);node.y=Math.max(bounds.top,Math.min(bounds.bottom,node.y));
   };
   if(reduced){
@@ -34,9 +44,9 @@ export function stepRibbon(nodes:RibbonNode[],grab:RibbonGrab|null,elapsed:numbe
       node.vx=(node.vx+(handBreeze+windX)*dt)*drag;node.vy=(node.vy+((grab?950:node.z>.2?450:0)+windSide)*dt)*drag;node.vz=(node.vz+windLift*dt-1400*dt)*drag;
       node.x+=node.vx*dt;node.y+=node.vy*dt;node.z+=node.vz*dt;
       if(bounds&&node.x<bounds.left+28&&airy>.025&&!grab){
-        const compression=Math.max(0,1-(node.x-bounds.left)/28);
-        node.vy+=(index%2?1:-1)*(180+index*5)*compression*airy*dt;
-        node.vz+=(420+index*9)*compression*airy*dt;
+        const compression=Math.max(0,1-(node.x-bounds.left)/42);
+        node.vy+=(index%2?1:-1)*(260+index*7)*compression*airy*dt;
+        node.vz+=(680+index*12)*compression*airy*dt;
         node.spin+=(index%2?1:-1)*2.8*compression*airy*dt;
       }
       const sideLength=index<(grab?.index??12)?(grab?.index??12):nodes.length-1-(grab?.index??12),fromGrip=grab?Math.abs(index-grab.index)/Math.max(1,sideLength):0;
