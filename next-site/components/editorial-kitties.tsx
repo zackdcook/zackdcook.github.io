@@ -23,6 +23,10 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   useEffect(()=>{
     const receive=(event:Event)=>{
       const strength=Math.max(0,Math.min(1.35,Number((event as CustomEvent<{strength?:number}>).detail?.strength)||0));
+      // Scroll wind must use the viewport edge, not the photo/SVG edge.
+      // Re-measure every impulse because the photo can move relative to the
+      // viewport while the page scrolls.
+      measureBounds();
       wind.current=Math.max(wind.current,strength);
       start();
     };
