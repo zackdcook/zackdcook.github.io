@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 declare global { interface Window { turnstile?: { render: (element: HTMLElement, options: Record<string, unknown>) => string; remove: (id: string) => void; reset: (id: string) => void } } }
 
-export function HumanCheck({ siteKey, action, resetKey }: { siteKey: string; action: "guestbook" | "shoutout"; resetKey: string }) {
+export function HumanCheck({ siteKey, action, resetKey }: { siteKey: string; action: "guestbook" | "shoutout" | "bebrave"; resetKey: string }) {
   const host = useRef<HTMLDivElement>(null), widget = useRef<string | null>(null);
   const [ready, setReady] = useState(false), [token, setToken] = useState(""), [failed, setFailed] = useState(false);
   useEffect(() => {
