@@ -16,7 +16,7 @@ export function stepRibbon(nodes:RibbonNode[],grab:RibbonGrab|null,elapsed:numbe
     // cloth wall: penetration is stopped, horizontal velocity is killed, but
     // neighboring nodes are allowed to pile vertically and in Z.
     if(node.x<bounds.left){node.x=bounds.left;node.vx=Math.max(0,node.vx)*.08;}
-    node.x=Math.min(bounds.right,node.x);node.y=Math.max(bounds.top,Math.min(bounds.bottom,node.y));
+    node.x=Math.min(bounds.right,node.x);
   };
   if(reduced){
     if(grab){const dx=grab.x-nodes[grab.index].x,dy=grab.y-nodes[grab.index].y;for(const node of nodes){node.x+=dx;node.y+=dy;clamp(node);}}
