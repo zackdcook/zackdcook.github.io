@@ -2,7 +2,6 @@ import { serviceSupabase } from "@/lib/supabase";
 import { beBraveConfigured } from "@/lib/bebrave-server";
 import { fallbackBeBraveTreeState } from "@/lib/bebrave-types";
 
-export const dynamic = "force-dynamic";
 
 export async function GET() {
   if (!beBraveConfigured()) return Response.json({ state: fallbackBeBraveTreeState }, { headers: { "Cache-Control": "no-store" } });
