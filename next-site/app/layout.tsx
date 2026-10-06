@@ -9,6 +9,7 @@ import "./cypress.css";
 import "./swamp-timeline.css";
 import "./materials.css";
 import "./folly.css";
+import "./bebrave.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
