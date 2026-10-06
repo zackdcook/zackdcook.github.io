@@ -14,7 +14,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
   const cache=useRef(new Map<number,BeBravePublicDrawing[]>()),inflight=useRef(new Map<number,Promise<BeBravePublicDrawing[]>>());
-  const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false);
+  const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null);
   const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60);
   const active=useRef<{strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number}|null>(null);
   const strokeCounter=useRef(draftStrokes.reduce((m,s)=>Math.max(m,s.strokeOrder+1),0));
@@ -36,11 +36,39 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   useEffect(()=>{
     const el=world.current;if(!el)return;
+    parallaxOrigin.current=null;
     const measure=()=>{const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:Math.min(1,rect.width/BEBRAVE_TREE_WIDTH);scaleRef.current=next;setScale(next);};
     const ro=new ResizeObserver(measure);ro.observe(mode==="fallen"&&horizontal.current?horizontal.current:el);measure();
-    const tick=()=>{scrollFrame.current=0;const s=stateRef.current;const viewport=mode==="fallen"&&horizontal.current?horizontal.current.clientWidth:window.innerHeight;const local=mode==="fallen"&&horizontal.current?Math.max(0,s.height-horizontal.current.scrollLeft/scaleRef.current-viewport/scaleRef.current):Math.max(0,(window.scrollY-worldTop.current)/scaleRef.current);const center=Math.floor((local+viewport/scaleRef.current*.5)/BEBRAVE_SECTION_HEIGHT);const max=Math.max(0,Math.ceil(s.height/BEBRAVE_SECTION_HEIGHT)-1);const next:[number,number]=[Math.max(0,Math.min(max,center)-2),Math.min(max,center+2)];if(next[0]!==rangeRef.current[0]||next[1]!==rangeRef.current[1]){rangeRef.current=next;setRange(next);}if(scene.current&&document.documentElement.dataset.effects!=="reduced"){const travel=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY-worldTop.current;scene.current.style.setProperty("--bebrave-horizon-y",`${(-travel*.055).toFixed(1)}px`);scene.current.style.setProperty("--bebrave-mid-y",`${(-travel*.15).toFixed(1)}px`);}};
-    const target=mode==="fallen"&&horizontal.current?horizontal.current:window;const scroll=()=>{if(!scrollFrame.current)scrollFrame.current=requestAnimationFrame(tick);};target.addEventListener("scroll",scroll,{passive:true});window.addEventListener("resize",measure,{passive:true});
-    let initial=0;if(!ready.current){ready.current=true;initial=requestAnimationFrame(()=>{if(mode==="fallen"&&horizontal.current){horizontal.current.scrollTo({left:0,behavior:"instant"});}else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+state.height*scaleRef.current-window.innerHeight*.86),behavior:"instant"});}tick();});}
+    const tick=()=>{
+      scrollFrame.current=0;
+      const s=stateRef.current;
+      const viewport=mode==="fallen"&&horizontal.current?horizontal.current.clientWidth:window.innerHeight;
+      const position=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
+      const local=mode==="fallen"&&horizontal.current?Math.max(0,s.height-horizontal.current.scrollLeft/scaleRef.current-viewport/scaleRef.current):Math.max(0,(window.scrollY-worldTop.current)/scaleRef.current);
+      const center=Math.floor((local+viewport/scaleRef.current*.5)/BEBRAVE_SECTION_HEIGHT);
+      const max=Math.max(0,Math.ceil(s.height/BEBRAVE_SECTION_HEIGHT)-1);
+      const next:[number,number]=[Math.max(0,Math.min(max,center)-2),Math.min(max,center+2)];
+      if(next[0]!==rangeRef.current[0]||next[1]!==rangeRef.current[1]){rangeRef.current=next;setRange(next);}
+      if(scene.current&&document.documentElement.dataset.effects!=="reduced"){
+        if(parallaxOrigin.current===null)parallaxOrigin.current=position;
+        const travel=position-parallaxOrigin.current;
+        scene.current.style.setProperty("--bebrave-horizon-y",`${(-travel*.055).toFixed(1)}px`);
+        scene.current.style.setProperty("--bebrave-mid-y",`${(-travel*.15).toFixed(1)}px`);
+      }
+    };
+    const target=mode==="fallen"&&horizontal.current?horizontal.current:window;
+    const scroll=()=>{if(!scrollFrame.current)scrollFrame.current=requestAnimationFrame(tick);};
+    target.addEventListener("scroll",scroll,{passive:true});window.addEventListener("resize",measure,{passive:true});
+    let initial=0;
+    if(!ready.current){
+      ready.current=true;
+      initial=requestAnimationFrame(()=>{
+        if(mode==="fallen"&&horizontal.current){horizontal.current.scrollTo({left:0,behavior:"instant"});}
+        else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+state.height*scaleRef.current-window.innerHeight*.86),behavior:"instant"});}
+        parallaxOrigin.current=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
+        tick();
+      });
+    }
     return()=>{ro.disconnect();target.removeEventListener("scroll",scroll);window.removeEventListener("resize",measure);cancelAnimationFrame(scrollFrame.current);cancelAnimationFrame(initial);};
   },[mode,state.height]);
 
@@ -85,9 +113,9 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
             {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed}/>)}</g>}
             {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`}>
-              {(visual.rarity==="superior"||visual.rarity==="epic")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>} 
+              {(visual.rarity==="superior"||visual.rarity==="epic")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
               <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
-              {visual.rarity==="epic"&&<path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/>} 
+              {visual.rarity==="epic"&&<path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/>}
             </g>}
             {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed}/>)}</g>)}
           </svg>

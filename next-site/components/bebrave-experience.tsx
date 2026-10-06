@@ -8,6 +8,7 @@ import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,t
 
 const timelineKey="zack.bebrave.timeline.v1";
 const siteTimelineKey="zack.timeline.v1";
+const cooldownCacheKey="zack.bebrave.cooldown.v1";
 type Scene="entry"|"base"|"admire"|"human"|"tools"|"cache"|"cache-code"|"epic-color"|"reveal"|"warning"|"draw"|"chop"|"confirm-chop"|"strikes"|"fallen"|"stump"|"regret";
 type DraftStroke={strokeId:string;strokeOrder:number;points:Array<[number,number]>};
 
@@ -54,20 +55,43 @@ export function BeBraveExperience({enabled,siteKey}:{enabled:boolean;siteKey:str
     try{localStorage.setItem(siteTimelineKey,JSON.stringify(value));}catch{}document.documentElement.dataset.timeline=kind;
   },[]);
 
-  useEffect(()=>{priorSiteTimeline.current=document.documentElement.dataset.timeline||"living";let story=defaultBeBraveTimeline;try{story=normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey)||"null"));}catch{}setTimelineState(story);applyTimelineTheme(story.kind);setHydrated(true);return()=>{document.documentElement.dataset.timeline=priorSiteTimeline.current;};},[applyTimelineTheme]);
+  useEffect(()=>{
+    priorSiteTimeline.current=document.documentElement.dataset.timeline||"living";
+    let story=defaultBeBraveTimeline;
+    try{story=normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey)||"null"));}catch{}
+    try{
+      const cached=localStorage.getItem(cooldownCacheKey);
+      if(cached&&Date.parse(cached)>Date.now())setCooldown(cached);
+    }catch{}
+    setTimelineState(story);applyTimelineTheme(story.kind);setHydrated(true);
+    return()=>{document.documentElement.dataset.timeline=priorSiteTimeline.current;};
+  },[applyTimelineTheme]);
   useEffect(()=>{const id=setInterval(()=>setClock(Date.now()+clockOffset.current),1000);return()=>clearInterval(id);},[]);
 
-  const applyState=useCallback((data:any)=>{if(data.state)setTree(data.state);if("cooldown" in data)setCooldown(data.cooldown);if(data.serverNow){setServerNow(data.serverNow);clockOffset.current=Date.parse(data.serverNow)-Date.now();}if(data.session)setSession(data.session);if(Array.isArray(data.draftStrokes))setDraftStrokes(data.draftStrokes);},[]);
+  const applyState=useCallback((data:any)=>{
+    if(data.state)setTree(data.state);
+    if("cooldown" in data){
+      setCooldown(data.cooldown);
+      try{if(data.cooldown)localStorage.setItem(cooldownCacheKey,data.cooldown);else localStorage.removeItem(cooldownCacheKey);}catch{}
+    }
+    if(data.serverNow){setServerNow(data.serverNow);clockOffset.current=Date.parse(data.serverNow)-Date.now();}
+    if(data.session)setSession(data.session);
+    if(Array.isArray(data.draftStrokes))setDraftStrokes(data.draftStrokes);
+  },[]);
   const refreshState=useCallback(async()=>{const r=await fetch("/api/bebrave/state",{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error||"The tree could not load.");applyState(d);return d;},[applyState]);
   useEffect(()=>{if(!hydrated)return;refreshState().then(async d=>{if(timeline.kind==="felled"){setScene("entry");return;}if(timeline.kind==="felling"&&timeline.additionalStrikes){setScene("strikes");return;}if(timeline.kind==="felling"&&timeline.hacked){setScene("confirm-chop");return;}if(d.session?.status==="drawing"){const r=await fetch(`/api/bebrave/session?id=${encodeURIComponent(d.session.id)}`,{cache:"no-store"});const detail=await r.json();if(r.ok){applyState(detail);setScene("draw");}}}).catch(e=>setProblem(e instanceof Error?e.message:"The tree could not load."));},[hydrated]);
 
   const onCooldown=cooldown?Date.parse(cooldown)>clock:false,cooldownLabel=cooldownText(cooldown,clock);
   function sceneForSession(s:BeBraveSessionView|null){if(!s)return "human" as Scene;if(s.status==="tool_select")return "tools";if(s.status==="epic_color")return "epic-color";if(s.status==="ready")return "warning";if(s.status==="drawing")return "draw";return "admire";}
-  async function admire(){setBusy(true);setProblem("");try{await refreshState();setScene("admire");}catch(e){setProblem(e instanceof Error?e.message:"The tree could not load.");}finally{setBusy(false);}}
+  function admire(){
+    setProblem("");
+    setScene("admire");
+    void refreshState().catch(e=>setProblem(e instanceof Error?e.message:"The tree could not refresh."));
+  }
   async function beginCarve(){if(onCooldown)return;setProblem("");if(session&&["tool_select","epic_color","ready","drawing"].includes(session.status)){setScene(sceneForSession(session));return;}setScene("human");}
-  async function createSession(event:React.FormEvent){event.preventDefault();if(!humanForm.current)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session",{method:"POST",body:new FormData(humanForm.current)});const d=await r.json();if(r.status===429&&d.cooldown){setCooldown(d.cooldown);setScene("entry");return;}if(!r.ok)throw Error(d.error||"The tools could not be prepared.");applyState(d);setScene(sceneForSession(d.session));}catch(e){setProblem(e instanceof Error?e.message:"The tools could not be prepared.");}finally{setBusy(false);}}
+  async function createSession(event:React.FormEvent){event.preventDefault();if(!humanForm.current)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session",{method:"POST",body:new FormData(humanForm.current)});const d=await r.json();if(r.status===429&&d.cooldown){applyState(d);setScene("entry");return;}if(!r.ok)throw Error(d.error||"The tools could not be prepared.");applyState(d);setScene(sceneForSession(d.session));}catch(e){setProblem(e instanceof Error?e.message:"The tools could not be prepared.");}finally{setBusy(false);}}
   async function chooseTool(tool:BeBraveNormalTool){if(!session)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/choose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,tool})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("reveal");}catch(e){setProblem(e instanceof Error?e.message:"That tool could not be selected.");}finally{setBusy(false);}}
-  async function tryCache(){if(!session||!cacheCode)return;setBusy(true);setCacheMessage("The keys press down with a mechanical click.");try{const r=await fetch("/api/bebrave/session/cache",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,code:cacheCode})});const d=await r.json();if(!d.valid){setCacheMessage("The keys press down with a mechanical click.\\n\\nNothing happened.");return;}applyState(d);if(d.colors)setCacheColors(d.colors);setCacheMessage("The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard.\\n\\nThe knife flicks open with a satisfying clink.");setScene("epic-color");}catch{setCacheMessage("The keys press down with a mechanical click.\\n\\nNothing happened.");}finally{setBusy(false);}}
+  async function tryCache(){if(!session||!cacheCode)return;setBusy(true);setCacheMessage("The keys press down with a mechanical click.");try{const r=await fetch("/api/bebrave/session/cache",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,code:cacheCode})});const d=await r.json();if(!d.valid){setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");return;}applyState(d);if(d.colors)setCacheColors(d.colors);setCacheMessage("The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard.\n\nThe knife flicks open with a satisfying clink.");setScene("epic-color");}catch{setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");}finally{setBusy(false);}}
   async function chooseEpicColor(color:string){if(!session)return;setBusy(true);try{const r=await fetch("/api/bebrave/session/color",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,color})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("warning");}catch(e){setProblem(e instanceof Error?e.message:"That color could not be selected.");}finally{setBusy(false);}}
   async function startDrawing(){if(!session)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("draw");}catch(e){setProblem(e instanceof Error?e.message:"The timer could not start.");}finally{setBusy(false);}}
   async function drawingFinished(payload:any){applyState(payload);await refreshState().catch(()=>{});setSession(payload.session||null);setDraftStrokes([]);setScene("admire");}
@@ -88,7 +112,7 @@ export function BeBraveExperience({enabled,siteKey}:{enabled:boolean;siteKey:str
 
   const dead=felled&&timeline.immediateFallenSeen,stumpView=dead||scene==="stump"||scene==="regret";
   return <Stage felled={felled} marks={marks} stump={stumpView}><div ref={impactRef} className="bebrave-stage-ui">
-    {scene==="entry"&&<Dialogue actions={dead?<><button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button" onClick={()=>setScene("base")}>Nothing</button><button className="button" disabled={busy} onClick={admire}>Admire</button><button className="button bebrave-carve-button" disabled={busy||onCooldown||!enabled} onClick={beginCarve}><span>Carve</span>{onCooldown&&<small className="bebrave-carve-countdown">{cooldownLabel}</small>}</button><button className="button" onClick={()=>setScene("chop")}>Chop down</button></>}>{dead?<><p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p><p>You have the distinct feeling that this is your fault.</p></>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new, others higher up, seemingly older.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
+    {scene==="entry"&&<Dialogue actions={dead?<><button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button" onClick={()=>setScene("base")}>Nothing</button><button className="button" onClick={admire}>Admire</button><button className="button bebrave-carve-button" disabled={busy||onCooldown||!enabled} onClick={beginCarve}><span>Carve</span>{onCooldown&&<small className="bebrave-carve-countdown">{cooldownLabel}</small>}</button><button className="button" onClick={()=>setScene("chop")}>Chop down</button></>}>{dead?<><p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p><p>You have the distinct feeling that this is your fault.</p></>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new, others higher up, seemingly older.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<><div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}><HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/><button className="button" disabled={busy}>{busy?"Checking…":"Continue"}</button></form></div><Dialogue><p>Before you carve, a quick human check keeps the communal tree from becoming bot mulch.</p>{problem&&<p role="alert">{problem}</p>}</Dialogue></>}
     {scene==="tools"&&<><div className="bebrave-tool-picker" role="group" aria-label="Choose your carving tool">{tools.map(tool=><button key={tool} className="bebrave-image-choice" disabled={busy} onClick={()=>chooseTool(tool)} aria-label={toolCopy[tool].label}><ToolImage tool={tool}/><span className="sr-only">{toolCopy[tool].label}</span></button>)}<button className="bebrave-image-choice" onClick={()=>setScene("cache")} aria-label="Mossy cache"><ToolImage tool="cache"/><span className="sr-only">Mossy cache</span></button></div><Dialogue><p>You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and brass house key laying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?</p>{problem&&<p role="alert">{problem}</p>}</Dialogue></>}
