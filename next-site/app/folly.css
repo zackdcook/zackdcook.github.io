@@ -54,8 +54,6 @@ body .leaf-reader { --dialog-bg: var(--floral); --dialog-ink: var(--khaki); --bu
 .leaf-reader-nav .button:disabled { opacity: .45; cursor: default; }
 .leaf-reader-count { white-space: nowrap; }
 body:has(.leaf-reader[open]) { overflow: hidden; }
-/* Each complete SVG banks in its own flat paint layer. Local perspective gives
-   depth without a shared 3D scene that could split intersecting blades. */
 @keyframes leaf-fall-in {
   0% { translate: 0 min(-100svh,-140%); opacity: 0; }
   20% { translate: 0 -92%; opacity: .15; }
@@ -99,7 +97,6 @@ body:has(.leaf-reader[open]) { overflow: hidden; }
   .leaf-reader-nav .button { padding: 10px 9px; font-size: 12px; }
   .leaf-reader-nav .leaf-reader-end { padding: 10px 0; }
 }
-/* Honor the bootstrap before hydration, with newest notes at the top left. */
 html[data-effects="reduced"] .folly-ground { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
 html[data-effects="reduced"] .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
 html[data-effects="reduced"] .folly-leaves .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
@@ -108,13 +105,10 @@ html[data-effects="reduced"] .leaf-reader[open] .reader-leaf { animation: none; 
 html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
 @media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf { animation: none; } .reader-leaf-underneath { transition: none; } }
 
-/* Only an armed touch grab prevents a native scroll; ordinary art never does. */
 .folly-ground[data-grab-ready],.folly-ground[data-dragging] { cursor: grabbing; }
 .quote-leaf,.leaf-art,.leaf-hit { -webkit-user-select: none; user-select: none; }
 .leaf-reader-content { z-index: 0; }
 
-/* Final surface pass: the playground sits on a gentle panel while the page
-   itself keeps the same paper/ink treatment as the rest of the site. */
 :root {
   --folly-ground: var(--folly-bg);
   --folly-ground-ink: var(--page-ink);
@@ -144,7 +138,6 @@ body .folly-panel .rail-more { margin-top: 22px; }
 body .folly-panel .button { background: var(--stage-bg); color: var(--stage-ink); }
 body .folly-panel .button:hover { background: var(--selected-bg); color: var(--selected-ink); }
 
-/* Reader paper is bright enough to read without recoloring the page behind it. */
 body .leaf-reader {
   --dialog-bg: var(--floral);
   --dialog-ink: var(--khaki);
@@ -171,15 +164,69 @@ body .folly-page .page-intro { margin-bottom: var(--section-gap); }
 body .folly-page-heading em { color: var(--page-heading-accent); font-style: normal; }
 body .folly-page .folly-ground { margin-top: 0; }
 @media(max-width:740px) { body .folly-page .folly-panel { padding: 8px; } }
-/* The Words of Folly playground is part of the page itself, not a material card.
-   Leaves remain fully interactive, but the giant cursor-reactive box is gone. */
+
 body .folly-page .folly-panel {
   --surface-bg: transparent;
-
   background: transparent !important;
   background-image: none !important;
   border: 0 !important;
   box-shadow: none !important;
-
   padding: 0;
+}
+
+
+/* Homepage Words of Folly remains a tactile material card. The dedicated
+   Words of Folly page stays flat because its .folly-page rule above wins. */
+body .journal-feature .folly-panel {
+  --surface-bg: var(--folly-card-bg);
+}
+
+/* Dynamic shared-light shadows only for the newest homepage leaf and leaves
+   currently presented in reader mode. */
+body .folly-latest .quote-leaf,
+body .leaf-reader .reader-leaf {
+  --leaf-dynamic-shadow-x: calc(var(--shadow-x, 0px) * .62);
+  --leaf-dynamic-shadow-y: calc(var(--shadow-y, 7px) * .62);
+}
+body .folly-latest .leaf-shadow,
+body .leaf-reader .reader-leaf .leaf-shadow {
+  transform: translate(var(--leaf-dynamic-shadow-x, 0px), var(--leaf-dynamic-shadow-y, 7px));
+}
+
+/* Kitty Committee ambient fabric motion. Existing drag/drop physics still
+   deforms the ribbon's individual SVG paths; this only moves the whole cloth
+   a few pixels in response to scroll/hover. */
+@keyframes kitty-ribbon-scroll-billow {
+  0%   { transform: perspective(900px) rotateX(-1.2deg) rotateY(.7deg) skewY(-.35deg) translateY(0); }
+  25%  { transform: perspective(900px) rotateX(1.6deg) rotateY(-1deg) skewY(.55deg) translateY(-2px); }
+  50%  { transform: perspective(900px) rotateX(-.8deg) rotateY(1.2deg) skewY(-.45deg) translateY(1px); }
+  75%  { transform: perspective(900px) rotateX(1.2deg) rotateY(-.6deg) skewY(.35deg) translateY(-1px); }
+  100% { transform: perspective(900px) rotateX(-1.2deg) rotateY(.7deg) skewY(-.35deg) translateY(0); }
+}
+@keyframes kitty-ribbon-hover-billow {
+  0%,100% { transform: perspective(900px) rotateX(0) rotateY(0) skewY(0) translateY(0); }
+  25%     { transform: perspective(900px) rotateX(2deg) rotateY(-1.4deg) skewY(.7deg) translateY(-3px); }
+  55%     { transform: perspective(900px) rotateX(-1.5deg) rotateY(1.6deg) skewY(-.65deg) translateY(2px); }
+  80%     { transform: perspective(900px) rotateX(.8deg) rotateY(-.7deg) skewY(.3deg) translateY(-1px); }
+}
+body .kitty-ribbon svg {
+  transform-origin: 50% 72%;
+  animation: kitty-ribbon-scroll-billow 1s linear both;
+  animation-timeline: scroll(root block);
+  animation-range: 0% 100%;
+}
+@media (any-hover: hover) {
+  body .kitty-ribbon:hover svg {
+    animation: kitty-ribbon-hover-billow 1.35s ease-in-out infinite;
+  }
+}
+html[data-effects="reduced"] body .kitty-ribbon svg {
+  animation: none;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  body .kitty-ribbon svg {
+    animation: none;
+    transform: none;
+  }
 }

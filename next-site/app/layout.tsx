@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
@@ -86,6 +87,7 @@ export default function RootLayout({
             </div>
           </OrganicTransition>
         </SitePreferences>
+        <Analytics />
       </body>
     </html>
   );
