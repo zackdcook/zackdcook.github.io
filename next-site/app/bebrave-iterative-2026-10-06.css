@@ -59,21 +59,28 @@ body:has(.bebrave-stage:not(.bebrave-world-stage)) #main{
   .bebrave-home-mark.site-mark{width:30px!important;height:30px!important;flex-basis:30px!important}
 }
 
-/* Cooldown belongs to the Carve control, not the dialogue copy. */
-.bebrave-carve-button{position:relative!important;overflow:visible!important}
+/* Cooldown is part of the Carve button face. */
+.bebrave-carve-button{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
+  position:relative!important;
+  overflow:hidden!important;
+  line-height:1.05!important;
+}
 .bebrave-carve-countdown{
-  position:absolute;
-  left:50%;
-  top:-1.35em;
-  transform:translateX(-50%);
-  width:max-content;
-  font:700 .72rem/1 var(--sans);
+  position:static!important;
+  transform:none!important;
+  width:auto!important;
+  font:700 .68rem/1 var(--sans)!important;
   font-variant-numeric:tabular-nums;
-  color:var(--panel-ink);
-  text-shadow:0 1px 2px rgb(255 255 255/.35);
+  color:inherit!important;
+  text-shadow:none!important;
   pointer-events:none;
 }
-.bebrave-carve-button:disabled{opacity:.68!important}
+.bebrave-carve-button:disabled{opacity:.72!important}
 
 /* Stump stays rooted at the bottom of the fixed swamp. */
 .bebrave-stage.is-bebrave-stump .bebrave-stage-tree,
@@ -186,4 +193,111 @@ html[data-timeline="felled"] body .stage-button[aria-pressed="true"]{
   --surface-bg:var(--selected-bg)!important;
   background:var(--selected-bg)!important;
   color:var(--selected-ink)!important;
+}
+
+
+/* --- Felled contrast pass -------------------------------------------------
+   Five distinct roles: wine page, coffee panels, camel controls,
+   apricot selected/home faces, chocolate leaf/secondary accents. */
+html[data-timeline="felled"][data-theme="dark"]{
+  --page-bg:#6F1D1B;
+  --page-ink:#FFE6A7;
+  --active-bg:#432818;
+  --active-ink:#FFE6A7;
+  --bio-bg:#432818;
+  --bio-ink:#FFE6A7;
+  --shoutouts-bg:#432818;
+  --shoutouts-card-bg:#99582A;
+  --shoutouts-card-ink:#FFE6A7;
+  --event-bg:#6F1D1B;
+  --event-card-bg:#432818;
+  --event-card-ink:#FFE6A7;
+  --folly-bg:#6F1D1B;
+  --folly-card-bg:#432818;
+  --folly-card-ink:#FFE6A7;
+  --button-bg:#BB9457;
+  --button-ink:#432818;
+  --button-hover-bg:#FFE6A7;
+  --button-hover-ink:#6F1D1B;
+  --stage-bg:#BB9457;
+  --stage-ink:#432818;
+  --selected-bg:#FFE6A7;
+  --selected-ink:#6F1D1B;
+  --nav-selected-bg:#FFE6A7;
+  --nav-selected-ink:#6F1D1B;
+  --panel-bg:#432818;
+  --panel-ink:#FFE6A7;
+  --leaf-color:#99582A;
+  --leaf-ink:#FFE6A7;
+  --folly-depth:#6F1D1B;
+  --chart-plate:#BB9457;
+  --progress-core:#6F1D1B;
+  --progress-track:#99582A;
+  --progress-hue:#FFE6A7;
+  --progress-label:#FFE6A7;
+}
+html[data-timeline="felled"][data-theme="dark"] body .leaf-body{
+  fill:#99582A!important;
+  stroke:#FFE6A7!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .leaf-veins{
+  stroke:#FFE6A7!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .mobile-menu nav{
+  --button-bg:#BB9457!important;
+  --button-ink:#6F1D1B!important;
+  --button-hover-bg:#FFE6A7!important;
+  --button-hover-ink:#6F1D1B!important;
+  background:#432818!important;
+  color:#FFE6A7!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .mobile-menu nav a:not([aria-current="page"]){
+  --surface-bg:#BB9457!important;
+  background:#BB9457!important;
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .mobile-menu nav a[aria-current="page"]{
+  --surface-bg:#FFE6A7!important;
+  background:#FFE6A7!important;
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .mobile-menu summary{
+  --surface-bg:#BB9457!important;
+  background:#BB9457!important;
+  color:#432818!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .home-tab{
+  --surface-bg:#BB9457!important;
+  --button-bg:#BB9457!important;
+  background:#BB9457!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .home-tab .wordmark-zack{
+  color:#FFE6A7!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .home-tab .wordmark-cook{
+  color:#6F1D1B!important;
+}
+
+/* --- Admire/parallax test ------------------------------------------------
+   Give the tree and the swamp artwork a tail below the viewport. This keeps
+   Safari from revealing the horizon while the browser chrome/overscroll
+   changes the visual viewport. */
+.bebrave-world-stage:has(.bebrave-scene.is-admire){
+  padding-bottom:55dvh!important;
+  background:var(--bebrave-mid)!important;
+}
+.bebrave-world-stage .bebrave-scene.is-admire{
+  min-height:calc(200dvh + 55dvh)!important;
+  background:var(--bebrave-mid)!important;
+}
+.bebrave-world-stage .bebrave-scene.is-admire .bebrave-midground{
+  height:calc(155svh - 66px)!important;
+  margin-bottom:calc(-155svh + 66px)!important;
+  background:
+    linear-gradient(to top,var(--bebrave-mid) 0 58%,transparent 58%),
+    repeating-conic-gradient(from 200deg at 50% 100%,transparent 0 6deg,var(--bebrave-mid) 7deg 11deg,transparent 12deg 19deg)!important;
+}
+.bebrave-world-stage .bebrave-scene.is-admire .bebrave-standing-scroll{
+  padding-bottom:55dvh!important;
+  background:linear-gradient(to bottom,transparent 0 calc(100% - 55dvh),var(--bebrave-mid) calc(100% - 55dvh))!important;
 }
