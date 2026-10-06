@@ -357,3 +357,28 @@ html[data-timeline="felled"]:not([data-theme="dark"]) body .mobile-menu nav a[ar
   padding-bottom:0!important;
   background:transparent!important;
 }
+
+
+/* -------------------------------------------------------------------------
+   Final pre-audit polish — 2026-10-06
+   ------------------------------------------------------------------------- */
+
+/* In felled dark mode, make the Words of Folly panel use the same semantic
+   face as the inner RM Hamrick shoutout card. */
+html[data-timeline="felled"][data-theme="dark"] body .journal-feature .folly-panel{
+  --surface-bg:var(--shoutouts-card-bg)!important;
+  background:var(--shoutouts-card-bg)!important;
+  color:var(--shoutouts-card-ink)!important;
+}
+
+/* Admire scenery starts perfectly registered to the viewport. JS now makes
+   parallax relative to the entry position, so the midground's bottom edge
+   begins at the viewport bottom and then moves offscreen as the tree is climbed. */
+.bebrave-world-stage .bebrave-scene.is-admire .bebrave-midground{
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  margin:0!important;
+  background-position:center bottom!important;
+  background-size:100% auto!important;
+}
