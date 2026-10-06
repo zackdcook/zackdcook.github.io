@@ -2,7 +2,6 @@ import { beBraveConfigured, currentOpenSession, requestContext, sessionView, vis
 import { fallbackBeBraveTreeState } from "@/lib/bebrave-types";
 import { serviceSupabase } from "@/lib/supabase";
 
-export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   if (!beBraveConfigured()) {
