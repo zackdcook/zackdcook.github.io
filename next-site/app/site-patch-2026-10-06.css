@@ -1,0 +1,111 @@
+/* 2026-10-06 visual patch */
+
+/* Keep dynamic light variables on leaves without rendering a rectangular
+   material card around the SVG. */
+body .folly-latest .quote-leaf,
+body .leaf-reader .reader-leaf {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+body .folly-latest .quote-leaf::before,
+body .folly-latest .quote-leaf::after,
+body .leaf-reader .reader-leaf::before,
+body .leaf-reader .reader-leaf::after {
+  content: none !important;
+  display: none !important;
+}
+@supports (-webkit-touch-callout: none) {
+  body .kitty-ribbon svg { animation: none; }
+}
+html[data-effects="reduced"] body .kitty-ribbon svg {
+  animation: none !important;
+  transform: none !important;
+}
+
+/* BE BRAVE art */
+.bebrave-scene { background: #121d55; }
+.bebrave-horizon {
+  background: url("/images/bebrave-horizon.webp") center bottom / cover no-repeat;
+}
+.bebrave-horizon > * { display: none !important; }
+.bebrave-midground {
+  background: url("/images/bebrave-midground.webp") center bottom / 100% auto no-repeat;
+  opacity: 1;
+}
+
+/* 30% of page width; center point at x=25% => left edge x=10%. */
+.bebrave-standing-scroll .bebrave-world {
+  width: 30vw;
+  max-width: 720px;
+  margin-left: 10vw;
+  margin-right: auto;
+}
+.bebrave-trunk {
+  border: 0;
+  box-shadow: inset 18px 0 24px rgb(25 15 10 / .22), inset -18px 0 24px rgb(25 15 10 / .22), 0 0 0 2px rgb(31 22 18 / .72);
+  background-image: url("/images/bebrave-bark.webp");
+  background-repeat: repeat-y;
+  /* 288 world units = one foot. Every repeat is exactly one metaphorical foot. */
+  background-size: 720px 288px;
+  background-position: center top;
+}
+.bebrave-trunk::after { display: none; }
+.bebrave-active-zone { background: rgb(255 248 237 / .025); border-color: rgb(255 248 237 / .48); }
+
+/* Supplied carving tools are dialogue-only. */
+.bebrave-tool {
+  min-height: 132px;
+  padding-left: 112px !important;
+  position: relative;
+  overflow: hidden;
+}
+.bebrave-tool > span { display: none; }
+.bebrave-tool::before {
+  content: "";
+  position: absolute;
+  left: 12px; top: 50%;
+  width: 88px; height: 88px;
+  transform: translateY(-50%);
+  background: center / contain no-repeat;
+  filter: drop-shadow(0 8px 9px rgb(0 0 0 / .16));
+}
+.bebrave-tools .bebrave-tool:nth-child(1)::before { background-image: url("/images/bebrave-tool-arrowhead.webp"); }
+.bebrave-tools .bebrave-tool:nth-child(2)::before { background-image: url("/images/bebrave-tool-nail.webp"); }
+.bebrave-tools .bebrave-tool:nth-child(3)::before { background-image: url("/images/bebrave-tool-key.webp"); }
+.bebrave-tools .bebrave-tool:nth-child(4)::before { background-image: url("/images/bebrave-cache.webp"); }
+.bebrave-dialog-card:has(.bebrave-color-grid)::before {
+  content: "";
+  display: block;
+  width: min(260px,70vw);
+  aspect-ratio: 1;
+  margin: 0 auto 18px;
+  background: url("/images/bebrave-tool-knife.webp") center / contain no-repeat;
+}
+
+/* Give the opening dialogue the same world art, including a glimpse of the tree. */
+.bebrave-experience {
+  min-height: 70svh;
+  background:
+    url("/images/bebrave-midground.webp") center bottom / 100% auto no-repeat,
+    url("/images/bebrave-horizon.webp") center bottom / cover fixed no-repeat;
+}
+.bebrave-experience > .bebrave-entry { position: relative; z-index: 2; }
+.bebrave-experience > .bebrave-entry::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  top: var(--header-height,76px); bottom: 0;
+  left: 10vw; width: 30vw; max-width: 720px;
+  background: url("/images/bebrave-bark.webp") center top / 100% 12.5vw repeat-y;
+  box-shadow: 0 0 0 2px rgb(31 22 18 / .6);
+  opacity: .82;
+  pointer-events: none;
+}
+@media (max-width:640px) {
+  .bebrave-tool { min-height: 116px; padding-left: 100px !important; }
+  .bebrave-tool::before { width: 78px; height: 78px; }
+  .bebrave-standing-scroll .bebrave-world { width: 30vw; margin-left: 10vw; }
+}
