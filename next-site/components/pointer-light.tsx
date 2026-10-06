@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { approachLight, materialLight, panelLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = ".calendar-dialog,.preferences-dialog,.signing-dialog,.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section,.placement-controls,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
+const surfacesSelector = ".calendar-dialog,.preferences-dialog,.signing-dialog,.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section,.placement-controls,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.journal-feature .folly-panel,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.signature-pad,.submission-panel,.cypress-carving,.tree-section";
 
 const panelsSelector = ".desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.submission-panel,.signature-pad,.admin-panel,.moderation-entry,.empty-note,.board-empty,.subscribe-callout,.commonplace-section";
 
@@ -94,11 +94,7 @@ export function PointerLight() {
       }
       previousTime = now;
       if (dirty) {
-        // Read all bounds together before writing any style. Re-measure after
-        // scroll/resize/pointer motion, including moved ribbons and nested rails.
-        for (const element of visible) {
-          rectangles.set(element, element.getBoundingClientRect());
-        }
+        for (const element of visible) rectangles.set(element, element.getBoundingClientRect());
         dirty = false;
       }
       for (const element of visible) {
@@ -110,7 +106,6 @@ export function PointerLight() {
     }
     function start() { if (!frame && !reduced()) frame = requestAnimationFrame(tick); }
     const move = (event: PointerEvent) => {
-      // Touches remain ordinary taps/scrolling, never a hold-to-light gesture.
       if (event.pointerType !== "mouse" || source === "tilt" || reduced()) return;
       x = event.clientX; y = event.clientY; lastMove = performance.now();
       source = "mouse"; released = false; dirty = true; hasLight = true; start();
@@ -130,15 +125,12 @@ export function PointerLight() {
       const point = tiltLight(reading, reference!, angle, innerWidth, innerHeight);
       if (!point) return;
       if (first) {
-        // A valid sensor reading claims the shared source until tilt is disabled.
         reset(); source = "tilt";
         x = point.x; y = point.y;
         document.documentElement.dataset.tiltStatus = "active";
         window.dispatchEvent(new Event(tiltStatusEvent));
       }
       tiltX = point.x; tiltY = point.y;
-      // Ignore sensor chatter. Slow intentional changes accumulate until they
-      // cross this threshold, allowing the same rest fade as the mouse.
       if (first || Math.hypot(point.x - significantX, point.y - significantY) > 5) {
         significantX = point.x; significantY = point.y; lastMove = performance.now();
         source = "tilt"; hasLight = true; released = false; start();
