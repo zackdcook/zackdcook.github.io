@@ -1,20 +1,21 @@
-/* Be Brave fixed-viewport + transparent stump */
-html:has(.bebrave-stage),
-body:has(.bebrave-stage){
+/* 2026-10-06 iterative fixes: Be Brave viewport, admire scroll, felled palette */
+
+/* Only the RPG/stump stage is viewport-locked. The communal world stage MUST
+   retain normal document scrolling so Admire can climb the tree. */
+html:has(.bebrave-stage:not(.bebrave-world-stage)),
+body:has(.bebrave-stage:not(.bebrave-world-stage)){
   width:100%;
   height:100%;
   overflow:hidden!important;
   overscroll-behavior:none!important;
 }
-body:has(.bebrave-stage) #page-sheet,
-body:has(.bebrave-stage) #main{
+body:has(.bebrave-stage:not(.bebrave-world-stage)) #page-sheet,
+body:has(.bebrave-stage:not(.bebrave-world-stage)) #main{
   height:100dvh!important;
   min-height:100dvh!important;
   overflow:hidden!important;
 }
-body:has(.bebrave-stage) .site-footer{display:none!important}
-
-.bebrave-stage{
+.bebrave-stage:not(.bebrave-world-stage){
   position:fixed!important;
   inset:0!important;
   width:100vw!important;
@@ -23,7 +24,7 @@ body:has(.bebrave-stage) .site-footer{display:none!important}
   overflow:hidden!important;
   overscroll-behavior:none!important;
 }
-.bebrave-stage-ui{
+.bebrave-stage:not(.bebrave-world-stage) .bebrave-stage-ui{
   position:absolute!important;
   inset:0!important;
   width:100%!important;
@@ -31,19 +32,52 @@ body:has(.bebrave-stage) .site-footer{display:none!important}
   min-height:0!important;
   overflow:hidden!important;
 }
-.bebrave-stage-art{
-  position:absolute!important;
-  inset:0!important;
-  overflow:hidden!important;
-  isolation:isolate;
+.bebrave-stage-art{overflow:hidden!important}
+
+/* Admire is deliberately extra tall for the current parallax test. */
+.bebrave-world-stage:has(.bebrave-scene.is-admire){
+  min-height:200dvh!important;
+  overflow:visible!important;
 }
-.bebrave-stage-bg,
-.bebrave-stage-mid{
-  position:absolute!important;
-  inset:-2px!important;
-  width:calc(100% + 4px)!important;
-  height:calc(100% + 4px)!important;
+.bebrave-world-stage .bebrave-scene.is-admire,
+.bebrave-world-stage .bebrave-scene.is-admire .bebrave-standing-scroll{
+  overflow:visible!important;
 }
+
+/* Use the actual site logo geometry on Be Brave. */
+.bebrave-home-mark.site-mark{
+  display:block!important;
+  width:34px!important;
+  height:34px!important;
+  flex:0 0 34px!important;
+  border-radius:9px;
+  overflow:hidden;
+  background:none!important;
+  color:inherit!important;
+}
+@media(max-width:700px){
+  .bebrave-home-mark.site-mark{width:30px!important;height:30px!important;flex-basis:30px!important}
+}
+
+/* Cooldown belongs to the Carve control, not the dialogue copy. */
+.bebrave-carve-button{position:relative!important;overflow:visible!important}
+.bebrave-carve-countdown{
+  position:absolute;
+  left:50%;
+  top:-1.35em;
+  transform:translateX(-50%);
+  width:max-content;
+  font:700 .72rem/1 var(--sans);
+  font-variant-numeric:tabular-nums;
+  color:var(--panel-ink);
+  text-shadow:0 1px 2px rgb(255 255 255/.35);
+  pointer-events:none;
+}
+.bebrave-carve-button:disabled{opacity:.68!important}
+
+/* Stump stays rooted at the bottom of the fixed swamp. */
+.bebrave-stage.is-bebrave-stump .bebrave-stage-tree,
+.bebrave-stage.is-bebrave-stump .bebrave-stage-hacks{display:none!important}
 .bebrave-stage-stump{
   position:absolute!important;
   z-index:3!important;
@@ -52,16 +86,104 @@ body:has(.bebrave-stage) .site-footer{display:none!important}
   transform:translateX(-50%)!important;
   width:min(88vw,650px)!important;
   height:min(68dvh,650px)!important;
-  aspect-ratio:auto!important;
-  background:url("/images/bebrave-stump.png") center bottom / contain no-repeat!important;
+  background:url("/images/bebrave-stump.png") center bottom/contain no-repeat!important;
   mix-blend-mode:normal!important;
   filter:drop-shadow(0 18px 18px rgb(0 0 0/.28))!important;
   pointer-events:none!important;
 }
 @media(max-width:700px){
-  .bebrave-stage-stump{
-    width:min(94vw,600px)!important;
-    height:min(66dvh,600px)!important;
-    bottom:0!important;
-  }
+  .bebrave-stage-stump{width:min(94vw,600px)!important;height:min(66dvh,600px)!important}
+}
+
+/* ------------------------------------------------------------------
+   Felled timeline palette
+   Give neighboring surfaces distinct pigments instead of camel-on-camel
+   and brown-on-brown. Geometry stays identical to the living timeline.
+   ------------------------------------------------------------------ */
+html[data-timeline="felled"]{
+  --page-bg:#FFE6A7;
+  --page-ink:#6F1D1B;
+  --active-bg:#BB9457;
+  --active-ink:#6F1D1B;
+  --bio-bg:#BB9457;
+  --bio-ink:#6F1D1B;
+  --shoutouts-bg:#BB9457;
+  --shoutouts-card-bg:#FFE6A7;
+  --shoutouts-card-ink:#6F1D1B;
+  --event-bg:#FFE6A7;
+  --event-card-bg:#BB9457;
+  --event-card-ink:#6F1D1B;
+  --folly-bg:#FFE6A7;
+  --folly-card-bg:#BB9457;
+  --folly-card-ink:#6F1D1B;
+  --button-bg:#FFE6A7;
+  --button-ink:#6F1D1B;
+  --stage-bg:#FFE6A7;
+  --stage-ink:#6F1D1B;
+  --selected-bg:#6F1D1B;
+  --selected-ink:#FFE6A7;
+  --chart-plate:#FFE6A7;
+  --progress-core:#6F1D1B;
+  --progress-track:#99582A;
+  --progress-hue:#432818;
+  --progress-label:#FFE6A7;
+}
+html[data-timeline="felled"][data-theme="dark"]{
+  --page-bg:#6F1D1B;
+  --page-ink:#FFE6A7;
+  --active-bg:#432818;
+  --active-ink:#FFE6A7;
+  --bio-bg:#432818;
+  --bio-ink:#FFE6A7;
+  --shoutouts-bg:#432818;
+  --shoutouts-card-bg:#99582A;
+  --shoutouts-card-ink:#FFE6A7;
+  --event-bg:#6F1D1B;
+  --event-card-bg:#432818;
+  --event-card-ink:#FFE6A7;
+  --folly-bg:#6F1D1B;
+  --folly-card-bg:#432818;
+  --folly-card-ink:#FFE6A7;
+  --button-bg:#BB9457;
+  --button-ink:#432818;
+  --stage-bg:#BB9457;
+  --stage-ink:#432818;
+  --selected-bg:#99582A;
+  --selected-ink:#FFE6A7;
+  --chart-plate:#BB9457;
+  --progress-core:#6F1D1B;
+  --progress-track:#99582A;
+  --progress-hue:#FFE6A7;
+  --progress-label:#FFE6A7;
+}
+
+/* Felled Active Project uses exactly the living timeline's structure.
+   Remove the old felled-only title plate/padding. */
+html[data-timeline="felled"] body .project-title>i{
+  display:block!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--active-ink)!important;
+}
+html[data-timeline="felled"] body .project-title-prefix{
+  width:auto!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:var(--active-ink)!important;
+}
+html[data-timeline="felled"] body .desk-section>.shell{
+  background:var(--active-bg)!important;
+  color:var(--active-ink)!important;
+}
+html[data-timeline="felled"] body .stage-button{
+  --surface-bg:var(--stage-bg)!important;
+  background:var(--stage-bg)!important;
+  color:var(--stage-ink)!important;
+}
+html[data-timeline="felled"] body .stage-button[aria-pressed="true"]{
+  --surface-bg:var(--selected-bg)!important;
+  background:var(--selected-bg)!important;
+  color:var(--selected-ink)!important;
 }
