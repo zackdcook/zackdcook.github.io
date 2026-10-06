@@ -1,17 +1,67 @@
-/* 2026-10-06 iterative Be Brave stump + mobile viewport fixes */
-body:has(.bebrave-stage){background:#101a50;overscroll-behavior:none}
-.bebrave-stage{min-height:100svh;height:100dvh;overflow:hidden}
-.bebrave-stage-ui{min-height:100svh;height:100dvh;overflow:hidden}
-.bebrave-stage.is-bebrave-stump .bebrave-stage-tree,
-.bebrave-stage.is-bebrave-stump .bebrave-stage-hacks{display:none!important}
-.bebrave-stage-stump{
-  position:absolute;z-index:3;left:50%;bottom:17dvh;transform:translateX(-50%);
-  width:min(86vw,650px);aspect-ratio:1/1;background:url("/images/bebrave-stump.jpeg") center/contain no-repeat;
-  mix-blend-mode:multiply;filter:drop-shadow(0 20px 22px rgb(0 0 0/.34));pointer-events:none;
+/* Be Brave fixed-viewport + transparent stump */
+html:has(.bebrave-stage),
+body:has(.bebrave-stage){
+  width:100%;
+  height:100%;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
 }
-.bebrave-stage-hacks{top:54%!important;left:48%!important;z-index:4!important}
-.bebrave-stump{display:none!important}
+body:has(.bebrave-stage) #page-sheet,
+body:has(.bebrave-stage) #main{
+  height:100dvh!important;
+  min-height:100dvh!important;
+  overflow:hidden!important;
+}
+body:has(.bebrave-stage) .site-footer{display:none!important}
+
+.bebrave-stage{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:0!important;
+  overflow:hidden!important;
+  overscroll-behavior:none!important;
+}
+.bebrave-stage-ui{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  overflow:hidden!important;
+}
+.bebrave-stage-art{
+  position:absolute!important;
+  inset:0!important;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.bebrave-stage-bg,
+.bebrave-stage-mid{
+  position:absolute!important;
+  inset:-2px!important;
+  width:calc(100% + 4px)!important;
+  height:calc(100% + 4px)!important;
+}
+.bebrave-stage-stump{
+  position:absolute!important;
+  z-index:3!important;
+  left:50%!important;
+  bottom:0!important;
+  transform:translateX(-50%)!important;
+  width:min(88vw,650px)!important;
+  height:min(68dvh,650px)!important;
+  aspect-ratio:auto!important;
+  background:url("/images/bebrave-stump.png") center bottom / contain no-repeat!important;
+  mix-blend-mode:normal!important;
+  filter:drop-shadow(0 18px 18px rgb(0 0 0/.28))!important;
+  pointer-events:none!important;
+}
 @media(max-width:700px){
-  .bebrave-stage-stump{width:min(92vw,560px);bottom:19dvh}
-  .bebrave-stage-hacks{top:49%!important;left:43%!important}
+  .bebrave-stage-stump{
+    width:min(94vw,600px)!important;
+    height:min(66dvh,600px)!important;
+    bottom:0!important;
+  }
 }
