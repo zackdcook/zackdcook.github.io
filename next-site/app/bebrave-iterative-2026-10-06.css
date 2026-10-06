@@ -278,26 +278,82 @@ html[data-timeline="felled"][data-theme="dark"] body .home-tab .wordmark-cook{
   color:#6F1D1B!important;
 }
 
-/* --- Admire/parallax test ------------------------------------------------
-   Give the tree and the swamp artwork a tail below the viewport. This keeps
-   Safari from revealing the horizon while the browser chrome/overscroll
-   changes the visual viewport. */
+/* -------------------------------------------------------------------------
+   2026-10-06 hotfix
+   Keep this file as the last stylesheet. These are deliberately narrow
+   overrides; no Be Brave world geometry is changed here.
+   ------------------------------------------------------------------------- */
+
+/* Latest-leaf contrast in FELLED DARK:
+   lighter brown leaf, original dark coffee veins. */
+html[data-timeline="felled"][data-theme="dark"] body .folly-latest .leaf-body{
+  fill:#BB9457!important;
+  stroke:#432818!important;
+}
+html[data-timeline="felled"][data-theme="dark"] body .folly-latest .leaf-veins{
+  stroke:#432818!important;
+}
+
+/* FELLED LIGHT header.
+   The material system paints from --surface-bg, so set the actual material
+   variables instead of only setting background-color. */
+html[data-timeline="felled"]:not([data-theme="dark"]) body .home-tab{
+  --button-bg:#BB9457!important;
+  --button-ink:#6F1D1B!important;
+  --button-hover-bg:#FFE6A7!important;
+  --button-hover-ink:#6F1D1B!important;
+  --surface-bg:#BB9457!important;
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .home-tab .wordmark-zack{
+  color:#FFE6A7!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .home-tab .wordmark-cook{
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .mobile-menu summary{
+  --button-bg:#BB9457!important;
+  --button-ink:#6F1D1B!important;
+  --button-hover-bg:#FFE6A7!important;
+  --button-hover-ink:#6F1D1B!important;
+  --surface-bg:#BB9457!important;
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .mobile-menu nav{
+  --panel-bg:#432818!important;
+  --panel-ink:#FFE6A7!important;
+  --button-bg:#BB9457!important;
+  --button-ink:#6F1D1B!important;
+  --button-hover-bg:#FFE6A7!important;
+  --button-hover-ink:#6F1D1B!important;
+  background:#432818!important;
+  color:#FFE6A7!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .mobile-menu nav a:not([aria-current="page"]){
+  --surface-bg:#BB9457!important;
+  color:#6F1D1B!important;
+}
+html[data-timeline="felled"]:not([data-theme="dark"]) body .mobile-menu nav a[aria-current="page"]{
+  --surface-bg:#FFE6A7!important;
+  color:#6F1D1B!important;
+}
+
+/* Undo the previous Admire extension completely.
+   The original site-patch + BeBraveTree scrolling geometry is authoritative. */
 .bebrave-world-stage:has(.bebrave-scene.is-admire){
-  padding-bottom:55dvh!important;
-  background:var(--bebrave-mid)!important;
+  padding-bottom:0!important;
+  min-height:100dvh!important;
+  background:#101a50!important;
 }
 .bebrave-world-stage .bebrave-scene.is-admire{
-  min-height:calc(200dvh + 55dvh)!important;
-  background:var(--bebrave-mid)!important;
+  min-height:100dvh!important;
+  background:#101a50!important;
 }
 .bebrave-world-stage .bebrave-scene.is-admire .bebrave-midground{
-  height:calc(155svh - 66px)!important;
-  margin-bottom:calc(-155svh + 66px)!important;
-  background:
-    linear-gradient(to top,var(--bebrave-mid) 0 58%,transparent 58%),
-    repeating-conic-gradient(from 200deg at 50% 100%,transparent 0 6deg,var(--bebrave-mid) 7deg 11deg,transparent 12deg 19deg)!important;
+  height:100dvh!important;
+  margin-bottom:-100dvh!important;
 }
 .bebrave-world-stage .bebrave-scene.is-admire .bebrave-standing-scroll{
-  padding-bottom:55dvh!important;
-  background:linear-gradient(to bottom,transparent 0 calc(100% - 55dvh),var(--bebrave-mid) calc(100% - 55dvh))!important;
+  padding-bottom:0!important;
+  background:transparent!important;
 }
