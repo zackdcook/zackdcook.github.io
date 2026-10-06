@@ -1,0 +1,17 @@
+/* 2026-10-06 iterative Be Brave stump + mobile viewport fixes */
+body:has(.bebrave-stage){background:#101a50;overscroll-behavior:none}
+.bebrave-stage{min-height:100svh;height:100dvh;overflow:hidden}
+.bebrave-stage-ui{min-height:100svh;height:100dvh;overflow:hidden}
+.bebrave-stage.is-bebrave-stump .bebrave-stage-tree,
+.bebrave-stage.is-bebrave-stump .bebrave-stage-hacks{display:none!important}
+.bebrave-stage-stump{
+  position:absolute;z-index:3;left:50%;bottom:17dvh;transform:translateX(-50%);
+  width:min(86vw,650px);aspect-ratio:1/1;background:url("/images/bebrave-stump.jpeg") center/contain no-repeat;
+  mix-blend-mode:multiply;filter:drop-shadow(0 20px 22px rgb(0 0 0/.34));pointer-events:none;
+}
+.bebrave-stage-hacks{top:54%!important;left:48%!important;z-index:4!important}
+.bebrave-stump{display:none!important}
+@media(max-width:700px){
+  .bebrave-stage-stump{width:min(92vw,560px);bottom:19dvh}
+  .bebrave-stage-hacks{top:49%!important;left:43%!important}
+}

@@ -12,6 +12,7 @@ import "./materials.css";
 import "./folly.css";
 import "./bebrave.css";
 import "./site-patch-2026-10-06.css";
+import "./bebrave-iterative-2026-10-06.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
