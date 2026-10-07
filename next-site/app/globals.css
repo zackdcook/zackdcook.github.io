@@ -1924,11 +1924,57 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .events-section { padding-bottom: clamp(48px,6vw,80px); }
 html[data-compact="true"] .events-section { padding-bottom: 40px; }
 .events-page { padding-bottom: 72px; }
-.about-story { max-width: none; margin-inline: 0; padding-bottom: 72px; }
-.about-name-art { max-width: 520px; margin: 0 auto 40px; }
-.about-name-art img { width: 100%; height: auto; }
+
 @media (max-width:740px) {
-  .about-story { padding-bottom: 48px; }
+
+}
+
+.about-story {
+  max-width:none;
+  margin-inline:0;
+  padding-bottom:0;
+  text-align:justify;
+  text-wrap:pretty;
+}
+.zacky-c-hover {
+  position:relative;
+  display:inline-block;
+}
+.zacky-c-trigger {
+  font-weight:650;
+  text-decoration:underline dotted;
+  text-underline-offset:.18em;
+  cursor:help;
+  border-radius:4px;
+}
+.zacky-c-trigger:focus-visible {
+  outline:2px solid currentColor;
+  outline-offset:3px;
+}
+.zacky-c-preview {
+  position:absolute;
+  left:50%;
+  bottom:calc(100% + 12px);
+  width:min(280px,72vw);
+  padding:7px;
+  border-radius:18px;
+  background:var(--photo-border);
+  box-shadow:0 14px 36px rgb(0 0 0 / .22);
+  opacity:0;
+  transform:translate(-50%,8px) scale(.96);
+  transform-origin:50% 100%;
+  transition:opacity .16s ease,transform .16s ease;
+  pointer-events:none;
+  z-index:30;
+}
+.zacky-c-preview img {
+  width:100%;
+  height:auto;
+  border-radius:12px;
+}
+.zacky-c-hover:is(:hover,:focus-within) .zacky-c-preview {
+  opacity:1;
+  transform:translate(-50%,0) scale(1);
 }
 
 /* The display scale and page-label baseline are shared across destinations. */
@@ -1957,7 +2003,7 @@ body :is(.hero h1,.project-title,.writing-group h2:not(.section-label),.life-cop
 .shoutout-card { flex-direction: column; align-items: flex-start; }
 .shoutout-card h3 { overflow-wrap: anywhere; }
 .shoutout-card .button { margin-top: 12px; }
-.about-name-art { margin-bottom: 0; }
+
 @media(max-width:740px) {
   :root { --feature-heading-size: clamp(66px,19vw,106px); }
   .project-title-prefix { font-size: .46em; }
@@ -1978,6 +2024,5 @@ html[data-compact="true"] .about-biography { margin-top: 36px; }
 
 
 /* Spring-clean: About Me reads like an editorial column; name art aligns left. */
-.about-story { text-align: justify; text-wrap: pretty; }
-.about-name-art { margin-left: max(0px, calc((100vw - min(1120px, calc(100vw - 40px))) / 2)); margin-right: auto; }
+
 @media (max-width:740px) { .about-name-art { margin-left: 20px; margin-right: 20px; max-width: min(520px, calc(100% - 40px)); } }

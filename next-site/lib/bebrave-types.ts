@@ -2,23 +2,19 @@ export const BEBRAVE_TREE_WIDTH = 720;
 export const BEBRAVE_UNITS_PER_FOOT = 288;
 export const BEBRAVE_ACTIVE_FEET = 5;
 export const BEBRAVE_ACTIVE_HEIGHT = BEBRAVE_UNITS_PER_FOOT * BEBRAVE_ACTIVE_FEET;
+export const BEBRAVE_RECARVE_GROWTH_FEET = 5;
+export const BEBRAVE_RECARVE_GROWTH_HEIGHT = BEBRAVE_UNITS_PER_FOOT * BEBRAVE_RECARVE_GROWTH_FEET;
 export const BEBRAVE_SECTION_HEIGHT = BEBRAVE_UNITS_PER_FOOT * 3;
 export const BEBRAVE_INITIAL_FEET = 30;
 export const BEBRAVE_INITIAL_HEIGHT = BEBRAVE_UNITS_PER_FOOT * BEBRAVE_INITIAL_FEET;
-export const BEBRAVE_COOLDOWN_MS = 28 * 24 * 60 * 60 * 1000;
 export const BEBRAVE_DRAWING_SECONDS = 60;
 
 export type BeBraveRarity = "common" | "uncommon" | "superior" | "epic";
 export type BeBraveNormalTool = "arrowhead" | "nail" | "key";
 export type BeBraveTool = BeBraveNormalTool | "cache";
 export type BeBraveSessionStatus =
-  | "tool_select"
-  | "epic_color"
-  | "ready"
-  | "drawing"
-  | "completed"
-  | "empty"
-  | "cancelled";
+  | "tool_select" | "epic_color" | "ready" | "drawing"
+  | "completed" | "empty" | "cancelled";
 
 export type BeBraveTreeState = {
   height: number;

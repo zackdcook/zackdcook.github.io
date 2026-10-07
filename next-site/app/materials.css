@@ -38,21 +38,13 @@ html[data-theme="dark"] {
   --material-shadow: rgb(0 0 0 / .48);
   --line: color-mix(in srgb,var(--soft-leaf) 45%,transparent);
 }
-/* Controls on a leaf-colored panel need a distinct face. */
-:is(.event-callout,.bio-section,.desk-section,.about-biography,.shoutouts-section,.calendar-dialog,.writing-panel,.mobile-menu nav) {
-  --button-bg: var(--soft-leaf); --button-ink: var(--khaki);
-}
-html[data-theme="dark"] :is(.event-callout,.bio-section,.desk-section,.about-biography,.shoutouts-section,.calendar-dialog,.writing-panel,.mobile-menu nav) {
-  --button-bg: var(--leaf); --button-ink: var(--midnight);
-  --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral);
-}
-:is(.shoutout-card) {
-  --button-bg: var(--shoutout-button-bg); --button-ink: var(--shoutout-button-ink);
-  --button-hover-bg: var(--khaki); --button-hover-ink: var(--floral);
-}
 .preferences-dialog {
-  --button-bg: var(--preference-button-bg); --button-ink: var(--preference-button-ink);
-  --button-hover-bg: var(--preference-selected-bg); --button-hover-ink: var(--preference-selected-ink);
+  --button-bg:var(--preference-button-bg);
+  --button-ink:var(--preference-button-ink);
+  --button-hover-bg:var(--preference-selected-bg);
+  --button-hover-ink:var(--preference-selected-ink);
+  background:var(--preferences-bg);
+  color:var(--preferences-ink);
 }
 /* One external shadow, plus two shallow INSET bevels. Hover never increases
    elevation or introduces a second cast. Pointer updates stay untransitioned. */
@@ -70,7 +62,7 @@ body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.
   background-clip: padding-box,border-box;
   border: 1px solid transparent;
   box-shadow:
-    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,5px)*var(--press-depth)) calc(var(--cast-blur,var(--shadow-blur,12px))*var(--press-depth)) var(--material-shadow),
+    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,0px)*var(--press-depth)) calc(var(--cast-blur,var(--shadow-blur,0px))*var(--press-depth)) var(--material-shadow),
     inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--material-cut);
   font-family: var(--sans);
@@ -97,27 +89,32 @@ body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.
   color: var(--button-hover-ink);
   /* A painted recess, not a layout/transform change, keeps nearby SVG stable. */
   box-shadow:
-    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,5px)*var(--press-depth)) 4px var(--material-shadow),
+    calc(var(--shadow-x,0px)*var(--press-depth)) calc(var(--shadow-y,0px)*var(--press-depth)) 4px var(--material-shadow),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 2px var(--material-edge),
     inset var(--rim-x,0px) var(--rim-y,1px) 3px var(--material-cut);
 }
 body .stage-button {
-  --surface-bg: var(--button-bg);
-  color: var(--button-ink);
-  min-height: 78px;
-  /* Do not clip the cast at the button's own bounds. */
-  contain: style;
+  --surface-bg:var(--stage-bg);
+  color:var(--stage-ink);
+  min-height:78px;
+  contain:style;
 }
 body .stage-button[aria-pressed="true"] {
-  --surface-bg: var(--midnight);
-  color: var(--coral);
+  --surface-bg:var(--selected-bg);
+  color:var(--selected-ink);
 }
-body .stage-button :is(.stage-label,.stage-label>span,.stage-count) { color: inherit; }
-body .stage-button .stage-count { opacity: .88; }
-@media (any-hover: hover) {
-  body .stage-button:not(:disabled):hover { --surface-bg: var(--midnight); color: var(--coral); }
+body .stage-button :is(.stage-label,.stage-label>span,.stage-count) { color:inherit; }
+body .stage-button .stage-count { opacity:.88; }
+@media (any-hover:hover) {
+  body .stage-button:not(:disabled):hover {
+    --surface-bg:var(--selected-bg);
+    color:var(--selected-ink);
+  }
 }
-body .stage-button:not(:disabled):active { --surface-bg: var(--midnight); color: var(--coral); }
+body .stage-button:not(:disabled):active {
+  --surface-bg:var(--selected-bg);
+  color:var(--selected-ink);
+}
 body .project-description-toggle {
   display: inline-flex;
   align-items: center;
@@ -131,7 +128,7 @@ body .project-description-toggle {
 body :is(.journal-banner,.shoutout-card,.event-callout,.writing-panel,.mobile-menu nav) {
   background-image: none;
   box-shadow:
-    var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow),
+    var(--shadow-x,0px) var(--shadow-y,0px) var(--shadow-blur,0px) var(--material-shadow),
     inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--material-cut);
   transform: none;
@@ -171,7 +168,7 @@ body .commonplace-image.tactile-photo>img { border-radius: 18px 18px 0 0; }
 
 /* A small safe-area gutter keeps upward header casts inside the viewport. */
 .site-header { padding-top: max(12px,env(safe-area-inset-top)); overflow: visible; }
-body .site-header :is(.home-tab,.mobile-menu summary) { --cast-blur: min(10px,var(--shadow-blur,12px)); }
+body .site-header :is(.home-tab,.mobile-menu summary) { --cast-blur: min(10px,var(--shadow-blur,0px)); }
 
 /* Crisp, shallow lettering edges catch the same light as the nearby frame. */
 body .hero h1, body .hero h1 em {
@@ -184,16 +181,57 @@ body .hero h1, body .hero h1 em {
 .rail-track { margin: -32px; padding: 32px; scroll-padding-inline: 32px; }
 .rail-track::after { content: ""; flex: 0 0 10px; }
 
-/* Folder faces and dropdown links use explicit foreground/background pairs,
-   independent of their dark/light parent. The active folder meets the page. */
-body .desktop-nav a:not([aria-current="page"]) { background-color: var(--button-bg); color: var(--button-ink); }
-body .desktop-nav a { background-image: none; box-shadow: inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge); transform: none; }
-body .desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) { background-color: var(--button-hover-bg); color: var(--button-hover-ink); }
-body .desktop-nav a[aria-current="page"] { background-color: var(--selected-bg); color: var(--selected-ink); box-shadow: none; border-bottom-color: transparent; }
-body .home-tab { --button-bg: var(--leaf); --button-hover-bg: var(--leaf); font-family: var(--display); font-weight: 650; }
-.wordmark-zack { color: var(--floral); }
-.wordmark-cook { color: var(--midnight); }
-.wordmark-name { white-space: nowrap; }
+/* Desktop folders catch dynamic edge light on the top and sides only.
+   The open bottom edge stays visually attached to the header. */
+body .desktop-nav a {
+  position:relative;
+  background-image:none;
+  box-shadow:none;
+  transform:none;
+  font-weight:700;
+}
+body .desktop-nav a::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  border-top:1px solid color-mix(in srgb,var(--floral) calc(18% + var(--light-strength,0)*62%),transparent);
+  border-left:1px solid color-mix(in srgb,var(--floral) calc(10% + var(--light-strength,0)*48%),transparent);
+  border-right:1px solid color-mix(in srgb,var(--floral) calc(10% + var(--light-strength,0)*48%),transparent);
+  border-bottom:0;
+}
+body .desktop-nav a:not([aria-current="page"]) {
+  background-color:var(--button-bg);
+  color:var(--button-ink);
+}
+body .desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) {
+  background-color:var(--button-hover-bg);
+  color:var(--button-hover-ink);
+}
+body .desktop-nav a[aria-current="page"] {
+  background-color:var(--nav-selected-bg);
+  color:var(--nav-selected-ink);
+  border-bottom-color:transparent;
+}
+body .home-tab {
+  --button-bg:var(--home-bg);
+  --button-hover-bg:var(--home-bg);
+  font-family:var(--display);
+  font-weight:650;
+}
+body .home-tab .wordmark-zack { color:var(--home-zack-ink); }
+body .home-tab .wordmark-cook { color:var(--home-cook-ink); }
+body .home-tab[aria-current="page"] {
+  --surface-bg:var(--home-selected-bg);
+  background-color:var(--home-selected-bg);
+  outline:2px solid color-mix(in srgb,var(--coral) 55%,transparent);
+  outline-offset:2px;
+}
+body .home-tab[aria-current="page"] .wordmark-zack { color:var(--home-selected-zack-ink); }
+body .home-tab[aria-current="page"] .wordmark-cook { color:var(--home-selected-cook-ink); }
+.wordmark-name { white-space:nowrap; }
+
 /* Close targets share the same square corners and material as navigation. */
 body :is(.preferences-dialog,.leaf-reader) .dialog-close {
   width: 44px; min-height: 44px; padding: 0; border-radius: 12px;
@@ -271,7 +309,7 @@ body .life-photo .kitty-ribbon {
 .ribbon-back-face { display: none; }
 .ribbon-patch[data-face="back"] .ribbon-front-face { display: none; }
 .ribbon-patch[data-face="back"] .ribbon-back-face { display: inline; }
-.ribbon-cast { fill: var(--midnight); opacity: .3; transform: translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,5px) + var(--ribbon-height,0px)*.15)); }
+.ribbon-cast { fill: var(--midnight); opacity: .3; transform: translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,0px) + var(--ribbon-height,0px)*.15)); }
 .ribbon-thickness { fill: var(--khaki); stroke: var(--khaki); stroke-width: 1.2; stroke-linejoin: round; transform: translateY(1.2px); }
 .ribbon-lettering { fill: var(--midnight); font: 600 21px var(--sans); letter-spacing: 0; }
 .ribbon-patch[data-face="back"] .ribbon-front-label { display: none; }
@@ -516,9 +554,9 @@ body .shoutouts-section > .shell {
   padding: clamp(30px,5vw,70px);
 }
 body .about-biography > .shell {
-  background: var(--bio-bg);
-  color: var(--bio-ink);
-  padding: clamp(30px,5vw,70px);
+  background:var(--about-card-bg);
+  color:var(--about-card-ink);
+  padding:clamp(30px,5vw,70px);
 }
 
 /* Keep the active project's two-line title intentional and easy to scan. */
@@ -552,20 +590,6 @@ html[data-theme="dark"] body .kitty-ribbon { --ribbon-shadow: rgb(0 0 0 / .32); 
 /* In dark mode the active draft ring uses the warm accent, not the khaki
    card behind it, so the progress chart remains readable. */
 html[data-theme="dark"] { --progress-hue: color-mix(in srgb,var(--leaf) 38%,var(--floral) 62%); }
-
-/* The home tab and mobile Menu share one face in dark mode. */
-body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 68%,var(--floral) 32%); }
-html[data-theme="dark"] body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 45%,var(--floral) 55%); }
-
-/* Active navigation always has a distinct selected face, including inside
-   the mobile dropdown. */
-body .desktop-nav a[aria-current="page"],
-body .mobile-menu nav a[aria-current="page"] {
-  --surface-bg: var(--selected-bg);
-  background: var(--selected-bg);
-  color: var(--selected-ink);
-  border-color: transparent;
-}
 
 html[data-theme="dark"] body .events-section .event-description { color: var(--floral); }
 
@@ -624,7 +648,7 @@ body .bio-section > .life-section,
 body .shoutouts-section > .shell,
 body .about-biography > .shell {
   box-shadow:
-    calc(var(--shadow-x,0px)*var(--press-depth,1)) calc(var(--shadow-y,5px)*var(--press-depth,1)) var(--shadow-blur,12px) var(--material-shadow),
+    calc(var(--shadow-x,0px)*var(--press-depth,1)) calc(var(--shadow-y,0px)*var(--press-depth,1)) var(--shadow-blur,0px) var(--material-shadow),
     inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--surface-edge),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--surface-cut);
 }
@@ -646,12 +670,13 @@ body [data-material="surface"] {
   background-clip: padding-box,border-box;
   border: 1px solid transparent !important;
   box-shadow:
-    calc(var(--shadow-x,0px)*var(--press-depth,1)) calc(var(--shadow-y,5px)*var(--press-depth,1)) calc(var(--shadow-blur,12px)*var(--press-depth,1)) var(--material-shadow),
+    calc(var(--shadow-x,0px)*var(--press-depth,1)) calc(var(--shadow-y,0px)*var(--press-depth,1)) calc(var(--shadow-blur,0px)*var(--press-depth,1)) var(--material-shadow),
     inset var(--rim-x,0px) var(--rim-y,1px) 1px var(--material-edge),
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--material-cut) !important;
 }
 body .desk-section > .shell { --surface-bg: var(--active-bg); }
-body :is(.bio-section > .life-section,.about-biography > .shell) { --surface-bg: var(--bio-bg); }
+body .bio-section > .life-section { --surface-bg:var(--bio-bg); }
+body .about-biography > .shell { --surface-bg:var(--about-card-bg); }
 body .shoutouts-section > .shell { --surface-bg: var(--shoutouts-bg); }
 body :is(.event-callout,.writing-panel) { --surface-bg: var(--event-card-bg); }
 body .shoutout-card { --surface-bg: var(--shoutouts-card-bg); }
@@ -659,20 +684,6 @@ body .folly-panel { --surface-bg: var(--folly-card-bg); }
 body .mobile-menu nav { --surface-bg: var(--page-bg); }
 body :is(.submission-panel) { --surface-bg: var(--panel-bg); }
 body .tactile-photo { --surface-bg: var(--photo-frame); }
-
-/* Dark selected controls use the same khaki/white pair as the open Menu. */
-html[data-theme="dark"], html[data-timeline="felled"][data-theme="dark"] {
-  --selected-bg: var(--khaki); --selected-ink: var(--floral);
-  --nav-selected-bg: var(--khaki); --nav-selected-ink: var(--floral);
-  --chart-plate: color-mix(in srgb,var(--khaki) 60%,var(--midnight) 40%);
-  --progress-core: var(--khaki);
-  --progress-dark: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
-  --progress-hue: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
-  --progress-track: color-mix(in srgb,var(--leaf) 45%,var(--khaki) 55%);
-}
-body .stage-button[aria-pressed="true"] { --surface-bg: var(--selected-bg); }
-body .stage-button:not(:disabled):is(:hover,:active) { --surface-bg: var(--selected-bg); }
-body .desktop-nav a:not([aria-current="page"]) { --surface-bg: var(--button-bg); }
 
 /* One page display scale; only the last emphasized word carries the accent. */
 :root { --page-heading-size: clamp(80px,9.8vw,136px); --page-heading-accent: var(--leaf); --section-gap: 36px; }
@@ -988,125 +999,6 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
 }
-/* -------------------------------------------------------------------------
-   FINAL DESKTOP HOVER PALETTE
-   ------------------------------------------------------------------------- */
-
-/*
- * Ordinary controls, both themes:
- * Midnight Violet face + Light Coral text.
- *
- * This intentionally comes last so section-specific inherited button tokens
- * cannot turn buttons khaki on desktop hover.
- */
-@media (any-hover: hover) {
-  body :is(
-    .button,
-    .text-link,
-    .stage-button:not(:disabled),
-    .rail-controls button:not(:disabled),
-    .feed-copy button:not(:disabled),
-    .project-description-toggle:not(:disabled),
-    .preference-control
-  ):hover {
-    --surface-bg: var(--midnight);
-    --button-hover-bg: var(--midnight);
-    --button-hover-ink: var(--coral);
-
-    background-color: var(--midnight);
-    color: var(--coral);
-  }
-
-
-  /* ---------------------------------------------------------------
-     HEADER HOME BUTTON
-     Zack Cook always becomes Light Coral on hover.
-     --------------------------------------------------------------- */
-
-  body .site-header .home-tab:hover {
-    --surface-bg: var(--coral);
-    --button-hover-bg: var(--coral);
-    --button-hover-ink: var(--midnight);
-
-    background-color: var(--coral);
-    color: var(--midnight);
-  }
-
-
-  /* ---------------------------------------------------------------
-     DESKTOP FOLDER TABS
-
-     Light mode -> Light Coral
-     Dark mode  -> Dark Khaki
-     --------------------------------------------------------------- */
-
-  html[data-theme="light"]
-  body .desktop-nav a:not([aria-current="page"]):hover {
-    --surface-bg: var(--midnight);
-    background-color: var(--midnight);
-    color: var(--coral);
-  }
-
-  html[data-theme="dark"]
-  body .desktop-nav a:not([aria-current="page"]):hover {
-    --surface-bg: var(--khaki);
-    background-color: var(--khaki);
-    color: var(--floral);
-  }
-
-
-  /*
-   * Keep the currently selected folder visually attached to its page.
-   * Hovering it should not make the active tab suddenly change material.
-   */
-  body .desktop-nav a[aria-current="page"]:hover {
-    background-color: var(--selected-bg);
-    color: var(--selected-ink);
-  }
-
-
-  /* ---------------------------------------------------------------
-     LIGHT MODE
-     Footer + Menu + dropdown navigation:
-     Midnight Violet with Light Coral text.
-     --------------------------------------------------------------- */
-
-  html[data-theme="light"]
-  body .site-footer .button:hover,
-  html[data-theme="light"]
-  body .mobile-menu summary:hover,
-  html[data-theme="light"]
-  body .mobile-menu nav a:hover {
-    --surface-bg: var(--midnight);
-    --button-hover-bg: var(--midnight);
-    --button-hover-ink: var(--coral);
-
-    background-color: var(--midnight);
-    color: var(--coral);
-  }
-
-
-  /* ---------------------------------------------------------------
-     DARK MODE
-     Footer + Menu + dropdown navigation:
-     Dark Khaki with Floral White text.
-     --------------------------------------------------------------- */
-
-  html[data-theme="dark"]
-  body .site-footer .button:hover,
-  html[data-theme="dark"]
-  body .mobile-menu summary:hover,
-  html[data-theme="dark"]
-  body .mobile-menu nav a:hover {
-    --surface-bg: var(--khaki);
-    --button-hover-bg: var(--khaki);
-    --button-hover-ink: var(--floral);
-
-    background-color: var(--khaki);
-    color: var(--floral);
-  }
-}
-
 /* Spring-clean survivors: current components only. */
 body .folly-latest .quote-leaf,body .leaf-reader .reader-leaf{background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 body .folly-latest .quote-leaf::before,body .folly-latest .quote-leaf::after,body .leaf-reader .reader-leaf::before,body .leaf-reader .reader-leaf::after{content:none!important;display:none!important}

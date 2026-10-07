@@ -5,19 +5,30 @@ import { cookies, headers } from "next/headers";
 import { serviceSupabase } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
 import { tierFromRoll, paletteForTier, BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
-import type { BeBraveNormalTool, BeBraveRarity, BeBraveSessionView, ToolReveal } from "@/lib/bebrave-types";
+import { BEBRAVE_RECARVE_GROWTH_HEIGHT, BEBRAVE_UNITS_PER_FOOT, type BeBraveNormalTool, type BeBraveRarity, type BeBraveSessionView, type BeBraveTreeState, type ToolReveal } from "@/lib/bebrave-types";
 
 const visitorCookie = "zack-bebrave-visitor";
 const uuid = /^[a-f0-9-]{36}$/i;
 
+
+export function beBraveTestMode() {
+  const ref = process.env.BEBRAVE_TEST_PROJECT_REF?.trim();
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+  return process.env.VERCEL_ENV === "preview"
+    && process.env.BEBRAVE_TEST_MODE === "true"
+    && Boolean(ref)
+    && url.includes(ref!);
+}
+
 export function beBraveConfigured() {
-  return Boolean(
+  const database = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
-      (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) &&
-      process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
-      process.env.TURNSTILE_SECRET_KEY &&
-      process.env.BEBRAVE_HMAC_KEY,
+    (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) &&
+    process.env.BEBRAVE_HMAC_KEY
   );
+  if (!database) return false;
+  if (beBraveTestMode()) return true;
+  return Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
 }
 
 function hmacKey() {
@@ -80,6 +91,7 @@ export async function requestContext(request: Request, createVisitor = true) {
 export async function verifyBeBraveTurnstile(request: Request, token: string) {
   const context = await requestContext(request, true);
   if (!context) throw new Error("This browser could not start a carving session.");
+  if (beBraveTestMode()) return context;
   const limited = await serviceSupabase().rpc("bebrave_turnstile_limit", { p_visitor_hash: context.visitorHash, p_network_hash: context.networkHash });
   if (limited.error) throw new Error("Too many carving attempts. Please give the tree a little time.");
   const host = new URL(request.headers.get("origin") || request.url).hostname;
@@ -125,11 +137,45 @@ export function assertSessionId(value: unknown) {
 export async function visitorRow(visitorHash: string) {
   const { data, error } = await serviceSupabase()
     .from("bebrave_visitors")
-    .select("id,visitor_hash,last_carved_at,next_carve_at")
+    .select("id,visitor_hash,last_carved_at")
     .eq("visitor_hash", visitorHash)
     .maybeSingle();
   if (error) throw new Error("The tree could not check your carving status.");
   return data;
+}
+
+export async function growthFeetRemaining(visitorId: string | null | undefined, treeHeight: number) {
+  if (!visitorId) return 0;
+  const { data, error } = await serviceSupabase()
+    .from("bebrave_sessions")
+    .select("zone_bottom")
+    .eq("visitor_id", visitorId)
+    .eq("status", "completed")
+    .not("zone_bottom", "is", null)
+    .order("public_sequence", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw new Error("The tree could not check your growth progress.");
+  if (!data?.zone_bottom) return 0;
+
+  const remaining = Math.max(
+    0,
+    Number(data.zone_bottom) + BEBRAVE_RECARVE_GROWTH_HEIGHT - treeHeight,
+  );
+  return Math.ceil(remaining / BEBRAVE_UNITS_PER_FOOT);
+}
+
+export function treeStateFromRow(row: Record<string, unknown>): BeBraveTreeState {
+  return {
+    height:Number(row.height),
+    activeTop:Number(row.active_top),
+    activeBottom:Number(row.active_bottom),
+    revision:Number(row.revision),
+    completedCount:Number(row.completed_count),
+    pendingGrowthCarvings:Number(row.pending_growth_carvings),
+    latestSequence:Number(row.completed_count),
+  };
 }
 
 export async function ownedSession(sessionId: string, visitorHash: string) {
