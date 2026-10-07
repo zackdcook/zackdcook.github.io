@@ -389,22 +389,6 @@ html[data-theme="dark"] {
   --line: color-mix(in srgb,var(--floral) 26%,transparent);
 }
 
-/* Keep felled mode pleasantly earthy at the same contrast ratios. */
-html[data-timeline="felled"] {
-  --active-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-  --bio-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-  --event-card-bg: color-mix(in srgb,var(--coral) 46%,var(--floral) 54%);
-  --folly-card-bg: color-mix(in srgb,var(--coral) 42%,var(--floral) 58%);
-  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-}
-html[data-timeline="felled"][data-theme="dark"] {
-  --active-bg: color-mix(in srgb,var(--khaki) 88%,var(--midnight) 12%);
-  --bio-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
-  --event-card-bg: color-mix(in srgb,var(--khaki) 88%,var(--midnight) 12%);
-  --folly-card-bg: color-mix(in srgb,var(--coral) 30%,var(--midnight) 70%);
-  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 45%,var(--floral) 55%);
-}
-
 body {
   background: var(--page-bg);
   color: var(--page-ink);
@@ -645,34 +629,6 @@ body .about-biography > .shell {
     inset calc(var(--rim-x,0px)*-1) calc(var(--rim-y,1px)*-1) 1px var(--surface-cut);
 }
 
-/* Local control roles must follow the shared face, including hover states. */
-html[data-timeline="felled"] {
-  --button-bg: var(--stage-bg);
-  --shoutouts-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-  --selected-ink: var(--floral);
-  --nav-selected-ink: var(--floral);
-}
-html[data-timeline="felled"][data-theme="dark"] {
-  --shoutouts-bg: color-mix(in srgb,var(--khaki) 94%,var(--midnight) 6%);
-  --nav-selected-ink: var(--midnight);
-}
-html[data-timeline="felled"] body .project-title > i {
-  padding: 14px 18px; border-radius: 12px; background: var(--khaki);
-}
-html:not([data-theme="dark"]) { --dialog-bg: var(--active-bg); }
-body :is(.event-callout,.bio-section,.desk-section,.about-biography,.shoutouts-section,.calendar-dialog,.writing-panel,.mobile-menu nav,.leaf-reader),
-html[data-theme="dark"] body :is(.event-callout,.bio-section,.desk-section,.about-biography,.shoutouts-section,.calendar-dialog,.writing-panel,.mobile-menu nav,.leaf-reader) {
-  --button-bg: var(--stage-bg);
-  --button-ink: var(--midnight);
-  --button-hover-bg: var(--khaki);
-  --button-hover-ink: var(--floral);
-}
-html[data-theme="dark"] body .project-title-prefix {
-  width: fit-content; padding: 6px 10px; border-radius: 8px;
-  background: var(--stage-bg);
-}
-body .home-tab { --button-hover-bg: var(--khaki); --button-hover-ink: var(--floral); }
-html[data-timeline="felled"] body .home-tab { --button-bg: var(--stage-bg); }
 body .shoutouts-page { background: var(--page-bg); color: var(--page-ink); }
 body .hero h1 { font-size: clamp(80px,9.8vw,136px); }
 @media(max-width:740px) { body .hero h1 { font-size: clamp(66px,19vw,106px); } }
@@ -799,28 +755,6 @@ html[data-theme="light"] body .project-title {
 
 :root {
   --shoutouts-card-ink: var(--midnight);
-}
-
-/* Dark-mode palette corrections. */
-html[data-theme="dark"] {
-  /* Selected Active Project stage:
-     dark pink face + light pink type. */
-  --selected-bg: var(--midnight);
-  --selected-ink: var(--coral);
-
-  /* Individual shoutouts use the same medium-pink face as Words of Folly. */
-  --shoutouts-card-bg: var(--folly-card-bg);
-  --shoutouts-card-ink: var(--floral);
-
-  /* ...with the same light-green family used by your other controls. */
-  --shoutout-button-bg:
-    color-mix(in srgb, var(--leaf) 45%, var(--floral) 55%);
-  --shoutout-button-ink: var(--midnight);
-}
-
-/* Preserve the shoutout/folly match in the alternate felled timeline too. */
-html[data-timeline="felled"][data-theme="dark"] {
-  --shoutouts-card-bg: var(--folly-card-bg);
 }
 
 /* The three "Greetings..." lines are hero-detail paragraphs. */

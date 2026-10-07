@@ -9,7 +9,7 @@
   --bio-bg:var(--active-bg); --bio-ink:var(--active-ink); --event-bg:var(--page-bg);
   --event-card-bg:var(--tone-light-color); --event-card-ink:var(--tone-dark-color);
   --folly-bg:var(--page-bg); --folly-card-bg:color-mix(in srgb,var(--tone-medium-color) 48%,var(--tone-light-neutral)); --folly-card-ink:var(--tone-dark-neutral);
-  --shoutouts-bg:var(--active-bg); --shoutouts-card-bg:color-mix(in srgb,var(--tone-medium-neutral) 52%,var(--tone-light-neutral)); --shoutouts-card-ink:var(--tone-dark-color);
+  --shoutouts-bg:var(--active-bg); --shoutouts-card-bg:var(--tone-light-color); --shoutouts-card-ink:var(--tone-dark-color);
   --feature-button-bg:color-mix(in srgb,var(--tone-medium-neutral) 45%,var(--tone-light-neutral) 55%); --feature-button-ink:var(--tone-dark-color);
   --feature-button-hover-bg:var(--tone-dark-neutral); --feature-button-hover-ink:var(--tone-light-neutral);
   --button-bg:color-mix(in srgb,var(--tone-medium-neutral) 68%,var(--tone-light-neutral)); --button-ink:var(--tone-dark-color);

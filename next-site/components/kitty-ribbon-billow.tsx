@@ -17,8 +17,9 @@ export function KittyRibbonBillow(){
       if(speed<.03)return;
       window.dispatchEvent(new CustomEvent(kittyRibbonWindEvent,{detail:{strength:speed}}));
     };
+    const prime=requestAnimationFrame(()=>window.dispatchEvent(new CustomEvent(kittyRibbonWindEvent,{detail:{strength:.08}})));
     window.addEventListener("scroll",onScroll,{passive:true});
-    return()=>window.removeEventListener("scroll",onScroll);
+    return()=>{cancelAnimationFrame(prime);window.removeEventListener("scroll",onScroll);};
   },[]);
   return null;
 }

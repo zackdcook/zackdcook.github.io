@@ -193,3 +193,8 @@ body .leaf-reader .reader-leaf .leaf-shadow {
   transform: translate(var(--leaf-dynamic-shadow-x, 0px), var(--leaf-dynamic-shadow-y, 7px));
 }
 
+
+/* Felled dark mode: keep the leaf distinct from its surrounding brown card. */
+html[data-timeline="felled"][data-theme="dark"] {
+  --leaf-color: var(--coral);
+}
