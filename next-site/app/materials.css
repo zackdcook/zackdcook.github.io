@@ -129,7 +129,7 @@ body .project-description-toggle {
 }
 
 /* Panels retain a solid face. Only the shallow edges and their cast move. */
-body :is(.journal-banner,.shoutout-card,.event-callout,.writing-panel,.mobile-menu nav) {
+body :is(.shoutout-card,.event-callout,.writing-panel,.mobile-menu nav) {
   background-image: none;
   box-shadow:
     var(--shadow-x,0px) var(--shadow-y,0px) var(--shadow-blur,0px) var(--material-shadow),
@@ -138,14 +138,14 @@ body :is(.journal-banner,.shoutout-card,.event-callout,.writing-panel,.mobile-me
   transform: none;
   transition: background-color .18s, color .18s;
 }
-body :is(.event-callout,.shoutout-card,.journal-banner) { background-color: var(--panel-bg); color: var(--panel-ink); }
+body :is(.event-callout,.shoutout-card) { background-color: var(--panel-bg); color: var(--panel-ink); }
 .event-callout :is(.event-description,.event-schedule,.event-address) { color: inherit; }
 body :is(.desk-section,.bio-section,.about-biography,.shoutouts-section,.shoutouts-page) { background-color: var(--feature-bg); color: var(--feature-ink); }
 body :is(.desk-section,.bio-section,.about-biography) :is(.progress-note,.life-copy>p,.identity-aside,.prose,.project-subtitle,.project-updated) { color: inherit; }
 body .writing-panel { background-color: var(--panel-bg); color: var(--panel-ink); }
 body .writing-panel :is(.progress-note,p,.eyebrow) { color: inherit; }
 body .shoutout-card { background-color: var(--shoutout-bg); color: var(--shoutout-ink); }
-body :is(.event-callout,.shoutout-card,.journal-banner) :is(p,time,.shoutout-subtitle) { color: inherit; }
+body :is(.event-callout,.shoutout-card) :is(p,time,.shoutout-subtitle) { color: inherit; }
 
 /* The seven-pixel colored band stays solid. Its one-pixel outer edge and
    inset bevel use the same material paint as buttons. Image pixels never light. */
@@ -235,16 +235,22 @@ body .home-tab[aria-current="page"] .wordmark-cook { color:var(--home-selected-c
 .wordmark-name { white-space:nowrap; }
 
 /* Close targets share the same square corners and material as navigation. */
-body :is(.preferences-dialog,.leaf-reader) .dialog-close {
+body :is(.preferences-dialog,.leaf-reader,.calendar-dialog) .dialog-close {
   width: 44px; min-height: 44px; padding: 0; border-radius: 12px;
   font-size: 28px; flex-shrink: 0;
 }
-body :is(.preferences-dialog,.leaf-reader) .dialog-close:focus-visible { outline: none; }
+body :is(.preferences-dialog,.leaf-reader,.calendar-dialog) .dialog-close:focus-visible { outline: none; }
 body .mobile-menu nav { background: var(--panel-bg); color: var(--panel-ink); }
 body .mobile-menu nav a { margin-block: 6px; text-decoration: none; }
 
 body .mobile-menu nav a[aria-current="page"] { --surface-bg: var(--button-hover-bg); color: var(--button-hover-ink); outline: none; }
 body .mobile-menu summary { color: var(--button-ink); }
+body .mobile-menu summary[aria-current="page"] {
+  --surface-bg: var(--home-selected-bg);
+  background-color: var(--home-selected-bg);
+  color: var(--home-selected-zack-ink);
+  border-color: var(--surface-edge);
+}
 
 /* Fixed SVG geometry: emphasis changes opacity only. No filter, scaling,
    layout shift, or parent elevation when a stage button is hovered/pressed. */
@@ -320,7 +326,7 @@ body .life-photo .kitty-ribbon {
 .tilt-preference>p:first-child { margin-top: 0; }
 .tilt-lighting-prompt { position: fixed; bottom: max(18px,env(safe-area-inset-bottom)); right: 18px; z-index: 19; display: flex; gap: 8px; max-width: calc(100vw - 36px); }
 
-html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.mobile-menu nav,.tactile-photo) { --shadow-x: 0px !important; --shadow-y: 3px !important; --shadow-blur: 7px !important; --rim-x: 0px !important; --rim-y: 1px !important; --light-strength: 0 !important; transition: none; }
+html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control,.shoutout-card,.event-callout,.writing-panel,.mobile-menu nav,.tactile-photo) { --shadow-x: 0px !important; --shadow-y: 3px !important; --shadow-blur: 7px !important; --rim-x: 0px !important; --rim-y: 1px !important; --light-strength: 0 !important; transition: none; }
 @media(max-width:740px) {
   /* Keep the shadow gutter inside the phone viewport. */
   .rail-track { margin-inline: -20px; padding-inline: 32px; }
@@ -332,7 +338,7 @@ html[data-effects="reduced"] body :is(.button,.text-link,.stage-button,:where(.r
 /* Reader paper is an explicit exception; other dialogs retain colored faces. */
 body :is(.calendar-dialog) { background: var(--dialog-bg); color: var(--dialog-ink); }
 body :is(.calendar-dialog) :is(.calendar-help,.form-hint) { color: inherit; }
-body :is(.event-callout,.shoutout-card,.writing-panel,.journal-banner) :is(p,time,.shoutout-subtitle) { color: inherit; }
+body :is(.event-callout,.shoutout-card,.writing-panel) :is(p,time,.shoutout-subtitle) { color: inherit; }
 body :is(.empty-note) { background: var(--panel-bg); color: var(--panel-ink); }
 body :is(input:not([type="radio"]):not([type="checkbox"]),textarea,select) { background: var(--soft-leaf); color: var(--khaki); }
 body :is(input,textarea)::placeholder { color: var(--khaki); opacity: .8; }
@@ -436,7 +442,7 @@ body {
 body .desk-section { background: var(--active-bg); color: var(--active-ink); }
 body .events-section { background: var(--event-bg); color: var(--page-ink); }
 body .bio-section { background: var(--bio-bg); color: var(--bio-ink); }
-body .journal-feature { background: var(--folly-bg); color: var(--page-ink); }
+body .folly-feature { background: var(--folly-bg); color: var(--page-ink); }
 body .shoutouts-section { background: var(--shoutouts-bg); color: var(--page-ink); }
 body .about-biography { background: var(--bio-bg); color: var(--bio-ink); }
 body .about-name-art-band { background: var(--page-bg); color: var(--page-ink); padding-block: clamp(38px,6vw,86px); }
@@ -444,7 +450,7 @@ body :is(.event-callout,.writing-panel) { background: var(--event-card-bg); colo
 body .folly-panel { background: var(--folly-card-bg); color: var(--folly-card-ink); }
 body .shoutout-card { background: var(--shoutouts-card-bg); color: var(--shoutouts-card-ink); }
 body :is(.event-callout,.writing-panel,.folly-panel,.shoutout-card) { border-color: color-mix(in srgb,var(--page-ink) 24%,transparent); }
-body :is(.desk-section,.events-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) :is(p,.eyebrow,.section-label,.project-subtitle,.project-updated,.identity-aside) { color: inherit; }
+body :is(.desk-section,.events-section,.bio-section,.folly-feature,.shoutouts-section,.about-biography) :is(p,.eyebrow,.section-label,.project-subtitle,.project-updated,.identity-aside) { color: inherit; }
 body .event-callout :is(p,time,.event-description,.event-schedule,.event-address),
 body .shoutout-card :is(p,time,.shoutout-subtitle) { color: inherit; }
 
@@ -470,7 +476,7 @@ body .home-tab {
 body .home-tab[aria-current="page"] {
   --button-bg:var(--home-selected-bg);
   --button-hover-bg:var(--home-selected-bg);
-  border-color:transparent;
+  border-color:var(--surface-edge);
 }
 body .mobile-menu nav { background: var(--page-bg); color: var(--page-ink); border-color: var(--line); }
 body .mobile-menu nav a[aria-current="page"] { background: var(--selected-bg); color: var(--selected-ink); }
@@ -511,11 +517,6 @@ body .site-footer {
 body .site-footer-inner { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 24px; }
 body .site-footer-inner .footer-links { width: 100%; justify-content: center; flex-wrap: wrap; }
 body .site-footer-inner .copyright { width: 100%; text-align: center; }
-
-/* The brand icon keeps its two-tone mark while the surrounding home control
-   remains part of the green button family. */
-body .home-tab .wordmark-zack { color: var(--floral); }
-body .home-tab .wordmark-cook { color: var(--midnight); }
 
 @media (max-width:740px) {
   :root { --feature-heading-size: clamp(38px,12vw,58px); }
@@ -704,7 +705,7 @@ html[data-theme="dark"] body .events-page .page-intro > p:not(.eyebrow) { color:
 body .page-wrap { padding-bottom: var(--section-gap); min-height: 0; }
 body .page-intro { margin-bottom: var(--section-gap); }
 body .hero { padding-bottom: var(--section-gap); }
-body :is(.desk-section,.events-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) {
+body :is(.desk-section,.events-section,.bio-section,.folly-feature,.shoutouts-section,.about-biography) {
   margin-top: 0; padding-block: 0 var(--section-gap); border-bottom: 0;
 }
 body .about-biography { padding-top: var(--section-gap); }
@@ -714,7 +715,7 @@ body .about-name-art { margin-bottom: 0; }
 body .creative-works-page .desk-section { padding-bottom: 0; }
 body .shoutout-list { gap: var(--section-gap); }
 body .site-footer { margin: 0; padding-top: var(--section-gap); border-top: 1px solid var(--line); }
-html[data-compact="true"] body :is(.section-space,.events-section,.desk-section,.bio-section,.journal-feature,.shoutouts-section,.about-biography) {
+html[data-compact="true"] body :is(.section-space,.events-section,.desk-section,.bio-section,.folly-feature,.shoutouts-section,.about-biography) {
   margin-top: 0; padding-block: 0 var(--section-gap);
 }
 html[data-compact="true"] body .about-biography { padding-top: var(--section-gap); }

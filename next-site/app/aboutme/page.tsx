@@ -1,6 +1,7 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ZackyCPreview } from "@/components/zacky-c-preview";
 import { site } from "@/content/site";
 
 export const metadata: Metadata = pageMetadata("about", "About Me");
@@ -42,12 +43,7 @@ export default function AboutMe() {
       <p>
         You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook.
         If you’ve known me for a while, you might be inclined to call me{" "}
-        <span className="zacky-c-hover">
-          <span className="zacky-c-trigger" tabIndex={0}>Zacky C</span>
-          <span className="zacky-c-preview" aria-hidden="true">
-            <Image src="/images/name-doodles.webp" alt="" width={1200} height={1600} sizes="280px" />
-          </span>
-        </span>.
+        <ZackyCPreview />.
         {" "}At one point, for a brief moment in the annals of history, I became Zacak, as it had been accidentally written on my birthday cake by your friendly neighborhood supermarket. Hello there.
       </p>
 

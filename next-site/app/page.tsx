@@ -53,20 +53,20 @@ export default async function Home() {
 
       <section id="about-me" className="bio-section section-space"><div className="life-section shell">
         <div className="life-copy">
-          <h2 className="eyebrow section-label">BIO1990</h2>
+          <CollectionHeading>BIO1990</CollectionHeading>
           <h2>
             Who am I?
             <sub className="identity-aside">no really // plz help // idk who I am</sub>
           </h2>
           {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-          <Link className="button" href="/aboutme">
+          <Link className="button" href="/about-me">
             A lil history
           </Link>
         </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
       </div></section>
 
-      <section id="words-of-folly" className="journal-feature section-space"><div className="shell folly-panel">
+      <section id="words-of-folly" className="folly-feature section-space"><div className="shell folly-panel">
         <div className="section-heading"><div className="life-copy">
           <CollectionHeading>Words of Folly</CollectionHeading>
           <h2>Note to self:</h2>
@@ -74,7 +74,7 @@ export default async function Home() {
         <div className="folly-latest" role="img" aria-label={latestFolly.text}>
           <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} />
         </div>
-        <div className="rail-more"><Link className="button button-outline" href="/journal">The whole pile</Link></div>
+        <div className="rail-more"><Link className="button button-outline" href="/words-of-folly">The whole pile</Link></div>
       </div></section>
 
       <section id="shoutouts" className="shoutouts-section section-space"><div className="shell">

@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { approachLight, materialLight, panelLight, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = ".calendar-dialog,.preferences-dialog,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.journal-feature .folly-panel,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.journal-banner,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.bebrave-rpg-dialogue,.bebrave-home-button";
+const surfacesSelector = ".calendar-dialog,.preferences-dialog,.zacky-c-preview,.bebrave-human-modal,.bebrave-timer,.bebrave-draw-hint,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-feature .folly-panel,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.shoutout-card,.event-callout,.portrait-frame,.tactile-photo,.kitty-ribbon,.hero h1,.home-tab,.preference-control,.desktop-nav a,.mobile-menu summary,.mobile-menu nav,.mobile-menu nav a,.writing-panel,.bebrave-rpg-dialogue,.bebrave-home-button";
 
-const panelsSelector = ".desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.journal-banner,.shoutout-card,.event-callout,.writing-panel,.bebrave-rpg-dialogue";
+const panelsSelector = ".bebrave-human-modal,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.shoutout-card,.event-callout,.writing-panel,.bebrave-rpg-dialogue";
 
 export function PointerLight() {
   useEffect(() => {

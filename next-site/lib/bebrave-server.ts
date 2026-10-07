@@ -4,7 +4,7 @@ import { createHmac, randomBytes, randomInt } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { serviceSupabase } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { tierFromRoll, paletteForTier, BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
+import { tierFromRoll, paletteForTier, BEBRAVE_EPIC_COLORS, epicChanceForPity } from "@/lib/bebrave-config";
 import { BEBRAVE_RECARVE_GROWTH_HEIGHT, BEBRAVE_UNITS_PER_FOOT, type BeBraveNormalTool, type BeBraveRarity, type BeBraveSessionView, type BeBraveTreeState, type ToolReveal } from "@/lib/bebrave-types";
 
 const visitorCookie = "zack-bebrave-visitor";
@@ -29,6 +29,18 @@ export function beBraveConfigured() {
   if (!database) return false;
   if (beBraveTestMode()) return true;
   return Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
+}
+
+export async function resetBeBraveTestVisitor() {
+  if (!beBraveTestMode()) throw new Error("Test reset is unavailable.");
+  const jar = await cookies();
+  jar.set(visitorCookie, randomBytes(32).toString("hex"), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365 * 2,
+  });
 }
 
 function hmacKey() {
@@ -103,6 +115,12 @@ export function secureRoll() {
   return randomInt(0, 10_000);
 }
 
+export function securePityRoll(pity: number) {
+  const epicPercent = epicChanceForPity(pity);
+  if (randomInt(0, 10_000) < epicPercent * 100) return randomInt(9_500, 10_000);
+  return randomInt(0, 9_500);
+}
+
 export function secureSeed() {
   return randomInt(0, 2_147_483_647);
 }
@@ -137,7 +155,7 @@ export function assertSessionId(value: unknown) {
 export async function visitorRow(visitorHash: string) {
   const { data, error } = await serviceSupabase()
     .from("bebrave_visitors")
-    .select("id,visitor_hash,last_carved_at")
+    .select("id,visitor_hash,last_carved_at,epic_pity")
     .eq("visitor_hash", visitorHash)
     .maybeSingle();
   if (error) throw new Error("The tree could not check your carving status.");
@@ -173,7 +191,6 @@ export function treeStateFromRow(row: Record<string, unknown>): BeBraveTreeState
     activeBottom:Number(row.active_bottom),
     revision:Number(row.revision),
     completedCount:Number(row.completed_count),
-    pendingGrowthCarvings:Number(row.pending_growth_carvings),
     latestSequence:Number(row.completed_count),
   };
 }

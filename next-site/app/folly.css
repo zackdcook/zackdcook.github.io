@@ -82,13 +82,13 @@ body:has(.leaf-reader[open]) { overflow: hidden; }
   0%,58% { opacity: 1; }
   to { opacity: 0; }
 }
-.journal-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }
-.journal-feature .collection-heading { color: inherit; }
-.journal-feature .section-heading { padding-top: 0; margin-bottom: 40px; }
+.folly-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }
+.folly-feature .collection-heading { color: inherit; }
+.folly-feature .section-heading { padding-top: 0; margin-bottom: 40px; }
 .folly-latest { display: block; width: min(580px,100%); margin: 0 auto; }
 @media (max-width:600px) {
   body .folly-panel { padding: 26px; }
-  .journal-feature .section-heading { margin-bottom: 25px; }
+  .folly-feature .section-heading { margin-bottom: 25px; }
   .folly-ground { height: min(64svh,540px); min-height: 400px; }
   .folly-ground-readable { height: auto; min-height: 0; }
   .folly-ground-readable .folly-leaves { gap: 24px; }
@@ -113,7 +113,7 @@ html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
   --folly-ground: var(--folly-bg);
   --folly-ground-ink: var(--page-ink);
 }
-body .journal-feature { background: var(--folly-bg); color: var(--page-ink); }
+body .folly-feature { background: var(--folly-bg); color: var(--page-ink); }
 body .folly-panel {
   background-color: var(--folly-card-bg);
   color: var(--folly-card-ink);
@@ -177,7 +177,7 @@ body .folly-page .folly-panel {
 
 /* Homepage Words of Folly remains a tactile material card. The dedicated
    Words of Folly page stays flat because its .folly-page rule above wins. */
-body .journal-feature .folly-panel {
+body .folly-feature .folly-panel {
   --surface-bg: var(--folly-card-bg);
 }
 

@@ -15,8 +15,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
   const cache=useRef(new Map<number,BeBravePublicDrawing[]>()),inflight=useRef(new Map<number,Promise<BeBravePublicDrawing[]>>());
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null);
-  const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60);
-  const active=useRef<{strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number}|null>(null);
+  const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60),[finishBusy,setFinishBusy]=useState(false);
+  const active=useRef<{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number}|null>(null);
   const strokeCounter=useRef(draftStrokes.reduce((m,s)=>Math.max(m,s.strokeOrder+1),0));
   const sendChain=useRef<Promise<void>>(Promise.resolve()),finishing=useRef(false),paintFrame=useRef(0),serverOffset=useRef(serverNow?Date.parse(serverNow)-Date.now():0);
 
@@ -77,7 +77,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=pointsToPath(a.points);activeLine.current?.setAttribute("d",d);activeGlow.current?.setAttribute("d",d);activeShimmer.current?.setAttribute("d",d);}
   function appendPoint(p:[number,number]){const a=active.current;if(!a)return;const last=a.points.at(-1);if(last&&Math.hypot(p[0]-last[0],p[1]-last[1])<1.4)return;a.points.push(p);if(!paintFrame.current)paintFrame.current=requestAnimationFrame(paint);}
 
-  function queueChunk(a:{strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number},force=false){
+  function queueChunk(a:{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number},force=false){
     const start=a.sentIndex===0?0:Math.max(0,a.sentIndex-1);const unsent=a.points.slice(start);if(unsent.length<2||(!force&&unsent.length<10))return;
     const chunks:Array<{index:number;points:Array<[number,number]>}>=[];let offset=0;while(offset<unsent.length-1){const part=unsent.slice(offset,Math.min(unsent.length,offset+120));if(part.length<2)break;chunks.push({index:a.chunkIndex++,points:part});offset+=part.length-1;}a.sentIndex=a.points.length;
     for(const chunk of chunks){sendChain.current=sendChain.current.then(async()=>{const r=await fetch("/api/bebrave/strokes",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session!.id,strokeId:a.strokeId,strokeOrder:a.strokeOrder,chunkIndex:chunk.index,points:chunk.points})});if(!r.ok){const d=await r.json().catch(()=>({}));if(d.error!=="deadline")throw Error(d.error||"A stroke could not be saved.");}}).catch(e=>setSaveError(e instanceof Error?e.message:"A stroke could not be saved."));}
@@ -86,7 +86,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   useEffect(()=>{if(mode!=="draw")return;const id=setInterval(()=>flushActive(false),200);return()=>clearInterval(id);},[mode,session?.id]);
 
-  const finish=useCallback(async()=>{if(finishing.current||!session)return;finishing.current=true;const a=active.current;if(a){queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;}await sendChain.current;async function attempt(){const r=await fetch("/api/bebrave/session/finish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session!.id})});const d=await r.json();if(r.status===409&&d.error==="still-active"){await new Promise(res=>setTimeout(res,180));return attempt();}if(!r.ok)throw Error(d.error||"The carving could not be finalized.");return d;}try{const d=await attempt();onFinished?.(d);}catch(e){setSaveError(e instanceof Error?e.message:"The carving could not be finalized.");finishing.current=false;}},[session,onFinished]);
+  const finish=useCallback(async()=>{if(finishing.current||!session)return;finishing.current=true;setFinishBusy(true);const a=active.current;if(a){queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;}await sendChain.current;async function attempt(){const r=await fetch("/api/bebrave/session/finish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session!.id})});const d=await r.json();if(r.status===409&&d.error==="still-active"){await new Promise(res=>setTimeout(res,180));return attempt();}if(!r.ok)throw Error(d.error||"The carving could not be finalized.");return d;}try{const d=await attempt();onFinished?.(d);}catch(e){setSaveError(e instanceof Error?e.message:"The carving could not be finalized.");finishing.current=false;setFinishBusy(false);}},[session,onFinished]);
 
   useEffect(()=>{if(mode!=="draw"||!session?.drawingDeadline)return;let ended=false;const tick=()=>{const ms=Date.parse(session.drawingDeadline!)-(Date.now()+serverOffset.current);setRemaining(Math.max(0,Math.ceil(ms/1000)));if(ms<=0&&!ended){ended=true;void finish();}};tick();const id=setInterval(tick,100);return()=>clearInterval(id);},[mode,session?.drawingDeadline,finish]);
 
@@ -102,10 +102,11 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     {saveError&&<p className="bebrave-save-error" role="alert">{saveError}</p>}
     <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
-        onPointerDown={e=>{if(mode!=="draw"||remaining<=0||!session)return;const p=worldPoint(e.clientX,e.clientY);if(!p)return;e.currentTarget.setPointerCapture(e.pointerId);const a={strokeId:crypto.randomUUID(),strokeOrder:strokeCounter.current++,points:[p],sentIndex:0,chunkIndex:0};active.current=a;paint();e.preventDefault();}}
-        onPointerMove={e=>{if(!active.current||mode!=="draw"||remaining<=0)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);}}
-        onPointerUp={e=>{const a=active.current;if(!a)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;activeLine.current?.setAttribute("d","");activeGlow.current?.setAttribute("d","");activeShimmer.current?.setAttribute("d","");}}
-        onPointerCancel={()=>{const a=active.current;if(!a)return;queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;}}>
+        onPointerDown={e=>{if(mode!=="draw"||remaining<=0||!session||!e.isPrimary||active.current||(e.pointerType==="mouse"&&e.button!==0))return;const p=worldPoint(e.clientX,e.clientY);if(!p)return;e.currentTarget.setPointerCapture(e.pointerId);const a={pointerId:e.pointerId,strokeId:crypto.randomUUID(),strokeOrder:strokeCounter.current++,points:[p],sentIndex:0,chunkIndex:0};active.current=a;paint();e.preventDefault();}}
+        onPointerMove={e=>{if(!active.current||active.current.pointerId!==e.pointerId||mode!=="draw"||remaining<=0)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);}}
+        onPointerUp={e=>{const a=active.current;if(!a||a.pointerId!==e.pointerId)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;activeLine.current?.setAttribute("d","");activeGlow.current?.setAttribute("d","");activeShimmer.current?.setAttribute("d","");}}
+        onPointerCancel={e=>{const a=active.current;if(!a||a.pointerId!==e.pointerId)return;queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;}}
+        onContextMenu={e=>{if(mode==="draw")e.preventDefault();}}>
         <div className="bebrave-tree-space" style={{width:BEBRAVE_TREE_WIDTH,height:state.height,transform:treeTransform}}>
           <div className="bebrave-trunk" aria-hidden="true"/>
           {mode==="draw"&&session?.zoneTop!=null&&session.zoneBottom!=null&&<div className="bebrave-active-zone" style={{top:session.zoneTop,height:session.zoneBottom-session.zoneTop}} aria-hidden="true"/>}
@@ -123,6 +124,6 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
         </div>
       </div>
     </div>
-    {mode==="draw"&&<p className="bebrave-draw-hint">Draw directly on the highlighted five-foot band. There is no undo.</p>}
+    {mode==="draw"&&<div className="bebrave-draw-actions"><p className="bebrave-draw-hint">Draw directly on the highlighted five-foot band. There is no undo.</p><button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button></div>}
   </section>;
 }

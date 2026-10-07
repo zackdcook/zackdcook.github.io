@@ -10,7 +10,7 @@ html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em {
 .preferences-dialog .calendar-help { margin: 0 0 22px; }
 html[data-compact="true"] :is(.section-space,.page-wrap,.events-section) { margin-top: 32px; padding-top: 28px; padding-bottom: 28px; }
 html[data-compact="true"] .hero { padding-top: 40px; padding-bottom: 40px; }
-html[data-compact="true"] :is(.journal-banner,.shoutout-card,.event-callout) { padding: 24px; }
+html[data-compact="true"] :is(.shoutout-card,.event-callout) { padding: 24px; }
 .copyright-secret { animation: little-secret .3s ease both; }
 .loading-leaf { min-height: 35vh; color: var(--muted); }
 

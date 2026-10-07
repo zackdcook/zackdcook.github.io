@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={displayFont.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap }} />
-        <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/journal/feed.xml`} />
+        <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/words-of-folly/feed.xml`} />
       </head>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>

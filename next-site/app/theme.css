@@ -93,9 +93,9 @@
   --home-zack-ink: var(--tone-dark-color);
   --home-cook-ink: var(--tone-dark-color);
 
-  --home-selected-bg: var(--tone-dark-color);
-  --home-selected-zack-ink: var(--tone-light-neutral);
-  --home-selected-cook-ink: var(--tone-medium-color);
+  --home-selected-bg: var(--home-bg);
+  --home-selected-zack-ink: var(--home-zack-ink);
+  --home-selected-cook-ink: var(--home-cook-ink);
 
   /* Preferences */
   --preferences-bg: var(--tone-white);

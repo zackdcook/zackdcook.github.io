@@ -38,7 +38,6 @@ export const config = {
     "/login",
     "/auth/:path*",
     "/api/commonplace/:path*",
-    "/api/journal/:path*",
     "/api/spotify/connect",
     "/api/spotify/callback",
   ],

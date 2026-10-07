@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
       { source: "/writing.html", destination: "/creative-works", permanent: true },
       { source: "/blog/index.html", destination: "/words-of-folly", permanent: true },
       { source: "/field-notes.html", destination: "/words-of-folly", permanent: true },
-      { source: "/blog/its-not-too-late.html", destination: "/journal/its-not-too-late", permanent: true },
+      { source: "/blog/its-not-too-late.html", destination: "/words-of-folly", permanent: true },
       { source: "/beta.html", destination: "/creative-works", permanent: false },
     ];
   },
@@ -33,7 +33,6 @@ const nextConfig: NextConfig = {
     return [
       { source: "/creative-works", destination: "/creativeworks" },
       { source: "/about-me", destination: "/aboutme" },
-      { source: "/words-of-folly", destination: "/journal" },
     ];
   },
 };

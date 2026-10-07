@@ -16,7 +16,6 @@ export function SiteHeader() {
     ({
       "/creativeworks": "/creative-works",
       "/aboutme": "/about-me",
-      "/journal": "/words-of-folly",
     } as Record<string, string>)[normalizedPath] ?? normalizedPath;
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
@@ -118,7 +117,7 @@ export function SiteHeader() {
             }
           }}
         >
-          <summary>
+          <summary aria-current={current("/")}>
             Menu <span aria-hidden="true">＋</span>
           </summary>
           <nav aria-label="Mobile navigation">

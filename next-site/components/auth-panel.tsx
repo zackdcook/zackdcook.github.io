@@ -63,8 +63,7 @@ export function AuthPanel({
     <div className="admin-panel">
       <h2>Sign in</h2>
       <p>
-        Reading and sharing stay open. Sign in to comment or use your private
-        editor.
+        Reading and sharing stay open. Sign in to use private site tools.
       </p>
       {(google || facebook) && (
         <div className="signin-options">

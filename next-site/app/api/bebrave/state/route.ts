@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   try {
     const { data, error } = await serviceSupabase()
       .from("bebrave_tree_state")
-      .select("height,active_top,active_bottom,revision,completed_count,pending_growth_carvings")
+      .select("height,active_top,active_bottom,revision,completed_count")
       .eq("id", true).single();
     if (error) throw error;
 

@@ -22,7 +22,6 @@ export type BeBraveTreeState = {
   activeBottom: number;
   revision: number;
   completedCount: number;
-  pendingGrowthCarvings: number;
   latestSequence: number;
 };
 
@@ -32,7 +31,6 @@ export const fallbackBeBraveTreeState: BeBraveTreeState = {
   activeBottom: BEBRAVE_INITIAL_HEIGHT,
   revision: 1,
   completedCount: 0,
-  pendingGrowthCarvings: 0,
   latestSequence: 0,
 };
 

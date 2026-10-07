@@ -26,7 +26,7 @@ export function CalendarMenu() {
       <div className="calendar-dialog-content">
         <div className="calendar-dialog-heading">
           <h2 id={heading}>Write it in.</h2>
-          <button className="button button-small calendar-close" type="button" aria-label="Close calendar choices" onClick={close}>×</button>
+          <button className="button button-small calendar-close dialog-close" type="button" aria-label="Close calendar choices" onClick={close}>×</button>
         </div>
         <p className="calendar-event-title">{writingGroup.title}</p>
         <p>{writingGroup.schedule}</p>

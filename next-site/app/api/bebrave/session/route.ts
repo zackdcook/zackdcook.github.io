@@ -1,6 +1,6 @@
 import {
   assertSessionId, beBraveConfigured, growthFeetRemaining, ownedSession,
-  requestContext, secureRoll, sessionDraftStrokes, sessionView,
+  requestContext, securePityRoll, sessionDraftStrokes, sessionView,
   verifyBeBraveTurnstile, visitorRow,
 } from "@/lib/bebrave-server";
 import { serviceSupabase } from "@/lib/supabase";
@@ -44,13 +44,15 @@ export async function POST(request: Request) {
     const token = String(form.get("cf-turnstile-response") || "");
     const context = await verifyBeBraveTurnstile(request, token);
 
+    const priorVisitor = await visitorRow(context.visitorHash);
+    const pity = Number(priorVisitor?.epic_pity || 0);
     const { data:id, error } = await serviceSupabase().rpc("bebrave_create_or_resume_session", {
       p_visitor_hash:context.visitorHash,
       p_network_hash:context.networkHash,
       p_browser_hint:context.browserHint,
-      p_roll_arrowhead:secureRoll(),
-      p_roll_nail:secureRoll(),
-      p_roll_key:secureRoll(),
+      p_roll_arrowhead:securePityRoll(pity),
+      p_roll_nail:securePityRoll(pity),
+      p_roll_key:securePityRoll(pity),
     });
 
     if (error || typeof id !== "string") {

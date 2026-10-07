@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { authConfigured, currentUser, isOwner } from "@/lib/supabase";
 import { AuthPanel } from "@/components/auth-panel";
 
@@ -23,8 +22,7 @@ export default async function Admin() {
         <div className="admin-panel">
           <h2>Connect the accounts</h2>
           <p>
-            This private area will let you add inspiration and
-            review comments.
+            This private area is reserved for owner-only site tools.
           </p>
           <p>
             The Supabase settings and your owner email need to be added before
@@ -41,18 +39,13 @@ export default async function Admin() {
       ) : !isOwner(user) ? (
         <div className="admin-panel">
           <h2>This desk belongs to Zack.</h2>
-          <p>You can still read, share, and join the journal conversations.</p>
+          <p>You can still browse the public site normally.</p>
         </div>
       ) : (
-        <>
-          <nav className="admin-nav" aria-label="Private tools">
-            <Link href="/admin/comments">Review comments</Link>
-          </nav>
-          <p className="short-note">
-            Writing counts and page copy live in the project files. We can
-            update those together.
-          </p>
-        </>
+        <div className="admin-panel">
+          <h2>Desk is clear.</h2>
+          <p>Writing counts and page copy live in the project files.</p>
+        </div>
       )}
     </div>
   );

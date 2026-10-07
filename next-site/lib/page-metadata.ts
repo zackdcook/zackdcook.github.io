@@ -8,7 +8,7 @@ export const shareRecords: ShareRecord[] = [
   { id: "writing", path: "/creativeworks", title: "I’m writing a novel!", description: "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a zeroth draft at 27,250 of 50,000 words.", category: "Creative Works" },
   { id: "about", path: "/aboutme", title: "About Me", description: "Meet Zack Cook, also known as Zacky C: an aspiring author, Publix industrial engineer, and University of Florida chemical engineering graduate in Lakeland, Florida.", category: "About Me" },
   { id: "events", path: "/events", title: "Come say hi =)", description: "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.", category: "Events" },
-  { id: "journal", path: "/journal", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
+  { id: "folly", path: "/words-of-folly", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
   { id: "shoutouts", path: "/shoutouts", title: "Cool peeps.", description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.", category: "Shoutouts" },
   ...projects.map(p => ({ id: `project-${p.slug}`, path: `/writing/${p.slug}`, title: p.shareTitle, description: p.summary, category: p.category, status: p.status })),
 ];

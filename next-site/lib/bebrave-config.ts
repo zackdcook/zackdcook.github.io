@@ -8,9 +8,16 @@ export const BEBRAVE_RARITY_WEIGHTS = {
 } as const satisfies Record<BeBraveRarity, number>;
 
 export const BEBRAVE_COMMON_COLOR = {
-  name: "Dark Bark Brown",
-  value: "#3B2418",
+  name: "Warm Bark Brown",
+  value: "#8A5A3A",
 };
+
+export const BEBRAVE_EPIC_PITY_PERCENT = [5, 8, 13, 21, 34, 50, 70, 90, 100] as const;
+
+export function epicChanceForPity(pity: number) {
+  const index = Math.max(0, Math.min(BEBRAVE_EPIC_PITY_PERCENT.length - 1, Math.floor(pity)));
+  return BEBRAVE_EPIC_PITY_PERCENT[index];
+}
 
 export const BEBRAVE_UNCOMMON_COLORS = [
   { name: "Cyan", value: "#00A9C7" },
