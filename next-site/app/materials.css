@@ -38,6 +38,10 @@ html[data-theme="dark"] {
   --material-shadow: rgb(0 0 0 / .48);
   --line: color-mix(in srgb,var(--soft-leaf) 45%,transparent);
 }
+body :is(.site-header,.site-footer) {
+  --button-bg:var(--chrome-button-bg);
+}
+
 .preferences-dialog {
   --button-bg:var(--preference-button-bg);
   --button-ink:var(--preference-button-ink);
@@ -196,9 +200,9 @@ body .desktop-nav a::before {
   inset:0;
   pointer-events:none;
   border-radius:inherit;
-  border-top:1px solid color-mix(in srgb,var(--floral) calc(18% + var(--light-strength,0)*62%),transparent);
-  border-left:1px solid color-mix(in srgb,var(--floral) calc(10% + var(--light-strength,0)*48%),transparent);
-  border-right:1px solid color-mix(in srgb,var(--floral) calc(10% + var(--light-strength,0)*48%),transparent);
+  border-top:1px solid color-mix(in srgb,var(--floral) calc(20% + var(--light-strength,0)*75%),transparent);
+  border-left:1px solid color-mix(in srgb,var(--floral) calc(12% + var(--light-strength,0)*65%),transparent);
+  border-right:1px solid color-mix(in srgb,var(--floral) calc(12% + var(--light-strength,0)*65%),transparent);
   border-bottom:0;
 }
 body .desktop-nav a:not([aria-current="page"]) {
@@ -225,8 +229,6 @@ body .home-tab .wordmark-cook { color:var(--home-cook-ink); }
 body .home-tab[aria-current="page"] {
   --surface-bg:var(--home-selected-bg);
   background-color:var(--home-selected-bg);
-  outline:2px solid color-mix(in srgb,var(--coral) 55%,transparent);
-  outline-offset:2px;
 }
 body .home-tab[aria-current="page"] .wordmark-zack { color:var(--home-selected-zack-ink); }
 body .home-tab[aria-current="page"] .wordmark-cook { color:var(--home-selected-cook-ink); }
@@ -334,8 +336,6 @@ body :is(.event-callout,.shoutout-card,.writing-panel,.journal-banner) :is(p,tim
 body :is(.empty-note) { background: var(--panel-bg); color: var(--panel-ink); }
 body :is(input:not([type="radio"]):not([type="checkbox"]),textarea,select) { background: var(--soft-leaf); color: var(--khaki); }
 body :is(input,textarea)::placeholder { color: var(--khaki); opacity: .8; }
-body .desktop-nav a[aria-current="page"]:hover { background: var(--selected-bg); color: var(--selected-ink); }
-
 /* Color transitions leave both photographs mounted and fully decoded. */
 .kitty-photo-layer { position: absolute; inset: 7px; border-radius: 20px; overflow: hidden; transition: opacity .8s cubic-bezier(.22,1,.36,1); }
 .kitty-photo-secret { opacity: 0; pointer-events: none; }
@@ -462,9 +462,16 @@ body :is(.button,.text-link,.project-description-toggle,.home-tab,.mobile-menu s
   background-color: var(--surface-bg);
   color: var(--button-hover-ink);
 }
-body .home-tab { --button-bg: color-mix(in srgb,var(--leaf) 72%,var(--floral) 28%); --button-hover-bg: color-mix(in srgb,var(--leaf) 82%,var(--khaki) 18%); }
-body .desktop-nav a:not([aria-current="page"]) { background-color: var(--button-bg); color: var(--button-ink); }
-body .desktop-nav a[aria-current="page"] { background-color: var(--selected-bg); color: var(--selected-ink); }
+body .home-tab {
+  --button-bg:var(--home-bg);
+  --button-hover-bg:var(--home-bg);
+  border-color:transparent;
+}
+body .home-tab[aria-current="page"] {
+  --button-bg:var(--home-selected-bg);
+  --button-hover-bg:var(--home-selected-bg);
+  border-color:transparent;
+}
 body .mobile-menu nav { background: var(--page-bg); color: var(--page-ink); border-color: var(--line); }
 body .mobile-menu nav a[aria-current="page"] { background: var(--selected-bg); color: var(--selected-ink); }
 
@@ -630,14 +637,12 @@ html[data-theme="dark"] {
   --material-shadow: rgb(0 0 0 / .32);
 }
 body .ring-center { fill: var(--progress-label); }
-body .desktop-nav a[aria-current="page"],
-body .desktop-nav a[aria-current="page"]:hover,
 body .mobile-menu nav a[aria-current="page"],
 body .mobile-menu nav a[aria-current="page"]:is(:hover,:active,:focus-visible) {
-  --surface-bg: var(--nav-selected-bg);
-  background: var(--nav-selected-bg);
-  color: var(--nav-selected-ink);
-  border: 1px solid var(--line);
+  --surface-bg:var(--nav-selected-bg);
+  background:var(--nav-selected-bg);
+  color:var(--nav-selected-ink);
+  border:1px solid var(--line);
 }
 
 /* Every tactile face receives the same directional cast and shallow rim.

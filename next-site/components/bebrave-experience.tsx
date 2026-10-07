@@ -8,7 +8,7 @@ import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,t
 
 const timelineKey="zack.bebrave.timeline.v1";
 const siteTimelineKey="zack.timeline.v1";
-type Scene="entry"|"base"|"admire"|"human"|"tools"|"cache"|"cache-code"|"epic-color"|"reveal"|"warning"|"draw"|"chop"|"confirm-chop"|"strikes"|"fallen"|"stump"|"regret";
+type Scene="entry"|"base"|"admire"|"complete"|"human"|"tools"|"cache"|"cache-code"|"epic-color"|"reveal"|"warning"|"draw"|"chop"|"confirm-chop"|"strikes"|"fallen"|"stump"|"regret";
 type DraftStroke={strokeId:string;strokeOrder:number;points:Array<[number,number]>};
 
 const toolCopy:Record<BeBraveNormalTool,{label:string;dialogue:string}>={
@@ -88,7 +88,13 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
   async function tryCache(){if(!session||!cacheCode)return;setBusy(true);setCacheMessage("The keys press down with a mechanical click.");try{const r=await fetch("/api/bebrave/session/cache",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,code:cacheCode})});const d=await r.json();if(!d.valid){setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");return;}applyState(d);if(d.colors)setCacheColors(d.colors);setCacheMessage("The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard.\n\nThe knife flicks open with a satisfying clink.");setScene("epic-color");}catch{setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");}finally{setBusy(false);}}
   async function chooseEpicColor(color:string){if(!session)return;setBusy(true);try{const r=await fetch("/api/bebrave/session/color",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,color})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("warning");}catch(e){setProblem(e instanceof Error?e.message:"That color could not be selected.");}finally{setBusy(false);}}
   async function startDrawing(){if(!session)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("draw");}catch(e){setProblem(e instanceof Error?e.message:"The timer could not start.");}finally{setBusy(false);}}
-  async function drawingFinished(payload:any){applyState(payload);await refreshState().catch(()=>{});setSession(payload.session||null);setDraftStrokes([]);setScene("admire");}
+  async function drawingFinished(payload:any){
+    applyState(payload);
+    await refreshState().catch(()=>{});
+    setSession(payload.session||null);
+    setDraftStrokes([]);
+    setScene("complete");
+  }
 
   async function growTestTree(){
     if(!testMode)return;
@@ -112,7 +118,24 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
   const fallenState=useMemo(()=>timeline.snapshotHeight?{...tree,height:timeline.snapshotHeight,activeBottom:timeline.snapshotHeight,activeTop:timeline.snapshotHeight-BEBRAVE_ACTIVE_HEIGHT,latestSequence:timeline.snapshotSequence||0}:tree,[tree,timeline.snapshotHeight,timeline.snapshotSequence]);
   const marks=timeline.hacked?1+timeline.completedAdditionalStrikes:0,felled=timeline.kind==="felled";
   if(!hydrated)return <Stage testMode={testMode} testBusy={busy} onTestGrow={growTestTree}><Dialogue>You follow a humid path into the swamp…</Dialogue></Stage>;
-  if(scene==="admire")return <div className="bebrave-stage bebrave-world-stage"><HomeControls testMode={testMode} busy={busy} onGrow={growTestTree}/><BeBraveTree state={{...tree,height:tree.height*2}} mode="admire"/><ActionBar><button className="button" onClick={()=>setScene("entry")}>What do you do?</button></ActionBar></div>;
+  if(scene==="admire")return <div className="bebrave-stage bebrave-world-stage"><HomeControls testMode={testMode} busy={busy} onGrow={growTestTree}/><BeBraveTree state={tree} mode="admire"/><ActionBar><button className="button" onClick={()=>setScene("entry")}>What do you do?</button></ActionBar></div>;
+  if(scene==="complete"&&session){
+    const toolName=session.chosenTool==="cache"
+      ?"pocket knife"
+      :session.chosenTool
+        ?toolCopy[session.chosenTool as BeBraveNormalTool].label.toLowerCase()
+        :"tool";
+    return <div className="bebrave-stage bebrave-world-stage bebrave-complete-stage">
+      <HomeControls testMode={testMode} busy={busy} onGrow={growTestTree}/>
+      <BeBraveTree state={tree} mode="admire"/>
+      <Dialogue
+        className="bebrave-post-carve"
+        actions={<button className="button" onClick={()=>setScene("entry")}>Back</button>}
+      >
+        <p>The {toolName} got too dull to keep going. The tree wears your carving proudly.</p>
+      </Dialogue>
+    </div>;
+  }
   if(scene==="draw"&&session)return <div className="bebrave-stage bebrave-world-stage"><HomeControls testMode={testMode} busy={busy} onGrow={growTestTree}/><BeBraveTree state={tree} mode="draw" session={session} serverNow={serverNow} draftStrokes={draftStrokes} onFinished={drawingFinished}/></div>;
   if(scene==="fallen"&&timeline.kind==="felled")return <div className="bebrave-stage bebrave-world-stage is-bebrave-felled"><HomeControls testMode={testMode} busy={busy} onGrow={growTestTree}/><BeBraveTree state={fallenState} mode="fallen" cutoff={timeline.snapshotSequence||0}/></div>;
 

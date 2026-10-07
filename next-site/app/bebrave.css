@@ -27,7 +27,18 @@
 .bebrave-stroke-line,.bebrave-stroke-glow,.bebrave-epic-shimmer{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}.bebrave-stroke-line{stroke-width:8}.bebrave-stroke-glow{stroke-width:18;opacity:.45;filter:blur(7px)}.bebrave-superior .bebrave-stroke-line{filter:drop-shadow(0 0 4px currentColor)}.bebrave-epic .bebrave-stroke-glow{stroke-width:25;opacity:.6;filter:blur(9px)}.bebrave-epic-shimmer{stroke-width:3;stroke-dasharray:2 17;opacity:.95;filter:drop-shadow(0 0 5px currentColor);animation:bebrave-shimmer 1.8s linear infinite}.bebrave-sparkle{filter:drop-shadow(0 0 5px currentColor);animation:bebrave-sparkle 1.8s ease-in-out infinite}
 @keyframes bebrave-shimmer{to{stroke-dashoffset:-38}}@keyframes bebrave-sparkle{0%,100%{opacity:.2;transform:scale(.65);transform-box:fill-box;transform-origin:center}50%{opacity:1;transform:scale(1.25)}}
 .bebrave-local-drawing{opacity:1}.bebrave-timer{position:sticky;top:90px;z-index:20;width:max-content;margin:12px auto -78px;padding:10px 18px;border-radius:16px;background:var(--midnight);color:var(--floral);box-shadow:0 10px 28px rgb(0 0 0 / .25);display:grid;text-align:center;pointer-events:none}.bebrave-timer strong{font:700 1.45rem var(--sans);font-variant-numeric:tabular-nums}.bebrave-timer span{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}.bebrave-draw-hint,.bebrave-save-error{position:sticky;bottom:12px;z-index:20;width:min(90vw,620px);margin:12px auto;padding:10px 14px;border-radius:12px;text-align:center;background:color-mix(in srgb,var(--paper) 92%,transparent);color:var(--ink);backdrop-filter:blur(9px)}.bebrave-save-error{background:#6f1d1b;color:#fff8ed}
-.is-draw .bebrave-world{touch-action:none;cursor:crosshair}
+.is-draw,
+.is-draw .bebrave-standing-scroll,
+.is-draw .bebrave-world,
+.is-draw .bebrave-tree-space,
+.is-draw .bebrave-drawings{
+  touch-action:none;
+  overscroll-behavior:none;
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+.is-draw .bebrave-world{cursor:crosshair}
 
 .bebrave-fallen-scroll{position:relative;z-index:2;width:100%;height:min(72svh,620px);overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;background:color-mix(in srgb,var(--bebrave-mid) 85%,black);touch-action:pan-x}.bebrave-fallen-scroll .bebrave-world{margin:0;max-width:none;width:auto}.is-fallen .bebrave-tree-space{transform-origin:0 0}.bebrave-fallen-cut{position:absolute;left:-18px;bottom:-4px;width:42px;height:720px;background:repeating-linear-gradient(75deg,#5a2f20 0 12px,#87513a 13px 24px);border:8px solid #3a2118}
 .is-base .bebrave-standing-scroll{height:min(72svh,720px);overflow:hidden}.is-base .bebrave-world{height:min(72svh,720px)!important}
@@ -71,14 +82,18 @@ html[data-timeline="felled"] .bebrave-stage-tree,.is-bebrave-felled .bebrave-sta
 .bebrave-world-stage{min-height:100dvh;overflow:visible}.bebrave-world-stage .bebrave-scene{background:#101a50;overflow:visible;min-height:100dvh}
 /* Overscan upward so parallax can move without clipping the tops. The bottom
    edge is still registered to the viewport at Admire entry. */
-.bebrave-world-stage .bebrave-horizon{position:fixed!important;left:0!important;right:0!important;top:-34dvh!important;height:134dvh!important;margin:0!important;z-index:-4!important;background:url("/images/bebrave-horizon.webp") center bottom/auto 100dvh no-repeat!important;transform:translateY(var(--bebrave-horizon-y))!important}.bebrave-world-stage .bebrave-horizon>*{display:none!important}
-.bebrave-world-stage .bebrave-midground{position:fixed!important;left:0!important;right:0!important;top:-34dvh!important;height:134dvh!important;margin:0!important;z-index:-3!important;background:url("/images/bebrave-midground.webp") center bottom/auto 100dvh no-repeat!important;opacity:1!important;transform:translateY(var(--bebrave-mid-y))!important}
-.bebrave-world-stage .bebrave-world{width:30vw!important;max-width:720px!important;margin-left:10vw!important;margin-right:auto!important}.bebrave-world-stage .bebrave-trunk{border:0!important;background:url("/images/bebrave-bark.webp") center top/720px 288px repeat-y!important;box-shadow:inset 18px 0 24px rgb(25 15 10/.22),inset -18px 0 24px rgb(25 15 10/.22),0 0 0 2px rgb(31 22 18/.72)!important}.bebrave-world-stage .bebrave-trunk::after{display:none!important}
+.bebrave-world-stage .bebrave-horizon{position:fixed!important;left:0!important;right:0!important;top:-34dvh!important;height:134dvh!important;margin:0!important;z-index:-4!important;background:url("/images/bebrave-horizon.webp") center bottom/cover no-repeat!important;transform:translateY(var(--bebrave-horizon-y))!important}.bebrave-world-stage .bebrave-horizon>*{display:none!important}
+.bebrave-world-stage .bebrave-midground{position:fixed!important;left:0!important;right:0!important;top:-34dvh!important;height:134dvh!important;margin:0!important;z-index:-3!important;background:url("/images/bebrave-midground.webp") center bottom/cover no-repeat!important;opacity:1!important;transform:translateY(var(--bebrave-mid-y))!important}
+.bebrave-world-stage .bebrave-world{width:75vw!important;max-width:none!important;margin-left:12.5vw!important;margin-right:auto!important}.bebrave-world-stage .bebrave-trunk{border:0!important;background:url("/images/bebrave-bark.webp") center top/720px 288px repeat-y!important;box-shadow:inset 18px 0 24px rgb(25 15 10/.22),inset -18px 0 24px rgb(25 15 10/.22),0 0 0 2px rgb(31 22 18/.72)!important}.bebrave-world-stage .bebrave-trunk::after{display:none!important}
 .bebrave-world-stage .bebrave-timer{position:fixed!important;top:max(18px,env(safe-area-inset-top));left:50%;transform:translateX(-50%);margin:0!important;z-index:90}
 .bebrave-stage-hacks{position:absolute;z-index:6;left:48%;top:54%;width:120px;height:100px}.bebrave-stage-hacks i{position:absolute;left:0;top:0;width:95px;height:9px;border-radius:50%;background:#321b12;box-shadow:0 2px 0 #d0a478}
 html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.bebrave-world-stage)){width:100%;height:100%;overflow:hidden!important;overscroll-behavior:none!important}.bebrave-stage:not(.bebrave-world-stage){position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:0!important;overflow:hidden!important}
 .bebrave-stage.is-bebrave-stump .bebrave-stage-tree,.bebrave-stage.is-bebrave-stump .bebrave-stage-hacks{display:none!important}.bebrave-stage-stump{position:absolute;z-index:3;left:50%;bottom:0;transform:translateX(-50%);width:min(88vw,650px);height:min(68dvh,650px);background:url("/images/bebrave-stump.png") center bottom/contain no-repeat;filter:drop-shadow(0 18px 18px rgb(0 0 0/.28));pointer-events:none}
 .bebrave-carve-button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important}.bebrave-growth-wait{font:700 .68rem/1 var(--sans)!important;font-variant-numeric:tabular-nums;color:inherit!important}
+.bebrave-post-carve{width:min(92vw,680px)}
+.bebrave-post-carve .bebrave-rpg-dialogue{padding:12px 16px;border-radius:16px}
+.bebrave-post-carve .bebrave-rpg-copy{font-size:clamp(.84rem,2vw,1rem)}
+.bebrave-post-carve .bebrave-rpg-actions{margin-top:0}
 @media(max-width:700px){.bebrave-home-mark.site-mark{width:30px;height:30px;flex-basis:30px}.bebrave-test-grow-button{left:max(16px,env(safe-area-inset-left));top:max(76px,calc(env(safe-area-inset-top) + 76px));min-height:44px}.bebrave-rpg-hud,.bebrave-rpg-actions{width:calc(100vw - 20px)}.bebrave-stage-stump{width:min(94vw,600px);height:min(66dvh,600px)}.bebrave-tool-picker{grid-template-columns:repeat(2,1fr);width:min(76vw,420px)}}
 /* Tool reveal and rarity feedback. */
 .bebrave-image-choice{transition:transform .28s ease,background .28s ease,filter .28s ease;filter:drop-shadow(0 14px 16px rgb(0 0 0/.25))}

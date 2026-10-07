@@ -55,8 +55,14 @@
   --shoutouts-card-bg: var(--tone-light-color);
   --shoutouts-card-ink: var(--tone-dark-color);
 
-  /* Ordinary controls */
+  /* Ordinary controls.
+     Content controls are intentionally paler than persistent site chrome. */
   --button-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 32%,
+    var(--tone-light-neutral)
+  );
+  --chrome-button-bg: color-mix(
     in srgb,
     var(--tone-medium-neutral) 68%,
     var(--tone-light-neutral)
@@ -83,7 +89,7 @@
   --nav-selected-ink: var(--tone-medium-color);
 
   /* Zack Cook home control */
-  --home-bg: var(--button-bg);
+  --home-bg: var(--chrome-button-bg);
   --home-zack-ink: var(--tone-dark-color);
   --home-cook-ink: var(--tone-dark-color);
 
@@ -176,6 +182,7 @@ html[data-theme="dark"] {
 
   /* Dark mode controls: green -> dark pink/light pink. */
   --button-bg: var(--tone-medium-neutral);
+  --chrome-button-bg: var(--tone-medium-neutral);
   --button-ink: var(--tone-dark-color);
   --button-hover-bg: var(--tone-dark-color);
   --button-hover-ink: var(--tone-medium-color);

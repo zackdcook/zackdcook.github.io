@@ -37,7 +37,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   useLayoutEffect(()=>{
     const el=world.current;if(!el)return;
     parallaxOrigin.current=null;
-    const measure=()=>{const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:Math.min(1,rect.width/BEBRAVE_TREE_WIDTH);scaleRef.current=next;setScale(next);};
+    const measure=()=>{const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;scaleRef.current=next;setScale(next);};
     const ro=new ResizeObserver(measure);ro.observe(mode==="fallen"&&horizontal.current?horizontal.current:el);measure();
     const tick=()=>{
       scrollFrame.current=0;
@@ -64,7 +64,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
       ready.current=true;
       initial=requestAnimationFrame(()=>{
         if(mode==="fallen"&&horizontal.current){horizontal.current.scrollTo({left:0,behavior:"instant"});}
-        else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+state.height*scaleRef.current-window.innerHeight*.86),behavior:"instant"});}
+        else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+state.height*scaleRef.current-window.innerHeight),behavior:"instant"});}
         parallaxOrigin.current=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
         tick();
       });
@@ -103,8 +103,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
         onPointerDown={e=>{if(mode!=="draw"||remaining<=0||!session)return;const p=worldPoint(e.clientX,e.clientY);if(!p)return;e.currentTarget.setPointerCapture(e.pointerId);const a={strokeId:crypto.randomUUID(),strokeOrder:strokeCounter.current++,points:[p],sentIndex:0,chunkIndex:0};active.current=a;paint();e.preventDefault();}}
-        onPointerMove={e=>{if(!active.current||mode!=="draw"||remaining<=0)return;const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);}}
-        onPointerUp={e=>{const a=active.current;if(!a)return;const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;activeLine.current?.setAttribute("d","");activeGlow.current?.setAttribute("d","");activeShimmer.current?.setAttribute("d","");}}
+        onPointerMove={e=>{if(!active.current||mode!=="draw"||remaining<=0)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);}}
+        onPointerUp={e=>{const a=active.current;if(!a)return;e.preventDefault();const p=worldPoint(e.clientX,e.clientY);if(p)appendPoint(p);queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;activeLine.current?.setAttribute("d","");activeGlow.current?.setAttribute("d","");activeShimmer.current?.setAttribute("d","");}}
         onPointerCancel={()=>{const a=active.current;if(!a)return;queueChunk(a,true);setLocalStrokes(s=>[...s,{strokeId:a.strokeId,strokeOrder:a.strokeOrder,points:[...a.points]}]);active.current=null;}}>
         <div className="bebrave-tree-space" style={{width:BEBRAVE_TREE_WIDTH,height:state.height,transform:treeTransform}}>
           <div className="bebrave-trunk" aria-hidden="true"/>

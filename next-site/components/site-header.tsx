@@ -10,7 +10,14 @@ const links = navigation.map(({ title, href }) => [title, href]);
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const visiblePath = pathname;
+  const normalizedPath =
+    pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
+  const visiblePath =
+    ({
+      "/creativeworks": "/creative-works",
+      "/aboutme": "/about-me",
+      "/journal": "/words-of-folly",
+    } as Record<string, string>)[normalizedPath] ?? normalizedPath;
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
   const explicitHome = useRef(false);
@@ -61,10 +68,13 @@ export function SiteHeader() {
       document.removeEventListener("focusin", dismissOutside);
     };
   }, []);
-  const current = (href: string) =>
-    visiblePath === href || visiblePath.startsWith(`${href}/`)
-      ? ("page" as const)
-      : undefined;
+  const current = (href: string) => {
+    const matches =
+      href === "/"
+        ? visiblePath === "/"
+        : visiblePath === href || visiblePath.startsWith(`${href}/`);
+    return matches ? ("page" as const) : undefined;
+  };
   return (
     <header className="site-header">
       <div className="header-inner">
