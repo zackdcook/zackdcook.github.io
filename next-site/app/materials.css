@@ -83,7 +83,7 @@ body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.
   outline: 3px solid var(--coral);
   outline-offset: 4px;
 }
-@media (hover:hover) {
+@media (any-hover: hover) {
   body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control):not(:disabled):hover {
     --surface-bg: var(--button-hover-bg);
     color: var(--button-hover-ink);
@@ -114,7 +114,7 @@ body .stage-button[aria-pressed="true"] {
 }
 body .stage-button :is(.stage-label,.stage-label>span,.stage-count) { color: inherit; }
 body .stage-button .stage-count { opacity: .88; }
-@media (hover:hover) {
+@media (any-hover: hover) {
   body .stage-button:not(:disabled):hover { --surface-bg: var(--midnight); color: var(--coral); }
 }
 body .stage-button:not(:disabled):active { --surface-bg: var(--midnight); color: var(--coral); }
@@ -238,7 +238,7 @@ body input:checked+.preference-control { --surface-bg: var(--preference-selected
 .checkbox-control { position: relative; display: inline-flex; flex-shrink: 0; cursor: pointer; }
 .checkbox-face { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; font-size: 20px; line-height: 1; }
 .checkbox-control input:not(:checked)+.checkbox-face { font-size: 0; }
-@media (hover:hover) {
+@media (any-hover: hover) {
   body :is(.appearance-selector label,.preference-row):hover input:not(:checked)+.preference-control {
     --surface-bg: var(--button-hover-bg); color: var(--button-hover-ink);
   }
@@ -1172,3 +1172,10 @@ body .desktop-theme-control button.desktop-theme-toggle:focus-visible {
     color: var(--floral);
   }
 }
+
+/* Spring-clean survivors: current components only. */
+body .folly-latest .quote-leaf,body .leaf-reader .reader-leaf{background:transparent!important;background-image:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+body .folly-latest .quote-leaf::before,body .folly-latest .quote-leaf::after,body .leaf-reader .reader-leaf::before,body .leaf-reader .reader-leaf::after{content:none!important;display:none!important}
+body .cats-escaped p{color:inherit;font-family:var(--sans);font-size:15px;font-weight:400;line-height:1.65;max-width:340px}
+@media(max-width:740px){body .cats-escaped p{font-size:14px;max-width:100%}}
+body .kitty-ribbon svg{animation:none!important;transform:none!important}

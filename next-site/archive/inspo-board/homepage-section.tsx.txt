@@ -1,9 +1,0 @@
-      <section id="inspo-board" className="commonplace-section section-space">
-        <div className="shell">
-          <div className="section-heading"><InspirationHeading /></div>
-          {entries.length ? <ContentRail label="Recent inspiration" count={entries.slice(0, 5).length}>
-            {entries.slice(0, 5).map(entry => <CommonplaceCard key={entry.id} entry={entry} />)}
-          </ContentRail> : <div className="board-empty"><span aria-hidden="true">↗</span><div><h3>Making room for new finds.</h3><p>The things I want to keep will land here.</p></div></div>}
-          <div className="rail-more"><Link className="button button-outline" href="/commonplace">Further inspiration</Link></div>
-        </div>
-      </section>

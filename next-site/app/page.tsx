@@ -6,7 +6,7 @@ import { WritingGroupCard } from "@/components/writing-group-card";
 import { CollectionHeading } from "@/components/collection-heading";
 import { follyQuotes, latestFolly } from "@/content/folly";
 import { QuoteLeaf } from "@/components/quote-leaf";
-import { getShoutouts } from "@/lib/community";
+import { getShoutouts } from "@/lib/shoutouts";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";

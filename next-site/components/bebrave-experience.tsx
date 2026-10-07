@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback,useEffect,useMemo,useRef,useState,type CSSProperties } from "react";
+import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties } from "react";
 import { HumanCheck } from "@/components/human-check";
 import { BeBraveTree } from "@/components/bebrave-tree";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
@@ -55,7 +55,7 @@ export function BeBraveExperience({enabled,siteKey}:{enabled:boolean;siteKey:str
     try{localStorage.setItem(siteTimelineKey,JSON.stringify(value));}catch{}document.documentElement.dataset.timeline=kind;
   },[]);
 
-  useEffect(()=>{
+  useLayoutEffect(()=>{
     priorSiteTimeline.current=document.documentElement.dataset.timeline||"living";
     let story=defaultBeBraveTimeline;
     try{story=normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey)||"null"));}catch{}
@@ -83,11 +83,7 @@ export function BeBraveExperience({enabled,siteKey}:{enabled:boolean;siteKey:str
 
   const onCooldown=cooldown?Date.parse(cooldown)>clock:false,cooldownLabel=cooldownText(cooldown,clock);
   function sceneForSession(s:BeBraveSessionView|null){if(!s)return "human" as Scene;if(s.status==="tool_select")return "tools";if(s.status==="epic_color")return "epic-color";if(s.status==="ready")return "warning";if(s.status==="drawing")return "draw";return "admire";}
-  function admire(){
-    setProblem("");
-    setScene("admire");
-    void refreshState().catch(e=>setProblem(e instanceof Error?e.message:"The tree could not refresh."));
-  }
+  function admire(){ setProblem(""); setScene("admire"); }
   async function beginCarve(){if(onCooldown)return;setProblem("");if(session&&["tool_select","epic_color","ready","drawing"].includes(session.status)){setScene(sceneForSession(session));return;}setScene("human");}
   async function createSession(event:React.FormEvent){event.preventDefault();if(!humanForm.current)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session",{method:"POST",body:new FormData(humanForm.current)});const d=await r.json();if(r.status===429&&d.cooldown){applyState(d);setScene("entry");return;}if(!r.ok)throw Error(d.error||"The tools could not be prepared.");applyState(d);setScene(sceneForSession(d.session));}catch(e){setProblem(e instanceof Error?e.message:"The tools could not be prepared.");}finally{setBusy(false);}}
   async function chooseTool(tool:BeBraveNormalTool){if(!session)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/choose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,tool})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("reveal");}catch(e){setProblem(e instanceof Error?e.message:"That tool could not be selected.");}finally{setBusy(false);}}

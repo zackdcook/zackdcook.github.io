@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback,useEffect,useMemo,useRef,useState,type CSSProperties } from "react";
+import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties } from "react";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
@@ -34,7 +34,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   useEffect(()=>{let cancelled=false;Promise.all(sections.map(load)).then(groups=>{if(cancelled)return;const map=new Map<string,BeBravePublicDrawing>();for(const d of groups.flat())map.set(d.id,d);setDrawings([...map.values()].sort((a,b)=>b.publicSequence-a.publicSequence));}).catch(()=>{if(!cancelled)setSaveError("That stretch of bark could not load.");});for(const n of [range[0]-1,range[1]+1])if(n>=0&&n<=maxSection)load(n).catch(()=>{});for(const k of cache.current.keys())if(k<range[0]-3||k>range[1]+3)cache.current.delete(k);return()=>{cancelled=true;};},[sections,load,range,maxSection]);
 
-  useEffect(()=>{
+  useLayoutEffect(()=>{
     const el=world.current;if(!el)return;
     parallaxOrigin.current=null;
     const measure=()=>{const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:Math.min(1,rect.width/BEBRAVE_TREE_WIDTH);scaleRef.current=next;setScale(next);};

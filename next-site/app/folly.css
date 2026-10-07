@@ -135,8 +135,8 @@ body .folly-panel .folly-label {
 }
 body .folly-panel .folly-ground { margin-top: 0; }
 body .folly-panel .rail-more { margin-top: 22px; }
-body .folly-panel .button { background: var(--stage-bg); color: var(--stage-ink); }
-body .folly-panel .button:hover { background: var(--selected-bg); color: var(--selected-ink); }
+body .folly-panel .button { --surface-bg: var(--button-bg); background: var(--button-bg); color: var(--button-ink); }
+@media (any-hover: hover) { body .folly-panel .button:hover { --surface-bg: var(--button-hover-bg); background: var(--button-hover-bg); color: var(--button-hover-ink); } }
 
 body .leaf-reader {
   --dialog-bg: var(--floral);
@@ -193,40 +193,3 @@ body .leaf-reader .reader-leaf .leaf-shadow {
   transform: translate(var(--leaf-dynamic-shadow-x, 0px), var(--leaf-dynamic-shadow-y, 7px));
 }
 
-/* Kitty Committee ambient fabric motion. Existing drag/drop physics still
-   deforms the ribbon's individual SVG paths; this only moves the whole cloth
-   a few pixels in response to scroll/hover. */
-@keyframes kitty-ribbon-scroll-billow {
-  0%   { transform: perspective(900px) rotateX(-1.2deg) rotateY(.7deg) skewY(-.35deg) translateY(0); }
-  25%  { transform: perspective(900px) rotateX(1.6deg) rotateY(-1deg) skewY(.55deg) translateY(-2px); }
-  50%  { transform: perspective(900px) rotateX(-.8deg) rotateY(1.2deg) skewY(-.45deg) translateY(1px); }
-  75%  { transform: perspective(900px) rotateX(1.2deg) rotateY(-.6deg) skewY(.35deg) translateY(-1px); }
-  100% { transform: perspective(900px) rotateX(-1.2deg) rotateY(.7deg) skewY(-.35deg) translateY(0); }
-}
-@keyframes kitty-ribbon-hover-billow {
-  0%,100% { transform: perspective(900px) rotateX(0) rotateY(0) skewY(0) translateY(0); }
-  25%     { transform: perspective(900px) rotateX(2deg) rotateY(-1.4deg) skewY(.7deg) translateY(-3px); }
-  55%     { transform: perspective(900px) rotateX(-1.5deg) rotateY(1.6deg) skewY(-.65deg) translateY(2px); }
-  80%     { transform: perspective(900px) rotateX(.8deg) rotateY(-.7deg) skewY(.3deg) translateY(-1px); }
-}
-body .kitty-ribbon svg {
-  transform-origin: 50% 72%;
-  animation: kitty-ribbon-scroll-billow 1s linear both;
-  animation-timeline: scroll(root block);
-  animation-range: 0% 100%;
-}
-@media (any-hover: hover) {
-  body .kitty-ribbon:hover svg {
-    animation: kitty-ribbon-hover-billow 1.35s ease-in-out infinite;
-  }
-}
-html[data-effects="reduced"] body .kitty-ribbon svg {
-  animation: none;
-  transform: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  body .kitty-ribbon svg {
-    animation: none;
-    transform: none;
-  }
-}

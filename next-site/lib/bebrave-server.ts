@@ -16,12 +16,12 @@ export function beBraveConfigured() {
       (process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) &&
       process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY &&
       process.env.TURNSTILE_SECRET_KEY &&
-      (process.env.BEBRAVE_HMAC_KEY || process.env.SUBMISSION_HMAC_KEY),
+      process.env.BEBRAVE_HMAC_KEY,
   );
 }
 
 function hmacKey() {
-  const key = process.env.BEBRAVE_HMAC_KEY || process.env.SUBMISSION_HMAC_KEY;
+  const key = process.env.BEBRAVE_HMAC_KEY;
   if (!key || key.length < 32) throw new Error("Be Brave server security is not configured.");
   return key;
 }

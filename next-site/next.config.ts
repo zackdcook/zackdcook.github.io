@@ -4,7 +4,6 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   cacheComponents: true,
   partialPrefetching: true,
-  outputFileTracingIncludes: { "/*": ["./public/fonts/geometry/*.json"] },
   experimental: { useTypeScriptCli: false, serverActions: { bodySizeLimit: "64kb" } },
   async headers() {
     return [{ source: "/:path*", headers: [
@@ -28,10 +27,6 @@ const nextConfig: NextConfig = {
       { source: "/field-notes.html", destination: "/words-of-folly", permanent: true },
       { source: "/blog/its-not-too-late.html", destination: "/journal/its-not-too-late", permanent: true },
       { source: "/beta.html", destination: "/creative-works", permanent: false },
-      { source: "/tree", destination: "/bebrave", permanent: true },
-      { source: "/tree/entries", destination: "/bebrave", permanent: true },
-      { source: "/guestbook", destination: "/bebrave", permanent: true },
-      { source: "/guestbook/entries", destination: "/bebrave", permanent: true },
     ];
   },
   async rewrites() {

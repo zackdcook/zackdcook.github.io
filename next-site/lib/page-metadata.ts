@@ -10,7 +10,6 @@ export const shareRecords: ShareRecord[] = [
   { id: "events", path: "/events", title: "Come say hi =)", description: "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.", category: "Events" },
   { id: "journal", path: "/journal", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
   { id: "shoutouts", path: "/shoutouts", title: "Cool peeps.", description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.", category: "Shoutouts" },
-  { id: "guestbook", path: "/tree", title: "A tree, impossibly tall.", description: "Wander into a quiet Florida swamp and leave a permanent mark on Zack Cook’s living bald-cypress guestbook.", category: "The living cypress" },
   ...projects.map(p => ({ id: `project-${p.slug}`, path: `/writing/${p.slug}`, title: p.shareTitle, description: p.summary, category: p.category, status: p.status })),
 ];
 

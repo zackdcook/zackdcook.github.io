@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultPreferences, normalizePreferences, preferenceKey, type Preferences } from "@/lib/preferences";
-import { carvingBookmarkKey, livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
+import { livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
 import { TiltLightingControl } from "@/components/tilt-lighting-control";
 
 const beBraveTimelineKey = "zack.bebrave.timeline.v1";
@@ -70,7 +70,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
   function reset() {
     update(defaultPreferences); changeTimeline(livingTimeline); setResetVersion(v => v + 1);
     try {
-      [preferenceKey, timelineKey, beBraveTimelineKey, carvingBookmarkKey, carvingBookmarkKey + ".seen"].forEach(key => localStorage.removeItem(key));
+      [preferenceKey, timelineKey, beBraveTimelineKey].forEach(key => localStorage.removeItem(key));
     } catch {}
     // Deliberately leaves the Be Brave server identity cookie/cooldown alone.
     resetting.current = true; dialog.current?.close();

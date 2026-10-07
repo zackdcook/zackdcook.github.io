@@ -1,0 +1,48 @@
+/* Palette primitives -> semantic roles. Components consume semantic roles only. */
+:root {
+  --tone-dark-neutral:#393313; --tone-dark-color:#31031F;
+  --tone-medium-neutral:#66693E; --tone-medium-color:#E88F93;
+  --tone-light-neutral:#FFF8ED; --tone-light-color:color-mix(in srgb,#E88F93 42%,#FFF8ED 58%); --tone-white:#fff;
+  --midnight:var(--tone-dark-color); --coral:var(--tone-medium-color); --khaki:var(--tone-dark-neutral); --floral:var(--tone-light-neutral); --leaf:var(--tone-medium-neutral);
+  --page-bg:var(--tone-light-neutral); --page-ink:var(--tone-dark-color);
+  --active-bg:color-mix(in srgb,var(--tone-medium-neutral) 82%,var(--tone-light-neutral)); --active-ink:var(--tone-dark-color);
+  --bio-bg:var(--active-bg); --bio-ink:var(--active-ink); --event-bg:var(--page-bg);
+  --event-card-bg:var(--tone-light-color); --event-card-ink:var(--tone-dark-color);
+  --folly-bg:var(--page-bg); --folly-card-bg:color-mix(in srgb,var(--tone-medium-color) 48%,var(--tone-light-neutral)); --folly-card-ink:var(--tone-dark-neutral);
+  --shoutouts-bg:var(--active-bg); --shoutouts-card-bg:color-mix(in srgb,var(--tone-medium-neutral) 52%,var(--tone-light-neutral)); --shoutouts-card-ink:var(--tone-dark-color);
+  --feature-button-bg:color-mix(in srgb,var(--tone-medium-neutral) 45%,var(--tone-light-neutral) 55%); --feature-button-ink:var(--tone-dark-color);
+  --feature-button-hover-bg:var(--tone-dark-neutral); --feature-button-hover-ink:var(--tone-light-neutral);
+  --button-bg:color-mix(in srgb,var(--tone-medium-neutral) 68%,var(--tone-light-neutral)); --button-ink:var(--tone-dark-color);
+  --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink);
+  --stage-bg:var(--feature-button-bg); --stage-ink:var(--feature-button-ink);
+  --selected-bg:var(--tone-dark-color); --selected-ink:var(--tone-medium-color);
+  --paper:var(--page-bg); --ink:var(--page-ink); --muted:var(--tone-dark-neutral); --line:color-mix(in srgb,var(--page-ink) 24%,transparent);
+}
+html[data-theme="dark"] {
+  --page-bg:color-mix(in srgb,var(--tone-dark-color) 93%,var(--tone-dark-neutral) 7%); --page-ink:var(--tone-light-neutral);
+  --active-bg:color-mix(in srgb,var(--tone-dark-neutral) 90%,var(--tone-dark-color)); --active-ink:var(--tone-light-neutral);
+  --bio-bg:var(--active-bg); --bio-ink:var(--tone-light-neutral); --event-bg:var(--page-bg); --event-card-bg:var(--active-bg); --event-card-ink:var(--tone-light-neutral);
+  --folly-bg:var(--page-bg); --folly-card-bg:color-mix(in srgb,var(--tone-medium-color) 38%,var(--tone-dark-color) 62%); --folly-card-ink:var(--tone-light-neutral);
+  --shoutouts-bg:color-mix(in srgb,var(--tone-dark-neutral) 94%,var(--tone-dark-color)); --shoutouts-card-bg:var(--folly-card-bg); --shoutouts-card-ink:var(--tone-light-neutral);
+  --feature-button-bg:color-mix(in srgb,var(--tone-medium-neutral) 45%,var(--tone-light-neutral) 55%); --feature-button-ink:var(--tone-dark-color);
+  --feature-button-hover-bg:var(--tone-dark-neutral); --feature-button-hover-ink:var(--tone-light-neutral);
+  --button-bg:var(--feature-button-bg); --button-ink:var(--feature-button-ink); --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink);
+  --stage-bg:var(--feature-button-bg); --stage-ink:var(--feature-button-ink); --paper:var(--page-bg); --ink:var(--page-ink); --muted:var(--tone-medium-color);
+}
+html[data-timeline="felled"] {
+  --tone-dark-neutral:#432818; --tone-dark-color:#6F1D1B; --tone-medium-neutral:#99582A; --tone-medium-color:#BB9457; --tone-light-neutral:#FFE6A7; --tone-light-color:color-mix(in srgb,#BB9457 54%,#FFE6A7 46%);
+}
+html[data-timeline="felled"][data-theme="dark"] {
+  --page-bg:var(--tone-dark-color); --page-ink:var(--tone-light-neutral);
+  --active-bg:var(--tone-dark-neutral); --active-ink:var(--tone-light-neutral); --bio-bg:var(--tone-dark-neutral); --bio-ink:var(--tone-light-neutral);
+  --event-bg:var(--tone-dark-color); --event-card-bg:var(--tone-dark-neutral); --event-card-ink:var(--tone-light-neutral);
+  /* Same face for Words of Folly and the inner RM Hamrick card. */
+  --folly-bg:var(--tone-dark-color); --folly-card-bg:var(--tone-medium-neutral); --folly-card-ink:var(--tone-light-neutral);
+  --shoutouts-bg:var(--tone-dark-neutral); --shoutouts-card-bg:var(--tone-medium-neutral); --shoutouts-card-ink:var(--tone-light-neutral);
+  --feature-button-bg:var(--tone-medium-color); --feature-button-ink:var(--tone-dark-color); --feature-button-hover-bg:var(--tone-light-neutral); --feature-button-hover-ink:var(--tone-dark-color);
+  --button-bg:var(--feature-button-bg); --button-ink:var(--feature-button-ink); --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink);
+  --stage-bg:var(--feature-button-bg); --stage-ink:var(--feature-button-ink); --selected-bg:var(--tone-light-neutral); --selected-ink:var(--tone-dark-color);
+  --paper:var(--page-bg); --ink:var(--page-ink); --muted:var(--tone-medium-color); --line:color-mix(in srgb,var(--tone-medium-color) 55%,transparent);
+}
+/* These two controls intentionally share one role. */
+body :is(.folly-panel,.shoutout-card) .button { --button-bg:var(--feature-button-bg); --button-ink:var(--feature-button-ink); --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink); }
