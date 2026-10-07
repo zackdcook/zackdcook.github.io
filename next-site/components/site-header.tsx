@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSelectedLayoutSegment } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
@@ -10,8 +10,7 @@ const links = navigation.map(({ title, href }) => [title, href]);
 
 export function SiteHeader() {
   const pathname = usePathname();
-  const segment = useSelectedLayoutSegment();
-  const visiblePath = segment ? `/${segment}` : "/";
+  const visiblePath = pathname;
   const menu = useRef<HTMLDetailsElement>(null);
   const menuScrollStart = useRef(0);
   const explicitHome = useRef(false);

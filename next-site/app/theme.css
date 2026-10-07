@@ -24,7 +24,7 @@ html[data-theme="dark"] {
   --bio-bg:var(--active-bg); --bio-ink:var(--tone-light-neutral); --event-bg:var(--page-bg); --event-card-bg:var(--active-bg); --event-card-ink:var(--tone-light-neutral);
   --folly-bg:var(--page-bg); --folly-card-bg:color-mix(in srgb,var(--tone-medium-color) 38%,var(--tone-dark-color) 62%); --folly-card-ink:var(--tone-light-neutral);
   --shoutouts-bg:color-mix(in srgb,var(--tone-dark-neutral) 94%,var(--tone-dark-color)); --shoutouts-card-bg:var(--folly-card-bg); --shoutouts-card-ink:var(--tone-light-neutral);
-  --feature-button-bg:color-mix(in srgb,var(--tone-medium-neutral) 45%,var(--tone-light-neutral) 55%); --feature-button-ink:var(--tone-dark-color);
+  --feature-button-bg:color-mix(in srgb,var(--tone-dark-neutral) 82%,var(--tone-dark-color) 18%); --feature-button-ink:var(--tone-light-neutral);
   --feature-button-hover-bg:var(--tone-dark-neutral); --feature-button-hover-ink:var(--tone-light-neutral);
   --button-bg:var(--feature-button-bg); --button-ink:var(--feature-button-ink); --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink);
   --stage-bg:var(--feature-button-bg); --stage-ink:var(--feature-button-ink); --paper:var(--page-bg); --ink:var(--page-ink); --muted:var(--tone-medium-color);
@@ -39,7 +39,7 @@ html[data-timeline="felled"][data-theme="dark"] {
   /* Same face for Words of Folly and the inner RM Hamrick card. */
   --folly-bg:var(--tone-dark-color); --folly-card-bg:var(--tone-medium-neutral); --folly-card-ink:var(--tone-light-neutral);
   --shoutouts-bg:var(--tone-dark-neutral); --shoutouts-card-bg:var(--tone-medium-neutral); --shoutouts-card-ink:var(--tone-light-neutral);
-  --feature-button-bg:var(--tone-medium-color); --feature-button-ink:var(--tone-dark-color); --feature-button-hover-bg:var(--tone-light-neutral); --feature-button-hover-ink:var(--tone-dark-color);
+  --feature-button-bg:var(--tone-dark-neutral); --feature-button-ink:var(--tone-light-neutral); --feature-button-hover-bg:var(--tone-medium-color); --feature-button-hover-ink:var(--tone-dark-color);
   --button-bg:var(--feature-button-bg); --button-ink:var(--feature-button-ink); --button-hover-bg:var(--feature-button-hover-bg); --button-hover-ink:var(--feature-button-hover-ink);
   --stage-bg:var(--feature-button-bg); --stage-ink:var(--feature-button-ink); --selected-bg:var(--tone-light-neutral); --selected-ink:var(--tone-dark-color);
   --paper:var(--page-bg); --ink:var(--page-ink); --muted:var(--tone-medium-color); --line:color-mix(in srgb,var(--tone-medium-color) 55%,transparent);
