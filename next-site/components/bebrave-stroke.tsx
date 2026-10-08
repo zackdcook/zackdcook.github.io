@@ -8,17 +8,23 @@ export function pointsToPath(points: Array<[number, number]>) {
 }
 
 function sparklePoints(points:Array<[number,number]>,seed:number,strokeOrder:number) {
-  if (points.length < 4) return [];
-  const out:Array<{x:number;y:number;r:number;delay:number}>=[];
-  const step=Math.max(5,Math.floor(points.length/10));
-  let state=(seed ^ ((strokeOrder+1)*2654435761))>>>0;
+  if(!points.length)return [];
+  let state=(seed ^ Math.imul(strokeOrder+1,2654435761))>>>0;
   const next=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
-  for(let i=step;i<points.length;i+=step){
-    if(next()<.52) continue;
-    const [x,y]=points[i];
-    out.push({x:x+(next()-.5)*14,y:y+(next()-.5)*14,r:1.6+next()*2.2,delay:next()*1.8});
+  const length=points.slice(1).reduce((sum,point,index)=>sum+Math.hypot(point[0]-points[index][0],point[1]-points[index][1]),0);
+  const targetCount=Math.max(1,Math.min(18,Math.round(length/44)));
+  const positions:number[]=[];
+  let distance=0;
+  for(let index=1;index<points.length;index++){
+    distance+=Math.hypot(points[index][0]-points[index-1][0],points[index][1]-points[index-1][1]);
+    positions.push(distance);
   }
-  return out.slice(0,12);
+  return Array.from({length:targetCount},(_,index)=>{
+    const wanted=length*((index+.4+.2*next())/targetCount);
+    const at=positions.findIndex(d=>d>=wanted);
+    const point=points[Math.max(0,at<0?points.length-1:at+1)];
+    return {x:point[0]+(next()-.5)*10,y:point[1]+(next()-.5)*10,r:5+next()*4,delay:next()*2.2};
+  });
 }
 
 export function BeBraveStroke({stroke,color,rarity,seed,active=false}:{stroke:BeBravePublicStroke;color:string;rarity:BeBraveRarity;seed:number;active?:boolean}) {
@@ -30,6 +36,9 @@ export function BeBraveStroke({stroke,color,rarity,seed,active=false}:{stroke:Be
     {(superior||epic)&&<path className="bebrave-stroke-glow" d={d} stroke={color}/>} 
     <path className="bebrave-stroke-line" d={d} stroke={color}/>
     {epic&&<path className="bebrave-epic-shimmer" d={d} stroke={color}/>} 
-    {sparkles.map((s,i)=><circle key={i} className="bebrave-sparkle" cx={s.x} cy={s.y} r={s.r} fill={color} style={{animationDelay:`-${s.delay}s`}}/>)}
+    {sparkles.map((s,i)=><g key={i} className="bebrave-sparkle" transform={`translate(${s.x} ${s.y})`}>
+      <path className="bebrave-sparkle-star" d={`M0 ${-s.r} L${s.r*.22} ${-s.r*.22} L${s.r} 0 L${s.r*.22} ${s.r*.22} L0 ${s.r} L${-s.r*.22} ${s.r*.22} L${-s.r} 0 L${-s.r*.22} ${-s.r*.22} Z`} style={{animationDelay:`-${s.delay}s`}}/>
+      <circle className="bebrave-sparkle-core" r={Math.max(1.7,s.r*.26)} />
+    </g>)}
   </g>;
 }

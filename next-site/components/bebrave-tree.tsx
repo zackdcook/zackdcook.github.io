@@ -1,13 +1,13 @@
 "use client";
 
-import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties } from "react";
+import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties,type ReactNode } from "react";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
 type Mode="admire"|"draw"|"fallen"|"base";
 type DraftStroke=BeBravePublicStroke;
 
-export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void}) {
+export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,drawHomeControls}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;drawHomeControls?:ReactNode}) {
   const scene=useRef<HTMLDivElement>(null),world=useRef<HTMLDivElement>(null),horizontal=useRef<HTMLDivElement>(null);
   const activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null);
   const [scale,setScale]=useState(1),[zoom,setZoom]=useState(mode==="admire"?.82:1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
@@ -134,7 +134,11 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     <div className="bebrave-horizon" aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
     {mode==="admire"&&<div className="bebrave-zoom-controls" role="group" aria-label="Zoom tree"><button type="button" onClick={()=>adjustZoom(zoom-.1)} disabled={zoom<=.65} aria-label="Zoom out">−</button><span>{Math.round(zoom*100)}%</span><button type="button" onClick={()=>adjustZoom(zoom+.1)} disabled={zoom>=1.45} aria-label="Zoom in">+</button><button type="button" onClick={()=>adjustZoom(.82)} aria-label="Reset zoom">Reset</button></div>}
-    {mode==="draw"&&<div className="bebrave-timer" role="timer" aria-live="polite"><strong>{minutes}:{seconds}</strong><span>carving time</span></div>}
+    {mode==="draw"&&<div className="bebrave-draw-toolbar" aria-label="Carving controls">
+      <div className="bebrave-draw-toolbar-home">{drawHomeControls}</div>
+      <button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button>
+      <div className="bebrave-timer" role="timer" aria-label="Carving time remaining" aria-live="off"><strong>{minutes}:{seconds}</strong></div>
+    </div>}
     {saveError&&<p className="bebrave-save-error" role="alert">{saveError}</p>}
     <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
@@ -181,6 +185,6 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
         </div>
       </div>
     </div>
-    {mode==="draw"&&<div className="bebrave-draw-actions"><p className="bebrave-draw-hint">Draw directly on the highlighted five-foot band. There is no undo.</p><button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button></div>}
+
   </section>;
 }

@@ -144,7 +144,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
       </Dialogue>
     </div>;
   }
-  if(scene==="draw"&&session)return <div className="bebrave-stage bebrave-world-stage"><HomeControls testMode={testMode} busy={busy} onReset={resetTestVisitor}/><BeBraveTree state={tree} mode="draw" session={session} serverNow={serverNow} draftStrokes={draftStrokes} onFinished={drawingFinished}/></div>;
+  if(scene==="draw"&&session)return <div className="bebrave-stage bebrave-world-stage"><BeBraveTree state={tree} mode="draw" session={session} serverNow={serverNow} draftStrokes={draftStrokes} onFinished={drawingFinished} drawHomeControls={<HomeControls testMode={testMode} busy={busy} onReset={resetTestVisitor}/>}/></div>;
   if(scene==="fallen"&&timeline.kind==="felled")return <div className="bebrave-stage bebrave-world-stage is-bebrave-felled"><HomeControls testMode={testMode} busy={busy} onReset={resetTestVisitor}/><BeBraveTree state={fallenState} mode="fallen" cutoff={timeline.snapshotSequence||0}/></div>;
 
   const dead=felled&&timeline.immediateFallenSeen,stumpView=dead||scene==="stump"||scene==="regret";
