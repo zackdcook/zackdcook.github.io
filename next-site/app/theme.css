@@ -67,6 +67,8 @@
     var(--tone-medium-neutral) 68%,
     var(--tone-light-neutral)
   );
+  --chrome-button-hover-bg: var(--tone-dark-color);
+  --chrome-button-hover-ink: var(--tone-medium-color);
   --button-ink: var(--tone-dark-color);
   --button-hover-bg: var(--tone-dark-color);
   --button-hover-ink: var(--tone-medium-color);
@@ -90,7 +92,7 @@
 
   /* Zack Cook home control */
   --home-bg: var(--chrome-button-bg);
-  --home-zack-ink: var(--tone-dark-color);
+  --home-zack-ink: var(--tone-white);
   --home-cook-ink: var(--tone-dark-color);
 
   --home-selected-bg: var(--home-bg);
@@ -183,6 +185,12 @@ html[data-theme="dark"] {
   /* Dark mode controls: green -> dark pink/light pink. */
   --button-bg: var(--tone-medium-neutral);
   --chrome-button-bg: var(--tone-medium-neutral);
+  --chrome-button-hover-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 58%,
+    var(--tone-light-neutral) 42%
+  );
+  --chrome-button-hover-ink: var(--tone-dark-color);
   --button-ink: var(--tone-dark-color);
   --button-hover-bg: var(--tone-dark-color);
   --button-hover-ink: var(--tone-medium-color);

@@ -39,7 +39,9 @@ html[data-theme="dark"] {
   --line: color-mix(in srgb,var(--soft-leaf) 45%,transparent);
 }
 body :is(.site-header,.site-footer) {
-  --button-bg:var(--chrome-button-bg);
+  --button-bg: var(--chrome-button-bg);
+  --button-hover-bg: var(--chrome-button-hover-bg);
+  --button-hover-ink: var(--chrome-button-hover-ink);
 }
 
 .preferences-dialog {
@@ -206,32 +208,34 @@ body .desktop-nav a::before {
   border-bottom:0;
 }
 body .desktop-nav a:not([aria-current="page"]) {
-  background-color:var(--button-bg);
-  color:var(--button-ink);
-}
-body .desktop-nav a:not([aria-current="page"]):is(:hover,:focus-visible) {
-  background-color:var(--button-hover-bg);
-  color:var(--button-hover-ink);
+  background-color: var(--button-bg);
+  color: var(--button-ink);
 }
 body .desktop-nav a[aria-current="page"] {
-  background-color:var(--nav-selected-bg);
-  color:var(--nav-selected-ink);
-  border-bottom-color:transparent;
+  background-color: var(--nav-selected-bg);
+  color: var(--nav-selected-ink);
+  border-bottom-color: transparent;
+}
+body .desktop-nav a:is(:hover,:focus-visible) {
+  background-color: var(--button-hover-bg);
+  color: var(--button-hover-ink);
 }
 body .home-tab {
-  --button-bg:var(--home-bg);
-  --button-hover-bg:var(--home-bg);
-  font-family:var(--display);
-  font-weight:650;
+  --button-bg: var(--home-bg);
+  --button-hover-bg: var(--chrome-button-hover-bg);
+  --button-hover-ink: var(--chrome-button-hover-ink);
+  font-family: var(--display);
+  font-weight: 650;
+  border-color: transparent;
 }
-body .home-tab .wordmark-zack { color:var(--home-zack-ink); }
-body .home-tab .wordmark-cook { color:var(--home-cook-ink); }
+body .home-tab .wordmark-zack { color: var(--home-zack-ink); }
+body .home-tab .wordmark-cook { color: var(--home-cook-ink); }
 body .home-tab[aria-current="page"] {
-  --surface-bg:var(--home-selected-bg);
-  background-color:var(--home-selected-bg);
+  --button-bg: var(--home-selected-bg);
+  border-color: var(--surface-edge);
 }
-body .home-tab[aria-current="page"] .wordmark-zack { color:var(--home-selected-zack-ink); }
-body .home-tab[aria-current="page"] .wordmark-cook { color:var(--home-selected-cook-ink); }
+body .home-tab[aria-current="page"] .wordmark-zack { color: var(--home-selected-zack-ink); }
+body .home-tab[aria-current="page"] .wordmark-cook { color: var(--home-selected-cook-ink); }
 .wordmark-name { white-space:nowrap; }
 
 /* Close targets share the same square corners and material as navigation. */
@@ -243,12 +247,15 @@ body :is(.preferences-dialog,.leaf-reader,.calendar-dialog) .dialog-close:focus-
 body .mobile-menu nav { background: var(--panel-bg); color: var(--panel-ink); }
 body .mobile-menu nav a { margin-block: 6px; text-decoration: none; }
 
-body .mobile-menu nav a[aria-current="page"] { --surface-bg: var(--button-hover-bg); color: var(--button-hover-ink); outline: none; }
+body .mobile-menu nav a[aria-current="page"] {
+  --button-bg: var(--selected-bg);
+  --button-ink: var(--selected-ink);
+  outline: none;
+}
 body .mobile-menu summary { color: var(--button-ink); }
 body .mobile-menu summary[aria-current="page"] {
-  --surface-bg: var(--home-selected-bg);
-  background-color: var(--home-selected-bg);
-  color: var(--home-selected-zack-ink);
+  --button-bg: var(--home-selected-bg);
+  --button-ink: var(--home-selected-zack-ink);
   border-color: var(--surface-edge);
 }
 
@@ -468,18 +475,11 @@ body :is(.button,.text-link,.project-description-toggle,.home-tab,.mobile-menu s
   background-color: var(--surface-bg);
   color: var(--button-hover-ink);
 }
-body .home-tab {
-  --button-bg:var(--home-bg);
-  --button-hover-bg:var(--home-bg);
-  border-color:transparent;
+body .mobile-menu nav {
+  background: var(--page-bg);
+  color: var(--page-ink);
+  border-color: var(--line);
 }
-body .home-tab[aria-current="page"] {
-  --button-bg:var(--home-selected-bg);
-  --button-hover-bg:var(--home-selected-bg);
-  border-color:var(--surface-edge);
-}
-body .mobile-menu nav { background: var(--page-bg); color: var(--page-ink); border-color: var(--line); }
-body .mobile-menu nav a[aria-current="page"] { background: var(--selected-bg); color: var(--selected-ink); }
 
 body .stage-button {
   --surface-bg: var(--stage-bg);
@@ -744,15 +744,6 @@ body [data-material-kind="panel"] {
 /* -------------------------------------------------------------------------
    Final UI corrections
    ------------------------------------------------------------------------- */
-
-/* Header controls should react only to the shared material light.
-   Don't simultaneously fade them into a different hover color, which makes
-   their response appear delayed/reversed relative to the rest of the page. */
-body .site-header :is(.home-tab, .mobile-menu summary) {
-  --button-hover-bg: var(--button-bg);
-  --button-hover-ink: var(--button-ink);
-  transition: none;
-}
 
 /* The ribbon lives inside .life-section, which is itself a z-index:1 material
    panel. Raise that stacking context above later material panels, then keep
