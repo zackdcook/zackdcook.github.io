@@ -11,15 +11,6 @@ const visitorCookie = "zack-bebrave-visitor";
 const uuid = /^[a-f0-9-]{36}$/i;
 
 
-export function beBraveTestMode() {
-  const ref = process.env.BEBRAVE_TEST_PROJECT_REF?.trim();
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
-  return process.env.VERCEL_ENV === "preview"
-    && process.env.BEBRAVE_TEST_MODE === "true"
-    && Boolean(ref)
-    && url.includes(ref!);
-}
-
 export function beBraveConfigured() {
   const database = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -27,20 +18,7 @@ export function beBraveConfigured() {
     process.env.BEBRAVE_HMAC_KEY
   );
   if (!database) return false;
-  if (beBraveTestMode()) return true;
   return Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
-}
-
-export async function resetBeBraveTestVisitor() {
-  if (!beBraveTestMode()) throw new Error("Test reset is unavailable.");
-  const jar = await cookies();
-  jar.set(visitorCookie, randomBytes(32).toString("hex"), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365 * 2,
-  });
 }
 
 function hmacKey() {
@@ -103,7 +81,6 @@ export async function requestContext(request: Request, createVisitor = true) {
 export async function verifyBeBraveTurnstile(request: Request, token: string) {
   const context = await requestContext(request, true);
   if (!context) throw new Error("This browser could not start a carving session.");
-  if (beBraveTestMode()) return context;
   const limited = await serviceSupabase().rpc("bebrave_turnstile_limit", { p_visitor_hash: context.visitorHash, p_network_hash: context.networkHash });
   if (limited.error) throw new Error("Too many carving attempts. Please give the tree a little time.");
   const host = new URL(request.headers.get("origin") || request.url).hostname;
