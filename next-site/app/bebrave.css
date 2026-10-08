@@ -24,18 +24,19 @@
 .bebrave-standing-scroll{position:relative;z-index:2;overflow:visible}.bebrave-world{position:relative;width:min(78vw,720px);margin:auto;touch-action:pan-y}.bebrave-tree-space{position:absolute;left:0;top:0;transform-origin:0 0}.bebrave-trunk{position:absolute;inset:0;background:var(--bebrave-bark);border-left:12px solid var(--bebrave-bark-dark);border-right:12px solid var(--bebrave-bark-dark);box-shadow:inset 24px 0 34px rgb(65 35 18 / .16),inset -24px 0 34px rgb(65 35 18 / .16)}
 .bebrave-trunk:after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(88deg,transparent 0 44px,rgb(91 56 37 / .08) 45px 48px,transparent 49px 86px);pointer-events:none}
 .bebrave-drawings{position:absolute;inset:0;width:720px;height:100%;overflow:visible;touch-action:none}.bebrave-active-zone{position:absolute;left:0;right:0;z-index:1;border-top:3px dashed rgb(255 248 237 / .65);border-bottom:3px dashed rgb(255 248 237 / .65);background:rgb(255 248 237 / .055);pointer-events:none}
+.bebrave-stroke{--stroke-color:#b981ea;color:var(--stroke-color)}
 .bebrave-stroke-line,.bebrave-stroke-glow,.bebrave-epic-shimmer{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .bebrave-stroke-line{stroke-width:8}
-.bebrave-stroke-glow{stroke-width:18;opacity:.45;filter:blur(7px)}
-.bebrave-superior .bebrave-stroke-line{filter:drop-shadow(0 0 4px currentColor)}
-.bebrave-epic .bebrave-stroke-glow{stroke:#bd59ff;stroke-width:30;opacity:.86;filter:blur(10px)}
-.bebrave-epic .bebrave-stroke-line{filter:drop-shadow(0 0 3px #e2afff) drop-shadow(0 0 8px #ad4bff)}
-.bebrave-epic-shimmer{stroke:#fff4ff;stroke-width:3.8;stroke-dasharray:3 14;opacity:1;filter:drop-shadow(0 0 5px #f0bbff);animation:bebrave-shimmer 1.8s linear infinite}
+.bebrave-stroke-glow{stroke-width:15;opacity:.38;filter:blur(4px)}
+.bebrave-superior .bebrave-stroke-line{filter:drop-shadow(0 0 2px var(--stroke-color))}
+.bebrave-epic .bebrave-stroke-glow{stroke:var(--stroke-color);stroke-width:22;opacity:.48;filter:blur(6px)}
+.bebrave-epic .bebrave-stroke-line{filter:drop-shadow(0 0 2px var(--stroke-color))}
+.bebrave-epic-shimmer{stroke:color-mix(in srgb,var(--stroke-color) 22%,white);stroke-width:2;stroke-dasharray:1 65;opacity:.8;filter:drop-shadow(0 0 2px var(--stroke-color));animation:bebrave-shimmer 5s linear infinite}
 .bebrave-sparkle{pointer-events:none}
-.bebrave-sparkle-star{fill:#fff6ff;stroke:#e6a2ff;stroke-width:.7;filter:drop-shadow(0 0 4px #f4d0ff) drop-shadow(0 0 9px #b857ff);transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 2.2s ease-in-out infinite}
-.bebrave-sparkle-core{fill:#fff;filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 7px #cf78ff)}
-@keyframes bebrave-shimmer{to{stroke-dashoffset:-34}}
-@keyframes bebrave-sparkle{0%,100%{opacity:.76;transform:scale(.85)}50%{opacity:1;transform:scale(1.48)}}
+.bebrave-sparkle-star{fill:color-mix(in srgb,var(--stroke-color) 15%,white);stroke:var(--stroke-color);stroke-width:.5;filter:drop-shadow(0 0 2px var(--stroke-color));transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 3.8s ease-in-out infinite}
+.bebrave-sparkle-core{fill:white;opacity:.85}
+@keyframes bebrave-shimmer{to{stroke-dashoffset:-132}}
+@keyframes bebrave-sparkle{0%,100%{opacity:.28;transform:scale(.72)}45%{opacity:.9;transform:scale(1.08)}65%{opacity:.5;transform:scale(.9)}}
 .bebrave-local-drawing{opacity:1}
 .bebrave-save-error{--surface-bg:color-mix(in srgb,var(--paper) 92%,transparent);position:sticky;bottom:12px;z-index:20;width:min(90vw,620px);margin:12px auto;padding:10px 14px;border-radius:12px;text-align:center;background:color-mix(in srgb,var(--paper) 92%,transparent);color:var(--ink);backdrop-filter:blur(9px)}
 .bebrave-save-error{background:#6f1d1b;color:#fff8ed}
@@ -52,35 +53,22 @@
 }
 .is-draw .bebrave-world{cursor:crosshair}
 html:has(.is-draw),body:has(.is-draw),.bebrave-stage:has(.is-draw){user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-.bebrave-draw-toolbar{
+/* Controls occupy their own viewport column, outside the drawing surface. */
+.bebrave-scene:is(.is-draw,.is-admire){--bebrave-rail-width:clamp(124px,20vw,218px)}
+.bebrave-control-rail{
   position:fixed;z-index:101;top:max(16px,env(safe-area-inset-top));
-  left:max(12px,env(safe-area-inset-left));right:max(12px,env(safe-area-inset-right));
-  display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-  align-items:start;column-gap:8px;pointer-events:none;
+  left:max(12px,env(safe-area-inset-left));width:calc(var(--bebrave-rail-width) - 24px);
+  max-height:calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;align-items:flex-start;gap:12px;
+  overflow-y:auto;overflow-x:clip;padding-bottom:6px;pointer-events:auto;
 }
-.bebrave-draw-toolbar>*{pointer-events:auto}
-.bebrave-draw-toolbar-home{display:flex;flex-direction:column;align-items:flex-start;gap:10px;min-width:0}
-.bebrave-draw-toolbar .bebrave-home-button,.bebrave-draw-toolbar .bebrave-test-reset-button{
-  position:static;top:auto;left:auto;transform:none
-}
-.bebrave-draw-toolbar .bebrave-test-reset-button{min-height:42px;padding:8px 12px}
-.bebrave-draw-toolbar .bebrave-done-button,.bebrave-draw-toolbar .bebrave-timer{
-  box-sizing:border-box;min-height:56px;border-radius:16px;padding:10px 15px;
-  font:650 clamp(1rem,2.5vw,1.25rem) var(--font-author-display),serif;
-  color:var(--button-ink);background:var(--button-bg);
-  box-shadow:var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow)
-}
-.bebrave-draw-toolbar .bebrave-done-button{justify-self:center;min-width:76px}
-.bebrave-draw-toolbar .bebrave-timer{justify-self:end;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums;white-space:nowrap;pointer-events:none}
-.bebrave-draw-toolbar .bebrave-timer strong{font:inherit}
-@media(max-width:440px){
-  .bebrave-draw-toolbar{column-gap:5px}
-  .bebrave-draw-toolbar .bebrave-home-button{padding:9px;gap:7px;font-size:.95rem}
-  .bebrave-draw-toolbar .bebrave-home-mark.site-mark{width:27px;height:27px;flex-basis:27px}
-  .bebrave-draw-toolbar .bebrave-done-button,.bebrave-draw-toolbar .bebrave-timer{min-height:49px;padding:8px 10px;font-size:.95rem}
-  .bebrave-draw-toolbar .bebrave-done-button{min-width:65px}
-  .bebrave-draw-toolbar .bebrave-test-reset-button{font-size:.83rem;padding:8px 10px}
-}
+.bebrave-control-rail .bebrave-home-button{position:static;transform:none;box-sizing:border-box;width:100%;padding:10px;gap:7px;font-size:clamp(.92rem,1.6vw,1.15rem)}
+.bebrave-control-rail .bebrave-home-mark.site-mark{width:26px;height:26px;flex-basis:26px}
+.bebrave-control-rail .button{box-sizing:border-box;max-width:100%;min-height:44px;padding:10px 12px;text-align:left;justify-content:flex-start;white-space:normal}
+.bebrave-timer{padding:10px 14px;border-radius:14px;color:var(--button-ink);background:var(--button-bg);font:650 1.1rem var(--sans);font-variant-numeric:tabular-nums}
+.bebrave-timer strong{font:inherit}
+.bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire) .bebrave-standing-scroll{width:calc(100% - var(--bebrave-rail-width));margin-left:var(--bebrave-rail-width);overflow:clip}
+.bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire) .bebrave-world{width:calc(90% * var(--bebrave-tree-zoom,1));max-width:none;margin-inline:auto}
 
 .bebrave-fallen-scroll{position:relative;z-index:2;width:100%;height:min(72svh,620px);overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;background:color-mix(in srgb,var(--bebrave-mid) 85%,black);touch-action:pan-x}.bebrave-fallen-scroll .bebrave-world{margin:0;max-width:none;width:auto}.is-fallen .bebrave-tree-space{transform-origin:0 0}.bebrave-fallen-cut{position:absolute;left:-18px;bottom:-4px;width:42px;height:720px;background:repeating-linear-gradient(75deg,#5a2f20 0 12px,#87513a 13px 24px);border:8px solid #3a2118}
 .is-base .bebrave-standing-scroll{height:min(72svh,720px);overflow:hidden}.is-base .bebrave-world{height:min(72svh,720px)!important}
@@ -112,7 +100,6 @@ html[data-timeline="felled"] .bebrave-stage-mid,.is-bebrave-felled .bebrave-stag
 html[data-timeline="felled"] .bebrave-stage-tree,.is-bebrave-felled .bebrave-stage-tree{filter:sepia(.35) saturate(.62) brightness(.72)}
 .bebrave-home-button{--surface-bg:var(--button-bg);position:absolute;z-index:100;top:max(16px,env(safe-area-inset-top));left:max(16px,env(safe-area-inset-left));display:flex;align-items:center;gap:10px;padding:10px 15px;border:1px solid transparent;border-radius:16px;background:var(--surface-bg);color:var(--button-ink);box-shadow:var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow);font:650 clamp(1rem,2.5vw,1.25rem) var(--font-author-display),serif;text-decoration:none}
 .bebrave-home-mark.site-mark{display:block;width:34px;height:34px;flex:0 0 34px;border-radius:9px;overflow:hidden}
-.bebrave-test-reset-button{position:absolute;z-index:100;top:max(16px,env(safe-area-inset-top));left:max(190px,calc(env(safe-area-inset-left) + 190px));min-height:56px;padding:10px 15px;border-radius:16px}
 .bebrave-rpg-hud{position:absolute;z-index:80;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(94vw,900px);display:grid;gap:10px;pointer-events:none}
 .bebrave-rpg-dialogue{--surface-bg:var(--panel-bg);position:relative;pointer-events:auto;padding:clamp(16px,2.7vw,26px);border-radius:24px;background:var(--surface-bg);color:var(--panel-ink);box-shadow:var(--shadow-x,0px) var(--shadow-y,5px) var(--shadow-blur,12px) var(--material-shadow)}
 .bebrave-rpg-copy{font:500 clamp(.95rem,2.3vw,1.13rem)/1.52 var(--sans);color:inherit}.bebrave-rpg-copy p{margin:0 0 .65em}.bebrave-rpg-copy p:last-child{margin-bottom:0}
@@ -126,7 +113,6 @@ html[data-timeline="felled"] .bebrave-stage-tree,.is-bebrave-felled .bebrave-sta
 .bebrave-code-display{width:100%;box-sizing:border-box;text-align:center;font:700 1.5rem var(--sans);letter-spacing:.18em;padding:10px;margin-bottom:12px}.bebrave-keypad{display:grid;grid-template-columns:repeat(3,64px);gap:8px;justify-content:center;margin-bottom:14px}.bebrave-keypad button{height:50px;border-radius:10px}.bebrave-knife-art{width:min(42vw,220px);aspect-ratio:1;margin:0 auto 10px;background:url("/images/bebrave-tool-knife.webp") center/contain no-repeat}
 .bebrave-world-stage{min-height:100dvh;overflow:visible}
 .bebrave-world-stage>.bebrave-home-button,
-.bebrave-world-stage>.bebrave-test-reset-button,
 .bebrave-world-stage>.bebrave-rpg-hud,
 .bebrave-world-stage>.bebrave-rpg-actions{position:fixed}
 .bebrave-world-stage .bebrave-scene{background:#101a50;overflow:visible;min-height:100dvh}
@@ -151,7 +137,7 @@ html[data-timeline="felled"] .bebrave-stage-tree,.is-bebrave-felled .bebrave-sta
   background-image:url("/images/bebrave-midground.webp");
   transform:translateY(clamp(-25dvh,var(--bebrave-mid-y),25dvh))
 }
-.bebrave-world-stage .bebrave-world{width:calc(75vw * var(--bebrave-tree-zoom,1))!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important}.bebrave-world-stage .bebrave-trunk{border:0!important;background:url("/images/bebrave-bark.webp") center top/720px 288px repeat-y!important;box-shadow:inset 18px 0 24px rgb(25 15 10/.22),inset -18px 0 24px rgb(25 15 10/.22),0 0 0 2px rgb(31 22 18/.72)!important}.bebrave-world-stage .bebrave-trunk::after{display:none!important}
+.bebrave-world-stage .bebrave-world{width:75vw;max-width:none;margin-inline:auto}.bebrave-world-stage .bebrave-trunk{border:0!important;background:url("/images/bebrave-bark.webp") center top/720px 288px repeat-y!important;box-shadow:inset 18px 0 24px rgb(25 15 10/.22),inset -18px 0 24px rgb(25 15 10/.22),0 0 0 2px rgb(31 22 18/.72)!important}.bebrave-world-stage .bebrave-trunk::after{display:none!important}
 
 .bebrave-stage-hacks{position:absolute;z-index:6;left:48%;top:54%;width:120px;height:100px}.bebrave-stage-hacks i{position:absolute;left:0;top:0;width:95px;height:9px;border-radius:50%;background:#321b12;box-shadow:0 2px 0 #d0a478}
 html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.bebrave-world-stage)){width:100%;height:100%;overflow:hidden!important;overscroll-behavior:none!important}.bebrave-stage:not(.bebrave-world-stage){position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;min-height:0!important;overflow:hidden!important}
@@ -161,7 +147,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-post-carve .bebrave-rpg-dialogue{padding:12px 16px;border-radius:16px}
 .bebrave-post-carve .bebrave-rpg-copy{font-size:clamp(.84rem,2vw,1rem)}
 .bebrave-post-carve .bebrave-rpg-actions{margin-top:0}
-@media(max-width:700px){.bebrave-home-mark.site-mark{width:30px;height:30px;flex-basis:30px}.bebrave-test-reset-button{left:max(16px,env(safe-area-inset-left));top:max(76px,calc(env(safe-area-inset-top) + 76px));min-height:44px}.bebrave-rpg-hud,.bebrave-rpg-actions{width:calc(100vw - 20px)}.bebrave-overlay{padding-top:max(136px,calc(env(safe-area-inset-top) + 136px))}.bebrave-stage-stump{width:min(94vw,600px);height:min(66dvh,600px)}.bebrave-tool-picker{grid-template-columns:repeat(2,1fr);width:min(76vw,420px)}}
+@media(max-width:700px){.bebrave-home-mark.site-mark{width:30px;height:30px;flex-basis:30px}.bebrave-rpg-hud,.bebrave-rpg-actions{width:calc(100vw - 20px)}.bebrave-overlay{padding-top:max(136px,calc(env(safe-area-inset-top) + 136px))}.bebrave-stage-stump{width:min(94vw,600px);height:min(66dvh,600px)}.bebrave-tool-picker{grid-template-columns:repeat(2,1fr);width:min(76vw,420px)}}
 /* Tool reveal and rarity feedback. */
 .bebrave-image-choice{transition:transform .28s ease,background .28s ease,filter .28s ease;filter:drop-shadow(0 14px 16px rgb(0 0 0/.25))}
 @media(hover:hover) and (pointer:fine){.bebrave-image-choice:hover{transform:translateY(-8px) scale(1.06);background:rgb(255 248 237/.24)}}
@@ -181,19 +167,19 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-reveal-tool.rarity-superior .bebrave-tool-image{
   filter:drop-shadow(2px 0 0 #2364ff) drop-shadow(-2px 0 0 #2364ff)
          drop-shadow(0 2px 0 #2364ff) drop-shadow(0 -2px 0 #2364ff)
-         drop-shadow(0 0 7px #297bff) drop-shadow(0 0 18px #164aff)
+         drop-shadow(0 0 4px #297bff) drop-shadow(0 0 11px #164aff)
 }
 .bebrave-reveal-tool.rarity-epic .bebrave-tool-image{
   filter:drop-shadow(2px 0 0 #be55ff) drop-shadow(-2px 0 0 #be55ff)
          drop-shadow(0 2px 0 #be55ff) drop-shadow(0 -2px 0 #be55ff)
-         drop-shadow(0 0 9px #d177ff) drop-shadow(0 0 24px #ac44ff)
+         drop-shadow(0 0 5px #d177ff) drop-shadow(0 0 14px #ac44ff)
 }
 .bebrave-rarity-fx{position:absolute;inset:1%;z-index:3;pointer-events:none}
 .bebrave-rarity-fx i{display:none}
 .fx-epic i{
-  display:block;position:absolute;width:15px;height:15px;
-  filter:drop-shadow(0 0 5px #fff) drop-shadow(0 0 8px #df77ff);
-  animation:bebrave-star 1.8s ease-in-out infinite
+  display:block;position:absolute;width:10px;height:10px;
+  filter:drop-shadow(0 0 3px #df77ff);
+  animation:bebrave-star 3.8s ease-in-out infinite
 }
 .fx-epic i::before{
   content:"";display:block;width:100%;height:100%;background:#fff2ff;
@@ -204,8 +190,8 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .fx-epic i:nth-child(3){left:16%;bottom:8%;animation-delay:.8s}
 .fx-epic i:nth-child(4){right:19%;bottom:3%;animation-delay:1.15s}
 .fx-epic i:nth-child(5){left:45%;top:0;animation-delay:1.45s}
-@keyframes bebrave-star{0%,100%{opacity:.66;transform:scale(.8)}50%{opacity:1;transform:scale(1.6)}}
-.bebrave-zoom-controls{position:fixed;top:max(16px,env(safe-area-inset-top));right:max(12px,env(safe-area-inset-right));z-index:94;display:flex;align-items:center;gap:5px;padding:5px;border:1px solid rgb(255 248 237/.45);border-radius:14px;background:rgb(25 18 41/.88);color:#fff8ed;box-shadow:0 8px 22px rgb(0 0 0/.22)}
+@keyframes bebrave-star{0%,100%{opacity:.3;transform:scale(.75)}50%{opacity:.95;transform:scale(1.1)}}
+.bebrave-zoom-controls{display:flex;flex-wrap:wrap;align-items:center;gap:5px;padding:6px;border:1px solid rgb(255 248 237/.35);border-radius:14px;background:rgb(25 18 41/.92);color:#fff8ed;max-width:100%;box-sizing:border-box}
 .bebrave-zoom-controls button{min-width:36px;min-height:36px;padding:4px 8px;border:0;border-radius:9px;background:#6b734a;color:#fff8ed;cursor:pointer;touch-action:manipulation}
 .bebrave-zoom-controls button:disabled{opacity:.4;cursor:default}
 .bebrave-zoom-controls span{min-width:44px;text-align:center;font:700 .82rem var(--sans);font-variant-numeric:tabular-nums}

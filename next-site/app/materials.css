@@ -202,10 +202,14 @@ body .desktop-nav a::before {
   inset:0;
   pointer-events:none;
   border-radius:inherit;
-  border-top:1px solid color-mix(in srgb,var(--floral) calc(20% + var(--light-strength,0)*75%),transparent);
-  border-left:1px solid color-mix(in srgb,var(--floral) calc(12% + var(--light-strength,0)*65%),transparent);
-  border-right:1px solid color-mix(in srgb,var(--floral) calc(12% + var(--light-strength,0)*65%),transparent);
-  border-bottom:0;
+  padding:1px;
+  background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),
+    color-mix(in srgb,var(--floral) 95%,transparent),transparent 75%);
+  opacity:var(--light-strength,0);
+  /* Cut the face and bottom out, leaving only the three exposed folder edges. */
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  clip-path:inset(0 0 1px 0);
 }
 body .desktop-nav a:not([aria-current="page"]) {
   background-color: var(--button-bg);
