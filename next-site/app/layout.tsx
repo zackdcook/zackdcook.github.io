@@ -5,14 +5,11 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
 import "./globals.css";
-import "./living-cypress.css";
-import "./cypress.css";
-import "./swamp-timeline.css";
+import "./motion.css";
 import "./materials.css";
+import "./theme.css";
 import "./folly.css";
 import "./bebrave.css";
-import "./site-patch-2026-10-06.css";
-import "./bebrave-iterative-2026-10-06.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
@@ -42,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={displayFont.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap }} />
-        <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/journal/feed.xml`} />
+        <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/words-of-folly/feed.xml`} />
       </head>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>

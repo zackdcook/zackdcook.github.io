@@ -78,7 +78,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   }
   function start(){const m=motion.current;if(!m.frame){m.lastFrame=0;m.frame=requestAnimationFrame(animate);}}
   function measureBounds(){const rect=svg.current?.getBoundingClientRect();if(!rect?.width)return;const scale=rect.width/ribbonWidth;bounds.current={left:(18-rect.left)/scale,right:(innerWidth-18-rect.left)/scale,top:Number.NEGATIVE_INFINITY,bottom:Number.POSITIVE_INFINITY};}
-  function play(x:number,y:number){const m=motion.current,now=performance.now();if(!m.grab)return;const distance=Math.hypot(x-m.previousX,y-m.previousY);if(distance>.8&&m.lastMove&&now-m.lastMove<240)m.played+=now-m.lastMove;m.lastMove=now;m.previousX=x;m.previousY=y;const b=bounds.current;m.grab.x=b?Math.max(b.left,Math.min(b.right,x)):x;m.grab.y=b?Math.max(b.top,Math.min(b.bottom,y)):y;start();if(m.played>2000&&!escapedRef.current){escapedRef.current=true;setEscaped(true);}}
+  function play(x:number,y:number){const m=motion.current,now=performance.now();if(!m.grab)return;const distance=Math.hypot(x-m.previousX,y-m.previousY);if(distance>.8&&m.lastMove&&now-m.lastMove<240)m.played+=now-m.lastMove;m.lastMove=now;m.previousX=x;m.previousY=y;const b=bounds.current;m.grab.x=b?Math.max(b.left,Math.min(b.right,x)):x;m.grab.y=b?Math.max(b.top,Math.min(b.bottom,y)):y;start();if(m.played>1000&&!escapedRef.current){escapedRef.current=true;setEscaped(true);}}
   function release(resetClock=true){const m=motion.current;if(!m.grab)return;dropRibbon(nodes.current);m.pointer=null;m.grab=null;if(resetClock)m.lastMove=0;start();}
   function point(event:PointerEvent<HTMLButtonElement>){const matrix=svg.current?.getScreenCTM();return matrix?new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse()):null;}
 
@@ -106,6 +106,6 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
         </svg>
       </button>
     </div>
-    {escaped&&!dismissed&&<div className="cats-escaped" role="status"><p>Brave chased a shadow and got outside. Follow him?</p><div className="actions"><Link href="/tree" className="button">Yes</Link><button className="button" onClick={()=>setDismissed(true)}>No</button></div></div>}
+    {escaped&&!dismissed&&<div className="cats-escaped" role="status"><p>Brave chased a shadow and got outside. Follow him?</p><div className="actions"><Link href="/bebrave" className="button">Yes</Link><button className="button" onClick={()=>setDismissed(true)}>No</button></div></div>}
   </div>;
 }

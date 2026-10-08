@@ -129,9 +129,10 @@ test("tilt handles landscape, angular wrap and malformed sensor readings", () =>
   assert.equal(tiltLight({ beta: NaN, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 400, 800), null);
   assert.equal(tiltLight({ beta: 0, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 0, 800), null);
 });
-test("legacy preferences enable available tilt while an explicit opt-out survives", () => {
-  assert.equal(normalizePreferences({ theme: "dark" }).tiltLighting, true);
+test("tilt lighting stays opt-in when loading legacy or explicit preferences", () => {
+  assert.equal(normalizePreferences({ theme: "dark" }).tiltLighting, false);
   assert.equal(normalizePreferences({ tiltLighting: false }).tiltLighting, false);
+  assert.equal(normalizePreferences({ tiltLighting: true }).tiltLighting, true);
 });
 
 test("quick drags cannot create repeated corkscrew reversals or paper-thin faces", () => {

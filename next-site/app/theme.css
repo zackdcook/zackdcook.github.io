@@ -1,0 +1,372 @@
+/* Palette primitives -> semantic roles.
+   Components consume roles; themes only remap those roles. */
+
+:root {
+  /* Primitive palette */
+  --tone-dark-neutral: #393313;
+  --tone-dark-color: #31031F;
+  --tone-medium-neutral: #66693E;
+  --tone-medium-color: #E88F93;
+  --tone-light-neutral: #FFF8ED;
+  --tone-light-color: color-mix(in srgb, #E88F93 42%, #FFF8ED 58%);
+  --tone-white: #FFFFFF;
+
+  /* Familiar palette aliases used by artwork */
+  --midnight: var(--tone-dark-color);
+  --coral: var(--tone-medium-color);
+  --khaki: var(--tone-dark-neutral);
+  --leaf: var(--tone-medium-neutral);
+  --floral: var(--tone-light-neutral);
+
+  /* Page */
+  --page-bg: var(--tone-light-neutral);
+  --page-ink: var(--tone-dark-color);
+  --muted: var(--tone-dark-neutral);
+  --line: color-mix(in srgb, var(--page-ink) 24%, transparent);
+
+  /* Main feature cards */
+  --active-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 82%,
+    var(--tone-light-neutral)
+  );
+  --active-ink: var(--tone-dark-color);
+
+  --bio-bg: var(--active-bg);
+  --bio-ink: var(--active-ink);
+
+  /* About Me gets the same pale pink family as Write On, Lakeland. */
+  --about-card-bg: var(--tone-light-color);
+  --about-card-ink: var(--tone-dark-color);
+
+  --event-bg: var(--page-bg);
+  --event-card-bg: var(--tone-light-color);
+  --event-card-ink: var(--tone-dark-color);
+
+  --folly-bg: var(--page-bg);
+  --folly-card-bg: color-mix(
+    in srgb,
+    var(--tone-medium-color) 48%,
+    var(--tone-light-neutral)
+  );
+  --folly-card-ink: var(--tone-dark-neutral);
+
+  --shoutouts-bg: var(--active-bg);
+  --shoutouts-card-bg: var(--tone-light-color);
+  --shoutouts-card-ink: var(--tone-dark-color);
+
+  /* Ordinary controls.
+     Content controls are intentionally paler than persistent site chrome. */
+  --button-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 32%,
+    var(--tone-light-neutral)
+  );
+  --chrome-button-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 68%,
+    var(--tone-light-neutral)
+  );
+  --chrome-button-hover-bg: var(--tone-dark-color);
+  --chrome-button-hover-ink: var(--tone-medium-color);
+  --button-ink: var(--tone-dark-color);
+  --button-hover-bg: var(--tone-dark-color);
+  --button-hover-ink: var(--tone-medium-color);
+
+  /* Feature controls use the same button family. */
+  --feature-button-bg: var(--button-bg);
+  --feature-button-ink: var(--button-ink);
+  --feature-button-hover-bg: var(--button-hover-bg);
+  --feature-button-hover-ink: var(--button-hover-ink);
+
+  /* Active-project stages */
+  --stage-bg: var(--button-bg);
+  --stage-ink: var(--button-ink);
+
+  --selected-bg: var(--tone-dark-color);
+  --selected-ink: var(--tone-medium-color);
+
+  /* Desktop/mobile navigation */
+  --nav-selected-bg: var(--tone-dark-color);
+  --nav-selected-ink: var(--tone-medium-color);
+
+  /* Zack Cook home control */
+  --home-bg: var(--chrome-button-bg);
+  --home-zack-ink: var(--tone-white);
+  --home-cook-ink: var(--tone-dark-color);
+
+  --home-selected-bg: var(--home-bg);
+  --home-selected-zack-ink: var(--home-zack-ink);
+  --home-selected-cook-ink: var(--home-cook-ink);
+
+  /* Preferences */
+  --preferences-bg: var(--tone-white);
+  --preferences-ink: var(--tone-dark-color);
+
+  --preference-button-bg: var(--button-bg);
+  --preference-button-ink: var(--tone-dark-color);
+  --preference-selected-bg: var(--tone-dark-color);
+  --preference-selected-ink: var(--tone-medium-color);
+
+  /* Compatibility roles still consumed by shared components */
+  --feature-bg: var(--active-bg);
+  --feature-ink: var(--active-ink);
+
+  --panel-bg: var(--event-card-bg);
+  --panel-ink: var(--event-card-ink);
+
+  --dialog-bg: var(--preferences-bg);
+  --dialog-ink: var(--preferences-ink);
+
+  --footer-bg: var(--page-bg);
+  --footer-ink: var(--page-ink);
+
+  --photo-border: var(--tone-dark-neutral);
+  --kitty-border: var(--tone-dark-color);
+
+  --chart-plate: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 55%,
+    var(--tone-light-neutral)
+  );
+  --progress-hue: var(--tone-dark-neutral);
+
+  --paper: var(--page-bg);
+  --ink: var(--page-ink);
+}
+
+
+/* --------------------------------------------------------------------------
+   LIVING — DARK
+   -------------------------------------------------------------------------- */
+
+html[data-theme="dark"] {
+  --page-bg: color-mix(
+    in srgb,
+    var(--tone-dark-color) 93%,
+    var(--tone-dark-neutral) 7%
+  );
+  --page-ink: var(--tone-light-neutral);
+  --muted: var(--tone-medium-color);
+
+  --active-bg: color-mix(
+    in srgb,
+    var(--tone-dark-neutral) 90%,
+    var(--tone-dark-color)
+  );
+  --active-ink: var(--tone-light-neutral);
+
+  --bio-bg: var(--active-bg);
+  --bio-ink: var(--tone-light-neutral);
+
+  --about-card-bg: var(--active-bg);
+  --about-card-ink: var(--tone-light-neutral);
+
+  --event-bg: var(--page-bg);
+  --event-card-bg: var(--active-bg);
+  --event-card-ink: var(--tone-light-neutral);
+
+  --folly-bg: var(--page-bg);
+  --folly-card-bg: color-mix(
+    in srgb,
+    var(--tone-medium-color) 38%,
+    var(--tone-dark-color) 62%
+  );
+  --folly-card-ink: var(--tone-light-neutral);
+
+  --shoutouts-bg: color-mix(
+    in srgb,
+    var(--tone-dark-neutral) 94%,
+    var(--tone-dark-color)
+  );
+  --shoutouts-card-bg: var(--folly-card-bg);
+  --shoutouts-card-ink: var(--tone-light-neutral);
+
+  /* Dark mode controls: green -> dark pink/light pink. */
+  --button-bg: var(--tone-medium-neutral);
+  --chrome-button-bg: var(--tone-medium-neutral);
+  --chrome-button-hover-bg: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 58%,
+    var(--tone-light-neutral) 42%
+  );
+  --chrome-button-hover-ink: var(--tone-dark-color);
+  --button-ink: var(--tone-dark-color);
+  --button-hover-bg: var(--tone-dark-color);
+  --button-hover-ink: var(--tone-medium-color);
+
+  --feature-button-bg: var(--button-bg);
+  --feature-button-ink: var(--button-ink);
+  --feature-button-hover-bg: var(--button-hover-bg);
+  --feature-button-hover-ink: var(--button-hover-ink);
+
+  --stage-bg: var(--button-bg);
+  --stage-ink: var(--button-ink);
+
+  --selected-bg: var(--tone-dark-color);
+  --selected-ink: var(--tone-medium-color);
+
+  --nav-selected-bg: var(--tone-dark-neutral);
+  --nav-selected-ink: var(--tone-light-neutral);
+
+  /* Khaki home face; Cook is light pink. */
+  --home-bg: var(--tone-dark-neutral);
+  --home-zack-ink: var(--tone-light-neutral);
+  --home-cook-ink: var(--tone-medium-color);
+
+  --home-selected-bg: var(--tone-dark-neutral);
+  --home-selected-zack-ink: var(--tone-light-neutral);
+  --home-selected-cook-ink: var(--tone-medium-color);
+
+  /* Same material as the large dark feature cards. */
+  --preferences-bg: var(--active-bg);
+  --preferences-ink: var(--tone-light-neutral);
+
+  --preference-button-bg: var(--tone-medium-neutral);
+  --preference-button-ink: var(--tone-dark-color);
+  --preference-selected-bg: var(--tone-dark-color);
+  --preference-selected-ink: var(--tone-medium-color);
+
+  --feature-bg: var(--active-bg);
+  --feature-ink: var(--active-ink);
+
+  --panel-bg: var(--active-bg);
+  --panel-ink: var(--tone-light-neutral);
+
+  --dialog-bg: var(--preferences-bg);
+  --dialog-ink: var(--preferences-ink);
+
+  --footer-bg: var(--page-bg);
+  --footer-ink: var(--tone-light-neutral);
+
+  --photo-border: var(--tone-medium-color);
+  --kitty-border: var(--tone-light-neutral);
+
+  --chart-plate: color-mix(
+    in srgb,
+    var(--tone-dark-neutral) 62%,
+    var(--tone-dark-color) 38%
+  );
+  --progress-hue: color-mix(
+    in srgb,
+    var(--tone-medium-neutral) 38%,
+    var(--tone-light-neutral) 62%
+  );
+
+  --paper: var(--page-bg);
+  --ink: var(--page-ink);
+}
+
+
+/* --------------------------------------------------------------------------
+   FELLED PALETTE
+   -------------------------------------------------------------------------- */
+
+html[data-timeline="felled"] {
+  --tone-dark-neutral: #432818;
+  --tone-dark-color: #6F1D1B;
+  --tone-medium-neutral: #99582A;
+  --tone-medium-color: #BB9457;
+  --tone-light-neutral: #FFE6A7;
+  --tone-light-color: color-mix(
+    in srgb,
+    #BB9457 54%,
+    #FFE6A7 46%
+  );
+}
+
+
+/* --------------------------------------------------------------------------
+   FELLED — DARK
+   -------------------------------------------------------------------------- */
+
+html[data-timeline="felled"][data-theme="dark"] {
+  --page-bg: var(--tone-dark-color);
+  --page-ink: var(--tone-light-neutral);
+
+  --active-bg: var(--tone-dark-neutral);
+  --active-ink: var(--tone-light-neutral);
+
+  --bio-bg: var(--tone-dark-neutral);
+  --bio-ink: var(--tone-light-neutral);
+
+  --about-card-bg: var(--tone-dark-neutral);
+  --about-card-ink: var(--tone-light-neutral);
+
+  --event-bg: var(--tone-dark-color);
+  --event-card-bg: var(--tone-dark-neutral);
+  --event-card-ink: var(--tone-light-neutral);
+
+  --folly-bg: var(--tone-dark-color);
+  --folly-card-bg: var(--tone-medium-neutral);
+  --folly-card-ink: var(--tone-light-neutral);
+
+  --shoutouts-bg: var(--tone-dark-neutral);
+  --shoutouts-card-bg: var(--tone-medium-neutral);
+  --shoutouts-card-ink: var(--tone-light-neutral);
+
+  --button-bg: var(--tone-medium-neutral);
+  --button-ink: var(--tone-dark-color);
+  --button-hover-bg: var(--tone-dark-color);
+  --button-hover-ink: var(--tone-light-neutral);
+
+  --feature-button-bg: var(--button-bg);
+  --feature-button-ink: var(--button-ink);
+  --feature-button-hover-bg: var(--button-hover-bg);
+  --feature-button-hover-ink: var(--button-hover-ink);
+
+  --stage-bg: var(--button-bg);
+  --stage-ink: var(--button-ink);
+
+  --selected-bg: var(--tone-dark-color);
+  --selected-ink: var(--tone-light-neutral);
+
+  --nav-selected-bg: var(--tone-dark-neutral);
+  --nav-selected-ink: var(--tone-light-neutral);
+
+  --home-bg: var(--tone-dark-neutral);
+  --home-zack-ink: var(--tone-light-neutral);
+  --home-cook-ink: var(--tone-medium-color);
+
+  --home-selected-bg: var(--tone-dark-neutral);
+  --home-selected-zack-ink: var(--tone-light-neutral);
+  --home-selected-cook-ink: var(--tone-medium-color);
+
+  --preferences-bg: var(--tone-dark-neutral);
+  --preferences-ink: var(--tone-light-neutral);
+
+  --preference-button-bg: var(--tone-medium-neutral);
+  --preference-button-ink: var(--tone-dark-color);
+  --preference-selected-bg: var(--tone-dark-color);
+  --preference-selected-ink: var(--tone-light-neutral);
+
+  --feature-bg: var(--active-bg);
+  --feature-ink: var(--active-ink);
+
+  --panel-bg: var(--tone-dark-neutral);
+  --panel-ink: var(--tone-light-neutral);
+
+  --dialog-bg: var(--preferences-bg);
+  --dialog-ink: var(--preferences-ink);
+
+  --footer-bg: var(--page-bg);
+  --footer-ink: var(--page-ink);
+
+  --paper: var(--page-bg);
+  --ink: var(--page-ink);
+
+  --line: color-mix(
+    in srgb,
+    var(--tone-medium-color) 55%,
+    transparent
+  );
+}
+
+
+/* Words of Folly and shoutout actions deliberately use the same control role. */
+body :is(.folly-panel, .shoutout-card) .button {
+  --button-bg: var(--feature-button-bg);
+  --button-ink: var(--feature-button-ink);
+  --button-hover-bg: var(--feature-button-hover-bg);
+  --button-hover-ink: var(--feature-button-hover-ink);
+}

@@ -74,11 +74,3 @@ Your palette-matched Z logo is in `app/icon.png`. Replacing that PNG changes the
 The RSS link opens `/rss`, which explains how to copy `/journal/feed.xml` into a reader. Browsers may display raw XML if you open the feed directly; that is expected. New entries appear in the feed automatically.
 
 The tab icon and shared-link picture are separate. `app/icon.png` sets the tab icon. Link previews use the title/description in `content/site.ts` and the generated picture in `app/opengraph-image.tsx`. Messaging apps can cache old previews for a while after an update.
-
-## Spotify is shelved
-
-The player, polling, and connect prompt have been removed from the pages. The old integration code is kept for a possible future restart; no Spotify account setup or new paid service is part of this update.
-
-## Compare the font and color studies
-
-`/design-preview` contains three full homepage studies. They reuse your actual layout and copy, and do not change the main homepage. They are excluded from search indexing. All study fonts are available through Google Fonts or the existing Fontsource packages; no commercial font was purchased.

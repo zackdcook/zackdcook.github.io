@@ -1,7 +1,7 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { ShoutoutList } from "@/components/shoutout-list";
-import { getShoutouts } from "@/lib/community";
+import { getShoutouts } from "@/lib/shoutouts";
 
 export const metadata: Metadata = pageMetadata("shoutouts", "Shoutouts");
 

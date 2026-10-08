@@ -1,16 +1,25 @@
 import type { BeBraveRarity } from "@/lib/bebrave-types";
 
 export const BEBRAVE_RARITY_WEIGHTS = {
-  common: 50,
-  uncommon: 30,
-  superior: 15,
+  common: 42,
+  uncommon: 35,
+  superior: 18,
   epic: 5,
 } as const satisfies Record<BeBraveRarity, number>;
 
+export const BEBRAVE_EPIC_ROLL_START = 10_000 - 100 * BEBRAVE_RARITY_WEIGHTS.epic;
+
 export const BEBRAVE_COMMON_COLOR = {
-  name: "Dark Bark Brown",
-  value: "#3B2418",
+  name: "Warm Bark Brown",
+  value: "#8A5A3A",
 };
+
+export const BEBRAVE_EPIC_PITY_PERCENT = [5, 8, 13, 21, 34, 50, 70, 90, 100] as const;
+
+export function epicChanceForPity(pity: number) {
+  const index = Math.max(0, Math.min(BEBRAVE_EPIC_PITY_PERCENT.length - 1, Math.floor(pity)));
+  return BEBRAVE_EPIC_PITY_PERCENT[index];
+}
 
 export const BEBRAVE_UNCOMMON_COLORS = [
   { name: "Cyan", value: "#00A9C7" },
@@ -39,9 +48,11 @@ export const BEBRAVE_EPIC_COLORS = [
 
 export function tierFromRoll(roll: number): BeBraveRarity {
   const bounded = Math.max(0, Math.min(9_999, Math.floor(roll)));
-  if (bounded < 5_000) return "common";
-  if (bounded < 8_000) return "uncommon";
-  if (bounded < 9_500) return "superior";
+  let ceiling = 0;
+  for (const rarity of ["common", "uncommon", "superior", "epic"] as const) {
+    ceiling += BEBRAVE_RARITY_WEIGHTS[rarity] * 100;
+    if (bounded < ceiling) return rarity;
+  }
   return "epic";
 }
 

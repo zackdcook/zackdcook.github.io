@@ -1,6 +1,5 @@
 // This is a browser-local story, never a database mutation or an authorization.
 export const timelineKey = "zack.timeline.v1";
-export const carvingBookmarkKey = "zack.guestbook.carving.v2";
 export type LocalTimeline = {
   kind: "living" | "felled";
   hacked: boolean;
