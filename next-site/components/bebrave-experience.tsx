@@ -94,11 +94,11 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
   async function tryCache(){if(!session||!cacheCode)return;setBusy(true);setCacheMessage("The keys press down with a mechanical click.");try{const r=await fetch("/api/bebrave/session/cache",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,code:cacheCode})});const d=await r.json();if(!d.valid){setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");return;}applyState(d);if(d.colors)setCacheColors(d.colors);setCacheMessage("The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard.\n\nThe knife flicks open with a satisfying clink.");setScene("epic-color");}catch{setCacheMessage("The keys press down with a mechanical click.\n\nNothing happened.");}finally{setBusy(false);}}
   async function chooseEpicColor(color:string){if(!session)return;setBusy(true);try{const r=await fetch("/api/bebrave/session/color",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,color})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("warning");}catch(e){setProblem(e instanceof Error?e.message:"That color could not be selected.");}finally{setBusy(false);}}
   async function startDrawing(){if(!session)return;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/start",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("draw");}catch(e){setProblem(e instanceof Error?e.message:"The timer could not start.");}finally{setBusy(false);}}
-  async function drawingFinished(payload:any){
+  async function drawingFinished(payload:any, finishedStrokes:DraftStroke[]){
     applyState(payload);
     await refreshState().catch(()=>{});
     setSession(payload.session||null);
-    setDraftStrokes([]);
+    setDraftStrokes(finishedStrokes);
     setScene("complete");
   }
 
@@ -135,7 +135,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
         :"tool";
     return <div className="bebrave-stage bebrave-world-stage bebrave-complete-stage">
       <HomeControls testMode={testMode} busy={busy} onReset={resetTestVisitor}/>
-      <BeBraveTree state={tree} mode="admire"/>
+      <BeBraveTree state={tree} mode="admire" session={session} draftStrokes={draftStrokes}/>
       <Dialogue
         className="bebrave-post-carve"
         actions={<button className="button" onClick={()=>setScene("entry")}>Back</button>}
@@ -153,7 +153,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<OverlayScene visual={<div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}><HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/><button className="button" disabled={busy}>{busy?"Checking…":"Continue"}</button>{problem&&<p className="form-hint" role="alert">{problem}</p>}</form></div>} />}
     {scene==="tools"&&<OverlayScene
-      visual={<div className="bebrave-tool-picker" role="group" aria-label="Choose your carving tool">{tools.map(tool=><button key={tool} type="button" className="bebrave-image-choice" disabled={busy} onClick={()=>chooseTool(tool)} aria-label={toolCopy[tool].label}><ToolImage tool={tool}/><span className="sr-only">{toolCopy[tool].label}</span></button>)}<button type="button" className="bebrave-image-choice" onClick={()=>setScene("cache")} aria-label="Mossy cache"><ToolImage tool="cache"/><span className="sr-only">Mossy cache</span></button></div>}
+      visual={<div className="bebrave-tool-picker" role="group" aria-label="Choose your carving tool">{tools.map(tool=><button key={tool} type="button" className="bebrave-image-choice" disabled={busy} onPointerDown={e=>{if(e.pointerType!=="mouse"){e.preventDefault();void chooseTool(tool);}}} onClick={()=>void chooseTool(tool)} aria-label={toolCopy[tool].label}><ToolImage tool={tool}/><span className="sr-only">{toolCopy[tool].label}</span></button>)}<button type="button" className="bebrave-image-choice" onClick={()=>setScene("cache")} aria-label="Mossy cache"><ToolImage tool="cache"/><span className="sr-only">Mossy cache</span></button></div>}
     ><p>You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and brass house key laying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?</p>{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
     {scene==="reveal"&&session&&selectedNormal&&<OverlayScene
       visual={<div className="bebrave-choice-reveal" aria-live="polite">{tools.map(tool=>{const rarity=session.toolResults?.[tool]||"common",chosen=tool===selectedNormal;return <div key={tool} className={`bebrave-reveal-tool ${chosen?"is-chosen":"is-missed"} rarity-${rarity}`} aria-label={`${toolCopy[tool].label}: ${rarity}`}><ToolImage tool={tool}/><RarityEffect rarity={rarity}/><span className="sr-only">{toolCopy[tool].label}: {rarity}</span></div>})}</div>}

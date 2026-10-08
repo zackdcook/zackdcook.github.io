@@ -4,7 +4,7 @@ import { createHmac, randomBytes, randomInt } from "node:crypto";
 import { cookies, headers } from "next/headers";
 import { serviceSupabase } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { tierFromRoll, paletteForTier, BEBRAVE_EPIC_COLORS, epicChanceForPity } from "@/lib/bebrave-config";
+import { tierFromRoll, paletteForTier, BEBRAVE_EPIC_COLORS, BEBRAVE_EPIC_ROLL_START, epicChanceForPity } from "@/lib/bebrave-config";
 import { BEBRAVE_RECARVE_GROWTH_HEIGHT, BEBRAVE_UNITS_PER_FOOT, type BeBraveNormalTool, type BeBraveRarity, type BeBraveSessionView, type BeBraveTreeState, type ToolReveal } from "@/lib/bebrave-types";
 
 const visitorCookie = "zack-bebrave-visitor";
@@ -117,8 +117,8 @@ export function secureRoll() {
 
 export function securePityRoll(pity: number) {
   const epicPercent = epicChanceForPity(pity);
-  if (randomInt(0, 10_000) < epicPercent * 100) return randomInt(9_500, 10_000);
-  return randomInt(0, 9_500);
+  if (randomInt(0, 10_000) < epicPercent * 100) return randomInt(BEBRAVE_EPIC_ROLL_START, 10_000);
+  return randomInt(0, BEBRAVE_EPIC_ROLL_START);
 }
 
 export function secureSeed() {

@@ -8,6 +8,6 @@ test("epic pity rises after misses and guarantees the ninth attempt", () => {
   assert.equal(epicChanceForPity(-10),5); assert.equal(epicChanceForPity(999),100);
 });
 
-test("rarity thresholds retain the 50/30/15/5 base distribution", () => {
-  assert.equal(tierFromRoll(0),"common"); assert.equal(tierFromRoll(4999),"common"); assert.equal(tierFromRoll(5000),"uncommon"); assert.equal(tierFromRoll(7999),"uncommon"); assert.equal(tierFromRoll(8000),"superior"); assert.equal(tierFromRoll(9499),"superior"); assert.equal(tierFromRoll(9500),"epic"); assert.equal(tierFromRoll(9999),"epic");
+test("rarity thresholds use the 42/35/18/5 base distribution", () => {
+  assert.equal(tierFromRoll(0),"common"); assert.equal(tierFromRoll(4199),"common"); assert.equal(tierFromRoll(4200),"uncommon"); assert.equal(tierFromRoll(7699),"uncommon"); assert.equal(tierFromRoll(7700),"superior"); assert.equal(tierFromRoll(9499),"superior"); assert.equal(tierFromRoll(9500),"epic"); assert.equal(tierFromRoll(9999),"epic");
 });
