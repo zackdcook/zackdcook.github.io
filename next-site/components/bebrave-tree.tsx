@@ -7,9 +7,9 @@ import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,typ
 type Mode="admire"|"draw"|"fallen"|"base";
 type DraftStroke=BeBravePublicStroke;
 
-export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,drawHomeControls}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;drawHomeControls?:ReactNode}) {
+export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,homeControls,admireActions}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode}) {
   const scene=useRef<HTMLDivElement>(null),world=useRef<HTMLDivElement>(null),horizontal=useRef<HTMLDivElement>(null);
-  const activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null);
+  const activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
   const [scale,setScale]=useState(1),[zoom,setZoom]=useState(mode==="admire"?.82:1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
@@ -83,7 +83,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   }
   useLayoutEffect(()=>{
     if(mode!=="admire"||zoomAnchor.current===null)return;
-    const targetScale=window.innerWidth*.75*zoom/BEBRAVE_TREE_WIDTH;
+    const targetScale=(horizontal.current?.clientWidth || window.innerWidth)*.9*zoom/BEBRAVE_TREE_WIDTH;
     if(Math.abs(scale-targetScale)>.03)return;
     const anchor=zoomAnchor.current;
     zoomAnchor.current=null;
@@ -92,7 +92,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   const visual=useMemo(()=>({rarity:session?.chosenRarity||"common",color:session?.chosenColor||"#3B2418",seed:session?.effectSeed||0}),[session]);
   function worldPoint(clientX:number,clientY:number):[number,number]|null{const rect=world.current?.getBoundingClientRect();if(!rect||mode!=="draw"||session?.zoneTop==null||session.zoneBottom==null)return null;const x=(clientX-rect.left)/scaleRef.current,y=(clientY-rect.top)/scaleRef.current;if(x<0||x>BEBRAVE_TREE_WIDTH||y<session.zoneTop||y>session.zoneBottom)return null;return [Math.round(x*10)/10,Math.round(y*10)/10];}
-  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=pointsToPath(a.points);activeLine.current?.setAttribute("d",d);activeGlow.current?.setAttribute("d",d);activeShimmer.current?.setAttribute("d",d);}
+  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=pointsToPath(a.points);activeLine.current?.setAttribute("d",d);activeGlow.current?.setAttribute("d",d);activeShimmer.current?.setAttribute("d",d);const tip=a.points.at(-1);if(tip){activeGleam.current?.setAttribute("transform",`translate(${tip[0]} ${tip[1]})`);activeGleam.current?.setAttribute("visibility","visible");}}
   function appendPoint(p:[number,number]){const a=active.current;if(!a)return;const last=a.points.at(-1);if(last&&Math.hypot(p[0]-last[0],p[1]-last[1])<1.4)return;a.points.push(p);if(!paintFrame.current)paintFrame.current=requestAnimationFrame(paint);}
 
   function queueChunk(a:{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number},force=false){
@@ -116,6 +116,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     activeLine.current?.setAttribute("d","");
     activeGlow.current?.setAttribute("d","");
     activeShimmer.current?.setAttribute("d","");
+    activeGleam.current?.setAttribute("visibility","hidden");
   }
 
   useEffect(()=>{if(mode!=="draw")return;const id=setInterval(()=>flushActive(false),200);return()=>clearInterval(id);},[mode,session?.id]);
@@ -133,12 +134,22 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   return <section ref={scene} className={`bebrave-scene is-${mode}`} style={{"--bebrave-tree-scale":scale,"--bebrave-tree-zoom":mode==="admire"?zoom:1} as CSSProperties}>
     <div className="bebrave-horizon" aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
-    {mode==="admire"&&<div className="bebrave-zoom-controls" role="group" aria-label="Zoom tree"><button type="button" onClick={()=>adjustZoom(zoom-.1)} disabled={zoom<=.65} aria-label="Zoom out">−</button><span>{Math.round(zoom*100)}%</span><button type="button" onClick={()=>adjustZoom(zoom+.1)} disabled={zoom>=1.45} aria-label="Zoom in">+</button><button type="button" onClick={()=>adjustZoom(.82)} aria-label="Reset zoom">Reset</button></div>}
-    {mode==="draw"&&<div className="bebrave-draw-toolbar" aria-label="Carving controls">
-      <div className="bebrave-draw-toolbar-home">{drawHomeControls}</div>
-      <button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button>
-      <div className="bebrave-timer" role="timer" aria-label="Carving time remaining" aria-live="off"><strong>{minutes}:{seconds}</strong></div>
-    </div>}
+    {(mode==="draw"||mode==="admire")&&<aside className="bebrave-control-rail" aria-label={mode==="draw"?"Carving controls":"Tree controls"}>
+      {homeControls}
+      {mode==="admire"&&<>
+        <div className="bebrave-zoom-controls" role="group" aria-label="Zoom tree">
+          <button type="button" onClick={()=>adjustZoom(zoom-.1)} disabled={zoom<=.65} aria-label="Zoom out">−</button>
+          <span>{Math.round(zoom*100)}%</span>
+          <button type="button" onClick={()=>adjustZoom(zoom+.1)} disabled={zoom>=1.45} aria-label="Zoom in">+</button>
+          <button type="button" onClick={()=>adjustZoom(.82)} aria-label="Reset zoom">Reset</button>
+        </div>
+        {admireActions}
+      </>}
+      {mode==="draw"&&<>
+        <div className="bebrave-timer" role="timer" aria-label="Carving time remaining" aria-live="off"><strong>{minutes}:{seconds}</strong></div>
+        <button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button>
+      </>}
+    </aside>}
     {saveError&&<p className="bebrave-save-error" role="alert">{saveError}</p>}
     <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
@@ -174,10 +185,10 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
           <svg className="bebrave-drawings" viewBox={`0 0 ${BEBRAVE_TREE_WIDTH} ${state.height}`} aria-label="Drawings carved into the shared cypress tree">
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
             {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed}/>)}</g>}
-            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`}>
+            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} style={{"--stroke-color":visual.color} as CSSProperties}>
               {(visual.rarity==="superior"||visual.rarity==="epic")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
               <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
-              {visual.rarity==="epic"&&<path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/>}
+              {visual.rarity==="epic"&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle"><path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
             </g>}
             {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed}/>)}</g>)}
           </svg>

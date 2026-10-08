@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import type { BeBravePublicStroke, BeBraveRarity } from "@/lib/bebrave-types";
 
 export function pointsToPath(points: Array<[number, number]>) {
@@ -12,7 +13,7 @@ function sparklePoints(points:Array<[number,number]>,seed:number,strokeOrder:num
   let state=(seed ^ Math.imul(strokeOrder+1,2654435761))>>>0;
   const next=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
   const length=points.slice(1).reduce((sum,point,index)=>sum+Math.hypot(point[0]-points[index][0],point[1]-points[index][1]),0);
-  const targetCount=Math.max(1,Math.min(18,Math.round(length/44)));
+  const targetCount=Math.max(1,Math.min(10,Math.round(length/90)));
   const positions:number[]=[];
   let distance=0;
   for(let index=1;index<points.length;index++){
@@ -22,8 +23,13 @@ function sparklePoints(points:Array<[number,number]>,seed:number,strokeOrder:num
   return Array.from({length:targetCount},(_,index)=>{
     const wanted=length*((index+.4+.2*next())/targetCount);
     const at=positions.findIndex(d=>d>=wanted);
-    const point=points[Math.max(0,at<0?points.length-1:at+1)];
-    return {x:point[0]+(next()-.5)*10,y:point[1]+(next()-.5)*10,r:5+next()*4,delay:next()*2.2};
+    const segment=at<0?points.length-2:at;
+    const before=segment>0?positions[segment-1]:0;
+    const span=(positions[segment]||length)-before;
+    const t=span>0?(wanted-before)/span:0;
+    const from=points[Math.max(0,segment)],to=points[Math.min(points.length-1,segment+1)];
+    const point:[number,number]=[from[0]+(to[0]-from[0])*t,from[1]+(to[1]-from[1])*t];
+    return {x:point[0]+(next()-.5)*10,y:point[1]+(next()-.5)*10,r:2.5+next()*2,delay:next()*3.8};
   });
 }
 
@@ -32,7 +38,7 @@ export function BeBraveStroke({stroke,color,rarity,seed,active=false}:{stroke:Be
   if(!d)return null;
   const superior=rarity==="superior", epic=rarity==="epic";
   const sparkles=epic?sparklePoints(stroke.points,seed,stroke.strokeOrder):[];
-  return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`}>
+  return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`} style={{"--stroke-color":color} as CSSProperties}>
     {(superior||epic)&&<path className="bebrave-stroke-glow" d={d} stroke={color}/>} 
     <path className="bebrave-stroke-line" d={d} stroke={color}/>
     {epic&&<path className="bebrave-epic-shimmer" d={d} stroke={color}/>} 
