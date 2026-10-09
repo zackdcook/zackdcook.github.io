@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties,type ReactNode } from "react";
+import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
@@ -13,7 +14,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const [scale,setScale]=useState(1),[zoom,setZoom]=useState(mode==="admire"?.82:1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
-  const cache=useRef(new Map<number,BeBravePublicDrawing[]>()),inflight=useRef(new Map<number,Promise<BeBravePublicDrawing[]>>());
+  const cache=useMemo(()=>new Map<number,BeBravePublicDrawing[]>(),[state.revision,cutoff]);
+  const inflight=useMemo(()=>new Map<number,Promise<BeBravePublicDrawing[]>>(),[state.revision,cutoff]);
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<number|null>(null),zoomRef=useRef(zoom);
   zoomRef.current=zoom;
   const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60),[finishBusy,setFinishBusy]=useState(false);
@@ -28,13 +30,13 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const maxSection=Math.max(0,Math.ceil(state.height/BEBRAVE_SECTION_HEIGHT)-1);
   const sections=useMemo(()=>Array.from({length:range[1]-range[0]+1},(_,i)=>range[0]+i),[range]);
   const load=useCallback((section:number)=>{
-    if(cache.current.has(section))return Promise.resolve(cache.current.get(section)!);
-    if(inflight.current.has(section))return inflight.current.get(section)!;
-    const p=(async()=>{let all:BeBravePublicDrawing[]=[],before="";do{const q=new URLSearchParams({section:String(section)});if(cutoff!==undefined)q.set("cutoff",String(cutoff));if(before)q.set("before",before);const r=await fetch(`/api/bebrave/tree?${q}`,{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error||"Bark could not load");all.push(...d.drawings);before=d.more&&d.nextBefore?String(d.nextBefore):"";}while(before);cache.current.set(section,all);return all;})().finally(()=>inflight.current.delete(section));
-    inflight.current.set(section,p);return p;
-  },[cutoff]);
+    if(cache.has(section))return Promise.resolve(cache.get(section)!);
+    if(inflight.has(section))return inflight.get(section)!;
+    const p=(async()=>{let all:BeBravePublicDrawing[]=[],before="";do{const q=new URLSearchParams({section:String(section),format:"compact-v1",revision:String(state.revision)});if(cutoff!==undefined)q.set("cutoff",String(cutoff));if(before)q.set("before",before);const r=await fetch(`/api/bebrave/tree?${q}`,{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error||"Bark could not load");all.push(...d.drawings.map(unpackDrawing));before=d.more&&d.nextBefore?String(d.nextBefore):"";}while(before);cache.set(section,all);return all;})().finally(()=>inflight.delete(section));
+    inflight.set(section,p);return p;
+  },[cutoff,state.revision,cache,inflight]);
 
-  useEffect(()=>{let cancelled=false;Promise.all(sections.map(load)).then(groups=>{if(cancelled)return;const map=new Map<string,BeBravePublicDrawing>();for(const d of groups.flat())map.set(d.id,d);setDrawings([...map.values()].sort((a,b)=>b.publicSequence-a.publicSequence));}).catch(()=>{if(!cancelled)setSaveError("That stretch of bark could not load.");});for(const n of [range[0]-1,range[1]+1])if(n>=0&&n<=maxSection)load(n).catch(()=>{});for(const k of cache.current.keys())if(k<range[0]-3||k>range[1]+3)cache.current.delete(k);return()=>{cancelled=true;};},[sections,load,range,maxSection]);
+  useEffect(()=>{let cancelled=false;Promise.all(sections.map(load)).then(groups=>{if(cancelled)return;const map=new Map<string,BeBravePublicDrawing>();for(const d of groups.flat())map.set(d.id,d);setDrawings([...map.values()].sort((a,b)=>b.publicSequence-a.publicSequence));}).catch(()=>{if(!cancelled)setSaveError("That stretch of bark could not load.");});for(const n of [range[0]-1,range[1]+1])if(n>=0&&n<=maxSection)load(n).catch(()=>{});for(const k of cache.keys())if(k<range[0]-3||k>range[1]+3)cache.delete(k);return()=>{cancelled=true;};},[sections,load,range,maxSection]);
 
   useLayoutEffect(()=>{
     const el=world.current;if(!el)return;

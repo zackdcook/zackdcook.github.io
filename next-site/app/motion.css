@@ -1,9 +1,4 @@
 /* A shared material and motion language; the original identity remains underneath. */
-:root { --midnight: #31031F; --coral: #E88F93; --khaki: #393313; --floral: #FFF8ED; --leaf: #66693E; --light-strength: 0; --cast-x: 0px; --cast-y: 0px; }
-html { color-scheme: light; }
-html[data-theme="dark"] { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); }
-@media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { color-scheme: dark; --paper: var(--midnight); --ink: var(--floral); --muted: var(--coral); --line: color-mix(in srgb,var(--coral) 33.3333%,transparent); } }
-html[data-theme="dark"] .hero h1 em, html[data-theme="dark"] .page-intro h1 em { color: var(--coral); }
 .prose { color: var(--ink); }
 .preferences-launcher { display: flex; justify-content: center; margin: -28px auto 50px; }
 .preference-row { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 18px 0; border-top: 1px solid var(--line); }

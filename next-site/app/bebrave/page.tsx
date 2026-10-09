@@ -1,5 +1,5 @@
 import { BeBraveExperience } from "@/components/bebrave-experience";
-import { beBraveConfigured } from "@/lib/bebrave-server";
+import { beBraveConfigured, beBraveTestMode } from "@/lib/bebrave-server";
 
 export const metadata = {
   title:"Be Brave",
@@ -12,6 +12,7 @@ export default function BeBravePage() {
     <BeBraveExperience
       enabled={beBraveConfigured()}
       siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+      testMode={beBraveTestMode()}
     />
     <noscript><p className="shell">The Be Brave tree needs JavaScript for its shared drawing and local timeline.</p></noscript>
   </>;

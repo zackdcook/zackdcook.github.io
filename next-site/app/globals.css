@@ -2,19 +2,6 @@
 
 
 :root {
-  --paper: #FFF8ED;
-  --ink: #31031F;
-  --muted: #393313;
-  --line: #66693E66;
-  --green: #393313;
-  --sage: #E88F93;
-  --progress-dark: #393313;
-  --olive: #66693E;
-  --gold: #E88F93;
-  --violet: #E88F93;
-  --peach: #E88F93;
-  --apricot: #E88F93;
-  --teal: #66693E;
   --display: var(--font-author-display), "DM Sans Variable", sans-serif;
   --serif: var(--display);
   --sans:
@@ -59,7 +46,7 @@ summary:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 select:focus-visible {
-  outline: 3px solid var(--midnight);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 5px;
 }
 img {

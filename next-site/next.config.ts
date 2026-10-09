@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import { assertExperimentalEnvironment } from "./lib/experimental-environment";
+
+assertExperimentalEnvironment(process.env);
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

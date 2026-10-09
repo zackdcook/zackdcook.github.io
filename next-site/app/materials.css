@@ -2,42 +2,6 @@
    elsewhere. Highlights are confined to rims; every surface has one cast. */
 /* Color roles stay separate: page paper, colored faces, and their controls. */
 /* Timeline aliases come from swamp-timeline.css. These roles apply to both. */
-:root {
-  --soft-leaf: color-mix(in srgb,var(--leaf) 55%,var(--floral));
-  --surface-bg: var(--leaf);
-  --button-bg: var(--leaf); --button-ink: var(--midnight);
-  --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral);
-  --selected-bg: var(--midnight); --selected-ink: var(--coral);
-  --panel-bg: var(--leaf); --panel-ink: var(--midnight);
-  --feature-bg: var(--leaf); --feature-ink: var(--midnight);
-  --dialog-bg: var(--leaf); --dialog-ink: var(--midnight);
-  --preference-button-bg: var(--soft-leaf); --preference-button-ink: var(--khaki);
-  --preference-selected-bg: var(--midnight); --preference-selected-ink: var(--coral);
-  --shoutout-bg: var(--shoutouts-card-bg); --shoutout-ink: var(--shoutouts-card-ink);
-  --shoutout-button-bg: var(--leaf); --shoutout-button-ink: var(--midnight);
-  --photo-border: var(--khaki); --kitty-border: var(--midnight);
-  --chart-plate: var(--soft-leaf); --progress-hue: var(--khaki);
-  --material-shadow: color-mix(in srgb,var(--khaki) 32%,transparent);
-  --material-edge: color-mix(in srgb,var(--floral) 58%,transparent);
-  --material-cut: color-mix(in srgb,var(--khaki) 32%,transparent);
-  --light-strength: 0;
-}
-html[data-theme="dark"] {
-  --button-bg: var(--leaf); --button-ink: var(--midnight);
-  --button-hover-bg: var(--khaki); --button-hover-ink: var(--floral);
-  --selected-bg: var(--khaki); --selected-ink: var(--floral);
-  --panel-bg: var(--khaki); --panel-ink: var(--floral);
-  --feature-bg: var(--khaki); --feature-ink: var(--floral);
-  --dialog-bg: var(--midnight); --dialog-ink: var(--coral);
-  --preference-button-bg: var(--coral); --preference-button-ink: var(--khaki);
-  --preference-selected-bg: var(--khaki); --preference-selected-ink: var(--floral);
-  --shoutout-bg: var(--leaf); --shoutout-ink: var(--midnight);
-  --shoutout-button-bg: var(--midnight); --shoutout-button-ink: var(--coral);
-  --photo-border: var(--coral); --kitty-border: var(--floral);
-  --chart-plate: var(--leaf);
-  --material-shadow: rgb(0 0 0 / .48);
-  --line: color-mix(in srgb,var(--soft-leaf) 45%,transparent);
-}
 body :is(.site-header,.site-footer) {
   --button-bg: var(--chrome-button-bg);
   --button-hover-bg: var(--chrome-button-hover-bg);
@@ -78,7 +42,7 @@ body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.
   transition: color .18s, background-color .18s;
 }
 body :is(.button,.text-link,.stage-button,:where(.rail-controls) button,:where(.feed-copy) button,.project-description-toggle,:where(.mobile-menu) summary,:where(.mobile-menu) nav a,.home-tab,.preference-control):not(:disabled):focus-visible {
-  outline: 3px solid var(--coral);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 4px;
 }
 @media (any-hover: hover) {
@@ -291,7 +255,7 @@ body .mobile-menu summary[aria-current="page"] {
 body .preference-control { --surface-bg: var(--preference-button-bg); color: var(--preference-button-ink); }
 body input:checked+.preference-control { --surface-bg: var(--preference-selected-bg); color: var(--preference-selected-ink); }
 .appearance-selector input:focus-visible+.preference-control,
-.checkbox-control input:focus-visible+.preference-control { outline: 3px solid var(--coral); outline-offset: 4px; }
+.checkbox-control input:focus-visible+.preference-control { outline: 3px solid var(--focus-ring); outline-offset: 4px; }
 .checkbox-control { position: relative; display: inline-flex; flex-shrink: 0; cursor: pointer; }
 .checkbox-face { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; font-size: 20px; line-height: 1; }
 .checkbox-control input:not(:checked)+.checkbox-face { font-size: 0; }
@@ -372,76 +336,15 @@ html[data-effects="reduced"] .kitty-photo-layer { transition: none; }
    mixes so a large section never feels like a solid neon block.
    ------------------------------------------------------------------------- */
 :root {
-  --page-bg: var(--floral);
-  --page-ink: var(--midnight);
-  --active-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
-  --active-ink: var(--midnight);
-  --event-bg: var(--floral);
-  --event-card-bg: color-mix(in srgb,var(--coral) 42%,var(--floral) 58%);
-  --event-card-ink: var(--midnight);
-  --bio-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
-  --bio-ink: var(--midnight);
-  --folly-bg: var(--floral);
-  --folly-card-bg: color-mix(in srgb,var(--coral) 48%,var(--floral) 52%);
-  --folly-card-ink: var(--khaki);
-  --shoutouts-bg: color-mix(in srgb,var(--leaf) 82%,var(--floral) 18%);
-  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 52%,var(--floral) 48%);
-  --shoutouts-card-ink: var(--khaki);
-  --footer-bg: var(--floral);
-  --footer-ink: var(--midnight);
-  --button-bg: color-mix(in srgb,var(--leaf) 68%,var(--floral) 32%);
-  --button-ink: var(--midnight);
-  --button-hover-bg: color-mix(in srgb,var(--leaf) 52%,var(--floral) 48%);
-  --button-hover-ink: var(--midnight);
-  --selected-bg: var(--midnight);
-  --selected-ink: var(--coral);
-  --stage-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-  --stage-ink: var(--midnight);
-  --photo-border: var(--midnight);
-  --kitty-border: var(--midnight);
-  --chart-plate: color-mix(in srgb,var(--leaf) 30%,var(--floral) 70%);
-  --progress-hue: var(--khaki);
   --shadow-color: color-mix(in srgb,var(--midnight) 18%,transparent);
   --surface-edge: color-mix(in srgb,var(--floral) 35%,transparent);
   --surface-cut: color-mix(in srgb,var(--khaki) 18%,transparent);
-  --soft-leaf: color-mix(in srgb,var(--leaf) 55%,var(--floral) 45%);
-  --line: color-mix(in srgb,var(--midnight) 24%,transparent);
 }
 
 html[data-theme="dark"] {
-  --page-bg: color-mix(in srgb,var(--midnight) 93%,var(--khaki) 7%);
-  --page-ink: var(--floral);
-  --active-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
-  --active-ink: var(--floral);
-  --event-bg: var(--page-bg);
-  --event-card-bg: color-mix(in srgb,var(--khaki) 90%,var(--midnight) 10%);
-  --event-card-ink: var(--floral);
-  --bio-bg: color-mix(in srgb,var(--khaki) 92%,var(--midnight) 8%);
-  --bio-ink: var(--floral);
-  --folly-bg: var(--page-bg);
-  --folly-card-bg: color-mix(in srgb,var(--coral) 38%,var(--midnight) 62%);
-  --folly-card-ink: var(--floral);
-  --shoutouts-bg: color-mix(in srgb,var(--khaki) 94%,var(--midnight) 6%);
-  --shoutouts-card-bg: color-mix(in srgb,var(--leaf) 45%,var(--floral) 55%);
-  --shoutouts-card-ink: var(--midnight);
-  --footer-bg: var(--page-bg);
-  --footer-ink: var(--floral);
-  --button-bg: color-mix(in srgb,var(--leaf) 45%,var(--floral) 55%);
-  --button-ink: var(--midnight);
-  --button-hover-bg: var(--khaki);
-  --button-hover-ink: var(--floral);
-  --selected-bg: var(--midnight);
-  --selected-ink: var(--coral);
-  --stage-bg: color-mix(in srgb,var(--leaf) 45%,var(--floral) 55%);
-  --stage-ink: var(--midnight);
-  --photo-border: var(--coral);
-  --kitty-border: var(--floral);
-  --chart-plate: color-mix(in srgb,var(--leaf) 72%,var(--khaki) 28%);
-  --progress-hue: var(--leaf);
   --shadow-color: rgb(0 0 0 / .32);
   --surface-edge: color-mix(in srgb,var(--floral) 22%,transparent);
   --surface-cut: color-mix(in srgb,var(--midnight) 36%,transparent);
-  --line: color-mix(in srgb,var(--floral) 26%,transparent);
 }
 
 body {
@@ -601,7 +504,6 @@ html[data-theme="dark"] body .kitty-ribbon { --ribbon-shadow: rgb(0 0 0 / .32); 
 
 /* In dark mode the active draft ring uses the warm accent, not the khaki
    card behind it, so the progress chart remains readable. */
-html[data-theme="dark"] { --progress-hue: color-mix(in srgb,var(--leaf) 38%,var(--floral) 62%); }
 
 html[data-theme="dark"] body .events-section .event-description { color: var(--floral); }
 
@@ -626,20 +528,12 @@ body .site-footer-inner .footer-preferences .button { min-height: 48px; }
   --progress-core: var(--midnight);
   --progress-track: color-mix(in srgb,var(--khaki) 16%,var(--chart-plate) 84%);
   --progress-label: var(--floral);
-  --nav-selected-bg: var(--midnight);
-  --nav-selected-ink: var(--coral);
-  --material-shadow: color-mix(in srgb,var(--khaki) 26%,transparent);
   --shadow-color: var(--material-shadow);
 }
 html[data-theme="dark"] {
-  --chart-plate: color-mix(in srgb,var(--khaki) 62%,var(--midnight) 38%);
   --progress-core: var(--midnight);
-  --progress-dark: var(--khaki);
   --progress-track: color-mix(in srgb,var(--leaf) 35%,var(--chart-plate) 65%);
   --progress-label: var(--floral);
-  --nav-selected-bg: color-mix(in srgb,var(--leaf) 48%,var(--floral) 52%);
-  --nav-selected-ink: var(--midnight);
-  --material-shadow: rgb(0 0 0 / .32);
 }
 body .ring-center { fill: var(--progress-label); }
 body .mobile-menu nav a[aria-current="page"],
@@ -696,8 +590,7 @@ body :is(.submission-panel) { --surface-bg: var(--panel-bg); }
 body .tactile-photo { --surface-bg: var(--photo-frame); }
 
 /* One page display scale; only the last emphasized word carries the accent. */
-:root { --page-heading-size: clamp(80px,9.8vw,136px); --page-heading-accent: var(--leaf); --section-gap: 36px; }
-html[data-theme="dark"] { --page-heading-accent: var(--coral); }
+:root { --page-heading-size: clamp(80px,9.8vw,136px); --section-gap: 36px; }
 body :is(.page-intro h1:not(.page-label),.hero h1,.folly-page-heading) {
   font: 650 var(--page-heading-size)/1.04 var(--display); letter-spacing: -.04em;
 }
@@ -763,10 +656,6 @@ body .life-photo .kitty-ribbon {
 /* Light-mode project/shoutout ink = the dark pink / Midnight Violet. */
 html[data-theme="light"] body .project-title {
   color: var(--midnight);
-}
-
-:root {
-  --shoutouts-card-ink: var(--midnight);
 }
 
 /* The three "Greetings..." lines are hero-detail paragraphs. */

@@ -1,8 +1,4 @@
 /* BE BRAVE prototype visuals: intentionally simple. Mechanics first, finished art later. */
-:root{
-  --bebrave-sky-top:#4d315f;--bebrave-sky-bottom:#e88f93;--bebrave-sun:#ffd36a;
-  --bebrave-mid:#252a25;--bebrave-bark:#b9875f;--bebrave-bark-dark:#5b3825;
-}
 .bebrave-entry,.bebrave-dialog-card{padding-block:clamp(34px,6vw,74px);max-width:820px}
 .bebrave-entry>p,.bebrave-dialog-card>p{font-size:clamp(1rem,2vw,1.22rem);line-height:1.75;white-space:pre-line}
 .bebrave-entry .actions,.bebrave-dialog-card .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
@@ -87,8 +83,8 @@ html[data-effects="reduced"] :is(.bebrave-horizon,.bebrave-midground){transform:
    ------------------------------------------------------------------------- */
 body:has(.bebrave-stage) .site-header,body:has(.bebrave-stage) #page-sheet>footer,body:has(.bebrave-stage) .site-footer{display:none!important}
 body:has(.bebrave-stage) #page-sheet,body:has(.bebrave-stage) #main{margin:0!important;padding:0!important;max-width:none!important}
-body:has(.bebrave-stage){overflow-x:hidden;background:#101a50}
-.bebrave-stage{position:relative;isolation:isolate;min-height:100dvh;width:100%;background:#101a50;overflow:clip}
+body:has(.bebrave-stage){overflow-x:hidden;background:var(--bebrave-sky-top)}
+.bebrave-stage{position:relative;isolation:isolate;min-height:100dvh;width:100%;background:var(--bebrave-sky-top);overflow:clip}
 .bebrave-stage-art{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .bebrave-stage-bg{position:absolute;inset:0;background:url("/images/bebrave-horizon.webp") center bottom/cover no-repeat}
 .bebrave-stage-mid{position:absolute;inset:0;background:url("/images/bebrave-midground.webp") center bottom/100% auto no-repeat}
@@ -115,7 +111,7 @@ html[data-timeline="felled"] .bebrave-stage-tree,.is-bebrave-felled .bebrave-sta
 .bebrave-world-stage>.bebrave-home-button,
 .bebrave-world-stage>.bebrave-rpg-hud,
 .bebrave-world-stage>.bebrave-rpg-actions{position:fixed}
-.bebrave-world-stage .bebrave-scene{background:#101a50;overflow:visible;min-height:100dvh}
+.bebrave-world-stage .bebrave-scene{background:var(--bebrave-sky-top);overflow:visible;min-height:100dvh}
 /* Parallax layers are fixed viewport windows. Overscanned art moves INSIDE each
    window rather than translating the window and exposing its bottom edge. */
 .bebrave-world-stage .bebrave-horizon,.bebrave-world-stage .bebrave-midground{
