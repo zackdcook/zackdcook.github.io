@@ -1,6 +1,6 @@
 /* The leaf clearing and reader share one semantic palette. */
 :root{
- --leaf-color:var(--color-foliage);--leaf-ink:var(--color-background);
+ --leaf-color:var(--color-foliage);--leaf-ink:var(--color-surface);
  --folly-ground:var(--color-background);--folly-ground-ink:var(--color-ink);
  --folly-depth:var(--color-ink);--folly-highlight:var(--color-surface);
 }

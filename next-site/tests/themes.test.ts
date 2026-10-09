@@ -17,7 +17,7 @@ for(const [name,colors] of Object.entries(themes)) {
       const ratio=contrast(colors[bg],colors[ink]);assert.ok(ratio>=4.5,`${ink}/${bg}: ${ratio}`);
     }
     for(const bg of ["background","surface"]) assert.ok(contrast(colors[bg],colors.border)>=3,`border/${bg}`);
-    assert.ok(contrast(colors.foliage,colors.background)>=4.5,"leaf lettering/foliage");
+    assert.ok(contrast(colors.foliage,colors.surface)>=4.5,"leaf lettering/foliage");
     for(const bg of ["background","surface","surface-alt"]) assert.ok(contrast(colors[bg],colors.accent)>=4.5,`accent/${bg}`);
   });
 }
