@@ -1,13 +1,13 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Artwork/lighting milestone is published and browser checked. Canonical archive/schema and synthetic full-geometry scale checks now pass; the archive milestone is ready to publish for real browser publication/backfill tests. Visual sign-off and full inventory remain incomplete.
+Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Archive milestone is published; 21 completed test carvings restored byte-for-byte after persistent canonical backfill. A real browser Legendary carving completed its full timer, published and archived automatically. Reset/cooldown/refresh/replay verified. Visual sign-off and full inventory remain incomplete.
 
 ## Branch and isolation
 
 - Branch: `experiment/immersive-world-2026-10-09`; repository `zackdcook/zackdcook.github.io`; app `next-site`.
-- Last verified published SHA: `5e4d7a6c76447e217f0d2bab157081a3e938d12e`. Use `git log -1` for the canonical-archive milestone containing this checkpoint.
+- Last verified published SHA: `19f7f99eec5dfd84619ce7a14488b3f9ffb13758`. Use `git log -1` for the verification checkpoint containing this file.
 - Main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`; spring-clean tree/test reference: `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`, branch `spring-clean-2026-10`.
-- Latest verified READY Preview: `dpl_C6R99hrqrcVJz9Dt3tdydWazDmKr`, https://zack-cook-cqmegz53w-dove-mack0o-3684.vercel.app/ , exact 5e4 SHA, target null (Preview). All history preserved; main unchanged; native publishing Codespace stopped after push.
+- Latest verified READY Preview: `dpl_FcspzTvrJH4sN6JFTmSUTNCxemJb`, https://zack-cook-dtuhqgj0j-dove-mack0o-3684.vercel.app/ , exact 19f SHA, target null (Preview). All history preserved; main unchanged; native publishing Codespace stopped after push.
 - Existing Vercel project: `zack-cook`, `prj_AcuTfmUBydayvETed53KCREnlONa`. Omit teamId/slug. Preview API omits target; literal preview is rejected.
 - Test Supabase: `qkkgcoejkqvthbjcldcw`. Production `belqlsqnbexwkpmnptyy` is read-only and must NEVER be modified.
 - Preview/test guards fail closed outside the exact test project and nonproduction configuration. Test-only Cloudflare bypass, responsive harness and personal carve reset are preserved.
@@ -72,10 +72,10 @@ Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Artwork/lighting milestone
 
 ## Remaining tasks in priority order
 
-1. Publish tested archive milestone from 5e4 preserving exact history. Deploy Preview at its verified SHA. Only then persistently backfill existing completed test carvings through reviewed compressed RPC arguments; verify exact restored source hashes and retained individual ledgers / published appearance.
+1. Archive milestone is published and backfilled/verified. Save/publish this verification checkpoint with the next coherent refinement. See BROWSER_VERIFICATION.md: 22 completed archives now include the real timed Legendary fixture; distribution 50 untouched.
 2. Complete browser 390/768/1024 and desktop/four-palette QA, camera texture/art polish and resting/reduced light. Source / scale checks are complete but full browser input / timing / actual performance are not.
-3. Test full browser → Next.js → isolated test Supabase → publication flow, 60-second drawing, zoom/pan/input, tools/rarities/live-vs-saved effects, personal reset/cooldown, Legendary redemption/refresh/replay and both timelines. Use disposable fixtures, never 50 distribution codes.
+3. Real browser → Next.js → test DB → timed Legendary publication/archive, zoom, cooldown/reset, reward refresh/replay now pass. Continue ordinary tools/rarities and both timelines. Use disposable fixtures, never 50 distribution codes.
 4. Verify remaining inventory/routes/secrets, desktop/tablet/mobile keyboard/touch/reduced states, performance and visual craft. Physical sensor testing must be disclosed if unavailable.
 5. Final refined preview + private codes + test report + palette/architecture summary. The project is not done until end-to-end/browser polish is verified.
 
-Exact next action: publish the tested archive milestone from verified remote 5e4 through the existing native Codespace mirror, deploy one isolated Preview, then verify/persist the canonical backfill and perform real timed carving + Legendary/cooldown browser checks. No blockers require user input presently. Never regenerate or test with distribution codes.
+Exact next action: continue four-theme / 390–1024px visual and full original-inventory browser QA; refine tree controls/engraving/environment and ordinary page craft where observations justify changes. Canonical backfill and timed Legendary browser checks are complete; do not repeat them unnecessarily. Publish the next checkpoint/refinement from exact remote 19f using the established mirror. No blockers require user input presently. Never regenerate or test with distribution codes.
