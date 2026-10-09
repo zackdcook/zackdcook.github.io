@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import progress from "@/content/progress.json";
 import { displayDate } from "@/content/site";
 import { progressRatio } from "@/lib/validation";
+import styles from "./progress-rings.module.css";
 
 const activeIndex = Math.max(0, progress.stages.findIndex(stage => stage.status === "active"));
 const number = (value: number) => value.toLocaleString("en-US");
@@ -39,7 +40,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
   const percentage = Math.round(progressRatio(stage.value, stage.target) * 100);
   const coreRadius = 61;
   const spacing = 85 / Math.max(1, progress.stages.length - 1);
-  const width = Math.min(20, spacing * .58);
+  const width = Math.min(8, spacing * .28);
   const noteFor = (item: typeof stage) => item.note
     .replace("{target}", number(item.target ?? 0))
     .replace("{currentStep}", progress.stages[activeIndex].label);
@@ -57,7 +58,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
 
   return <div
     ref={container}
-    className={`progress-display ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
+    className={`progress-display ${styles.display} ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
   >
     <div className="progress-details">
       <ol className="stage-list">{progress.stages.map((item, index) => <li key={item.id}>
@@ -69,6 +70,15 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           onClick={() => { setSelected(index); setHovered(null); }}
           onFocus={() => setFocused(index)}
           onBlur={() => setFocused(null)}
+          onKeyDown={event => {
+            if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            const total = progress.stages.length;
+            const next = event.key === "Home" ? 0 : event.key === "End" ? total - 1 :
+              (index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1) + total) % total;
+            setSelected(next); setHovered(null);
+            container.current?.querySelectorAll<HTMLButtonElement>(".stage-button")[next]?.focus();
+          }}
           onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(index); }}
           onPointerLeave={() => setHovered(null)}
         >

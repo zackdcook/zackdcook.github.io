@@ -1,200 +1,66 @@
-/* Palette ownership stays here; artwork, casts and reading surfaces all use
-   these tokens, including the browser's local felled timeline. */
-:root {
-  --leaf-color: var(--leaf); --leaf-ink: var(--floral);
-  --folly-ground: var(--paper); --folly-ground-ink: var(--ink);
-  --folly-depth: var(--khaki); --folly-highlight: var(--floral);
+/* The leaf clearing and reader share one semantic palette. */
+:root{
+ --leaf-color:var(--color-foliage);--leaf-ink:var(--color-background);
+ --folly-ground:var(--color-background);--folly-ground-ink:var(--color-ink);
+ --folly-depth:var(--color-ink);--folly-highlight:var(--color-surface);
 }
-.folly-page { background: var(--folly-ground); color: var(--folly-ground-ink); min-height: 80svh; }
-.folly-page .page-intro { margin-bottom: 30px; }
-body .folly-panel {
-  background: var(--coral); color: var(--khaki); border-radius: 24px; padding: 42px;
-  --button-bg: var(--soft-leaf); --button-ink: var(--khaki);
-  --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral);
-}
-.folly-label { color: var(--khaki); font: 400 16px/1.6 var(--sans); margin: 0; }
-.folly-ground { position: relative; width: 100%; height: clamp(440px,62vw,720px); isolation: isolate; overflow: hidden; touch-action: auto; margin-top: 12px; cursor: grab; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
-.folly-ground[data-dragging] { cursor: grabbing; }
-.folly-leaves { margin: 0; padding: 0; list-style: none; }
-.folly-leaves,.folly-leaves > li,.folly-litter { transform-style: flat; }
-.folly-leaves > li { position: static; }
-.pile-leaf { position: absolute; left: 0; top: 0; width: var(--pile-leaf-width,370px); aspect-ratio: 1.6; padding: 0; border: 0; background: transparent; cursor: grab; color: inherit; font: inherit; transform-style: flat; pointer-events: auto; touch-action: pan-y; }
-.pile-leaf .leaf-hit { pointer-events: fill; }
-.pile-leaf .leaf-art { pointer-events: none; }
-.pile-leaf:focus-visible { outline: none; z-index: 100000 !important; }
-.quote-leaf { display: block; position: relative; width: 100%; aspect-ratio: 1.6; color: var(--leaf-ink); }
-.leaf-art { display: block; width: 100%; height: 100%; overflow: visible; }
-.leaf-shadow { fill: var(--folly-depth); opacity: .18; pointer-events: none; }
-.leaf-body { fill: var(--leaf-color); stroke: var(--khaki); stroke-width: 7; stroke-linejoin: round; }
-.leaf-veins { fill: none; stroke: var(--khaki); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
-.leaf-center-vein { stroke-width: 10; }
-.leaf-hit { fill: transparent; pointer-events: fill; }
-.leaf-hit,.leaf-art,.quote-leaf { touch-action: auto; -webkit-touch-callout: none; }
-.leaf-lettering { font-family: var(--display); font-weight: 650; fill: var(--leaf-ink); pointer-events: none; }
-.folly-ground-readable { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
-.folly-ground-readable .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
-.folly-ground-readable .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
-.folly-ground-readable .folly-litter { display: none; }
-body .leaf-reader { --dialog-bg: var(--floral); --dialog-ink: var(--khaki); --button-bg: var(--stage-bg); --button-ink: var(--midnight); --button-hover-bg: var(--midnight); --button-hover-ink: var(--coral); width: min(96vw,1100px); max-width: none; max-height: 94svh; border: 0; padding: 18px; margin: auto; overflow: auto; overscroll-behavior: contain; color: var(--dialog-ink); background: var(--dialog-bg); border-radius: 28px; box-shadow: 0 18px 80px rgb(0 0 0 / .25); }
-.leaf-reader::backdrop { background: rgb(0 0 0 / .12); }
-.leaf-reader-content { position: relative; }
-.leaf-reader-toolbar { position: sticky; top: 0; z-index: 10; display: flex; justify-content: flex-end; padding: 0 0 8px; background: var(--dialog-bg); isolation: isolate; }
-.leaf-reader-close { position: relative; margin: 0; }
-.reader-leaf-stage { position: relative; width: min(100%,1000px); aspect-ratio: 1.48; margin: 0 auto; overflow: clip; isolation: isolate; }
-.reader-leaf { position: absolute; inset: 4% 4% 8%; transform-style: flat; transform-origin: 50% 45%; pointer-events: none; }
-.reader-leaf-current { z-index: 3; }
-.reader-leaf-underneath { z-index: 2; transform: translate(-.5%,1%) rotate(-5deg) scale(.99); }
-.reader-leaf-retiring { z-index: 1; transform: translate(-3%,7%) rotate(-9deg) scale(.96); }
-.leaf-reader[open] .reader-leaf-falling { animation: leaf-fall-in 1.45s linear both, leaf-bank-in 1.45s ease-in-out both; }
-.leaf-reader[open] .reader-leaf-underneath { animation: leaf-settle-under 750ms cubic-bezier(.22,1,.36,1) both; }
-.leaf-reader[open] .reader-leaf-retiring { animation: leaf-settle-back 750ms cubic-bezier(.22,1,.36,1) both, leaf-buried-away var(--leaf-retire-time,1900ms) linear both; }
-.leaf-reader-nav { display: grid; grid-template-columns: 44px minmax(0,1fr) auto minmax(0,1fr) 44px; align-items: center; gap: 12px; width: min(100%,560px); margin: 0 auto; font: 500 13px var(--sans); padding: 10px 0; }
-.leaf-reader-nav .button { justify-self: center; font-size: 14px; padding: 12px 20px; white-space: nowrap; min-height: 44px; }
-.leaf-reader-nav .leaf-reader-end { width: 44px; padding: 10px 0; border-radius: 12px; }
-.leaf-reader-nav .button:disabled { opacity: .45; cursor: default; }
-.leaf-reader-count { white-space: nowrap; }
-body:has(.leaf-reader[open]) { overflow: hidden; }
-@keyframes leaf-fall-in {
-  0% { translate: 0 min(-100svh,-140%); opacity: 0; }
-  20% { translate: 0 -92%; opacity: .15; }
-  42% { translate: 0 -42%; opacity: .9; }
-  68% { translate: 0 -13%; opacity: 1; }
-  87% { translate: 0 -2%; }
-  100% { translate: 0 0; opacity: 1; }
-}
-@keyframes leaf-bank-in {
-  0% { transform: perspective(1600px) translate3d(7%,0,100px) rotateX(18deg) rotateY(-20deg) rotateZ(11deg) scale(1.35); }
-  22% { transform: perspective(1600px) translate3d(-8%,0,75px) rotateX(-12deg) rotateY(18deg) rotateZ(-9deg) scale(1.22); }
-  46% { transform: perspective(1600px) translate3d(6%,0,45px) rotateX(10deg) rotateY(-14deg) rotateZ(7deg) scale(1.12); }
-  70% { transform: perspective(1600px) translate3d(-3%,0,20px) rotateX(-6deg) rotateY(8deg) rotateZ(-4deg) scale(1.05); }
-  88% { transform: perspective(1600px) translate3d(1%,0,5px) rotateX(3deg) rotateY(-3deg) rotateZ(1.5deg) scale(1.01); }
-  100% { transform: perspective(1600px) translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1); }
-}
-@keyframes leaf-settle-under {
-  from { transform: var(--reader-from-transform,none); translate: var(--reader-from-translate,0 0); opacity: var(--reader-from-opacity,1); }
-  to { transform: translate(-.5%,1%) rotate(-5deg) scale(.99); translate: 0 0; opacity: 1; }
-}
-@keyframes leaf-settle-back {
-  from { transform: var(--reader-from-transform,none); translate: var(--reader-from-translate,0 0); }
-  to { transform: translate(-1%,2%) rotate(-9deg) scale(.97); translate: 0 0; }
-}
-@keyframes leaf-buried-away {
-  0%,58% { opacity: 1; }
-  to { opacity: 0; }
-}
-.folly-feature { background: var(--folly-ground); color: var(--folly-ground-ink); }
-.folly-feature .collection-heading { color: inherit; }
-.folly-feature .section-heading { padding-top: 0; margin-bottom: 40px; }
-.folly-latest { display: block; width: min(580px,100%); margin: 0 auto; }
-@media (max-width:600px) {
-  body .folly-panel { padding: 26px; }
-  .folly-feature .section-heading { margin-bottom: 25px; }
-  .folly-ground { height: min(64svh,540px); min-height: 400px; }
-  .folly-ground-readable { height: auto; min-height: 0; }
-  .folly-ground-readable .folly-leaves { gap: 24px; }
-  body .leaf-reader { width: 98vw; padding: 12px 8px; }
-  .leaf-reader-nav { gap: 6px; }
-  .leaf-reader-nav .button { padding: 10px 9px; font-size: 12px; }
-  .leaf-reader-nav .leaf-reader-end { padding: 10px 0; }
-}
-html[data-effects="reduced"] .folly-ground { height: auto; min-height: 0; padding: 32px 0; overflow: visible; touch-action: pan-y; cursor: auto; }
-html[data-effects="reduced"] .folly-leaves { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,320px),1fr)); gap: 30px 18px; }
-html[data-effects="reduced"] .folly-leaves .pile-leaf { position: relative; left: auto !important; top: auto !important; transform: none !important; width: 100%; z-index: auto !important; touch-action: pan-y; cursor: pointer; }
-html[data-effects="reduced"] .folly-litter { display: none; }
-html[data-effects="reduced"] .leaf-reader[open] .reader-leaf { animation: none; }
-html[data-effects="reduced"] .reader-leaf-underneath { transition: none; }
-@media (prefers-reduced-motion:reduce) { .leaf-reader[open] .reader-leaf { animation: none; } .reader-leaf-underneath { transition: none; } }
-
-.folly-ground[data-grab-ready],.folly-ground[data-dragging] { cursor: grabbing; }
-.quote-leaf,.leaf-art,.leaf-hit { -webkit-user-select: none; user-select: none; }
-.leaf-reader-content { z-index: 0; }
-
-:root {
-  --folly-ground: var(--folly-bg);
-  --folly-ground-ink: var(--page-ink);
-}
-body .folly-feature { background: var(--folly-bg); color: var(--page-ink); }
-body .folly-panel {
-  background-color: var(--folly-card-bg);
-  color: var(--folly-card-ink);
-  border: 1px solid color-mix(in srgb,var(--folly-card-ink) 20%,transparent);
-  --button-bg: var(--stage-bg);
-  --button-ink: var(--stage-ink);
-  --button-hover-bg: var(--selected-bg);
-  --button-hover-ink: var(--selected-ink);
-}
-body .folly-panel .folly-label {
-  font-family: var(--display);
-  font-size: var(--feature-heading-size);
-  font-weight: 650;
-  line-height: 1.04;
-  letter-spacing: -.04em;
-  color: var(--folly-card-ink);
-  margin: 0 0 22px;
-  max-width: 18ch;
-}
-body .folly-panel .folly-ground { margin-top: 0; }
-body .folly-panel .rail-more { margin-top: 22px; }
-body .folly-panel .button { --surface-bg: var(--button-bg); background: var(--button-bg); color: var(--button-ink); }
-@media (any-hover: hover) { body .folly-panel .button:hover { --surface-bg: var(--button-hover-bg); background: var(--button-hover-bg); color: var(--button-hover-ink); } }
-
-body .leaf-reader {
-  --dialog-bg: var(--floral);
-  --dialog-ink: var(--khaki);
-  background: var(--dialog-bg);
-  color: var(--dialog-ink);
-}
-body .leaf-reader .dialog-close,
-body .leaf-reader .leaf-reader-end { border-radius: 12px; }
-
-@media (max-width:600px) {
-  body .folly-panel .folly-label { font-size: clamp(38px,12vw,58px); }
-}
-
-body .folly-page-heading {
-  font: 650 var(--page-heading-size)/1.04 var(--display);
-  letter-spacing: -.04em;
-  color: var(--page-ink);
-  margin: 0;
-  max-width: 18ch;
-}
-
-body .folly-page .folly-panel { padding: 12px; }
-body .folly-page .page-intro { margin-bottom: var(--section-gap); }
-body .folly-page-heading em { color: var(--page-heading-accent); font-style: normal; }
-body .folly-page .folly-ground { margin-top: 0; }
-@media(max-width:740px) { body .folly-page .folly-panel { padding: 8px; } }
-
-body .folly-page .folly-panel {
-  --surface-bg: transparent;
-  background: transparent !important;
-  background-image: none !important;
-  border: 0 !important;
-  box-shadow: none !important;
-  padding: 0;
-}
-
-
-/* Homepage Words of Folly remains a tactile material card. The dedicated
-   Words of Folly page stays flat because its .folly-page rule above wins. */
-body .folly-feature .folly-panel {
-  --surface-bg: var(--folly-card-bg);
-}
-
-/* Dynamic shared-light shadows only for the newest homepage leaf and leaves
-   currently presented in reader mode. */
-body .folly-latest .quote-leaf,
-body .leaf-reader .reader-leaf {
-  --leaf-dynamic-shadow-x: calc(var(--shadow-x, 0px) * .62);
-  --leaf-dynamic-shadow-y: calc(var(--shadow-y, 7px) * .62);
-}
-body .folly-latest .leaf-shadow,
-body .leaf-reader .reader-leaf .leaf-shadow {
-  transform: translate(var(--leaf-dynamic-shadow-x, 0px), var(--leaf-dynamic-shadow-y, 7px));
-}
-
-
-/* Felled dark mode: keep the leaf distinct from its surrounding brown card. */
-html[data-timeline="felled"][data-theme="dark"] {
-  --leaf-color: var(--coral);
-}
+.folly-page{min-height:80svh}
+.folly-page-heading{max-width:17ch}
+.folly-panel{position:relative;background:none;padding:0;border:0}
+.folly-label{font:450 13px/1.8 var(--sans);color:var(--color-muted);margin:0 0 22px;max-width:650px}
+.folly-ground{position:relative;width:100%;height:clamp(440px,62vw,760px);isolation:isolate;overflow:hidden;touch-action:auto;margin-top:12px;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;border-bottom:1px solid color-mix(in srgb,var(--color-border) 35%,transparent)}
+.folly-ground[data-dragging],.folly-ground[data-grab-ready]{cursor:grabbing}
+.folly-leaves{margin:0;padding:0;list-style:none}
+.folly-leaves,.folly-leaves>li,.folly-litter{transform-style:flat}
+.folly-leaves>li{position:static}
+.pile-leaf{position:absolute;left:0;top:0;width:var(--pile-leaf-width,370px);aspect-ratio:1.6;padding:0;border:0;background:transparent;cursor:grab;color:inherit;font:inherit;transform-style:flat;pointer-events:auto;touch-action:pan-y}
+.pile-leaf .leaf-hit{pointer-events:fill}
+.pile-leaf .leaf-art{pointer-events:none}
+.pile-leaf:focus-visible{outline:none;z-index:100000!important}
+.pile-leaf:focus-visible .leaf-body{stroke:var(--color-accent);stroke-width:9}
+.quote-leaf{display:block;position:relative;width:100%;aspect-ratio:1.6;color:var(--leaf-ink);background:none}
+.leaf-art{display:block;width:100%;height:100%;overflow:visible}
+.leaf-shadow{fill:var(--folly-depth);opacity:.16;pointer-events:none}
+.leaf-body{fill:var(--leaf-color);stroke:color-mix(in srgb,var(--leaf-ink) 45%,var(--leaf-color));stroke-width:2;stroke-linejoin:round}
+.leaf-veins{fill:none;stroke:color-mix(in srgb,var(--leaf-ink) 40%,var(--leaf-color));stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.leaf-center-vein{stroke-width:3.2}
+.leaf-hit{fill:transparent;pointer-events:fill}
+.leaf-hit,.leaf-art,.quote-leaf{touch-action:auto;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.leaf-lettering{font-family:var(--display);font-weight:650;fill:var(--leaf-ink);pointer-events:none}
+.folly-ground-readable{height:auto;min-height:0;padding:32px 0;overflow:visible;touch-action:pan-y;cursor:auto}
+.folly-ground-readable .folly-leaves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:30px 18px}
+.folly-ground-readable .pile-leaf{position:relative;left:auto!important;top:auto!important;transform:none!important;width:100%;z-index:auto!important;touch-action:pan-y;cursor:pointer}
+.folly-ground-readable .folly-litter{display:none}
+.leaf-reader{--dialog-bg:var(--color-surface);--dialog-ink:var(--color-ink);width:min(96vw,1100px);max-width:none;max-height:94svh;border:1px solid var(--color-border);padding:18px;margin:auto;overflow:auto;overscroll-behavior:contain;color:var(--dialog-ink);background:var(--dialog-bg);border-radius:18px;box-shadow:0 18px 80px var(--material-shadow)}
+.leaf-reader::backdrop{background:color-mix(in srgb,var(--tone-dark-neutral) 45%,transparent);backdrop-filter:blur(5px)}
+.leaf-reader-content{position:relative;z-index:0}
+.leaf-reader-toolbar{position:sticky;top:0;z-index:10;display:flex;justify-content:flex-end;padding:0 0 8px;background:var(--dialog-bg);isolation:isolate}
+.leaf-reader-close{position:relative;margin:0}
+.reader-leaf-stage{position:relative;width:min(100%,1000px);aspect-ratio:1.48;margin:0 auto;overflow:clip;isolation:isolate}
+.reader-leaf{position:absolute;inset:4% 4% 8%;transform-style:flat;transform-origin:50% 45%;pointer-events:none;background:none}
+.reader-leaf-current{z-index:3}
+.reader-leaf-underneath{z-index:2;transform:translate(-.5%,1%) rotate(-5deg) scale(.99)}
+.reader-leaf-retiring{z-index:1;transform:translate(-3%,7%) rotate(-9deg) scale(.96)}
+.leaf-reader[open] .reader-leaf-falling{animation:leaf-fall-in 1.1s linear both,leaf-bank-in 1.1s ease-in-out both}
+.leaf-reader[open] .reader-leaf-underneath{animation:leaf-settle-under 650ms var(--ease-settle) both}
+.leaf-reader[open] .reader-leaf-retiring{animation:leaf-settle-back 650ms var(--ease-settle) both,leaf-buried-away var(--leaf-retire-time,1900ms) linear both}
+.leaf-reader-nav{display:grid;grid-template-columns:44px minmax(0,1fr) auto minmax(0,1fr) 44px;align-items:center;gap:12px;width:min(100%,560px);margin:0 auto;font:500 13px var(--sans);padding:10px 0}
+.leaf-reader-nav .button{justify-self:center;font-size:13px;padding:12px 20px;white-space:nowrap;min-height:44px}
+.leaf-reader-nav .leaf-reader-end{width:44px;padding:10px 0}
+.leaf-reader-nav .button:disabled{opacity:.45;cursor:default}
+.leaf-reader-count{white-space:nowrap;font-variant-numeric:tabular-nums}
+@keyframes leaf-fall-in{0%{translate:0 min(-100svh,-140%);opacity:0}20%{translate:0 -92%;opacity:.15}42%{translate:0 -42%;opacity:.9}68%{translate:0 -13%;opacity:1}87%{translate:0 -2%}100%{translate:0 0;opacity:1}}
+@keyframes leaf-bank-in{0%{transform:perspective(1600px) translate3d(7%,0,100px) rotateX(18deg) rotateY(-20deg) rotateZ(11deg) scale(1.35)}22%{transform:perspective(1600px) translate3d(-8%,0,75px) rotateX(-12deg) rotateY(18deg) rotateZ(-9deg) scale(1.22)}46%{transform:perspective(1600px) translate3d(6%,0,45px) rotateX(10deg) rotateY(-14deg) rotateZ(7deg) scale(1.12)}70%{transform:perspective(1600px) translate3d(-3%,0,20px) rotateX(-6deg) rotateY(8deg) rotateZ(-4deg) scale(1.05)}88%{transform:perspective(1600px) translate3d(1%,0,5px) rotateX(3deg) rotateY(-3deg) rotateZ(1.5deg) scale(1.01)}100%{transform:none}}
+@keyframes leaf-settle-under{from{transform:var(--reader-from-transform,none);translate:var(--reader-from-translate,0 0);opacity:var(--reader-from-opacity,1)}to{transform:translate(-.5%,1%) rotate(-5deg) scale(.99);translate:0 0;opacity:1}}
+@keyframes leaf-settle-back{from{transform:var(--reader-from-transform,none);translate:var(--reader-from-translate,0 0)}to{transform:translate(-1%,2%) rotate(-9deg) scale(.97);translate:0 0}}
+@keyframes leaf-buried-away{0%,58%{opacity:1}to{opacity:0}}
+.folly-latest{display:block;width:min(620px,100%);margin:0 auto}
+.folly-latest .quote-leaf,.leaf-reader .reader-leaf{--leaf-dynamic-shadow-x:calc(var(--shadow-x,0px)*.62);--leaf-dynamic-shadow-y:calc(var(--shadow-y,7px)*.62)}
+.folly-latest .leaf-shadow,.leaf-reader .reader-leaf .leaf-shadow{transform:translate(var(--leaf-dynamic-shadow-x,0px),var(--leaf-dynamic-shadow-y,7px))}
+@media(max-width:600px){.folly-ground{height:min(64svh,540px);min-height:400px}.folly-ground-readable{height:auto;min-height:0}.leaf-reader{width:98vw;padding:12px 8px}.leaf-reader-nav{gap:6px}.leaf-reader-nav .button{padding:10px 9px;font-size:12px}.leaf-reader-nav .leaf-reader-end{padding:10px 0}}
+html[data-effects="reduced"] .folly-ground{height:auto;min-height:0;padding:32px 0;overflow:visible;touch-action:pan-y;cursor:auto}
+html[data-effects="reduced"] .folly-leaves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:30px 18px}
+html[data-effects="reduced"] .folly-leaves .pile-leaf{position:relative;left:auto!important;top:auto!important;transform:none!important;width:100%;z-index:auto!important;touch-action:pan-y;cursor:pointer}
+html[data-effects="reduced"] .folly-litter{display:none}
+html[data-effects="reduced"] .leaf-reader[open] .reader-leaf{animation:none}
+@media(prefers-reduced-motion:reduce){.leaf-reader[open] .reader-leaf{animation:none}}

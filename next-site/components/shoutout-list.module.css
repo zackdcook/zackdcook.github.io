@@ -1,0 +1,7 @@
+.list{display:grid;margin-top:35px}
+.person{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:start;padding-block:38px;border-top:1px solid color-mix(in srgb,var(--color-border) 50%,transparent)}
+.name h3{font-size:clamp(35px,4.3vw,58px);letter-spacing:-.055em}
+.name p{font-size:13px;color:var(--color-muted);margin-top:12px;max-width:340px}
+.note p{font-size:14px;line-height:1.8;max-width:430px}
+.note a{margin-top:15px}
+@media(max-width:650px){.person{grid-template-columns:1fr;gap:22px;padding-block:28px}.name h3{font-size:38px}.note p{font-size:14px}}

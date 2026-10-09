@@ -14,6 +14,8 @@ Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in com
 - Automatic Vercel builds remain disabled for this experimental branch in `vercel.json` and `next-site/vercel.json` to avoid unnecessary iterative builds. Manual Preview deployment works using the existing test configuration and free account. Other branch settings are unaffected.
 
 ## Completed
+- Structural site redesign milestone: unboxed editorial spreads, slim ink navigation, native full-screen mobile navigation dialog, original paper-heron illustration, manuscript/progress composition, typographic event spread, open biography/photo layout, illustrated Folly clearing, directory-style shoutouts and restrained footer. New component CSS modules; replaced legacy global/material/Folly overrides (over 3,500 removed lines). Native scroll and short route transitions replace full-height page-stack motion. Existing ribbon/leaf physics, routes, authored text and backends remain in place.
+- Structural milestone source checks: all 67 tests, TypeScript, generated-theme check, and production build pass. Browser sign-off of this new milestone is NEXT; do not describe it as visually verified yet. Build emitted all 44 static entries with the original route inventory retained.
 - Verified remote branch heads and cloned the repository; local branch is based on main.
 - Compared all 12 branch differences. Main already incorporates the later production tree visual/control improvements. Selectively port spring-clean test helpers and controls; do not replace main's improved control rail or newer authored bio.
 - Installed exact locked dependencies, without lifecycle scripts. Baseline 46 tests, typecheck, and production build pass (43 routes; no backend credentials).
