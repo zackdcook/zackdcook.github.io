@@ -1,161 +1,57 @@
 {
-  "date": "2026-10-09",
-  "environment": "isolated Supabase test database",
-  "method": "40 viewport RPC reads per population; generated metadata in one rolled-back transaction; no browser/network timings",
-  "plan": [
-    {
-      "Plan": {
-        "Plans": [
-          {
-            "Plans": [
-              {
-                "Alias": "s",
-                "Plans": [
-                  {
-                    "Node Type": "Bitmap Index Scan",
-                    "Plan Rows": 177,
-                    "Index Cond": "(int8range(zone_top, zone_bottom, '[)'::text) && '[14408064,14408928)'::int8range)",
-                    "Index Name": "bebrave_completed_zone_gist_idx",
-                    "Plan Width": 0,
-                    "Total Cost": 7.1,
-                    "Actual Rows": 7,
-                    "Actual Loops": 1,
-                    "Startup Cost": 0,
-                    "Async Capable": false,
-                    "Parallel Aware": false,
-                    "Local Hit Blocks": 0,
-                    "Temp Read Blocks": 0,
-                    "Actual Total Time": 0.647,
-                    "Local Read Blocks": 0,
-                    "Shared Hit Blocks": 3,
-                    "Shared Read Blocks": 0,
-                    "Actual Startup Time": 0.647,
-                    "Parent Relationship": "Outer",
-                    "Temp Written Blocks": 0,
-                    "Local Dirtied Blocks": 0,
-                    "Local Written Blocks": 0,
-                    "Shared Dirtied Blocks": 0,
-                    "Shared Written Blocks": 0
-                  }
-                ],
-                "Node Type": "Bitmap Heap Scan",
-                "Plan Rows": 177,
-                "Plan Width": 24,
-                "Total Cost": 192.34,
-                "Actual Rows": 7,
-                "Actual Loops": 1,
-                "Recheck Cond": "((int8range(zone_top, zone_bottom, '[)'::text) && '[14408064,14408928)'::int8range) AND (status = 'completed'::text) AND (public_sequence IS NOT NULL))",
-                "Startup Cost": 7.15,
-                "Async Capable": false,
-                "Relation Name": "bebrave_sessions",
-                "Parallel Aware": false,
-                "Local Hit Blocks": 0,
-                "Temp Read Blocks": 0,
-                "Actual Total Time": 0.66,
-                "Exact Heap Blocks": 1,
-                "Local Read Blocks": 0,
-                "Lossy Heap Blocks": 0,
-                "Shared Hit Blocks": 4,
-                "Shared Read Blocks": 0,
-                "Actual Startup Time": 0.658,
-                "Parent Relationship": "Outer",
-                "Temp Written Blocks": 0,
-                "Local Dirtied Blocks": 0,
-                "Local Written Blocks": 0,
-                "Shared Dirtied Blocks": 0,
-                "Shared Written Blocks": 0,
-                "Rows Removed by Index Recheck": 0
-              }
-            ],
-            "Sort Key": [
-              "public_sequence DESC"
-            ],
-            "Node Type": "Sort",
-            "Plan Rows": 177,
-            "Plan Width": 24,
-            "Total Cost": 196.84,
-            "Actual Rows": 7,
-            "Sort Method": "quicksort",
-            "Actual Loops": 1,
-            "Startup Cost": 196.4,
-            "Async Capable": false,
-            "Parallel Aware": false,
-            "Sort Space Type": "Memory",
-            "Sort Space Used": 25,
-            "Local Hit Blocks": 0,
-            "Temp Read Blocks": 0,
-            "Actual Total Time": 0.669,
-            "Local Read Blocks": 0,
-            "Shared Hit Blocks": 4,
-            "Shared Read Blocks": 0,
-            "Actual Startup Time": 0.667,
-            "Parent Relationship": "Outer",
-            "Temp Written Blocks": 0,
-            "Local Dirtied Blocks": 0,
-            "Local Written Blocks": 0,
-            "Shared Dirtied Blocks": 0,
-            "Shared Written Blocks": 0
-          }
-        ],
-        "Node Type": "Limit",
-        "Plan Rows": 12,
-        "Plan Width": 24,
-        "Total Cost": 196.43,
-        "Actual Rows": 7,
-        "Actual Loops": 1,
-        "Startup Cost": 196.4,
-        "Async Capable": false,
-        "Parallel Aware": false,
-        "Local Hit Blocks": 0,
-        "Temp Read Blocks": 0,
-        "Actual Total Time": 0.671,
-        "Local Read Blocks": 0,
-        "Shared Hit Blocks": 4,
-        "Shared Read Blocks": 0,
-        "Actual Startup Time": 0.669,
-        "Temp Written Blocks": 0,
-        "Local Dirtied Blocks": 0,
-        "Local Written Blocks": 0,
-        "Shared Dirtied Blocks": 0,
-        "Shared Written Blocks": 0
-      },
-      "Planning": {
-        "Local Hit Blocks": 0,
-        "Temp Read Blocks": 0,
-        "Local Read Blocks": 0,
-        "Shared Hit Blocks": 6,
-        "Shared Read Blocks": 0,
-        "Temp Written Blocks": 0,
-        "Local Dirtied Blocks": 0,
-        "Local Written Blocks": 0,
-        "Shared Dirtied Blocks": 0,
-        "Shared Written Blocks": 0
-      },
-      "Triggers": [],
-      "Planning Time": 0.226,
-      "Execution Time": 1.332
-    }
-  ],
-  "measurements": [
+  "method": "Synthetic 2,400-point carvings with individual IDs, lossless gzip round trips, original-path Legendary anchors and five indexed viewport sections. Geometry generated on demand; total populations are metadata indexes, not an allocated full-history geometry download. Timings are local Node measurements, not browser FPS or live-database latency.",
+  "results": [
     {
       "population": 100,
-      "mean_query_ms": 0.269,
-      "visible_sessions": 8
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1854495,
+      "gzipBytes": 425101,
+      "viewportBytes": 198541,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.034,
+      "decodeMs": 0.885,
+      "serverSvgMs": 76.951
     },
     {
       "population": 1000,
-      "mean_query_ms": 0.242,
-      "visible_sessions": 7
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1858447,
+      "gzipBytes": 422416,
+      "viewportBytes": 199097,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.008,
+      "decodeMs": 0.415,
+      "serverSvgMs": 67.194
     },
     {
       "population": 10000,
-      "mean_query_ms": 0.272,
-      "visible_sessions": 7
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1862399,
+      "gzipBytes": 421448,
+      "viewportBytes": 199962,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.005,
+      "decodeMs": 0.355,
+      "serverSvgMs": 63.8
     },
     {
       "population": 100000,
-      "mean_query_ms": 0.28,
-      "visible_sessions": 7
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1862551,
+      "gzipBytes": 416900,
+      "viewportBytes": 200011,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.011,
+      "decodeMs": 0.196,
+      "serverSvgMs": 21.3
     }
   ]
 }

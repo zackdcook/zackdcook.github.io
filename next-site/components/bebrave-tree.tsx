@@ -48,6 +48,17 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   }),[state.revision,state.latestSequence,cutoff]);
   useEffect(()=>()=>sectionCache.dispose(),[sectionCache]);
   useEffect(()=>{
+    // Nearby sections stay cached, but effects outside the actual camera sleep.
+    // A single observer changes CSS state without a React animation loop.
+    const root=scene.current;
+    if(!root||typeof IntersectionObserver==="undefined")return;
+    const observer=new IntersectionObserver(entries=>{
+      for(const entry of entries)(entry.target as SVGGElement).style.setProperty("--effect-play",entry.isIntersecting?"running":"paused");
+    },{root:mode==="fallen"?horizontal.current:null,rootMargin:"80px"});
+    for(const drawing of root.querySelectorAll(".bebrave-published-drawing"))observer.observe(drawing);
+    return()=>observer.disconnect();
+  },[drawings,mode]);
+  useEffect(()=>{
     let cancelled=false;
     sectionCache.setWindow(range[0],range[1]);
     Promise.all(sections.map(n=>sectionCache.load(n))).then(groups=>{
@@ -215,7 +226,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
               <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
               {(visual.rarity==="epic"||visual.rarity==="legendary")&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle">{visual.rarity==="legendary"&&<circle className="bebrave-wisp-orbit" r="8"/>}<path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
             </g>}
-            {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
+            {drawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
           </svg>
           {mode==="fallen"&&<div className="bebrave-fallen-cut" aria-hidden="true"/>}
         </div>

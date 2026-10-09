@@ -133,6 +133,7 @@ html:has(.is-draw),body:has(.is-draw),.bebrave-stage:has(.is-draw){user-select:n
 .bebrave-legendary .bebrave-epic-shimmer{stroke:var(--effect-wisp-core);stroke-width:2.2;stroke-dasharray:9 36 2 47;opacity:.86;animation-duration:8s}
 .bebrave-legendary .bebrave-sparkle-star{fill:var(--effect-wisp-core);stroke:var(--effect-wisp-edge);animation-duration:5.6s}
 .bebrave-wisp-orbit{fill:none;stroke:var(--effect-wisp-orbit);stroke-width:1;stroke-dasharray:8 10;opacity:.6;transform-box:fill-box;transform-origin:center;animation:bebrave-wisp-orbit 12s linear infinite}
+.bebrave-published-drawing :is(.bebrave-sparkle-star,.bebrave-epic-shimmer,.bebrave-wisp-orbit){animation-play-state:var(--effect-play,paused)}
 @keyframes bebrave-shimmer{to{stroke-dashoffset:-132}}
 @keyframes bebrave-sparkle{0%,100%{opacity:.28;transform:scale(.72)}45%{opacity:.9;transform:scale(1.08)}65%{opacity:.5;transform:scale(.9)}}
 @keyframes bebrave-wisp-orbit{to{transform:rotate(360deg)}}

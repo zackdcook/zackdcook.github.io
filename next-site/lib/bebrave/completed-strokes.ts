@@ -8,6 +8,7 @@ export type StrokeChunk = {
   stroke_order: number;
   chunk_index: number;
   points: Point[];
+  created_at?: string;
 };
 export type PackedDrawing = Omit<BeBravePublicDrawing,"strokes"> & {
   strokes: Array<Omit<BeBravePublicStroke,"points"> & { geometry: EncodedPoints }>;
@@ -51,5 +52,9 @@ export function packDrawing(drawing:BeBravePublicDrawing):PackedDrawing {
   return {...drawing,strokes:drawing.strokes.map(({points,...stroke})=>({...stroke,geometry:encodePoints(points)}))};
 }
 export function unpackDrawing(drawing:PackedDrawing|BeBravePublicDrawing):BeBravePublicDrawing {
-  return {...drawing,strokes:drawing.strokes.map(stroke=>"geometry" in stroke?{strokeId:stroke.strokeId,strokeOrder:stroke.strokeOrder,points:decodePoints(stroke.geometry)}:stroke)};
+  return {...drawing,strokes:drawing.strokes.map(stroke=>{
+    if(!("geometry" in stroke))return stroke;
+    const {geometry,...fields}=stroke;
+    return {...fields,points:decodePoints(geometry)};
+  })};
 }

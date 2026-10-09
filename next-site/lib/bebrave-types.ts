@@ -59,6 +59,8 @@ export type BeBravePublicStroke = {
   strokeId: string;
   strokeOrder: number;
   points: Array<[number, number]>;
+  /** Original-path anchors retained when only the render path is simplified. */
+  sparkles?: Array<{x:number;y:number;r:number;delay:number}>;
 };
 
 export type BeBravePublicDrawing = {

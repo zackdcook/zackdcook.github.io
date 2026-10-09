@@ -1,5 +1,6 @@
 import { serviceSupabase } from "@/lib/supabase";
-import { assembleStrokes, packDrawing, readChunkPages, type StrokeChunk } from "@/lib/bebrave/completed-strokes";
+import { packDrawing } from "@/lib/bebrave/completed-strokes";
+import { completedStrokes } from "@/lib/bebrave/completed-storage";
 import type { BeBravePublicDrawing } from "@/lib/bebrave-types";
 
 
@@ -17,16 +18,7 @@ export async function GET(request: Request) {
     });
     if (error) throw error;
     const ids = (sessions || []).map((row: {id:string}) => row.id);
-    const chunks = ids.length ? await readChunkPages(async (afterId) => {
-      let chunkQuery = serviceSupabase().from("bebrave_stroke_chunks")
-        .select("id,session_id,stroke_id,stroke_order,chunk_index,points")
-        .in("session_id", ids).order("id", {ascending:true}).limit(500);
-      if(afterId !== null) chunkQuery=chunkQuery.gt("id",afterId);
-      const page=await chunkQuery;
-      if(page.error)throw page.error;
-      return (page.data || []) as StrokeChunk[];
-    }, ids.length*320) : [];
-    const bySession = assembleStrokes(chunks);
+    const bySession = await completedStrokes(ids,params.get("format")==="compact-v1");
     const drawings = (sessions || []).map((row: {id:string;public_sequence:number;chosen_rarity:BeBravePublicDrawing["rarity"];chosen_color:string;effect_seed:number;chosen_effect:string|null}) => ({
       id:row.id, publicSequence:Number(row.public_sequence), rarity:row.chosen_rarity,
       color:row.chosen_color, effectSeed:Number(row.effect_seed||0), effectId:row.chosen_effect||undefined, strokes:bySession.get(row.id)||[],

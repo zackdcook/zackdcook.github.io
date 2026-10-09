@@ -1,13 +1,13 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. The published preview is an intermediate design, not final visual sign-off. Current milestone removes the rejected bird/decorations, makes artwork replaceable, and refines shared cursor/tilt material lighting.
+Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Artwork/lighting milestone is published and browser checked. Canonical archive/schema and synthetic full-geometry scale checks now pass; the archive milestone is ready to publish for real browser publication/backfill tests. Visual sign-off and full inventory remain incomplete.
 
 ## Branch and isolation
 
 - Branch: `experiment/immersive-world-2026-10-09`; repository `zackdcook/zackdcook.github.io`; app `next-site`.
-- Last verified published SHA: `cfa38bd4ef4ccb019fe3c043f7fcd65df293af3e`. Use `git log -1` for the artwork-system milestone containing this checkpoint.
+- Last verified published SHA: `5e4d7a6c76447e217f0d2bab157081a3e938d12e`. Use `git log -1` for the canonical-archive milestone containing this checkpoint.
 - Main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`; spring-clean tree/test reference: `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`, branch `spring-clean-2026-10`.
-- Latest verified READY Preview: `dpl_GP1f6P4GScHzxs8NZAqKuCAVGQWL`, https://zack-cook-ohaxqm30r-dove-mack0o-3684.vercel.app/ , exact cfa SHA, target null (Preview).
+- Latest verified READY Preview: `dpl_C6R99hrqrcVJz9Dt3tdydWazDmKr`, https://zack-cook-cqmegz53w-dove-mack0o-3684.vercel.app/ , exact 5e4 SHA, target null (Preview). All history preserved; main unchanged; native publishing Codespace stopped after push.
 - Existing Vercel project: `zack-cook`, `prj_AcuTfmUBydayvETed53KCREnlONa`. Omit teamId/slug. Preview API omits target; literal preview is rejected.
 - Test Supabase: `qkkgcoejkqvthbjcldcw`. Production `belqlsqnbexwkpmnptyy` is read-only and must NEVER be modified.
 - Preview/test guards fail closed outside the exact test project and nonproduction configuration. Test-only Cloudflare bypass, responsive harness and personal carve reset are preserved.
@@ -31,7 +31,8 @@ Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. The published preview is a
 - Architectural presentation cleanup: over 3,500 obsolete CSS lines removed; module-based editorial homepage, typographic events, biography/photos, Folly leaves, directory shoutouts, slim header and native mobile navigation dialog. Authored text remains.
 - Kitty ribbon physics/keyboard secret, Folly leaf physics/reading, stage progress keyboard/click, calendar dialog and preferences preserved; previous desktop browser checks passed. Full inventory remains pending.
 - Original cypress-world art: three versioned WebPs, under 0.9 MB total, unified tree CSS/HUD, responsive full-width world, mist/fireflies and shared live/published seeded effects. No gameplay/world-coordinate changes. Texture seam and input/art polish still need browser sign-off.
-- Shared bounded viewport cache/cancellable section requests; lossless delta/varint transport with high-precision fallback; 12-session endpoint pages; indexed GiST viewport lookup tested with 100,000 rolled-back metadata rows. Canonical compressed archive and full-population rendering benchmarks are NOT finished.
+- Shared bounded viewport cache/cancellable section requests; lossless delta/varint transport with high-precision fallback; 12-session pages; GiST viewport lookup tested with 100,000 rolled-back metadata rows. Canonical gzip originals + separate simplified projections + preserved original-path rare anchors implemented; anonymous table/RPC access denied. Session, visitor, tree and reward ledgers untouched. Failed source/payload/projection, success and idempotence verified in a rolled-back actual DB transaction. No existing carving has been persistently archived yet; backfill only AFTER compatible preview is READY.
+- Synthetic full 2,400-point geometry round trips / real React SVG generation tested with 100/1k/10k/100k metadata populations: fixed five-section window held 19 records, 2,964 render points and ~199–200 KB worst-case all-Legendary JSON. Local Node measurements, not browser FPS. Dense simultaneous same-zone populations and physical DB savings are not claimed verified. See SCALABLE_CARVINGS.md and carving-scale-results.json.
 - Legendary server-only one-way verifiers, stable IDs, code-to-effect mapping, atomic single-use reward, anonymous entitlement persistence and default will-o-wisp-v1 implemented. 50 distribution codes registered and remain unredeemed; original 20 completed test carvings preserved.
 - Actual SQL simultaneous-redemption fixture passed: two scheduled requests started .654 ms apart; one won, second waited ~8 s then failed. No cron jobs remain. Three consumed fixture verifiers in separate campaigns and six cancelled fixture sessions retained after MCP delete approval-state failures; do not delete original records.
 - Existing browser sign-in securely authorized and completed. Preview protection remains intact. Prior browser checks: desktop home light/dark, progress click/arrow, calendar choices, preferences, ribbon keyboard secret, tree entry/Admire/82% zoom.
@@ -40,11 +41,11 @@ Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. The published preview is a
 
 ## Tests and verification status
 
-- Current source milestone: 73/73 tests PASS, TypeScript PASS, art/theme generated checks PASS, production build PASS (all original routes plus test-only harness). No lint command exists; do not claim lint passed.
+- Current archive source: 77/77 tests PASS, TypeScript PASS, art/theme generated checks PASS, production build PASS (all original routes, harness, selective canonical-detail API), including the final observer refinement. No lint command exists; do not claim lint passed.
 - Source checks cover original authored copy/routes, four contrast palettes, codec fidelity, pagination/cache bounds, test isolation, Legendary mapping, artwork paths/variants and bounded pose.
-- Actual new artwork browser appearance and shared light resting/settling are NOT verified yet. Latest READY preview still runs cfa, before these changes.
+- Actual 5e4 preview verifies removed bird, cleaner desktop hero, 320px layout with no overflow, native mobile menu/Escape, visible small manuscript progress, and resting cursor light at strength 1 with bounded pose and unchanged outer photo geometry. Photos remain responsive. Full 390/768/1024 and all-palette QA is still due.
 - Prior 390px harness found decorative bio/menu overflow and source fixes were committed; deployed recheck is still due.
-- Canonical completed archives, full geometry/network/render scale tests, mouse/touch drawing+publication, all effects, cooldown/reset, lockbox entitlement+refresh, complete living/felled states, all routes/hidden features and physical mobile tilt remain incomplete.
+- Persistent archive backfill, live new archive/read APIs, mouse/touch drawing+publication, all effects, cooldown/reset, lockbox entitlement+refresh, complete living/felled states, all routes/hidden features and physical mobile tilt remain incomplete.
 - Supabase security advisor previously had only intentional INFO (RLS enabled with no browser policies on service-only tables); no warning/error.
 - No exact Work usage counter is exposed. Save milestones; no work runs between sessions.
 
@@ -52,9 +53,9 @@ Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. The published preview is a
 
 - Design: next-site/docs/reimagining/ART_DIRECTION.md, ARTWORK_SYSTEM.md, ART_ASSETS.md, functionality inventory / baseline-manifest.json; next-site/design/themes.json, art-assets.json.
 - Presentation: components/field-journal-hero*, active-project*, progress-rings*, site-header*, artwork.tsx, pointer-light.tsx, editorial-kitties.tsx, quote-leaf.tsx; app/{globals,materials,artwork,art-assets,theme,folly,bebrave}.css.
-- Tree: components/bebrave-experience.tsx, bebrave-tree*, bebrave-stroke*; lib/bebrave*, lib/server/bebrave*; app/api/bebrave.
-- Existing applied migrations: 20261009080906_bebrave_legendary_unlocks.sql and 20261009084443_bebrave_completed_geometry.sql. Confirm ledger before creating any new migration.
-- Next data architecture: retain visitor/session/cooldown/effect records; archive ALL original chunk fields in a checksummed lossless gzip container; replace completed raw chunks only atomically after round-trip verification. Row-lock against concurrent publication. Legacy-compatible reads. Render simplification must not change canonical artwork or seeded effect anchors.
+- Tree: components/bebrave-experience.tsx, bebrave-tree.tsx, bebrave-stroke.tsx; lib/bebrave-server.ts, lib/bebrave/{archive-codec,completed-storage,completed-strokes,effect-anchors}; app/api/bebrave; scripts/{prepare-carving-archives,benchmark-carvings}.ts.
+- Applied experimental migrations: 20261009080906_bebrave_legendary_unlocks.sql, 20261009084443_bebrave_completed_geometry.sql, 20261009190308_bebrave_canonical_archives.sql. Latest created with pinned CLI 2.120.0 and filename reconciled to actual applied ledger; schema is already applied only to test. Original 20 complete carvings and all 50 distribution codes remain intact/unredeemed. Test now has 21 completed sessions including a prior fixture.
+- Canonical archive architecture is implemented as above. Client camera pauses offscreen rare effects via one observer, while live drawing remains unchanged. The canonical detail endpoint is server-only at the DB boundary and exposes only already published artwork metadata, never visitor/reward identity.
 
 ## Publishing and recovery
 
@@ -71,10 +72,10 @@ Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. The published preview is a
 
 ## Remaining tasks in priority order
 
-1. Publish current artwork milestone preserving exact history. Deploy Preview at its verified SHA; inspect 320/390/768/1024 and desktop, all palettes, home/menu/progress layout, optional art variants and cursor/rest/reduced lighting. Refine visible failures.
-2. Complete lossless canonical carving archives and meaningful full-geometry/population performance benchmarks; verify backwards compatibility, source fidelity, visitor/cooldown separation, atomic publication/cache updates.
+1. Publish tested archive milestone from 5e4 preserving exact history. Deploy Preview at its verified SHA. Only then persistently backfill existing completed test carvings through reviewed compressed RPC arguments; verify exact restored source hashes and retained individual ledgers / published appearance.
+2. Complete browser 390/768/1024 and desktop/four-palette QA, camera texture/art polish and resting/reduced light. Source / scale checks are complete but full browser input / timing / actual performance are not.
 3. Test full browser → Next.js → isolated test Supabase → publication flow, 60-second drawing, zoom/pan/input, tools/rarities/live-vs-saved effects, personal reset/cooldown, Legendary redemption/refresh/replay and both timelines. Use disposable fixtures, never 50 distribution codes.
 4. Verify remaining inventory/routes/secrets, desktop/tablet/mobile keyboard/touch/reduced states, performance and visual craft. Physical sensor testing must be disclosed if unavailable.
 5. Final refined preview + private codes + test report + palette/architecture summary. The project is not done until end-to-end/browser polish is verified.
 
-Exact next action: publish the tested artwork-system milestone from cfa through the authorized native Codespace Git mirror, create one isolated Preview at the exact SHA, and perform actual browser responsive/lighting checks. No blockers require user input presently.
+Exact next action: publish the tested archive milestone from verified remote 5e4 through the existing native Codespace mirror, deploy one isolated Preview, then verify/persist the canonical backfill and perform real timed carving + Legendary/cooldown browser checks. No blockers require user input presently. Never regenerate or test with distribution codes.

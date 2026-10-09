@@ -3,6 +3,7 @@ import {
   sessionView, visitorRow,
 } from "@/lib/bebrave-server";
 import { serviceSupabase } from "@/lib/supabase";
+import { archiveCompletedSession } from "@/lib/bebrave/completed-storage";
 
 export async function POST(request: Request) {
   try {
@@ -24,13 +25,18 @@ export async function POST(request: Request) {
       throw new Error("The carving could not be finalized.");
     }
 
+    const completed = await ownedSession(id,context.visitorHash);
+    if(completed.status==="completed"&&completed.chosen_rarity){
+      try { await archiveCompletedSession(id,completed.chosen_rarity,Number(completed.effect_seed||0)); }
+      catch { console.error("Completed carving archive optimization deferred."); }
+    }
     const visitor = await visitorRow(context.visitorHash);
     const { data:tree, error:treeError } = await serviceSupabase()
       .from("bebrave_tree_state").select("height").eq("id", true).single();
     if (treeError) throw treeError;
 
     return Response.json({
-      session:sessionView(await ownedSession(id, context.visitorHash)),
+      session:sessionView(completed),
       growthFeetRemaining:await growthFeetRemaining(visitor?.id, Number(tree.height),Number(visitor?.test_reset_sequence||0)),
       serverNow:new Date().toISOString(),
     }, { headers:{ "Cache-Control":"no-store" } });
