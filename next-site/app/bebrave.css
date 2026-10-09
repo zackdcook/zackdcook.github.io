@@ -11,39 +11,50 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-stage-mid{position:absolute;inset:0;z-index:3;background:var(--asset-tree-foreground) center/100% 100% no-repeat;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));opacity:.82}
 .bebrave-stage-tree{position:absolute;top:-8%;bottom:-8%;left:50%;width:min(58vw,800px);transform:translateX(-50%);background:var(--bebrave-bark) var(--asset-tree-bark) center top/100% auto repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 22px 0 42px var(--world-shadow),inset -22px 0 42px var(--world-shadow),0 18px 60px var(--world-shadow)}
 .bebrave-stage-tree::after,.bebrave-trunk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--world-shadow),transparent 9% 88%,var(--world-shadow));pointer-events:none}
+.bebrave-stage-art::after,.bebrave-horizon::after{content:"";position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,25%),color-mix(in srgb,var(--color-sun) calc(var(--light-strength,0)*26%),transparent),transparent 62%);mix-blend-mode:soft-light}
 .bebrave-stage-ui{position:relative;z-index:5;min-height:100dvh}
 .bebrave-stage-stump{position:absolute;z-index:2;left:50%;bottom:0;transform:translateX(-50%);width:min(88vw,680px);height:min(74dvh,680px);background:var(--asset-tree-stump) center bottom/contain no-repeat;filter:saturate(var(--world-art-saturation)) brightness(var(--world-bark-light)) drop-shadow(0 18px 18px var(--world-shadow))}
 .bebrave-stage-hacks{position:absolute;z-index:6;left:48%;top:54%;width:120px;height:100px}
 .bebrave-stage-hacks i{position:absolute;left:0;top:0;width:95px;height:6px;border-radius:50%;background:var(--bebrave-bark-dark);box-shadow:0 2px 0 color-mix(in srgb,var(--color-brass) 60%,transparent)}
 
-/* Tactile but restrained HUD: fine brass rules and solid legible paper. */
-.bebrave-home-button{position:absolute;z-index:100;top:max(18px,env(safe-area-inset-top));left:max(22px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:8px 14px;background:var(--world-hud);color:var(--world-hud-ink);border:1px solid var(--world-rule);border-radius:2px;box-shadow:0 6px 24px var(--world-shadow);font:650 21px/1 var(--display);letter-spacing:-.035em;text-decoration:none;transition:background var(--duration-hover),translate var(--duration-hover)}
+/* Legible smoked glass belongs to the world; no detached paper cards. */
+.bebrave-home-button{position:absolute;z-index:100;top:max(18px,env(safe-area-inset-top));left:max(22px,env(safe-area-inset-left));display:inline-flex;align-items:center;gap:9px;min-height:48px;padding:10px 16px;background:var(--world-hud);color:var(--world-hud-ink);border:1px solid var(--world-rule);border-radius:100px;box-shadow:inset 0 1px var(--world-rim),0 6px 24px var(--world-shadow);font:650 21px/1 var(--display);letter-spacing:-.035em;text-decoration:none;transition:background var(--duration-hover),translate var(--duration-hover)}
 .bebrave-home-mark.site-mark{width:25px;height:30px;flex:0 0 25px;overflow:visible}
-.bebrave-home-mark path{fill:var(--color-accent)}
-.bebrave-stage>.bebrave-test-reset-button{position:absolute;z-index:100;top:max(18px,env(safe-area-inset-top));right:max(22px,env(safe-area-inset-right))}
-.bebrave-stage .button{min-height:46px;border:1px solid var(--world-rule);border-radius:2px;background:var(--world-hud);color:var(--world-hud-ink);box-shadow:0 4px 18px var(--world-shadow);padding:12px 18px;font-weight:600;transition:background var(--duration-hover),color var(--duration-hover),translate var(--duration-press)}
-.bebrave-stage .button:hover{background:var(--color-chrome);color:var(--color-on-chrome)}
+.bebrave-home-mark path{fill:var(--color-sun)}
+.bebrave-stage>.bebrave-test-reset-button{position:absolute;z-index:100;top:max(18px,env(safe-area-inset-top));right:max(82px,calc(env(safe-area-inset-right) + 60px))}
+.bebrave-preferences{margin:0;display:flex}
+.bebrave-stage>.bebrave-preferences{position:absolute;z-index:100;top:max(18px,env(safe-area-inset-top));right:max(22px,env(safe-area-inset-right))}
+.bebrave-preferences .button{width:48px;padding:12px;justify-content:center}
+.bebrave-control-rail .bebrave-preferences{width:100%;justify-content:flex-end}
+.bebrave-control-rail .bebrave-preferences .button{width:44px;justify-content:center}
+.bebrave-stage .button{min-height:46px;border:1px solid var(--world-rule);border-radius:100px;background-color:var(--world-hud);background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--world-hud-ink) calc(var(--light-strength,0)*10%),transparent),transparent 70%);color:var(--world-hud-ink);box-shadow:inset 0 1px var(--world-rim),0 4px 18px var(--world-shadow);padding:12px 20px;font-weight:550;transition:background var(--duration-hover),color var(--duration-hover),translate var(--duration-press)}
+.bebrave-stage .button:hover{background-color:var(--world-control-hover);color:var(--world-hud-ink)}
 .bebrave-stage .button:active{translate:0 1px}
 .bebrave-stage .button:disabled{opacity:.55;cursor:not-allowed}
-.bebrave-rpg-hud{position:absolute;z-index:80;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 64px),780px);display:grid;gap:10px;pointer-events:none}
-.bebrave-rpg-dialogue{position:relative;pointer-events:auto;padding:clamp(22px,3vw,34px);border:1px solid var(--world-rule);border-radius:2px;background:var(--world-hud);color:var(--world-hud-ink);box-shadow:0 16px 55px var(--world-shadow)}
-.bebrave-rpg-dialogue::before{content:"";position:absolute;top:-1px;left:24px;width:46px;height:2px;background:var(--color-brass)}
+.bebrave-rpg-hud{position:absolute;z-index:80;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 64px),740px);display:grid;gap:0;padding:8px;background-color:var(--world-hud);background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--world-hud-ink) calc(var(--light-strength,0)*10%),transparent),transparent 70%);color:var(--world-hud-ink);border:1px solid var(--world-rule);border-radius:28px;box-shadow:inset 0 1px var(--world-rim),0 16px 55px var(--world-shadow);backdrop-filter:blur(14px) saturate(.85);pointer-events:none;animation:bebrave-dialogue-enter var(--duration-reveal) var(--ease-settle) both}
+.bebrave-rpg-dialogue{position:relative;pointer-events:auto;padding:clamp(20px,2.5vw,30px);border:0;border-radius:20px;background:none;color:inherit;box-shadow:none}
+.bebrave-rpg-dialogue::before{content:"";position:absolute;top:8px;left:30px;width:38px;height:1px;background:var(--world-rim)}
 .bebrave-rpg-copy{font:450 clamp(14px,1.2vw,17px)/1.7 var(--sans);color:inherit;text-wrap:pretty}
 .bebrave-rpg-copy p{margin:0 0 .8em}.bebrave-rpg-copy p:last-child{margin-bottom:0}
 .bebrave-preserve-lines{white-space:pre-line}
-.bebrave-rpg-actions{position:absolute;z-index:82;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 64px),780px);display:flex;gap:8px;pointer-events:auto}
-.bebrave-rpg-hud .bebrave-rpg-actions{position:static;transform:none;width:100%}
-.bebrave-rpg-actions .button{flex:1 1 0;min-width:0;white-space:normal;justify-content:center;text-align:center;padding:12px 8px;font-size:13px}
+.bebrave-rpg-actions{position:absolute;z-index:82;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 64px),740px);display:flex;justify-content:center;gap:8px;pointer-events:auto}
+.bebrave-rpg-hud .bebrave-rpg-actions{position:static;transform:none;width:100%;padding-top:8px;border-top:1px solid var(--world-rule)}
+.bebrave-rpg-actions .button{flex:1 1 0;min-width:0;white-space:normal;justify-content:center;text-align:center;padding:12px 10px;font-size:14px}
+.bebrave-rpg-hud .bebrave-rpg-actions .button{border:0;background-color:var(--world-control);box-shadow:none;border-radius:18px}
+.bebrave-rpg-hud .bebrave-rpg-actions .button:hover{background-color:var(--world-control-hover)}
+.bebrave-rpg-actions .button:only-child{flex:0 1 240px;min-width:160px}
+.bebrave-stage :is(a,button,input):focus-visible{outline:2px solid var(--color-sun);outline-offset:4px}
+@keyframes bebrave-dialogue-enter{from{opacity:0;translate:0 12px}to{opacity:1;translate:0 0}}
 .bebrave-carve-button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
-.bebrave-growth-wait{font:600 10px/1.2 var(--sans);font-variant-numeric:tabular-nums;color:inherit}
+.bebrave-growth-wait{font:500 10px/1.25 var(--sans);font-variant-numeric:tabular-nums;color:inherit}
 .bebrave-overlay{position:absolute;inset:0;z-index:90;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:20px;padding:max(96px,calc(env(safe-area-inset-top) + 96px)) max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));pointer-events:none}
 .bebrave-overlay-main{min-height:0;display:grid;place-items:center;overflow-y:auto;overscroll-behavior:contain;padding:clamp(14px,3vmin,36px);pointer-events:auto}
 .bebrave-overlay .bebrave-rpg-hud{position:static;transform:none;width:min(100%,780px);justify-self:center}
 .bebrave-center-modal,.bebrave-tool-picker,.bebrave-choice-reveal{width:min(100%,760px);max-width:100%;position:relative}
-.bebrave-human-modal,.bebrave-cache-modal,.bebrave-color-modal{width:min(100%,460px);padding:clamp(20px,3vw,32px);border:1px solid var(--world-rule);border-radius:2px;background:var(--world-hud);color:var(--world-hud-ink);box-shadow:0 20px 70px var(--world-shadow)}
+.bebrave-human-modal,.bebrave-cache-modal,.bebrave-color-modal{width:min(100%,440px);padding:clamp(20px,3vw,32px);border:1px solid var(--world-rule);border-radius:28px;background:var(--world-hud);color:var(--world-hud-ink);box-shadow:inset 0 1px var(--world-rim),0 20px 70px var(--world-shadow);backdrop-filter:blur(14px) saturate(.85)}
 .bebrave-human-modal form{display:grid;gap:20px}
 .bebrave-tool-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,3vw,30px);align-items:center}
-.bebrave-image-choice{position:relative;aspect-ratio:1;border:1px solid color-mix(in srgb,var(--color-brass) 40%,transparent);border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--color-surface) 20%,transparent),transparent 70%);cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 14px 16px var(--world-shadow));transition:transform .28s var(--ease-settle),background .28s}
+.bebrave-image-choice{position:relative;aspect-ratio:1;border:1px solid var(--world-rule);border-radius:50%;background:radial-gradient(ellipse,var(--world-control),transparent 70%);cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 14px 16px var(--world-shadow));transition:transform .28s var(--ease-settle),background .28s}
 .bebrave-tool-image{position:absolute;inset:8%;display:block;background:center/contain no-repeat}
 .tool-arrowhead{background-image:var(--asset-tool-arrowhead)}
 .tool-nail{background-image:var(--asset-tool-nail)}
@@ -51,16 +62,17 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .tool-cache{background-image:var(--asset-tool-cache)}
 @media(hover:hover) and (pointer:fine){.bebrave-image-choice:hover{transform:translateY(-6px) scale(1.06);background:color-mix(in srgb,var(--color-surface) 28%,transparent)}}
 .bebrave-image-choice:focus-visible{outline:3px solid var(--color-sun);outline-offset:5px;transform:translateY(-6px) scale(1.06)}
-.bebrave-code-display{width:100%;padding:14px 8px;margin-bottom:20px;border:0;border-bottom:1px solid var(--color-border);border-radius:0;background:var(--color-surface-alt);color:var(--color-ink);text-align:center;font:650 clamp(14px,2vw,21px)/1.5 var(--sans);letter-spacing:.12em}
+.bebrave-code-display{width:100%;padding:14px 8px;margin-bottom:20px;border:1px solid var(--world-rule);border-radius:12px;background:var(--world-control);color:var(--world-hud-ink);text-align:center;font:600 clamp(14px,2vw,21px)/1.5 var(--sans);letter-spacing:.12em}
 .bebrave-keypad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(100%,270px);margin:0 auto 24px}
-.bebrave-keypad button{min-height:50px;border:1px solid var(--color-border);border-radius:2px;background:var(--color-surface-alt);color:var(--color-ink);font:600 17px var(--sans);cursor:pointer;touch-action:manipulation;transition:background var(--duration-hover),translate var(--duration-press)}
-.bebrave-keypad button:hover{background:var(--color-chrome);color:var(--color-on-chrome)}
+.bebrave-keypad button{min-height:50px;border:1px solid var(--world-rule);border-radius:14px;background:var(--world-control);color:var(--world-hud-ink);font:550 17px var(--sans);cursor:pointer;touch-action:manipulation;box-shadow:inset 0 1px var(--world-rim);transition:background var(--duration-hover),translate var(--duration-press)}
+.bebrave-keypad button:hover{background:var(--world-control-hover);color:var(--world-hud-ink)}
 .bebrave-keypad button:active{translate:0 1px}
 .bebrave-cache-modal>.button{width:100%}
 .bebrave-knife-art{width:min(42vw,210px);aspect-ratio:1;margin:0 auto 20px;background:var(--asset-tool-knife) center/contain no-repeat;filter:drop-shadow(0 10px 14px var(--world-shadow))}
 .bebrave-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.bebrave-color-choice{display:grid;place-items:center;min-height:56px;padding:10px;border:1px solid var(--color-border);border-radius:2px;background:var(--color-surface-alt);cursor:pointer}
-.bebrave-color-choice>span{width:25px;height:25px;border-radius:50%;background:var(--choice-color);box-shadow:0 0 13px var(--choice-color)}
+.bebrave-color-choice{display:grid;place-items:center;min-height:56px;padding:10px;border:1px solid var(--world-rule);border-radius:50%;background:var(--world-control);cursor:pointer;transition:background var(--duration-hover),scale var(--duration-hover)}
+.bebrave-color-choice>span{width:25px;height:25px;border-radius:50%;background:var(--choice-color);box-shadow:inset 0 1px 2px var(--world-rim),0 3px 10px var(--world-shadow)}
+.bebrave-color-choice:hover{background:var(--world-control-hover);scale:1.06}
 .bebrave-post-carve{width:min(calc(100% - 48px),680px)}
 .bebrave-post-carve .bebrave-rpg-dialogue{padding:18px 24px}
 
@@ -93,18 +105,18 @@ html[data-timeline="felled"] .bebrave-fireflies{opacity:.25}
 .bebrave-trunk{position:absolute;inset:0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/720px 480px repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 20px 0 35px var(--world-shadow),inset -20px 0 35px var(--world-shadow),0 0 0 1px var(--bebrave-bark-dark)}
 .bebrave-drawings{position:absolute;inset:0;width:720px;height:100%;overflow:visible;touch-action:inherit}
 .bebrave-active-zone{position:absolute;left:0;right:0;z-index:1;border-block:2px dashed var(--color-sun);background:color-mix(in srgb,var(--color-sun) 6%,transparent);pointer-events:none}
-.bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire){--bebrave-rail-width:clamp(180px,20vw,250px)}
-.bebrave-control-rail{position:fixed;z-index:101;top:max(18px,env(safe-area-inset-top));left:max(22px,env(safe-area-inset-left));width:calc(var(--bebrave-rail-width) - 44px);max-height:calc(100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:flex-start;gap:12px;overflow-y:auto;overflow-x:clip;padding-bottom:8px;pointer-events:auto}
-.bebrave-control-rail .bebrave-home-button{position:static;width:100%;padding:12px 9px;gap:5px;font-size:clamp(17px,1.6vw,21px)}
-.bebrave-control-rail .button{width:100%;min-height:46px;padding:10px 12px;white-space:normal;text-align:left;justify-content:flex-start;font-size:12px}
+.bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire){--bebrave-rail-width:clamp(168px,15vw,200px)}
+.bebrave-control-rail{position:fixed;z-index:101;top:max(18px,env(safe-area-inset-top));left:max(22px,env(safe-area-inset-left));width:calc(var(--bebrave-rail-width) - 30px);max-height:calc(100dvh - 36px - env(safe-area-inset-top) - env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:flex-start;gap:8px;overflow-y:auto;overflow-x:clip;padding:10px;background:var(--world-hud);color:var(--world-hud-ink);border:1px solid var(--world-rule);border-radius:24px;box-shadow:inset 0 1px var(--world-rim),0 6px 24px var(--world-shadow);backdrop-filter:blur(12px);pointer-events:auto}
+.bebrave-control-rail .bebrave-home-button{position:static;width:100%;padding:8px 2px;gap:6px;font-size:clamp(16px,1.4vw,19px);border:0;background:none;box-shadow:none}
+.bebrave-control-rail .button{width:100%;min-height:44px;padding:10px 12px;white-space:normal;text-align:left;justify-content:flex-start;font-size:12px;background:var(--world-control);border:0;box-shadow:none;border-radius:14px}
 .bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire) .bebrave-standing-scroll{width:calc(100% - var(--bebrave-rail-width));margin-left:var(--bebrave-rail-width);overflow:clip}
 .bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire) .bebrave-world{width:calc(90% * var(--bebrave-tree-zoom,1));margin-inline:auto}
-.bebrave-zoom-controls{display:flex;flex-wrap:wrap;align-items:center;gap:4px;width:100%;padding:5px;border:1px solid var(--world-rule);border-radius:2px;background:var(--world-hud);color:var(--world-hud-ink);box-shadow:0 6px 24px var(--world-shadow)}
+.bebrave-zoom-controls{display:flex;flex-wrap:wrap;align-items:center;gap:2px;width:100%;padding:2px;border:0;border-block:1px solid var(--world-rule);border-radius:0;background:none;color:var(--world-hud-ink);box-shadow:none}
 .bebrave-zoom-controls button{min-width:36px;min-height:38px;border:0;border-radius:1px;padding:4px 8px;background:transparent;color:inherit;cursor:pointer;touch-action:manipulation}
-.bebrave-zoom-controls button:hover{background:var(--color-surface-alt)}
+.bebrave-zoom-controls button:hover{background:var(--world-control)}
 .bebrave-zoom-controls button:disabled{opacity:.4;cursor:default}
 .bebrave-zoom-controls span{flex:1;min-width:42px;text-align:center;font:600 12px var(--sans);font-variant-numeric:tabular-nums}
-.bebrave-timer{padding:12px 16px;border:1px solid var(--world-rule);background:var(--world-hud);color:var(--world-hud-ink);font:600 20px var(--sans);font-variant-numeric:tabular-nums;box-shadow:0 6px 24px var(--world-shadow)}
+.bebrave-timer{width:100%;padding:12px 10px;border:0;border-block:1px solid var(--world-rule);background:none;color:var(--world-hud-ink);font:600 24px var(--sans);font-variant-numeric:tabular-nums;box-shadow:none}
 .bebrave-timer strong{font:inherit}
 .bebrave-save-error{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:110;width:min(90vw,620px);padding:14px 20px;border:1px solid var(--color-accent);background:var(--color-surface);color:var(--color-ink);text-align:center;font-size:14px}
 .is-draw,.is-draw .bebrave-standing-scroll,.is-draw .bebrave-world,.is-draw .bebrave-tree-space,.is-draw .bebrave-drawings{touch-action:none;overscroll-behavior:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
@@ -120,6 +132,7 @@ html:has(.is-draw),body:has(.is-draw),.bebrave-stage:has(.is-draw){user-select:n
 .bebrave-stroke{color:var(--stroke-color)}
 .bebrave-stroke-line,.bebrave-stroke-glow,.bebrave-epic-shimmer{fill:none;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 .bebrave-stroke-line{stroke-width:8}
+.bebrave-common .bebrave-stroke-line,.bebrave-uncommon .bebrave-stroke-line{filter:drop-shadow(.5px 1.2px .35px var(--effect-cut-light)) drop-shadow(-.5px -.7px .3px var(--effect-cut-shadow))}
 .bebrave-stroke-glow{stroke-width:15;opacity:.3;filter:blur(4px)}
 .bebrave-superior .bebrave-stroke-line{filter:drop-shadow(0 0 2px var(--stroke-color))}
 .bebrave-epic .bebrave-stroke-glow{stroke:var(--stroke-color);stroke-width:22;opacity:.38;filter:blur(6px)}
@@ -159,21 +172,26 @@ html:has(.is-draw),body:has(.is-draw),.bebrave-stage:has(.is-draw){user-select:n
  .bebrave-stage-mid{background-size:100% auto;background-position:center bottom}
  .bebrave-home-button{left:max(14px,env(safe-area-inset-left));top:max(14px,env(safe-area-inset-top));font-size:18px;padding:8px 10px;gap:6px}
  .bebrave-home-mark.site-mark{width:22px;height:27px;flex-basis:22px}
- .bebrave-stage>.bebrave-test-reset-button{top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right));font-size:10px;padding:10px 12px;max-width:45vw}
- .bebrave-rpg-hud,.bebrave-rpg-actions{width:calc(100% - 28px);bottom:max(14px,env(safe-area-inset-bottom));gap:7px}
+ .bebrave-stage>.bebrave-test-reset-button{top:max(14px,env(safe-area-inset-top));right:max(72px,calc(env(safe-area-inset-right) + 58px));font-size:10px;padding:10px 12px;max-width:45vw}
+ .bebrave-stage>.bebrave-preferences{top:max(14px,env(safe-area-inset-top));right:max(14px,env(safe-area-inset-right))}
+ .bebrave-rpg-hud,.bebrave-rpg-actions{width:calc(100% - 28px);bottom:max(14px,env(safe-area-inset-bottom));gap:0}
+ .bebrave-rpg-hud{border-radius:24px;padding:6px}
  .bebrave-rpg-dialogue{padding:20px}.bebrave-rpg-copy{font-size:14px;line-height:1.65}
- .bebrave-rpg-actions .button{padding:12px 5px;font-size:11px}
+ .bebrave-rpg-actions .button{padding:12px 8px;font-size:13px}
+ .bebrave-rpg-actions:has(>.button:nth-child(3)){display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+ .bebrave-rpg-actions .button:only-child{min-width:150px}
  .bebrave-overlay{padding:max(86px,calc(env(safe-area-inset-top) + 86px)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));gap:12px}
  .bebrave-overlay-main{padding:10px}
  .bebrave-tool-picker{grid-template-columns:repeat(2,minmax(0,1fr));width:min(76vw,370px);gap:20px}
  .bebrave-stage-stump{height:min(68dvh,600px)}
- .bebrave-control-rail{top:0;left:0;right:0;width:100%;max-height:160px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;padding:max(10px,env(safe-area-inset-top)) 12px 10px;background:var(--world-hud);box-shadow:0 5px 24px var(--world-shadow);border-bottom:1px solid var(--world-rule)}
+ .bebrave-control-rail{top:10px;left:10px;right:10px;width:calc(100% - 20px);max-height:160px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;padding:max(6px,env(safe-area-inset-top)) 8px 8px;border-radius:22px;background:var(--world-hud);box-shadow:0 5px 24px var(--world-shadow);border:1px solid var(--world-rule)}
  .bebrave-control-rail .bebrave-home-button{width:auto;border:0;box-shadow:none;padding:0 8px 0 0;min-height:44px;font-size:18px}
  .bebrave-control-rail .button{width:auto;flex:0 1 auto;max-width:none;padding:9px 12px;font-size:11px;min-height:44px}
  .bebrave-control-rail .bebrave-test-reset-button{margin-left:auto;font-size:10px;box-shadow:none}
+ .bebrave-control-rail .bebrave-preferences{width:auto;margin-left:auto}
  .bebrave-zoom-controls{width:auto;flex:1 1 auto;box-shadow:none;max-width:200px;padding:2px}
  .bebrave-zoom-controls button{min-height:38px}
- .bebrave-timer{padding:8px 12px;box-shadow:none;font-size:18px}
+ .bebrave-timer{width:auto;border:0;padding:8px 12px;box-shadow:none;font-size:18px}
  .bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire) .bebrave-standing-scroll{width:100%;margin-left:0}
  .bebrave-midground::before{background-size:100% auto;background-position:center bottom}
  .bebrave-post-carve{width:calc(100% - 28px)}
@@ -183,10 +201,15 @@ html:has(.is-draw),body:has(.is-draw),.bebrave-stage:has(.is-draw){user-select:n
 /* OS and in-site preferences are equally authoritative. */
 html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-water-haze,.bebrave-fireflies i,.bebrave-reveal-tool,.bebrave-rarity-fx i,.bebrave-sparkle-star,.bebrave-epic-shimmer,.bebrave-wisp-orbit){animation:none;transition:none}
 html[data-effects="reduced"] :is(.bebrave-water-haze,.bebrave-fireflies){display:none}
-html[data-effects="reduced"] :is(.bebrave-stroke-glow,.bebrave-sparkle-star,.bebrave-tool-image,.bebrave-image-choice){filter:none}
+html[data-effects="reduced"] :is(.bebrave-stroke-glow,.bebrave-sparkle-star,.bebrave-stroke-line,.bebrave-tool-image,.bebrave-image-choice){filter:none}
+html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-rpg-hud,.bebrave-color-choice){animation:none;transition:none}
+html[data-effects="reduced"] :is(.bebrave-rpg-hud,.bebrave-control-rail,.bebrave-center-modal){backdrop-filter:none}
+html[data-effects="reduced"] :is(.bebrave-stage-art,.bebrave-horizon)::after{display:none}
 html[data-effects="reduced"] :is(.bebrave-horizon,.bebrave-midground)::before{transform:none;will-change:auto}
 html[data-effects="reduced"] .bebrave-legendary .bebrave-stroke-glow{stroke-width:14;opacity:.2}
 @media(prefers-reduced-motion:reduce){
  .bebrave-water-haze,.bebrave-fireflies i,.bebrave-reveal-tool,.bebrave-rarity-fx i,.bebrave-sparkle-star,.bebrave-epic-shimmer,.bebrave-wisp-orbit{animation:none;transition:none}
  .bebrave-horizon::before,.bebrave-midground::before{transform:none;will-change:auto}
+ .bebrave-rpg-hud,.bebrave-color-choice{animation:none;transition:none}
+ .bebrave-stage-art::after,.bebrave-horizon::after{display:none}
 }

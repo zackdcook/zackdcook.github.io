@@ -5,6 +5,7 @@ import { HumanCheck } from "@/components/human-check";
 import { BeBraveTree } from "@/components/bebrave-tree";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { Artwork } from "./artwork";
+import { PreferencesButton } from "./preferences-button";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
 import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,type BeBraveLocalTimeline,type BeBraveNormalTool,type BeBraveRarity,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
@@ -38,10 +39,11 @@ function HomeControls({testMode=false,busy=false,onReset}:{testMode?:boolean;bus
       <span>Zack Cook</span>
     </a>
     {testMode&&<button className="button bebrave-test-reset-button" disabled={busy} onClick={onReset}>Reset my carve limit</button>}
+    <PreferencesButton iconOnly className="bebrave-preferences"/>
   </>;
 }
 function ActionBar({children}:{children:React.ReactNode}){return <div className="bebrave-rpg-actions" aria-label="Choices">{children}</div>;}
-function Dialogue({children,actions,className=""}:{children:React.ReactNode;actions?:React.ReactNode;className?:string}){return <div className={`bebrave-rpg-hud ${className}`}><div className="bebrave-rpg-dialogue"><div className="bebrave-rpg-copy">{children}</div></div>{actions&&<ActionBar>{actions}</ActionBar>}</div>;}
+function Dialogue({children,actions,className=""}:{children:React.ReactNode;actions?:React.ReactNode;className?:string}){return <div className={`bebrave-rpg-hud ${className}`} data-material-surface="glass"><div className="bebrave-rpg-dialogue"><div className="bebrave-rpg-copy">{children}</div></div>{actions&&<ActionBar>{actions}</ActionBar>}</div>;}
 function OverlayScene({visual,children,actions}:{visual:React.ReactNode;children?:React.ReactNode;actions?:React.ReactNode}){
   return <div className="bebrave-overlay">
     <div className="bebrave-overlay-main">{visual}</div>
@@ -49,7 +51,7 @@ function OverlayScene({visual,children,actions}:{visual:React.ReactNode;children
   </div>;
 }
 function Stage({children,felled=false,marks=0,stump=false,homeControls}:{children:React.ReactNode;felled?:boolean;marks?:number;stump?:boolean;homeControls?:React.ReactNode}){
-  return <div className={`bebrave-stage ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div className="bebrave-stage-art" aria-hidden="true"><div className="bebrave-stage-bg"/>{!stump&&<div className="bebrave-stage-tree"/>}{stump&&<div className="bebrave-stage-stump"/>}<div className="bebrave-stage-mid"/><TreeAtmosphere/>{!stump&&marks>0&&<div className="bebrave-stage-hacks">{Array.from({length:marks},(_,i)=><i key={i} style={{transform:`translate(${i*4}px,${i*5}px) rotate(${-16+i*3}deg)`}}/>)}</div>}</div>{children}</div>;
+  return <div className={`bebrave-stage ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div className="bebrave-stage-art" data-light-source aria-hidden="true"><div className="bebrave-stage-bg"/>{!stump&&<div className="bebrave-stage-tree"/>}{stump&&<div className="bebrave-stage-stump"/>}<div className="bebrave-stage-mid"/><TreeAtmosphere/>{!stump&&marks>0&&<div className="bebrave-stage-hacks">{Array.from({length:marks},(_,i)=><i key={i} style={{transform:`translate(${i*4}px,${i*5}px) rotate(${-16+i*3}deg)`}}/>)}</div>}</div>{children}</div>;
 }
 function ToolImage({tool}:{tool:BeBraveNormalTool|"cache"}){return <span className={`bebrave-tool-image tool-${tool}`} aria-hidden="true"/>;}
 function RarityEffect({rarity}:{rarity:BeBraveRarity}){return <span className={`bebrave-rarity-fx fx-${rarity}`} aria-hidden="true"><i/><i/><i/><i/><i/></span>;}

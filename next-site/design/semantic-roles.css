@@ -101,9 +101,12 @@
   --bebrave-mid: var(--color-chrome);
   --bebrave-bark: var(--color-bark);
   --bebrave-bark-dark: var(--color-bark-dark);
-  --world-hud: color-mix(in srgb, var(--color-surface) 96%, transparent);
-  --world-hud-ink: var(--color-ink);
-  --world-rule: color-mix(in srgb, var(--color-brass) 65%, var(--color-border));
+  --world-hud: color-mix(in srgb, var(--color-world-glass) 96%, transparent);
+  --world-hud-ink: var(--color-world-ink);
+  --world-control: color-mix(in srgb, var(--color-world-ink) 8%, transparent);
+  --world-control-hover: color-mix(in srgb, var(--color-world-glass) 86%, var(--color-world-ink));
+  --world-rule: color-mix(in srgb, var(--color-world-ink) 22%, transparent);
+  --world-rim: color-mix(in srgb, var(--color-sun) 34%, transparent);
   --world-shadow: color-mix(in srgb, var(--color-bark-dark) 65%, transparent);
   --world-mist: color-mix(in srgb, var(--color-sky-bottom) 40%, transparent);
   --world-art-light: 1;
@@ -120,6 +123,8 @@
   --effect-wisp-edge: #C4E3B0;
   --effect-wisp-orbit: #A2E3CE;
   --effect-silver: #FFFFFF;
+  --effect-cut-light: color-mix(in srgb, var(--color-sun) 70%, transparent);
+  --effect-cut-shadow: var(--color-bark-dark);
   --duration-press: 120ms;
   --duration-hover: 180ms;
   --duration-reveal: 420ms;

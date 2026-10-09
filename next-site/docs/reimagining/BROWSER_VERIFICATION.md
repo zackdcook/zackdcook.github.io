@@ -17,6 +17,8 @@ Preview: `dpl_FcspzTvrJH4sN6JFTmSUTNCxemJb`, commit `19f7f99eec5dfd84619ce7a1448
 - Test-only personal reset restored eligibility and retained visitor, completed artwork/archive and permanently consumed reward. A new eligible session's attempt to reuse the fixture code returned the original `Nothing happened.` feedback; exactly one entitlement remains.
 - All 50 distribution codes remain registered and unredeemed. Fixtures use separate campaigns; plaintext distribution codes never entered browser tests.
 - Prior modular-art preview: 320px home/manuscript has no horizontal overflow; mobile menu fits, Escape dismisses and restores focus. Resting desktop cursor maintains illumination/inner optical pose while outer photo hit bounds remain fixed.
+- Ordinary randomized tool selection revealed the arrowhead's common tier and preserved the complete authored tool dialogue, alongside the other revealed rarities. This was cancelled through the test reset before drawing.
+- Chop down → Chop → authored Stop/Continue confirmation → Stop returns to living introduction and retains the first-strike state. Complete felling/stump/regret QA remains next.
 
 ## Automated/database evidence
 
@@ -28,3 +30,5 @@ Preview: `dpl_FcspzTvrJH4sN6JFTmSUTNCxemJb`, commit `19f7f99eec5dfd84619ce7a1448
 ## Pending
 
 All four themes, living/felled story states, remaining routes/secrets, Folly input/feed, broader responsive layouts, live engraving refinement, reduced effects/motion and dense same-zone browser performance remain to be checked. Physical touchscreen/sensor behavior cannot be certified from this desktop browser. Final visual quality and the whole original inventory are not yet signed off.
+
+Local refinement after the above Preview: smoked-glass dialogue/control system, four centralized world-glass/world-ink pairs, contrast assertions including a worst-case white backdrop, existing preferences reachable inside the tree, bounded environment lighting and cut-edge depth. Automated tests/type/build pass; actual revised Preview visual QA pending.

@@ -20,6 +20,8 @@
   --color-sun: #E6CC92;
   --color-bark: #B58D62;
   --color-bark-dark: #5B4835;
+  --color-world-glass: #25342C;
+  --color-world-ink: #F4EFDE;
 }
 
 html[data-theme="dark"] {
@@ -43,6 +45,8 @@ html[data-theme="dark"] {
   --color-sun: #D8BC81;
   --color-bark: #92704F;
   --color-bark-dark: #42382C;
+  --color-world-glass: #15221E;
+  --color-world-ink: #F4EFDE;
 }
 
 html[data-timeline="felled"] {
@@ -66,6 +70,8 @@ html[data-timeline="felled"] {
   --color-sun: #CDB68A;
   --color-bark: #9A806A;
   --color-bark-dark: #51433F;
+  --color-world-glass: #342B34;
+  --color-world-ink: #F2E9DE;
 }
 
 html[data-timeline="felled"][data-theme="dark"] {
@@ -89,6 +95,8 @@ html[data-timeline="felled"][data-theme="dark"] {
   --color-sun: #B69A78;
   --color-bark: #7E6661;
   --color-bark-dark: #392F34;
+  --color-world-glass: #241D29;
+  --color-world-ink: #F2E9DE;
 }
 
 /* All shared color decisions live here. Components own geometry and states. */
@@ -194,9 +202,12 @@ html[data-timeline="felled"][data-theme="dark"] {
   --bebrave-mid: var(--color-chrome);
   --bebrave-bark: var(--color-bark);
   --bebrave-bark-dark: var(--color-bark-dark);
-  --world-hud: color-mix(in srgb, var(--color-surface) 96%, transparent);
-  --world-hud-ink: var(--color-ink);
-  --world-rule: color-mix(in srgb, var(--color-brass) 65%, var(--color-border));
+  --world-hud: color-mix(in srgb, var(--color-world-glass) 96%, transparent);
+  --world-hud-ink: var(--color-world-ink);
+  --world-control: color-mix(in srgb, var(--color-world-ink) 8%, transparent);
+  --world-control-hover: color-mix(in srgb, var(--color-world-glass) 86%, var(--color-world-ink));
+  --world-rule: color-mix(in srgb, var(--color-world-ink) 22%, transparent);
+  --world-rim: color-mix(in srgb, var(--color-sun) 34%, transparent);
   --world-shadow: color-mix(in srgb, var(--color-bark-dark) 65%, transparent);
   --world-mist: color-mix(in srgb, var(--color-sky-bottom) 40%, transparent);
   --world-art-light: 1;
@@ -213,6 +224,8 @@ html[data-timeline="felled"][data-theme="dark"] {
   --effect-wisp-edge: #C4E3B0;
   --effect-wisp-orbit: #A2E3CE;
   --effect-silver: #FFFFFF;
+  --effect-cut-light: color-mix(in srgb, var(--color-sun) 70%, transparent);
+  --effect-cut-shadow: var(--color-bark-dark);
   --duration-press: 120ms;
   --duration-hover: 180ms;
   --duration-reveal: 420ms;

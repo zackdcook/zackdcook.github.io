@@ -13,11 +13,14 @@ for(const [name,colors] of Object.entries(themes)) {
     for(const bg of ["background","surface","surface-alt"]) for(const ink of ["ink","muted"]) {
       const ratio=contrast(colors[bg],colors[ink]);assert.ok(ratio>=4.5,`${ink}/${bg}: ${ratio}`);
     }
-    for(const [bg,ink] of [["background","accent"],["chrome","on-chrome"],["hover","on-hover"]]) {
+    for(const [bg,ink] of [["background","accent"],["chrome","on-chrome"],["hover","on-hover"],["world-glass","world-ink"]]) {
       const ratio=contrast(colors[bg],colors[ink]);assert.ok(ratio>=4.5,`${ink}/${bg}: ${ratio}`);
     }
     for(const bg of ["background","surface"]) assert.ok(contrast(colors[bg],colors.border)>=3,`border/${bg}`);
     assert.ok(contrast(colors.foliage,colors.surface)>=4.5,"leaf lettering/foliage");
     for(const bg of ["background","surface","surface-alt"]) assert.ok(contrast(colors[bg],colors.accent)>=4.5,`accent/${bg}`);
+    // Glass is 96% opaque; white behind it is the worst lightening case.
+    const glassOnWhite="#"+[1,3,5].map(i=>Math.round(parseInt(colors["world-glass"].slice(i,i+2),16)*.96+255*.04).toString(16).padStart(2,"0")).join("");
+    assert.ok(contrast(glassOnWhite,colors["world-ink"])>=4.5,"world glass over white");
   });
 }

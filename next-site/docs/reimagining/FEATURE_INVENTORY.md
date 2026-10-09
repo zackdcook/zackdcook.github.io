@@ -12,13 +12,13 @@ Source commits and complete route paths are in `baseline-manifest.json`. This is
 | Words of Folly | physical leaves, brushing, grabbing, reading, feed, copy-feed | Physics/reader tests pass; browser verification pending |
 | Kitty secret | editorial photo, ribbon physics, escape confirmation, empty window, tree access | Physics tests and prior desktop keyboard secret flow pass; optional skins preserve geometry |
 | Tree introduction | Nothing / Admire / Carve / Chop down, narrative and base cache | Main mechanics retained |
-| Carving | anonymous httpOnly cookie, Turnstile, rate limits, tools, hidden rolls, pity, colors, 60 seconds, coalesced pointer samples | Unit rarity tests pass; full DB flow pending |
-| Eligibility | five feet since prior completed carving, enforced again at drawing start | SQL source identified; integration tests pending |
-| Publication | streamed chunks, deadline enforcement, overdue finalization, one-foot growth, individual sessions, stable overlap order | Source preserved; lossless archive/atomic DB replacement and original-path anchors pass; actual timed publication pending |
-| Admire | viewport sections, zoom anchor, parallax, completed strokes | Row-cap-safe pages, bounded cache and archive projections implemented; prior desktop zoom checked; new art / full browser QA due |
+| Carving | anonymous httpOnly cookie, Turnstile, rate limits, tools, hidden rolls, pity, colors, 60 seconds, coalesced pointer samples | Rarity tests pass; actual Legendary mouse/stream/timer/color DB flow passes; ordinary tools/touch QA due |
+| Eligibility | five feet since prior completed carving, enforced again at drawing start | Actual post-publication cooldown persists after refresh; create/resume DB gate rejects visitor; start logic retained |
+| Publication | streamed chunks, deadline enforcement, overdue finalization, one-foot growth, individual sessions, stable overlap order | 21 originals restored exactly after backfill; actual timed publication 22 automatically archives and renders saved effect; individual records retained |
+| Admire | viewport sections, zoom anchor, parallax, completed strokes | Actual archived-carving scroll/zoom/reset and offcamera effect sleep pass; broader responsive/art refinement due |
 | Felling | first strike, confirmation, d4 additional strikes, snapshot cutoff, sideways tree, later stump, regret, reset | Local state retained; browser verification pending |
-| Lockbox | code entry, server digest, visitor/network limits, color selection | Legacy Epic retained plus 50 secure one-use Legendary codes and persistent entitlements; real SQL concurrency passes; browser unlock refresh/replay due |
-| Test infrastructure | spring-clean bypass and reset; test DB | Strict exact-test/Preview guards and READY Vercel preview verified; real reset interaction due |
+| Lockbox | code entry, server digest, visitor/network limits, color selection | 50 distribution codes remain unused; actual SQL concurrency and disposable browser redemption/refresh/replay/nonempty consumption pass |
+| Test infrastructure | spring-clean bypass and reset; test DB | Strict exact-test/Preview guards and READY Preview verified; browser reset restores eligibility and retains carving/identity/reward history |
 | Preferences | light/dark, motion/effects, phone tilt, restore timeline/reset, persistence/bootstrap | Existing preference tests pass |
 | Material interaction | shared cursor / opt-in tilt, bounded optical pose, tactile press, ribbon layering | Resting cursor light and stable hit bounds browser checked; idle loop stops in source; physical sensor QA unavailable |
 | Shoutouts | static curated entries, optional approved database entries | Neither DB currently has `shoutout_suggestions`; source falls back to static list |
