@@ -42,8 +42,8 @@ export function SiteHeader() {
   };
   const toggleTheme = () => update({ theme: document.documentElement.dataset.theme === "dark" ? "light" : "dark" });
   const themeControl = <button type="button" className={styles.theme} onClick={toggleTheme} aria-label="Toggle light and dark mode">
-    <span className={styles.sun} aria-hidden="true">☀</span>
-    <span className={styles.moon} aria-hidden="true">🌙</span>
+    <span className={styles.sun} aria-hidden="true"><svg viewBox="0 0 24 24"><title>☀</title><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.2 2.2m9.8 9.8 2.2 2.2M4.9 19.1l2.2-2.2m9.8-9.8 2.2-2.2"/></svg></span>
+    <span className={styles.moon} aria-hidden="true"><svg viewBox="0 0 24 24"><title>🌙</title><path d="M19.8 15.6A8.5 8.5 0 0 1 8.4 4.2 8.5 8.5 0 1 0 19.8 15.6Z"/></svg></span>
   </button>;
 
   return <header className={`site-header ${styles.header}`}>

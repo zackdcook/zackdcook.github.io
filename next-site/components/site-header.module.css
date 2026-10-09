@@ -12,6 +12,7 @@
 .theme,.menu{border:0;padding:0;min-width:44px;min-height:44px;background:none;color:var(--color-ink);cursor:pointer}
 .theme{display:grid;place-items:center;position:relative;border:1px solid color-mix(in srgb,var(--color-border) 40%,transparent);border-radius:50%}
 .theme span{grid-area:1/1;font-size:23px;transition:opacity .18s,rotate .42s var(--ease-settle)}
+.theme svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
 .moon{opacity:0;filter:grayscale(1)}
 :global(html[data-theme="dark"]) .sun{opacity:0;rotate:90deg}
 :global(html[data-theme="dark"]) .moon{opacity:1}
