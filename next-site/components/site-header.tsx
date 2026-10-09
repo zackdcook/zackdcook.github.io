@@ -19,7 +19,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const { update } = usePreferences();
   const current = (href: string) => (href === "/" ? visiblePath === "/" : visiblePath === href || visiblePath.startsWith(href + "/")) ? "page" as const : undefined;
-  const close = () => dialog.current?.close();
+  const close = () => { dialog.current?.close(); setOpen(false); };
 
   useEffect(() => {
     const historyTravel = () => { explicitHome.current = false; };
@@ -28,6 +28,7 @@ export function SiteHeader() {
   }, []);
   useEffect(() => {
     dialog.current?.close();
+    setOpen(false);
     if (pathname === "/" && explicitHome.current) {
       explicitHome.current = false;
       const frame = requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
@@ -65,7 +66,7 @@ export function SiteHeader() {
         </button>
       </div>
     </div>
-    <dialog ref={dialog} className={styles.sheet} aria-label="Mobile navigation" onClose={() => { setOpen(false); opener.current?.focus({preventScroll:true}); }} onClick={event => { if(event.target === event.currentTarget) close(); }}>
+    <dialog ref={dialog} className={styles.sheet} aria-label="Mobile navigation" onCancel={() => setOpen(false)} onClose={() => { setOpen(false); opener.current?.focus({preventScroll:true}); }} onClick={event => { if(event.target === event.currentTarget) close(); }}>
       <div className={styles.sheetHeader}>
         <span className={styles.sheetName}>Zack Cook</span>
         <button type="button" className={styles.menu} onClick={close}>Menu <span aria-hidden="true" className={styles.close}>＋</span></button>
