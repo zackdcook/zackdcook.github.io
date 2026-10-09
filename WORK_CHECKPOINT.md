@@ -1,17 +1,17 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. Status: publishing restored; backend and content-preservation milestone verified. Visual overhaul, optimized canonical storage, and preview/browser verification remain incomplete.
+Updated: 2026-10-09 UTC. Status: publishing restored, recovered source published, first experimental preview READY. Paused at protected-preview authorization boundary. Visual overhaul, canonical archives, and browser verification remain incomplete.
 
 ## Source and isolation
 - Experimental branch: `experiment/immersive-world-2026-10-09`.
-- Latest published commit: `5911625de246110c7fac224a73a7655685928885`. All three original experimental commits are on GitHub with their exact history. Use `git log -1` for the commit containing this update.
+- Latest published commit: `c23b479bb21f637dfadc175576ca96e9c12910f4`. All original experimental history and recovered source changes are on GitHub. Use `git log -1` for the commit containing this update.
 - Original main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`.
 - Tree/test reference: `spring-clean-2026-10` at `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`.
 - Repository: `zackdcook/zackdcook.github.io`; application directory: `next-site`.
 - Test Supabase: `qkkgcoejkqvthbjcldcw` (`zackdcook-test`). Organization plan verified free.
 - Production Supabase: `belqlsqnbexwkpmnptyy`. Read-only table metadata inspected; never modify.
 - Vercel project: `prj_AcuTfmUBydayvETed53KCREnlONa`, account `team_NSAGsSQupndjz84vjnupVkVK`.
-- Automatic Vercel builds are disabled for this experimental branch in `vercel.json` and `next-site/vercel.json` until preview environment isolation and free plan are verified. Other branch settings are unaffected.
+- Automatic Vercel builds remain disabled for this experimental branch in `vercel.json` and `next-site/vercel.json` to avoid unnecessary iterative builds. Manual Preview deployment works using the existing test configuration and free account. Other branch settings are unaffected.
 
 ## Completed
 - Verified remote branch heads and cloned the repository; local branch is based on main.
@@ -37,17 +37,18 @@ Updated: 2026-10-09 UTC. Status: publishing restored; backend and content-preser
 
 ## Remaining access / verification limits
 - GitHub connector writes still fail and the Work shell has no configured Git credentials. Authorized publishing now succeeds through the existing repository Codespace's native Git connection; see the recovery procedure below. No credential extraction or new credential was required.
-- Vercel project and preview environment reads work when omitting explicit teamId/slug. Preview writes remain unverified until a real experimental deployment is created. No local Vercel CLI authentication exists in the Work shell.
-- Verified existing preview URL and test project reference point to `qkkgcoejkqvthbjcldcw`. Preview test-mode value, other required config, branch scoping, free plan/limits and deployment permissions still need verification. Do not read production secrets or deploy blindly.
+- Vercel project and preview environment reads work when omitting explicit teamId/slug. Preview creation is verified by the real READY experimental deployment below. Neither Work nor the existing Codespace has a Vercel CLI connection.
+- Verified existing Preview URL, project reference, and `true` test mode point to `qkkgcoejkqvthbjcldcw`; authenticated account billing reports active Hobby. Build fails closed outside isolated test storage. No production secrets/settings were read or changed.
+- BLOCKING browser QA: `get_access_to_vercel_url` returned 403 with omitted team (read_protection_bypass) and with the actual owning team (lookup_deployment). Browser reaches Vercel sign-in; no normal CLI fallback is configured. Do not retry unchanged, disable Deployment Protection, broaden Trusted Sources, or extract credentials. Ask user to authorize secure browser sign-in as a fallback, or repair the Vercel connection's protected-deployment/team permission. Preview exists but is NOT functionally or visually signed off.
 - Cloudflare plugin discovery returned no usable connector. Dashboard fallback requires user approval if resolving an available plugin's failure.
 - No exact Work usage counter is exposed. Save coherent milestones; no background continuation between sessions.
 - Cloud browser can inspect reference sites but cannot reach the workspace's localhost server (connection refused). Local HTTP and build verification are possible; changed-site browser/visual QA awaits a reachable preview.
 
 ## Next tasks (ordered)
-1. Commit the recovered, verified source milestone and publish it by the established Codespace bundle method. Reconcile migration filenames with the actual test ledger; do not reapply existing migrations.
+1. Resolve protected-preview browser authorization with the user's direction, then verify the real browser → Next.js → test Supabase flow.
 2. Complete compact canonical storage/projections, bounded rendering, and meaningful geometry/network/render scale tests (not just metadata lookup).
 3. Finish cohesive site/tree art direction and component cleanup; keep exact authored wording and every inventory feature.
-4. Verify free Vercel plan/limits and isolated preview configuration; deploy this branch only and test the real browser → Next.js → test Supabase flow.
+4. Publish coherent milestones via the verified Codespace bundle method; deploy this branch only with the existing free/test configuration.
 5. Check all inventory features, desktop/mobile input and preferences, four timelines/themes, accessibility, security, performance, and visual refinement. Update the functionality ledger with evidence.
 6. Deliver the working preview, branch/SHA, accurate tested/incomplete report and existing private code file. Never regenerate the 50 codes.
 
@@ -69,7 +70,15 @@ Updated: 2026-10-09 UTC. Status: publishing restored; backend and content-preser
 - Supabase security advisor has no warning/error findings; only intentional INFO notices for RLS enabled with no browser policies on service-only tables.
 - Source now also has a baseline wording/content/route guard and bounded, cancellable viewport cache. Their latest checks are running.
 
-Exact next action: commit/publish this verified source milestone, then implement canonical completed-carving storage and resume visual refinement. No production changes or charges. The remote experimental branch exists; no overhaul preview has been deployed yet. Do not repeat completed research or regenerate codes.
+Exact next action: obtain the user's direction for protected-preview access, inspect the existing READY preview, then implement/rollback-test canonical archives and continue visual refinement. No production changes or charges. Do not repeat completed research or regenerate codes.
+
+## Preview / next data milestone — 2026-10-09
+- Vercel authenticated account reports active `hobby` billing, default team matching the existing project, and one concurrent build. No plan upgrade or paid feature was activated. Team-level `get_team` still returns 403; do not retry unchanged.
+- Existing preview configuration is test-only: Supabase origin and project ref match `qkkgcoejkqvthbjcldcw`, test mode is `true`; production variables were not read or changed.
+- First experimental preview is READY: `dpl_9vY4XvcuafzafvG7ZdQRz9a5g4pJ`, `https://zack-cook-efctw1pcq-dove-mack0o-3684.vercel.app`, source SHA `c23b479bb21f637dfadc175576ca96e9c12910f4`, target `null` (API default Preview). Preview write access is now verified. Browser testing remains pending.
+- Manual Git-connected deployment succeeded with no explicit teamId/slug and no project-setting changes. In this API, omit `target` for Preview; literal `preview` is rejected with 400. Automatic builds remain disabled to avoid unnecessary deployments during development.
+- Planned next architecture (NOT implemented): retain each completed session/visitor/cooldown/effect record, archive all original chunk fields in a checksummed lossless gzip container, and replace raw completed chunks only atomically after round-trip validation. Old drawings need a lazy-compatible path. Render-only simplification must retain original geometry and deterministic mote positions; never simplify canonical artwork. Supabase CLI `2.120.0` migration help was verified. Its empty generated migration placeholder was removed before checkpointing; create a new migration with the CLI when implementing. No new database migration or artwork deletion occurred in this continuation.
+- Tests in this continuation: 67/67 unit tests, TypeScript and generated theme checks pass. Deployment READY verifies the current source builds under the configured test Preview environment; browser/API/data/render testing remains blocked, not passed. All 50 distribution codes remain unredeemed, and all 20 original completed test carvings remain present. Repository scan found zero plaintext distribution codes.
 
 ## Publishing recovery investigation — 2026-10-09
 - Source branch still at `5911625de246110c7fac224a73a7655685928885`, with the previously recorded uncommitted implementation intact. Do not recreate or squash its three experimental commits.
