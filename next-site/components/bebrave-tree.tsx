@@ -5,6 +5,7 @@ import { legendaryEffect } from "@/lib/bebrave/effects";
 import { SectionCache } from "@/lib/bebrave/section-cache";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
+import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
 type Mode="admire"|"draw"|"fallen"|"base";
@@ -157,6 +158,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   return <section ref={scene} className={`bebrave-scene is-${mode}`} style={{"--bebrave-tree-scale":scale,"--bebrave-tree-zoom":mode==="admire"?zoom:1} as CSSProperties}>
     <div className="bebrave-horizon" aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
+    <TreeAtmosphere/>
     {(mode==="draw"||mode==="admire")&&<aside className="bebrave-control-rail" aria-label={mode==="draw"?"Carving controls":"Tree controls"}>
       {homeControls}
       {mode==="admire"&&<>

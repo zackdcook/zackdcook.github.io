@@ -16,4 +16,4 @@
  }
 }
 @keyframes leaf-drift{from{translate:0 20px;rotate:-11deg}to{translate:0 -20px;rotate:-5deg}}
-@media(max-width:740px){.biography::before{top:auto;bottom:14%;right:-10%;width:82%;height:38%}.follySpread{grid-template-columns:1fr;gap:35px}.follyHeading h2{font-size:clamp(50px,14vw,74px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:70px 100px}.reeds{height:190px}}
+@media(max-width:740px){.biography::before{top:auto;bottom:14%;right:0;width:82%;height:38%}.follySpread{grid-template-columns:1fr;gap:35px}.follyHeading h2{font-size:clamp(50px,14vw,74px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:70px 100px}.reeds{height:190px}}

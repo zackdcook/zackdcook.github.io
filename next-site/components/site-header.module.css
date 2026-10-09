@@ -18,7 +18,7 @@
 :global(html[data-theme="dark"]) .moon{opacity:1}
 .menu{display:none;align-items:center;gap:16px;font-size:13px;font-weight:650}
 .menu>span{font-size:27px;font-weight:350;line-height:1}
-.sheet{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;padding:0;color:var(--color-ink);background:var(--color-background);overflow:auto;isolation:isolate}
+.sheet{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;padding:0;color:var(--color-ink);background:var(--color-background);overflow-x:clip;overflow-y:auto;isolation:isolate}
 .sheet::backdrop{background:var(--color-background)}
 .sheet[open]{animation:sheet-in .36s var(--ease-settle) both}
 .sheetHeader{display:flex;align-items:center;justify-content:space-between;width:min(1120px,calc(100% - 96px));min-height:88px;margin-inline:auto;padding-top:env(safe-area-inset-top)}

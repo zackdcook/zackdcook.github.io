@@ -1,10 +1,10 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in completed and existing experimental preview is accessible. Structural visual redesign now in progress. Canonical archives and complete browser verification remain incomplete.
+Updated: 2026-10-09 UTC. Status: publishing restored; structural visual redesign and responsive harness are published. New original cypress-world art/presentation passes source checks and is ready for browser verification. Canonical archives and complete browser verification remain incomplete.
 
 ## Source and isolation
 - Experimental branch: `experiment/immersive-world-2026-10-09`.
-- Latest verified published commit: `f5833c0c017139894fa7f64062eca55ebbee49b1`. All original experimental history and the structural redesign are on GitHub. Use `git log -1` for the commit containing this update.
+- Latest verified published commit: `ba40a18f66f1f3934d673c1f990bd67800e2f979`. All original experimental history and the structural redesign are on GitHub. Use `git log -1` for the cypress-art milestone containing this update.
 - Original main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`.
 - Tree/test reference: `spring-clean-2026-10` at `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`.
 - Repository: `zackdcook/zackdcook.github.io`; application directory: `next-site`.
@@ -14,6 +14,8 @@ Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in com
 - Automatic Vercel builds remain disabled for this experimental branch in `vercel.json` and `next-site/vercel.json` to avoid unnecessary iterative builds. Manual Preview deployment works using the existing test configuration and free account. Other branch settings are unaffected.
 
 ## Completed
+- Original cypress-world presentation milestone: three new versioned WebP assets (under 0.9 MB combined), fine-rule paper HUD, unboxed tool selection, mobile full-width tree with compact top controls, deterministic CSS-only fireflies/mist, centralized environmental and rarity-light tokens, shared live/published effects. Replaced the prototype/override tree CSS with one presentation layer. Original geometry, gameplay, authored dialogue, saved colors and old assets retained. Source checks: 69/69 tests, TypeScript, generated themes and production build PASS. Actual art composition, texture repeat and drawing/browser verification are NEXT, not passed.
+- Actual 390px responsive iframe QA verified the new editorial manuscript/progress layout and modal Escape closure. Found 39px home overflow from a decorative biography ellipse and menu-art overflow; constrained those decorative layers in this milestone. Fixes still require a deployed browser recheck. This harness is CSS viewport testing, not physical touch-device emulation.
 - Structural site redesign milestone: unboxed editorial spreads, slim ink navigation, native full-screen mobile navigation dialog, original paper-heron illustration, manuscript/progress composition, typographic event spread, open biography/photo layout, illustrated Folly clearing, directory-style shoutouts and restrained footer. New component CSS modules; replaced legacy global/material/Folly overrides (over 3,500 removed lines). Native scroll and short route transitions replace full-height page-stack motion. Existing ribbon/leaf physics, routes, authored text and backends remain in place.
 - Structural milestone source checks: all 69 tests, TypeScript, generated-theme check, and production build pass, with all original routes retained. Desktop browser checks verified the new light/dark home compositions, manuscript click/arrow-key selection, calendar-choice dialog, preferences, kitty ribbon keyboard secret, and tree entry/Admire controls. Full inventory, mobile, four timelines and backend publication checks remain incomplete.
 - Added an unlinked test-only responsive viewport harness at `/test-viewport?width=390&path=/`. It only runs with the existing exact test-project/Preview safeguards. Same-origin framing is allowed only for the nine whitelisted site documents with `_testViewport=true`, only in test mode. Ordinary documents retain DENY/no-ancestor headers; APIs, admin routes, production and deployment protection are unchanged. Harness/browser verification is NEXT.
@@ -51,8 +53,8 @@ Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in com
 - Cloud browser can inspect reference sites but cannot reach the workspace's localhost server (connection refused). Local HTTP and build verification are possible; changed-site browser/visual QA awaits a reachable preview.
 
 ## Next tasks (ordered)
-1. Publish the responsive-QA milestone, inspect the mobile/tablet compositions and navigation, and refine any layout failures in the new visual system.
-2. Refine the tree environment/controls/effects; verify the browser → Next.js → test Supabase flow.
+1. Publish/deploy the original cypress-world milestone, recheck home/menu overflow, inspect tree art/controls at real 320/390/768/1024px iframe viewports and desktop, then refine any failures.
+2. Verify the browser → Next.js → test Supabase flow, shared live/published effects, input, zoom, cooldown/reset, lockbox and timelines.
 3. Complete compact canonical storage/projections, bounded rendering, and meaningful geometry/network/render scale tests (not just metadata lookup).
 4. Publish coherent milestones via the verified Codespace bundle method; deploy this branch only with the existing free/test configuration.
 5. Check all inventory features, desktop/mobile input and preferences, four timelines/themes, accessibility, security, performance, and visual refinement. Update the functionality ledger with evidence.
@@ -76,9 +78,10 @@ Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in com
 - Supabase security advisor has no warning/error findings; only intentional INFO notices for RLS enabled with no browser policies on service-only tables.
 - Source now also has a baseline wording/content/route guard and bounded, cancellable viewport cache. Their latest checks are running.
 
-Exact next action: publish this responsive-QA milestone from `f5833c0`, deploy only Preview with the existing test configuration, inspect real 320/390/768/1024px iframe viewports, and verify mobile navigation before returning to the tree's rendering/environment milestone. No production changes or charges. Do not regenerate codes.
+Exact next action: commit/publish the cypress-world milestone from the verified remote `ba40a18`, deploy only Preview with the existing test configuration, inspect the new tree artwork and 320/390/768/1024px layouts, then test carving publication. No production changes or charges. Do not regenerate codes.
 
 ## Preview / next data milestone — 2026-10-09
+- Responsive-harness Preview is READY: `dpl_8fq4WM3s35MkYMLN37MFctYBuHMe`, `https://zack-cook-ahk9eh3py-dove-mack0o-3684.vercel.app`, source `ba40a18f66f1f3934d673c1f990bd67800e2f979`, target `null` (Preview). The same-origin harness works in the authenticated browser.
 - Structural redesign Preview is READY: `dpl_6zJ9B9VRYr89iMXdYRAjK9RiEyGD`, `https://zack-cook-2sx56fgiq-dove-mack0o-3684.vercel.app/`, source `f5833c0c017139894fa7f64062eca55ebbee49b1`, target `null` (Preview). Browser sign-in persists across these protected previews. Desktop screenshot saved outside Git; mobile harness and full gameplay QA remain pending.
 - Vercel authenticated account reports active `hobby` billing, default team matching the existing project, and one concurrent build. No plan upgrade or paid feature was activated. Team-level `get_team` still returns 403; do not retry unchanged.
 - Existing preview configuration is test-only: Supabase origin and project ref match `qkkgcoejkqvthbjcldcw`, test mode is `true`; production variables were not read or changed.
@@ -97,5 +100,5 @@ Exact next action: publish this responsive-QA milestone from `f5833c0`, deploy o
 - Imported the incremental bundle into a separate bare mirror at `/tmp/zack-experimental-publish.o8jDoO/repository.git`, then pushed ONLY the experimental ref. Remote SHA exactly matches `5911625de246110c7fac224a73a7655685928885`; main remains `be6b15d93f2bae259a52e7b80d98a51018edb01d`. The existing spring-clean Codespace worktree remains clean and unchanged.
 - Vercel `get_project({idOrName: "zack-cook"})` works without explicit teamId/slug, as verified in the preceding access task. Preview writes and branch-only environment isolation still require verification; do not deploy blindly.
 - Repeatable publishing: create a new incremental Git bundle outside the repository from the last pushed SHA to the experimental branch. Upload it through VS Code's supported file chooser to `next-site`, move that temporary upload immediately into the separate mirror directory, fetch the experimental ref from the bundle, and perform a normal fast-forward push. Verify exact remote SHA, unchanged main, and clean original Codespace. Never force-push, squash, rewrite existing history, copy credentials, or publish a different branch.
-- Codespace restart removes `/tmp` mirrors. Current persistent separate bare mirror is `/workspaces/zack-experimental-publish.y2QMu0/repository.git`; it was recreated from the experimental branch and fast-forwarded to `f5833c0` with native existing Git authentication. Main remains `be6b15d93f2bae259a52e7b80d98a51018edb01d`; original spring-clean worktree is clean. Codespace stop was requested immediately after the push.
+- Codespace restart removes `/tmp` mirrors. Current persistent separate bare mirror is `/workspaces/zack-experimental-publish.y2QMu0/repository.git`; it was recreated from the experimental branch and fast-forwarded to `ba40a18` with native existing Git authentication. Main remains `be6b15d93f2bae259a52e7b80d98a51018edb01d`; original spring-clean worktree is clean. Stop the Codespace after each publishing milestone.
 - Existing private recovery bundle remains accessible at `/workspace/scratch/01235e4bd732/website-reimagining-checkpoint.bundle`, saved file ID `libfile_e8cf0dc5d8d08191b77ff9f158631473`. Preserve it and create a new recovery bundle at later milestones.

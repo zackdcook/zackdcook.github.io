@@ -3,6 +3,7 @@
 import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties } from "react";
 import { HumanCheck } from "@/components/human-check";
 import { BeBraveTree } from "@/components/bebrave-tree";
+import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
 import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,type BeBraveLocalTimeline,type BeBraveNormalTool,type BeBraveRarity,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
@@ -31,7 +32,6 @@ function HomeControls({testMode=false,busy=false,onReset}:{testMode?:boolean;bus
   return <>
     <a className="bebrave-home-button" href="/" aria-label="Zack Cook — home">
       <svg className="bebrave-home-mark site-mark" viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
-        <rect width="1280" height="1280" rx="200" fill="var(--midnight)"/>
         <path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="var(--coral)"/>
       </svg>
       <span>Zack Cook</span>
@@ -48,7 +48,7 @@ function OverlayScene({visual,children,actions}:{visual:React.ReactNode;children
   </div>;
 }
 function Stage({children,felled=false,marks=0,stump=false,homeControls}:{children:React.ReactNode;felled?:boolean;marks?:number;stump?:boolean;homeControls?:React.ReactNode}){
-  return <div className={`bebrave-stage ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div className="bebrave-stage-art" aria-hidden="true"><div className="bebrave-stage-bg"/><div className="bebrave-stage-mid"/>{!stump&&<div className="bebrave-stage-tree"/>}{stump&&<div className="bebrave-stage-stump"/>}{!stump&&marks>0&&<div className="bebrave-stage-hacks">{Array.from({length:marks},(_,i)=><i key={i} style={{transform:`translate(${i*4}px,${i*5}px) rotate(${-16+i*3}deg)`}}/>)}</div>}</div>{children}</div>;
+  return <div className={`bebrave-stage ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div className="bebrave-stage-art" aria-hidden="true"><div className="bebrave-stage-bg"/>{!stump&&<div className="bebrave-stage-tree"/>}{stump&&<div className="bebrave-stage-stump"/>}<div className="bebrave-stage-mid"/><TreeAtmosphere/>{!stump&&marks>0&&<div className="bebrave-stage-hacks">{Array.from({length:marks},(_,i)=><i key={i} style={{transform:`translate(${i*4}px,${i*5}px) rotate(${-16+i*3}deg)`}}/>)}</div>}</div>{children}</div>;
 }
 function ToolImage({tool}:{tool:BeBraveNormalTool|"cache"}){return <span className={`bebrave-tool-image tool-${tool}`} aria-hidden="true"/>;}
 function RarityEffect({rarity}:{rarity:BeBraveRarity}){return <span className={`bebrave-rarity-fx fx-${rarity}`} aria-hidden="true"><i/><i/><i/><i/><i/></span>;}
