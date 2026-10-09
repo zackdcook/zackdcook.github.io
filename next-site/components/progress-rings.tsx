@@ -90,7 +90,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         {item.target && <span className="sr-only" role="progressbar" aria-label={item.label} aria-valuemin={0} aria-valuemax={item.target} aria-valuenow={Math.min(item.value, item.target)} aria-valuetext={`${number(item.value)} of ${number(item.target)} ${item.unit}`} />}
       </li>)}</ol>
     </div>
-    <div className="progress-chart"><div className="rings" onPointerLeave={() => setHovered(null)}>
+    <div className="progress-chart"><div className="rings" data-material-surface="glass" onPointerLeave={() => setHovered(null)}>
       <svg viewBox="0 0 320 320" aria-hidden="true">
         <defs>{progress.stages.map((item, index) => {
           const tone = toneFor(index);

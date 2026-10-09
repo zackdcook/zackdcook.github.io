@@ -6,8 +6,12 @@
 .button:not(a):not(:disabled):active{box-shadow:inset 0 2px 5px var(--material-shadow)}
 .tactile-photo::after{
  content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+ background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*18%),transparent),transparent 62%);
  box-shadow:inset var(--rim-x,0px) var(--rim-y,0px) 2px color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*80%),transparent);
 }
+.tactile-photo[data-material-surface]>:is(img,.artwork-photo){transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg)) scale(1.025)}
+[data-material-surface="glass"]{background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*22%),transparent),transparent 68%)}
+.rings[data-material-surface]>svg{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 .kitty-ribbon{
  --ribbon-face-bg:var(--color-chrome);
  --ribbon-face-ink:var(--color-on-chrome);
@@ -29,6 +33,8 @@
 .ribbon-cast{fill:var(--material-shadow);transform:translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,0px) + var(--ribbon-height,0px)*.15))}
 .ribbon-thickness{fill:var(--ribbon-face-bg);stroke:var(--ribbon-face-bg);stroke-width:1.2;stroke-linejoin:round;transform:translateY(1.2px)}
 .ribbon-lettering{fill:var(--ribbon-face-ink);font:600 21px var(--sans)}
-html[data-effects="reduced"] :is(.button,.preference-control,.tactile-photo)::after{box-shadow:none}
+html[data-effects="reduced"] :is(.button,.preference-control,.tactile-photo)::after{box-shadow:none;background:none}
+html[data-effects="reduced"] [data-material-surface]{background-image:none}
+html[data-effects="reduced"] :is(.tactile-photo[data-material-surface]>:is(img,.artwork-photo),.rings[data-material-surface]>svg){transform:none}
 html[data-effects="reduced"] .kitty-photo-layer{transition:none}
-@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}}
+@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.tactile-photo[data-material-surface]>:is(img,.artwork-photo),.rings[data-material-surface]>svg{transform:none}}

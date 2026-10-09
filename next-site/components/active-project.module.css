@@ -9,6 +9,12 @@
 .heading :global(.desk-followup){margin-top:24px}
 .art{width:100%;max-width:440px;justify-self:end;position:relative}
 .art svg{width:100%;height:auto}
+.art{aspect-ratio:5/5.6}
+.project[data-project-art="false"]{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:center}
+.project[data-project-art="false"] .progress{grid-column:2;grid-row:1;margin:0;padding:0;border:0;container-type:inline-size}
+.project[data-project-art="false"] .progress :global(.progress-display){grid-template-columns:minmax(130px,1fr) minmax(160px,1fr);gap:24px}
+.project[data-project-art="false"] .progress :global(.progress-note){grid-column:1/-1;border-top:1px solid color-mix(in srgb,var(--color-border) 32%,transparent);padding-top:24px;min-height:130px}
 .progress{grid-column:1/-1;border-top:1px solid color-mix(in srgb,var(--color-border) 42%,transparent);margin-top:50px;padding-top:40px}
 @media(max-width:850px){.project{grid-template-columns:1fr .6fr;gap:25px}.title{font-size:clamp(39px,5.7vw,54px)}.art{align-self:center}.progress{margin-top:25px}}
-@media(max-width:600px){.project{grid-template-columns:1fr;gap:0}.heading :global(.section-label){margin-bottom:24px}.title{font-size:clamp(38px,10.7vw,55px);max-width:18ch}.subtitle{max-width:310px}.art{max-width:250px;justify-self:end;margin-top:-25px;margin-bottom:-24px;opacity:.8}.progress{margin-top:24px;padding-top:30px}}
+@media(max-width:850px){.project[data-project-art="false"]{grid-template-columns:1fr;gap:40px}.project[data-project-art="false"] .progress{grid-column:1;grid-row:auto;border-top:1px solid color-mix(in srgb,var(--color-border) 32%,transparent);padding-top:30px}}
+@media(max-width:600px){.project[data-project-art="false"] .progress :global(.progress-display){grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:15px}.project{grid-template-columns:1fr;gap:0}.heading :global(.section-label){margin-bottom:24px}.title{font-size:clamp(38px,10.7vw,55px);max-width:18ch}.subtitle{max-width:310px}.art{max-width:250px;justify-self:end;margin-top:-25px;margin-bottom:-24px;opacity:.8}.progress{margin-top:24px;padding-top:30px}}

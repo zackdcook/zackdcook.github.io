@@ -9,3 +9,4 @@
 .details :global(.event-actions){margin-top:24px;gap:18px}
 .description{font-size:15px;line-height:1.8;color:var(--color-muted);margin-top:30px}
 @media(max-width:740px){.group{grid-template-columns:1fr;gap:20px}.title h2:not(:global(.section-label)){font-size:clamp(46px,13vw,72px);max-width:12ch}.title>svg{width:190px;margin:14px 0 0 auto;display:block;max-height:80px}.details{padding-top:0}.schedule{font-size:17px}.venue{font-size:25px;margin-top:23px}.description{font-size:14px}}
+.illustration{width:min(100%,360px);aspect-ratio:400/180;margin-top:32px}

@@ -35,6 +35,15 @@ export function approachLight(current: number, target: number, elapsed: number) 
   return current < target ? Math.min(target, current + distance) : Math.max(target, current - distance);
 }
 
+/** Small, bounded optical pose. Geometry/hit targets never depend on this pose. */
+export function materialPose(bounds:SurfaceBounds,x:number,y:number,strength:number) {
+  const clamp=(value:number)=>Math.max(-1,Math.min(1,value));
+  const u=clamp((x-bounds.left)/Math.max(1,bounds.width)*2-1);
+  const v=clamp((y-bounds.top)/Math.max(1,bounds.height)*2-1);
+  const intensity=Math.max(0,Math.min(1,strength));
+  return {yaw:u*1.8*intensity,pitch:-v*1.8*intensity,castX:-u*6*intensity,castY:10-v*6*intensity};
+}
+
 /** Large panels light the portion the visitor can see, rather than an
  * offscreen midpoint several screens away. Keep face coordinates local to
  * the whole panel so the highlight stays under the shared light source. */

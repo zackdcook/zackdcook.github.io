@@ -96,7 +96,7 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .zacky-c-trigger{appearance:none;border:0;padding:0;background:none;color:inherit;font:inherit;font-weight:650;text-decoration:underline dotted;text-underline-offset:.18em;cursor:help}
 .zacky-c-backdrop{position:fixed;inset:0;z-index:99;background:var(--material-shadow);opacity:0;pointer-events:none;transition:opacity .18s}
 .zacky-c-preview{position:fixed;left:50%;top:50%;width:min(360px,78vw);max-height:min(78dvh,600px);padding:7px;background:var(--color-surface);opacity:0;transform:translate(-50%,-50%) scale(.96);transition:opacity .18s,transform .18s;pointer-events:none;z-index:100}
-.zacky-c-preview img{width:100%;height:auto;max-height:calc(min(78dvh,600px) - 14px);object-fit:contain}
+.zacky-c-preview :is(img,.artwork-photo){width:100%;height:auto;max-height:calc(min(78dvh,600px) - 14px);object-fit:contain}
 .zacky-c-close{position:absolute;right:12px;top:12px;width:44px;padding:0;font-size:25px;opacity:0;pointer-events:none}
 .zacky-c-hover.is-open :is(.zacky-c-backdrop,.zacky-c-preview,.zacky-c-close){opacity:1;pointer-events:auto}
 .zacky-c-hover.is-open .zacky-c-preview{transform:translate(-50%,-50%) scale(1)}

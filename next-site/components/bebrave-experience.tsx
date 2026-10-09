@@ -4,6 +4,7 @@ import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSP
 import { HumanCheck } from "@/components/human-check";
 import { BeBraveTree } from "@/components/bebrave-tree";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
+import { Artwork } from "./artwork";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
 import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,type BeBraveLocalTimeline,type BeBraveNormalTool,type BeBraveRarity,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
@@ -31,9 +32,9 @@ function normalizeTimeline(value:unknown):BeBraveLocalTimeline{
 function HomeControls({testMode=false,busy=false,onReset}:{testMode?:boolean;busy?:boolean;onReset?:()=>void}){
   return <>
     <a className="bebrave-home-button" href="/" aria-label="Zack Cook — home">
-      <svg className="bebrave-home-mark site-mark" viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
+      <Artwork slot="brand-mark" className="bebrave-home-mark site-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
         <path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="var(--coral)"/>
-      </svg>
+      </svg></Artwork>
       <span>Zack Cook</span>
     </a>
     {testMode&&<button className="button bebrave-test-reset-button" disabled={busy} onClick={onReset}>Reset my carve limit</button>}

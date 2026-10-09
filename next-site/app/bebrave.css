@@ -7,12 +7,12 @@ body:has(.bebrave-stage){overflow-x:clip;background:var(--bebrave-sky-top)}
 html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.bebrave-world-stage)){height:100%;overflow:hidden;overscroll-behavior:none}
 .bebrave-stage:not(.bebrave-world-stage){position:fixed;inset:0;min-height:0;height:100dvh;overflow:clip}
 .bebrave-stage-art{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:clip}
-.bebrave-stage-bg{position:absolute;inset:0;background:url("/images/cypress-twilight-v2.webp") center/cover no-repeat;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue))}
-.bebrave-stage-mid{position:absolute;inset:0;z-index:3;background:url("/images/cypress-foreground-v2.webp") center/100% 100% no-repeat;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));opacity:.82}
-.bebrave-stage-tree{position:absolute;top:-8%;bottom:-8%;left:50%;width:min(58vw,800px);transform:translateX(-50%);background:var(--bebrave-bark) url("/images/cypress-bark-v2.webp") center top/100% auto repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 22px 0 42px var(--world-shadow),inset -22px 0 42px var(--world-shadow),0 18px 60px var(--world-shadow)}
+.bebrave-stage-bg{position:absolute;inset:0;background:var(--asset-tree-sky) center/cover no-repeat;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue))}
+.bebrave-stage-mid{position:absolute;inset:0;z-index:3;background:var(--asset-tree-foreground) center/100% 100% no-repeat;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));opacity:.82}
+.bebrave-stage-tree{position:absolute;top:-8%;bottom:-8%;left:50%;width:min(58vw,800px);transform:translateX(-50%);background:var(--bebrave-bark) var(--asset-tree-bark) center top/100% auto repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 22px 0 42px var(--world-shadow),inset -22px 0 42px var(--world-shadow),0 18px 60px var(--world-shadow)}
 .bebrave-stage-tree::after,.bebrave-trunk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--world-shadow),transparent 9% 88%,var(--world-shadow));pointer-events:none}
 .bebrave-stage-ui{position:relative;z-index:5;min-height:100dvh}
-.bebrave-stage-stump{position:absolute;z-index:2;left:50%;bottom:0;transform:translateX(-50%);width:min(88vw,680px);height:min(74dvh,680px);background:url("/images/bebrave-stump.png") center bottom/contain no-repeat;filter:saturate(var(--world-art-saturation)) brightness(var(--world-bark-light)) drop-shadow(0 18px 18px var(--world-shadow))}
+.bebrave-stage-stump{position:absolute;z-index:2;left:50%;bottom:0;transform:translateX(-50%);width:min(88vw,680px);height:min(74dvh,680px);background:var(--asset-tree-stump) center bottom/contain no-repeat;filter:saturate(var(--world-art-saturation)) brightness(var(--world-bark-light)) drop-shadow(0 18px 18px var(--world-shadow))}
 .bebrave-stage-hacks{position:absolute;z-index:6;left:48%;top:54%;width:120px;height:100px}
 .bebrave-stage-hacks i{position:absolute;left:0;top:0;width:95px;height:6px;border-radius:50%;background:var(--bebrave-bark-dark);box-shadow:0 2px 0 color-mix(in srgb,var(--color-brass) 60%,transparent)}
 
@@ -45,10 +45,10 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-tool-picker{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(14px,3vw,30px);align-items:center}
 .bebrave-image-choice{position:relative;aspect-ratio:1;border:1px solid color-mix(in srgb,var(--color-brass) 40%,transparent);border-radius:50%;background:radial-gradient(ellipse,color-mix(in srgb,var(--color-surface) 20%,transparent),transparent 70%);cursor:pointer;touch-action:manipulation;filter:drop-shadow(0 14px 16px var(--world-shadow));transition:transform .28s var(--ease-settle),background .28s}
 .bebrave-tool-image{position:absolute;inset:8%;display:block;background:center/contain no-repeat}
-.tool-arrowhead{background-image:url("/images/bebrave-tool-arrowhead.webp")}
-.tool-nail{background-image:url("/images/bebrave-tool-nail.webp")}
-.tool-key{background-image:url("/images/bebrave-tool-key.webp")}
-.tool-cache{background-image:url("/images/bebrave-cache.webp")}
+.tool-arrowhead{background-image:var(--asset-tool-arrowhead)}
+.tool-nail{background-image:var(--asset-tool-nail)}
+.tool-key{background-image:var(--asset-tool-key)}
+.tool-cache{background-image:var(--asset-tool-cache)}
 @media(hover:hover) and (pointer:fine){.bebrave-image-choice:hover{transform:translateY(-6px) scale(1.06);background:color-mix(in srgb,var(--color-surface) 28%,transparent)}}
 .bebrave-image-choice:focus-visible{outline:3px solid var(--color-sun);outline-offset:5px;transform:translateY(-6px) scale(1.06)}
 .bebrave-code-display{width:100%;padding:14px 8px;margin-bottom:20px;border:0;border-bottom:1px solid var(--color-border);border-radius:0;background:var(--color-surface-alt);color:var(--color-ink);text-align:center;font:650 clamp(14px,2vw,21px)/1.5 var(--sans);letter-spacing:.12em}
@@ -57,7 +57,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-keypad button:hover{background:var(--color-chrome);color:var(--color-on-chrome)}
 .bebrave-keypad button:active{translate:0 1px}
 .bebrave-cache-modal>.button{width:100%}
-.bebrave-knife-art{width:min(42vw,210px);aspect-ratio:1;margin:0 auto 20px;background:url("/images/bebrave-tool-knife.webp") center/contain no-repeat;filter:drop-shadow(0 10px 14px var(--world-shadow))}
+.bebrave-knife-art{width:min(42vw,210px);aspect-ratio:1;margin:0 auto 20px;background:var(--asset-tool-knife) center/contain no-repeat;filter:drop-shadow(0 10px 14px var(--world-shadow))}
 .bebrave-color-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .bebrave-color-choice{display:grid;place-items:center;min-height:56px;padding:10px;border:1px solid var(--color-border);border-radius:2px;background:var(--color-surface-alt);cursor:pointer}
 .bebrave-color-choice>span{width:25px;height:25px;border-radius:50%;background:var(--choice-color);box-shadow:0 0 13px var(--choice-color)}
@@ -71,8 +71,8 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-horizon{z-index:-4}.bebrave-midground{z-index:-3}
 .bebrave-horizon>*{display:none}
 .bebrave-horizon::before,.bebrave-midground::before{content:"";position:absolute;inset:-8dvh -5vw;background-position:center;background-repeat:no-repeat;will-change:transform}
-.bebrave-horizon::before{background-image:url("/images/cypress-twilight-v2.webp");background-size:cover;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translateY(clamp(-7dvh,var(--bebrave-horizon-y),7dvh))}
-.bebrave-midground::before{background-image:url("/images/cypress-foreground-v2.webp");background-size:100% 100%;opacity:.82;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translateY(clamp(-7dvh,var(--bebrave-mid-y),7dvh))}
+.bebrave-horizon::before{background-image:var(--asset-tree-sky);background-size:cover;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translateY(clamp(-7dvh,var(--bebrave-horizon-y),7dvh))}
+.bebrave-midground::before{background-image:var(--asset-tree-foreground);background-size:100% 100%;opacity:.82;filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translateY(clamp(-7dvh,var(--bebrave-mid-y),7dvh))}
 .bebrave-atmosphere{position:fixed;inset:0;z-index:1;overflow:clip;pointer-events:none}
 .bebrave-water-haze{position:absolute;left:-10%;right:-10%;bottom:15%;height:22%;opacity:.25;background:radial-gradient(ellipse,var(--world-mist),transparent 65%);animation:bebrave-haze 24s ease-in-out infinite alternate}
 .bebrave-fireflies i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--color-sun);box-shadow:0 0 8px 2px color-mix(in srgb,var(--color-sun) 32%,transparent);animation:bebrave-firefly 9s ease-in-out infinite both}
@@ -90,7 +90,7 @@ html[data-timeline="felled"] .bebrave-fireflies{opacity:.25}
 .bebrave-standing-scroll{position:relative;z-index:2;overflow:visible}
 .bebrave-world{position:relative;width:75vw;max-width:none;margin-inline:auto;touch-action:pan-y}
 .bebrave-tree-space{position:absolute;left:0;top:0;transform-origin:0 0}
-.bebrave-trunk{position:absolute;inset:0;background:var(--bebrave-bark) url("/images/cypress-bark-v2.webp") center top/720px 480px repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 20px 0 35px var(--world-shadow),inset -20px 0 35px var(--world-shadow),0 0 0 1px var(--bebrave-bark-dark)}
+.bebrave-trunk{position:absolute;inset:0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/720px 480px repeat-y;background-blend-mode:luminosity;filter:brightness(var(--world-bark-light));box-shadow:inset 20px 0 35px var(--world-shadow),inset -20px 0 35px var(--world-shadow),0 0 0 1px var(--bebrave-bark-dark)}
 .bebrave-drawings{position:absolute;inset:0;width:720px;height:100%;overflow:visible;touch-action:inherit}
 .bebrave-active-zone{position:absolute;left:0;right:0;z-index:1;border-block:2px dashed var(--color-sun);background:color-mix(in srgb,var(--color-sun) 6%,transparent);pointer-events:none}
 .bebrave-world-stage .bebrave-scene:is(.is-draw,.is-admire){--bebrave-rail-width:clamp(180px,20vw,250px)}

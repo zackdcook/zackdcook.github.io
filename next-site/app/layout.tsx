@@ -8,6 +8,8 @@ import "./globals.css";
 import "./motion.css";
 import "./materials.css";
 import "./theme.css";
+import "./art-assets.css";
+import "./artwork.css";
 import "./folly.css";
 import "./bebrave.css";
 import { Suspense } from "react";

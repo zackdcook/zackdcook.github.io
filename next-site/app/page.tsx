@@ -11,6 +11,7 @@ import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
 import { SwampLandscape } from "@/components/swamp-landscape";
+import { Artwork } from "@/components/artwork";
 import styles from "./home.module.css";
 
 export const metadata = { alternates: { canonical: "/" } };
@@ -42,7 +43,7 @@ export default async function Home() {
       </div>
     </section>
     <section id="words-of-folly" className={`folly-feature ${styles.clearing}`}>
-      <SwampLandscape foreground className={styles.reeds} />
+      <Artwork slot="folly-scenery" className={styles.reeds}><SwampLandscape foreground/></Artwork>
       <div className={`shell ${styles.follySpread}`}>
         <div className={styles.follyHeading}>
           <CollectionHeading>Words of Folly</CollectionHeading>

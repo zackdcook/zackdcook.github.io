@@ -2,6 +2,7 @@
 .inner{width:min(1440px,calc(100% - 96px));margin-inline:auto;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:30px;padding-top:env(safe-area-inset-top)}
 .wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;font:650 24px/1 var(--display);letter-spacing:-.05em}
 .wordmark svg{width:31px;height:36px;color:var(--color-accent);transition:transform var(--duration-reveal) var(--ease-settle)}
+.wordmark :global(.artwork){width:31px;height:36px;color:var(--color-accent)}
 .wordmark:hover svg{transform:rotate(-8deg)}
 .desktop{display:flex;align-items:center;gap:clamp(18px,2.4vw,35px)}
 .desktop a{position:relative;display:flex;align-items:center;min-height:44px;font-size:12px;font-weight:550;text-decoration:none;white-space:nowrap}
@@ -13,6 +14,7 @@
 .theme{display:grid;place-items:center;position:relative;border:1px solid color-mix(in srgb,var(--color-border) 40%,transparent);border-radius:50%}
 .theme span{grid-area:1/1;font-size:23px;transition:opacity .18s,rotate .42s var(--ease-settle)}
 .theme svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.theme :global(.artwork){width:20px;height:20px}
 .moon{opacity:0;filter:grayscale(1)}
 :global(html[data-theme="dark"]) .sun{opacity:0;rotate:90deg}
 :global(html[data-theme="dark"]) .moon{opacity:1}
@@ -30,6 +32,7 @@
 .destinations a[aria-current="page"]{color:var(--color-accent)}
 .destinations a:hover{color:var(--color-accent)}
 .destinations svg{width:29px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.3;transition:translate .24s}
+.destinations :global(.artwork){width:29px;height:29px;flex-shrink:0}
 .destinations a:hover svg{translate:5px 0}
 .scenery{position:absolute;right:-12%;bottom:0;width:85%;height:70%;z-index:-1;opacity:.12;pointer-events:none}
 @keyframes sheet-in{from{opacity:0;translate:0 -12px}to{opacity:1;translate:0 0}}

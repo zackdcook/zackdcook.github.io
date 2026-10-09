@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import { artworkEnabled } from "@/lib/art-assets";
+import { Artwork, ArtworkImage } from "./artwork";
 import Link from "next/link";
 import { useEffect, useId, useRef, useState, type PointerEvent } from "react";
 import { usePreferences } from "@/components/site-preferences";
@@ -85,7 +87,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   return <div className="kitty-discovery">
     <div className="life-photo">
       <div className="tactile-photo kitty-photo" data-escaped={escaped && secretReady ? "true" : undefined}>
-        <div className="kitty-photo-layer kitty-photo-original" aria-hidden={escaped && secretReady || undefined}><Image src="/images/cats.webp" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /></div>
+        <div className="kitty-photo-layer kitty-photo-original" aria-hidden={escaped && secretReady || undefined}><ArtworkImage slot="cats" alt="Chemi, Tashi, and Brave relaxing on a rug beside a sunny window" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" /></div>
         <div className="kitty-photo-layer kitty-photo-secret" aria-hidden={!escaped || !secretReady}>
           {emptyPhoto ? <Image src={emptyPhoto} alt="A sunny window and cat tree, with two cats relaxing" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" onLoad={() => setSecretReady(true)} /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div>}
         </div>
@@ -102,7 +104,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
         <svg ref={svg} viewBox={`0 0 ${ribbonWidth} ${ribbonHeight}`} aria-hidden="true" focusable="false">
           <defs><path ref={lettering} id={`${id}-lettering`} d={restingPaths.lettering} />{restingPaths.segments.map((segment,index)=><clipPath key={index} id={`${id}-patch-${index}`}><path ref={element=>{clips.current[index]=element;}} d={segment.path}/></clipPath>)}<radialGradient id={`${id}-front-satin`} ref={frontSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460"><stop offset="0" stopColor="color-mix(in srgb,var(--ribbon-face-highlight) 82%,var(--ribbon-face-bg) 18%)"/><stop offset=".65" stopColor="var(--ribbon-face-bg)"/><stop offset="1" stopColor="var(--ribbon-face-bg)"/></radialGradient><radialGradient id={`${id}-back-satin`} ref={backSatin} gradientUnits="userSpaceOnUse" cx="380" cy="0" r="460"><stop offset="0" stopColor="color-mix(in srgb,var(--ribbon-face-highlight) 82%,var(--ribbon-face-bg) 18%)"/><stop offset=".65" stopColor="var(--ribbon-face-bg)"/><stop offset="1" stopColor="var(--ribbon-face-bg)"/></radialGradient><filter id={`${id}-soft-shadow`} x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur ref={blur} stdDeviation="2"/></filter></defs>
           <path ref={shadow} className="ribbon-cast" d={restingPaths.body} filter={`url(#${id}-soft-shadow)`}/><path ref={edge} className="ribbon-thickness" d={restingPaths.body}/>
-          <g ref={surface}>{restingPaths.segments.map((segment,index)=><g key={index} ref={element=>{patches.current[index]=element;}} className="ribbon-patch" data-face={segment.front?"front":"back"}><path className="ribbon-face ribbon-front-face" d={segment.path} fill={`url(#${id}-front-satin)`} stroke={`url(#${id}-front-satin)`}/><path className="ribbon-face ribbon-back-face" d={segment.path} fill={`url(#${id}-back-satin)`} stroke={`url(#${id}-back-satin)`}/><g clipPath={`url(#${id}-patch-${index})`}><text className="ribbon-lettering ribbon-front-label" textAnchor="middle" textLength="470" lengthAdjust="spacingAndGlyphs"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text></g></g>)}</g><path ref={hit} className="ribbon-hit" d={restingPaths.body}/>
+          <g ref={surface}>{restingPaths.segments.map((segment,index)=><g key={index} ref={element=>{patches.current[index]=element;}} className="ribbon-patch" data-face={segment.front?"front":"back"}><path className="ribbon-face ribbon-front-face" d={segment.path} fill={`url(#${id}-front-satin)`} stroke={`url(#${id}-front-satin)`}/><path className="ribbon-face ribbon-back-face" d={segment.path} fill={`url(#${id}-back-satin)`} stroke={`url(#${id}-back-satin)`}/><g clipPath={`url(#${id}-patch-${index})`}>{artworkEnabled("ribbon-texture")&&<foreignObject x="-640" y="-1000" width="1920" height="2400"><Artwork slot="ribbon-texture" className="artwork-skin"/></foreignObject>}<text className="ribbon-lettering ribbon-front-label" textAnchor="middle" textLength="470" lengthAdjust="spacingAndGlyphs"><textPath href={`#${id}-lettering`} startOffset="50%">{label}</textPath></text></g></g>)}</g><path ref={hit} className="ribbon-hit" d={restingPaths.body}/>
         </svg>
       </button>
     </div>
