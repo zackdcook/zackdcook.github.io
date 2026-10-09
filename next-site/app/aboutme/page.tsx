@@ -60,7 +60,7 @@ export default function AboutMe() {
 
       <p>Review: "Oh shit. Books can be this good?"</p>
 
-      <p>I graduated cum laude from UF in 2012 (fun fact: this is where I met my wife, Jennifer), and then went on to work in Sarasota for a short while. This is when I began experiencing heavy withdrawal symptoms from the literary high that George R. R. Martin had injected straight into my basal ganglia. Taking pity on the starved and clueless book junkie I’d become, a friend lent me his copies of the first three books in the Wheel of Time series.</p>
+      <p>I graduated cum laude from UF in 2012 (fun fact: this is where I met my wife), and then went on to work in Sarasota for a short while. This is when I began experiencing heavy withdrawal symptoms from the literary high that George R. R. Martin had injected straight into my basal ganglia. Taking pity on the starved and clueless book junkie I’d become, a friend lent me his copies of the first three books in the Wheel of Time series.</p>
 
       <p>"Now <i>this</i> is podracing!"</p>
 
