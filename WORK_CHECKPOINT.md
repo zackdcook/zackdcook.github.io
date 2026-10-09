@@ -1,11 +1,11 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Archive milestone is published; 21 completed test carvings restored byte-for-byte after persistent canonical backfill. A real browser Legendary carving completed its full timer, published and archived automatically. Reset/cooldown/refresh/replay verified. Visual sign-off and full inventory remain incomplete.
+Updated: 2026-10-09 UTC. The overhaul is IN PROGRESS. Archive milestone is published; 21 completed test carvings restored byte-for-byte after persistent canonical backfill. A real browser Legendary carving completed its full timer, published and archived automatically. Reset/cooldown/refresh/replay verified. Common carving contrast and rounded-square profile framing are now refined. Visual sign-off and full inventory remain incomplete.
 
 ## Branch and isolation
 
 - Branch: `experiment/immersive-world-2026-10-09`; repository `zackdcook/zackdcook.github.io`; app `next-site`.
-- Last verified published SHA: `4dd2bfbda1d9bfc07afa72aef4bb837277369107`. Use `git log -1` for the inspection/felled-view milestone containing this checkpoint.
+- Last local SHA: `f7ab4327ccc76903d8a80f733a088b883371ee2d` (common carving contrast and profile framing). The latest published SHA remains `ee80e102a2a4a6079aacd7dc334ef4893804ea4c`; use the authorized Codespace publishing path before preview verification.
 - Main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`; spring-clean tree/test reference: `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`, branch `spring-clean-2026-10`.
 - Latest verified READY Preview: `dpl_2Uh7Ti516gAhmxWn9ssjEmVeDGgP`, https://zack-cook-nhnqyity3-dove-mack0o-3684.vercel.app/ , exact 4dd SHA, target null (Preview). All history preserved; main unchanged; native publishing Codespace stopped after push.
 - Existing Vercel project: `zack-cook`, `prj_AcuTfmUBydayvETed53KCREnlONa`. Omit teamId/slug. Preview API omits target; literal preview is rejected.
