@@ -1,6 +1,6 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import { memo,useMemo,type CSSProperties } from "react";
 import type { BeBravePublicStroke, BeBraveRarity } from "@/lib/bebrave-types";
 import { legendaryEffect } from "@/lib/bebrave/effects";
 
@@ -34,11 +34,11 @@ function sparklePoints(points:Array<[number,number]>,seed:number,strokeOrder:num
   });
 }
 
-export function BeBraveStroke({stroke,color,rarity,seed,effectId,active=false}:{stroke:BeBravePublicStroke;color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean}) {
-  const d=pointsToPath(stroke.points);
-  if(!d)return null;
+export const BeBraveStroke=memo(function BeBraveStroke({stroke,color,rarity,seed,effectId,active=false}:{stroke:BeBravePublicStroke;color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean}) {
+  const d=useMemo(()=>pointsToPath(stroke.points),[stroke.points]);
   const superior=rarity==="superior", epic=rarity==="epic",legendary=rarity==="legendary";
-  const sparkles=epic||legendary?sparklePoints(stroke.points,seed,stroke.strokeOrder):[];
+  const sparkles=useMemo(()=>epic||legendary?sparklePoints(stroke.points,seed,stroke.strokeOrder):[],[epic,legendary,stroke,seed]);
+  if(!d)return null;
   return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`} data-effect={legendary?legendaryEffect(effectId):undefined} style={{"--stroke-color":color} as CSSProperties}>
     {(superior||epic||legendary)&&<path className="bebrave-stroke-glow" d={d} stroke={color}/>}
     <path className="bebrave-stroke-line" d={d} stroke={color}/>
@@ -49,4 +49,4 @@ export function BeBraveStroke({stroke,color,rarity,seed,effectId,active=false}:{
       <circle className="bebrave-sparkle-core" r={Math.max(1.7,s.r*.26)} />
     </g>)}
   </g>;
-}
+});

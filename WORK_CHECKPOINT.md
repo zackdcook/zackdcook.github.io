@@ -1,10 +1,10 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. Status: first source implementation milestone; visual overhaul and backend integration incomplete.
+Updated: 2026-10-09 UTC. Status: publishing restored; backend and content-preservation milestone verified. Visual overhaul, optimized canonical storage, and preview/browser verification remain incomplete.
 
 ## Source and isolation
 - Experimental branch: `experiment/immersive-world-2026-10-09`.
-- Latest recorded checkpoint commit: `90de8430d6fddfde61858817350164d483d62b9a`. Use `git log -1` for the commit containing this update.
+- Latest published commit: `5911625de246110c7fac224a73a7655685928885`. All three original experimental commits are on GitHub with their exact history. Use `git log -1` for the commit containing this update.
 - Original main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`.
 - Tree/test reference: `spring-clean-2026-10` at `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`.
 - Repository: `zackdcook/zackdcook.github.io`; application directory: `next-site`.
@@ -17,13 +17,15 @@ Updated: 2026-10-09 UTC. Status: first source implementation milestone; visual o
 - Verified remote branch heads and cloned the repository; local branch is based on main.
 - Compared all 12 branch differences. Main already incorporates the later production tree visual/control improvements. Selectively port spring-clean test helpers and controls; do not replace main's improved control rail or newer authored bio.
 - Installed exact locked dependencies, without lifecycle scripts. Baseline 46 tests, typecheck, and production build pass (43 routes; no backend credentials).
-- Current 60 tests pass, including four palette contrast checks, compact stroke round-trips, pagination beyond REST row caps, and environment isolation.
+- Current 67 tests, TypeScript, and generated-theme checks pass, including four palette contrast checks, lossless compact stroke round-trips, pagination beyond REST row caps, cancellation/cache bounds, authored-copy/route preservation, and environment isolation.
 - Centralized four palettes in `next-site/design/themes.json` and semantic aliases in `design/semantic-roles.css`. `npm run themes:build` generates `app/theme.css`; `themes:check` detects drift. Removed superseded root color declarations; further component art cleanup remains.
 - Ported spring-clean test bypass/reset with strict exact-test-project and nonproduction guards. Experimental preview builds fail closed if pointed at another database. Local unconfigured visual builds are allowed.
 - Added lossless delta/varint point transport with high-precision legacy fallback, bounded chunk reconstruction, 12-session endpoint pages, and revision-keyed client caches. Canonical database storage and scale benchmarks remain unfinished.
 - Inventoried source routes and content hashes in `next-site/docs/reimagining/baseline-manifest.json`.
-- Both databases contain the six Be Brave tables with RLS enabled. Test has existing sessions/carvings to preserve; no code records currently registered.
-- Supabase changelog reviewed through 2026-10-06. Existing code uses Supabase SSR (not deprecated framework adapters).
+- Both databases contain the six original Be Brave tables with RLS enabled. Test now also contains Legendary service-only tables; 50 distribution codes remain registered and unredeemed. Preserve the existing 20 completed test carvings.
+- Supabase changelog reviewed through 2026-10-08. The new status-page migration does not affect this implementation. Existing code uses Supabase SSR (not deprecated framework adapters).
+- Original field-journal hero and semantic SVG swamp landscape are implemented in source; unchanged copy is regression-tested. Browser visual sign-off remains outstanding.
+- Spatial GiST viewport lookup is implemented and tested with up to 100,000 rolled-back metadata rows. Actual ledger version is `20261009084443_bebrave_completed_geometry.sql`; compact canonical geometry storage remains the next data milestone.
 
 ## Decisions / research
 - Preserve exact content from main and existing tree gameplay: 60-second timer, 5-foot growth eligibility, one foot per completed nonempty carving, pity rarity progression, earlier sessions visually above newer sessions, local-only felled timeline.
@@ -33,29 +35,50 @@ Updated: 2026-10-09 UTC. Status: first source implementation milestone; visual o
 - Supabase Free: 500 MB database, 5 GB egress, 1 GB storage, two active projects. Use existing test project, no new paid resources.
 - Vercel `git.deploymentEnabled` supports disabling an individual branch (official project-configuration/git-configuration docs).
 
-## Blockers
-- GitHub read access works, but connector `github_create_tree` returns HTTP 403 (resource not accessible by integration). Local git push has no credentials. Experimental branch and commits are LOCAL ONLY until write access is repaired. Save a private recovery bundle as an interim durable checkpoint.
-- Vercel plugin lists the project but project/env/team inspection returns HTTP 403: not authorized under scope `dove-mack0o-3684`. No local Vercel CLI/token/auth file exists. Do not retry unchanged, create substitute resources, deploy blindly, or read production secrets.
-- Vercel plan, preview env scoping/values, test HMAC settings, and Cloudflare dashboard settings remain unverified. Existing source bypass may be ported with strict test-project guards. A connection with access to the actual project is needed for preview configuration and deployment.
+## Remaining access / verification limits
+- GitHub connector writes still fail and the Work shell has no configured Git credentials. Authorized publishing now succeeds through the existing repository Codespace's native Git connection; see the recovery procedure below. No credential extraction or new credential was required.
+- Vercel project and preview environment reads work when omitting explicit teamId/slug. Preview writes remain unverified until a real experimental deployment is created. No local Vercel CLI authentication exists in the Work shell.
+- Verified existing preview URL and test project reference point to `qkkgcoejkqvthbjcldcw`. Preview test-mode value, other required config, branch scoping, free plan/limits and deployment permissions still need verification. Do not read production secrets or deploy blindly.
 - Cloudflare plugin discovery returned no usable connector. Dashboard fallback requires user approval if resolving an available plugin's failure.
 - No exact Work usage counter is exposed. Save coherent milestones; no background continuation between sessions.
 - Cloud browser can inspect reference sites but cannot reach the workspace's localhost server (connection refused). Local HTTP and build verification are possible; changed-site browser/visual QA awaits a reachable preview.
 
 ## Next tasks (ordered)
-1. Save this source milestone and recovery bundle; finish current typecheck and generated-token check.
-2. Implement additive Legendary schema/functions in the TEST database, persistent one-use entitlements and secure code verifiers; test rollback fixtures and concurrency before issuing 50 codes.
-3. Complete compact canonical storage and spatial indexing, bounded cache behavior and meaningful scale tests.
-4. Record design/reference research and implement cohesive site/tree art direction; preserve all authored wording with a regression guard.
-5. Check all original features and new systems; complete production build and visual refinement.
-6. Register exactly 50 secure codes only when verifier configuration is durable and usable; deliver privately, never in this repository.
-7. Browser QA across devices/preferences, security and performance verification; resolve Vercel access and configure branch-only test envs before enabling preview builds.
+1. Commit the recovered, verified source milestone and publish it by the established Codespace bundle method. Reconcile migration filenames with the actual test ledger; do not reapply existing migrations.
+2. Complete compact canonical storage/projections, bounded rendering, and meaningful geometry/network/render scale tests (not just metadata lookup).
+3. Finish cohesive site/tree art direction and component cleanup; keep exact authored wording and every inventory feature.
+4. Verify free Vercel plan/limits and isolated preview configuration; deploy this branch only and test the real browser → Next.js → test Supabase flow.
+5. Check all inventory features, desktop/mobile input and preferences, four timelines/themes, accessibility, security, performance, and visual refinement. Update the functionality ledger with evidence.
+6. Deliver the working preview, branch/SHA, accurate tested/incomplete report and existing private code file. Never regenerate the 50 codes.
 
 ## Legendary milestone (before applying the migration)
 - Latest foundation commit: `1bffa64` (full SHA in Git). Recovery bundle has been saved privately because GitHub writes are blocked.
 - Implemented source for one-time Legendary verifiers, bounded lockbox input, service-only atomic redemption, persistent reward records, future code/effect mapping, and default `will-o-wisp-v1` live/published SVG treatment. These are NOT yet database/browser verified.
-- Migration: `next-site/supabase/migrations/20261009030640_bebrave_legendary_unlocks.sql`. Existing Epic cache codes remain supported. Legendary is never an ordinary tool roll.
+- Migration: `next-site/supabase/migrations/20261009080906_bebrave_legendary_unlocks.sql`. Existing Epic cache codes remain supported. Legendary is never an ordinary tool roll.
 - Reward semantics: redemption is permanently consumed; reward is attached to the anonymous visitor, retained through empty/cancelled attempts, and spent only by the next completed nonempty carving. Normal 5-foot eligibility is retained. Test reset now preserves identity and historical records using an eligibility watermark.
 - Discovered baseline SQL tier thresholds were 50/30/15/5 while TypeScript intended 42/35/18/5. The test migration aligns SQL with the intended distribution.
 - Existing lockbox narrative is preserved verbatim, including its numeric-keypad description; keyboard/touch input now also accepts the required alphanumeric codes.
 
-Exact next action: apply and verify the Legendary migration ONLY in `qkkgcoejkqvthbjcldcw`, then run rollback integration tests and concurrent redemption fixtures. No database mutations or production changes have been made at this checkpoint. No distribution codes have been generated or registered, no remote branch exists yet, and no working preview has been deployed. Continue from this state rather than repeating the audit.
+## Verified backend milestone
+- Latest committed source: `5911625`; subsequent tests/cache/copy-guard changes may still be uncommitted. Check `git status`.
+- Legendary migration applied ONLY to the isolated test database. Rollback integration tests passed under service_role, including ownership, publication, cooldown, rate limits and entitlement restoration.
+- True simultaneous redemption passed using two self-removing test cron jobs. Started within 0.654 ms; one succeeded, one waited 8,011 ms and failed. Zero jobs remain. Details in `next-site/docs/reimagining/LEGENDARY.md`.
+- EXACTLY 50 distribution codes are REGISTERED in campaign `immersive-world-2026-10-09`. All 50 were verified with rollback redemption/reuse tests and remain unredeemed. DO NOT REGENERATE.
+- Private file: `zackdcook-legendary-codes-private.csv`, saved file ID `libfile_a4526eee5f2c8191821e94729fc943bf`. Local path outside repo: `/workspace/scratch/01235e4bd732/private-legendary/zackdcook-legendary-codes-private.csv`. No plaintext codes in Git, database, logs or frontend assets.
+- Fixture cleanup: connector deletion attempts returned `Invalid or expired requestState`; six fixture sessions were cancelled instead. Three consumed fixture verifiers remain in separate fixture campaigns. Original user records were preserved.
+- Supabase security advisor has no warning/error findings; only intentional INFO notices for RLS enabled with no browser policies on service-only tables.
+- Source now also has a baseline wording/content/route guard and bounded, cancellable viewport cache. Their latest checks are running.
+
+Exact next action: commit/publish this verified source milestone, then implement canonical completed-carving storage and resume visual refinement. No production changes or charges. The remote experimental branch exists; no overhaul preview has been deployed yet. Do not repeat completed research or regenerate codes.
+
+## Publishing recovery investigation — 2026-10-09
+- Source branch still at `5911625de246110c7fac224a73a7655685928885`, with the previously recorded uncommitted implementation intact. Do not recreate or squash its three experimental commits.
+- Existing recovery bundle verified: complete history through `5911625`. The additional `website-publishing-transfer.bundle` outside the repository is a 34,524-byte incremental Git bundle requiring main baseline `be6b15d93f2bae259a52e7b80d98a51018edb01d`; it preserves exact commit objects for importing into an authenticated Git workspace.
+- GitHub web write previously succeeded on disposable branch `access-check-2026-10-09-7f3c`, commit `6ca2fc857789605290b4ab2e8df02f67698ca972`. The connector still has no installation returned by `list_installations`; local workspace has no configured Git credential helper or GitHub token. Do not extract browser credentials or mint credentials without explicit approval.
+- Existing repository Codespace `cautious-trout-wrq56q47v6j4c94x6` is reachable via the authenticated GitHub browser session. Its existing source is on `spring-clean-2026-10` and must remain untouched. Use a separate temporary bare Git mirror for bundle import/push if terminal authorization succeeds.
+- Verified GitHub Free account with remaining included Codespaces usage and a product-level $0 Codespaces budget, `Stop usage: Yes`. No billing setting was changed and no new Codespace was created.
+- The transient folder-trust prompt cleared as the existing Codespace reconnected; no trust/security setting was approved or changed. Native `gh auth status` identified Zack's existing GitHub connection, and a Git push dry run succeeded without exposing the token.
+- Imported the incremental bundle into a separate bare mirror at `/tmp/zack-experimental-publish.o8jDoO/repository.git`, then pushed ONLY the experimental ref. Remote SHA exactly matches `5911625de246110c7fac224a73a7655685928885`; main remains `be6b15d93f2bae259a52e7b80d98a51018edb01d`. The existing spring-clean Codespace worktree remains clean and unchanged.
+- Vercel `get_project({idOrName: "zack-cook"})` works without explicit teamId/slug, as verified in the preceding access task. Preview writes and branch-only environment isolation still require verification; do not deploy blindly.
+- Repeatable publishing: create a new incremental Git bundle outside the repository from the last pushed SHA to the experimental branch. Upload it through VS Code's supported file chooser to `next-site`, move that temporary upload immediately into the separate mirror directory, fetch the experimental ref from the bundle, and perform a normal fast-forward push. Verify exact remote SHA, unchanged main, and clean original Codespace. Never force-push, squash, rewrite existing history, copy credentials, or publish a different branch.
+- Existing private recovery bundle remains accessible at `/workspace/scratch/01235e4bd732/website-reimagining-checkpoint.bundle`, saved file ID `libfile_e8cf0dc5d8d08191b77ff9f158631473`. Preserve it and create a new recovery bundle at later milestones.

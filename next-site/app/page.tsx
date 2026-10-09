@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { FieldJournalHero } from "@/components/field-journal-hero";
 import { ActiveProject } from "@/components/active-project";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
@@ -18,26 +18,7 @@ export default async function Home() {
   const event = events[0];
   return (
     <>
-      <section className="hero shell">
-        <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">Engineer <span className="reaction-symbol">⇌</span> Author</p>
-          <h1>Zack<br /> <em>Cook.</em></h1>
-          <p className="hero-intro">{editorial.home.intro}</p>
-          {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
-        </div>
-        <div className="hero-photo">
-          <div className="portrait-frame tactile-photo">
-            <Image
-              src="/images/portrait.webp"
-              alt="Zack Cook smiling in a black sweater"
-              width={1200}
-              height={1200}
-              priority
-              sizes="(max-width: 740px) 85vw, 40vw"
-            />
-          </div>
-        </div>
-      </section>
+      <FieldJournalHero />
 
       <section id="creative-works" className="desk-section">
         <div className="shell"><ActiveProject detailsLink /></div>

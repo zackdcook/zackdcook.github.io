@@ -409,8 +409,6 @@ body :is(.project-title,.writing-group h2:not(.section-label),.life-copy h2:not(
 body .shoutout-card h3 { font-family: var(--display); font-size: clamp(28px,3.5vw,42px); line-height: 1.08; letter-spacing: -.03em; }
 body .project-title-prefix { font-size: .34em; margin-bottom: 12px; }
 body .folly-label { font-family: var(--display); font-size: var(--feature-heading-size); font-weight: 650; line-height: 1.04; letter-spacing: -.04em; color: var(--folly-card-ink); margin: 0 0 22px; max-width: 18ch; }
-
-body .hero-eyebrow .reaction-symbol { color: inherit; font-weight: 400; font-size: 1.25em; line-height: 1; }
 body .portrait-frame { --photo-frame: var(--photo-border); border-color: transparent; }
 body .kitty-photo { --photo-frame: var(--kitty-border); }
 body .rings { color: var(--midnight); }
@@ -558,8 +556,6 @@ body .about-biography > .shell {
 }
 
 body .shoutouts-page { background: var(--page-bg); color: var(--page-ink); }
-body .hero h1 { font-size: clamp(80px,9.8vw,136px); }
-@media(max-width:740px) { body .hero h1 { font-size: clamp(66px,19vw,106px); } }
 
 /* One material paint for every registered card, box and control. These three
    properties intentionally override legacy face/state shorthand declarations;
@@ -594,14 +590,13 @@ body .tactile-photo { --surface-bg: var(--photo-frame); }
 body :is(.page-intro h1:not(.page-label),.hero h1,.folly-page-heading) {
   font: 650 var(--page-heading-size)/1.04 var(--display); letter-spacing: -.04em;
 }
-body .page-intro :is(h1,h2) em, body .hero h1 em { color: var(--page-heading-accent); font-style: normal; }
+body .page-intro :is(h1,h2) em { color: var(--page-heading-accent); font-style: normal; }
 body .creative-works-page .title-plain { color: var(--page-ink); }
 html[data-theme="dark"] body .events-page .page-intro > p:not(.eyebrow) { color: var(--floral); }
 
 /* The same clear gap above and below the footer divider and between cards. */
 body .page-wrap { padding-bottom: var(--section-gap); min-height: 0; }
 body .page-intro { margin-bottom: var(--section-gap); }
-body .hero { padding-bottom: var(--section-gap); }
 body :is(.desk-section,.events-section,.bio-section,.folly-feature,.shoutouts-section,.about-biography) {
   margin-top: 0; padding-block: 0 var(--section-gap); border-bottom: 0;
 }

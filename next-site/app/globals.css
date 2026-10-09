@@ -206,52 +206,11 @@ h3 {
 .mobile-menu {
   display: none;
 }
-.hero {
-  padding-block: 88px 108px;
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 85px;
-  align-items: center;
-}
-.hero-eyebrow {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 27px;
-}
-.hero-eyebrow span {
-  color: var(--violet);
-  font-size: 20px;
-  line-height: 1;
-}
-.hero h1 {
-  font-size: clamp(88px, 10.7vw, 148px);
-  line-height: 0.95;
-  letter-spacing: -0.07em;
-}
-.hero h1 em {
-  color: var(--midnight);
-}
-.hero-intro {
-  font-size: 23px;
-  line-height: 1.45;
-  font-weight: 450;
-  letter-spacing: -0.5px;
-  margin-top: 30px;
-}
 .hero-detail {
   font-size: 15px;
   color: var(--muted);
   max-width: 385px;
   margin-top: 17px;
-}
-.hero .actions {
-  margin-top: 29px;
-}
-.hero-photo {
-  position: relative;
-  padding-top: 35px;
-  margin-top: 20px;
 }
 .portrait-frame {
   border-radius: 28px;
@@ -513,10 +472,6 @@ h3 {
   border: 0;
   border-radius: 12px;
   margin-top: 18px;
-}
-.hero-photo > .spotify-card {
-  margin-top: 24px;
-  padding: 20px;
 }
 .event-description {
   max-width: 660px;
@@ -991,24 +946,7 @@ h3 {
   color: var(--muted);
   margin-top: 5px;
 }
-@media (min-width: 1450px) {
-  .hero {
-    padding-block: 105px 125px;
-  }
-  .hero-photo {
-    margin-top: 25px;
-  }
-}
 @media (max-width: 1050px) {
-  .hero {
-    gap: 45px;
-  }
-  .hero h1 {
-    font-size: 110px;
-  }
-  .hero-intro {
-    font-size: 21px;
-  }
   .desk-inner {
     gap: 30px;
     grid-template-columns: 0.85fr 1.15fr;
@@ -1048,12 +986,6 @@ h3 {
   }
   .footer-links {
     gap: 20px;
-  }
-  .hero .actions {
-    gap: 15px;
-  }
-  .hero .button {
-    padding-inline: 18px;
   }
 }
 @media (max-width: 960px) {
@@ -1110,41 +1042,9 @@ h3 {
     width: calc(100% - 40px);
     height: 66px;
   }
-  .hero {
-    padding-top: 43px;
-    padding-bottom: 55px;
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-  .hero h1 {
-    font-size: clamp(85px, 23vw, 120px);
-  }
-  .hero h1 br {
-    display: none;
-  }
-  .hero h1 em {
-    margin-left: 10px;
-  }
-  .hero-eyebrow {
-    margin-bottom: 21px;
-    font-size: 10px;
-  }
-  .hero-intro {
-    font-size: 21px;
-    margin-top: 23px;
-  }
   .hero-detail {
     font-size: 14px;
     max-width: 360px;
-  }
-  .hero .actions {
-    margin-top: 24px;
-    gap: 25px;
-  }
-  .hero-photo {
-    width: min(100%, 390px);
-    margin: 8px auto 0;
-    padding-top: 35px;
   }
   .portrait-frame {
     aspect-ratio: 1;
@@ -1429,21 +1329,6 @@ h3 {
   }
 }
 /* A calmer, image-first board; compact entries instead of large tiles. */
-.hero h1 {
-  font-weight: 400;
-  letter-spacing: -0.035em;
-}
-.hero h1 em {
-  color: var(--peach);
-  font-family: inherit;
-  font-style: italic;
-  font-weight: 400;
-  text-decoration: none;
-}
-.hero-photo {
-  padding-top: 0;
-  margin-top: 0;
-}
 .portrait-frame {
   border-color: var(--apricot);
 }
@@ -1537,9 +1422,6 @@ h3 {
   .section-heading {
     flex-wrap: wrap;
   }
-  .hero-photo {
-    padding-top: 0;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   html {
@@ -1550,14 +1432,6 @@ h3 {
   *:after {
     transition: none !important;
     animation: none !important;
-  }
-}
-@media (max-width: 740px) {
-  .hero h1 {
-    font-size: clamp(60px, 20vw, 108px);
-  }
-  .hero h1 em {
-    margin-left: 0;
   }
 }
 
@@ -1593,8 +1467,6 @@ h3 {
 .mobile-menu nav a[aria-current="page"] { font-weight: 700; }
 section[id] { scroll-margin-top: 115px; }
 h1, h2, h3, .wordmark { text-shadow: none; }
-.hero h1 { font-size: clamp(80px, 9.8vw, 136px); letter-spacing: -.05em; line-height: 1.04; }
-.hero h1 em { font-family: inherit; text-shadow: none; }
 .desk-section { overflow: visible; }
 .desk-copy .button, .life-copy .button { margin-top: 20px; }
 
@@ -1739,7 +1611,6 @@ h1, h2, h3, .wordmark { text-shadow: none; }
   .mobile-menu nav { background: var(--paper); }
 }
 @media (max-width: 740px) {
-  .hero h1 { font-size: clamp(66px, 19vw, 106px); }
 
   .shoutout-card { flex-direction: column; align-items: flex-start; }
   .stage-label { font-size: 15px; }
@@ -1752,13 +1623,10 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 }
 
 /* Paper folders open directly into the page; no electronic status stripe. */
-.hero h1, .hero h1 em, h1, h2, h3, .wordmark { font-weight: 650; }
-.hero h1 { letter-spacing: -.04em; line-height: 1.03; }
-.hero h1 em { color: var(--olive); }
+h1, h2, h3, .wordmark { font-weight: 650; }
 .button, .text-link, .rail-controls button, .footer-links a.button,
 .support-callout a.button, .mobile-menu summary { font-family: var(--sans); font-weight: 600; }
 .desktop-nav a[aria-current="page"]:hover { background: var(--paper); color: var(--ink); }
-.hero-eyebrow .reaction-symbol { font-weight: 400; font-family: var(--sans); font-size: 1.25em; line-height: 1; }
 .rings { width: 100%; max-width: 320px; min-width: 0; justify-self: center; }
 .stage-count { white-space: normal; font-size: 12px; }
 .events-section { margin-top: 64px; }
@@ -1838,10 +1706,6 @@ h1, h2, h3, .wordmark { text-shadow: none; }
 .events-section { padding-bottom: clamp(48px,6vw,80px); }
 html[data-compact="true"] .events-section { padding-bottom: 40px; }
 .events-page { padding-bottom: 72px; }
-
-@media (max-width:740px) {
-
-}
 
 .about-story {
   max-width:none;
