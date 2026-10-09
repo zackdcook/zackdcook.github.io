@@ -11,7 +11,7 @@ export const BEBRAVE_EPIC_ROLL_START = 10_000 - 100 * BEBRAVE_RARITY_WEIGHTS.epi
 
 export const BEBRAVE_COMMON_COLOR = {
   name: "Warm Bark Brown",
-  value: "#8A5A3A",
+  value: "#5A321F",
 };
 
 export const BEBRAVE_EPIC_PITY_PERCENT = [5, 8, 13, 21, 34, 50, 70, 90, 100] as const;

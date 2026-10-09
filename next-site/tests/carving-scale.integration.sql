@@ -9,7 +9,7 @@ begin
  insert into public.bebrave_visitors(visitor_hash) values(encode(extensions.gen_random_bytes(32),'hex')) returning id into v;
  foreach population in array array[100,1000,10000,100000] loop
   insert into public.bebrave_sessions(visitor_id,status,roll_arrowhead,roll_nail,roll_key,chosen_tool,chosen_rarity,chosen_color,effect_seed,zone_top,zone_bottom,public_sequence)
-  select v,'completed',0,0,0,'key','common','#8A5A3A',42,8640+n::bigint*288,10080+n::bigint*288,100000000+n from generate_series(previous+1,population) n;
+  select v,'completed',0,0,0,'key','common','#5A321F',42,8640+n::bigint*288,10080+n::bigint*288,100000000+n from generate_series(previous+1,population) n;
   section:=floor((8640+population*144)/864.0)::integer;
   select jsonb_agg(id order by public_sequence desc) into actual from public.bebrave_completed_in_section(section,null,null);
   select jsonb_agg(id order by public_sequence desc) into expected from(select id,public_sequence from public.bebrave_sessions where status='completed' and public_sequence is not null and zone_bottom>section::bigint*864 and zone_top<(section::bigint+1)*864 order by public_sequence desc limit 12) legacy;
