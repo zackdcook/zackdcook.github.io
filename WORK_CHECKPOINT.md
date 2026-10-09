@@ -1,10 +1,10 @@
 # Website reimagining checkpoint
 
-Updated: 2026-10-09 UTC. Status: publishing restored, recovered source published, first experimental preview READY. Paused at protected-preview authorization boundary. Visual overhaul, canonical archives, and browser verification remain incomplete.
+Updated: 2026-10-09 UTC. Status: publishing restored; secure browser sign-in completed and existing experimental preview is accessible. Structural visual redesign now in progress. Canonical archives and complete browser verification remain incomplete.
 
 ## Source and isolation
 - Experimental branch: `experiment/immersive-world-2026-10-09`.
-- Latest published commit: `c23b479bb21f637dfadc175576ca96e9c12910f4`. All original experimental history and recovered source changes are on GitHub. Use `git log -1` for the commit containing this update.
+- Latest published commit: `b302dee5918165b2fddcce81c6f0620750f5d260`. All original experimental history and recovered source changes are on GitHub. Use `git log -1` for the commit containing this update.
 - Original main baseline: `be6b15d93f2bae259a52e7b80d98a51018edb01d`.
 - Tree/test reference: `spring-clean-2026-10` at `cd697eb1b6a756d74b4eee16ac3ec096ce80eb50`.
 - Repository: `zackdcook/zackdcook.github.io`; application directory: `next-site`.
@@ -28,6 +28,9 @@ Updated: 2026-10-09 UTC. Status: publishing restored, recovered source published
 - Spatial GiST viewport lookup is implemented and tested with up to 100,000 rolled-back metadata rows. Actual ledger version is `20261009084443_bebrave_completed_geometry.sql`; compact canonical geometry storage remains the next data milestone.
 
 ## Decisions / research
+- USER CLARIFICATION: preserve Zack's authored words and the tree's dream/vision, not the old boxes, menu buttons, layout, or presentation. Replace the old structural visual language comprehensively. No generated website prose; existing labels/paragraphs and functional mechanics stay intact. The uploaded mobile screenshot is the explicit rejected visual baseline.
+- Secure Vercel browser sign-in was expressly authorized and completed using the secure credential handoff. Existing preview renders the homepage after authentication. No deployment-protection or persistent access-control setting changed. Never record sign-in values or session URLs.
+- New art direction and reference observations: `next-site/docs/reimagining/ART_DIRECTION.md`. Prioritize the ordinary site's structural redesign now, then return to canonical archives and tree refinement. Existing recovery bundles, private codes, migrations, and history must remain intact.
 - Preserve exact content from main and existing tree gameplay: 60-second timer, 5-foot growth eligibility, one foot per completed nonempty carving, pity rarity progression, earlier sessions visually above newer sessions, local-only felled timeline.
 - Existing stack: Next 16.3.8, React 19.3.0, TypeScript; retain stable systems while decomposing large interaction components.
 - Existing viewport sections are 864 world units; five nearby sections load, but endpoint reconstructs raw chunks, can hit REST row caps, and fetches all pages. Add compact canonical completed records and bounded viewport render projections without flattening visitor identity or stroke order.
@@ -39,15 +42,15 @@ Updated: 2026-10-09 UTC. Status: publishing restored, recovered source published
 - GitHub connector writes still fail and the Work shell has no configured Git credentials. Authorized publishing now succeeds through the existing repository Codespace's native Git connection; see the recovery procedure below. No credential extraction or new credential was required.
 - Vercel project and preview environment reads work when omitting explicit teamId/slug. Preview creation is verified by the real READY experimental deployment below. Neither Work nor the existing Codespace has a Vercel CLI connection.
 - Verified existing Preview URL, project reference, and `true` test mode point to `qkkgcoejkqvthbjcldcw`; authenticated account billing reports active Hobby. Build fails closed outside isolated test storage. No production secrets/settings were read or changed.
-- BLOCKING browser QA: `get_access_to_vercel_url` returned 403 with omitted team (read_protection_bypass) and with the actual owning team (lookup_deployment). Browser reaches Vercel sign-in; no normal CLI fallback is configured. Do not retry unchanged, disable Deployment Protection, broaden Trusted Sources, or extract credentials. Ask user to authorize secure browser sign-in as a fallback, or repair the Vercel connection's protected-deployment/team permission. Preview exists but is NOT functionally or visually signed off.
+- Protected-preview connector still returns 403; do not retry unchanged. RESOLVED for browser QA through the user's authorized secure sign-in. Actual visual/functionality sign-off is still outstanding. Do not disable protection, broaden Trusted Sources, or extract credentials.
 - Cloudflare plugin discovery returned no usable connector. Dashboard fallback requires user approval if resolving an available plugin's failure.
 - No exact Work usage counter is exposed. Save coherent milestones; no background continuation between sessions.
 - Cloud browser can inspect reference sites but cannot reach the workspace's localhost server (connection refused). Local HTTP and build verification are possible; changed-site browser/visual QA awaits a reachable preview.
 
 ## Next tasks (ordered)
-1. Resolve protected-preview browser authorization with the user's direction, then verify the real browser → Next.js → test Supabase flow.
-2. Complete compact canonical storage/projections, bounded rendering, and meaningful geometry/network/render scale tests (not just metadata lookup).
-3. Finish cohesive site/tree art direction and component cleanup; keep exact authored wording and every inventory feature.
+1. Implement and inspect the genuinely new unboxed editorial/landscape site structure, navigation, shared surfaces, and movement. Keep authored wording and inventory features.
+2. Refine the tree environment/controls/effects; verify the browser → Next.js → test Supabase flow.
+3. Complete compact canonical storage/projections, bounded rendering, and meaningful geometry/network/render scale tests (not just metadata lookup).
 4. Publish coherent milestones via the verified Codespace bundle method; deploy this branch only with the existing free/test configuration.
 5. Check all inventory features, desktop/mobile input and preferences, four timelines/themes, accessibility, security, performance, and visual refinement. Update the functionality ledger with evidence.
 6. Deliver the working preview, branch/SHA, accurate tested/incomplete report and existing private code file. Never regenerate the 50 codes.
@@ -70,7 +73,7 @@ Updated: 2026-10-09 UTC. Status: publishing restored, recovered source published
 - Supabase security advisor has no warning/error findings; only intentional INFO notices for RLS enabled with no browser policies on service-only tables.
 - Source now also has a baseline wording/content/route guard and bounded, cancellable viewport cache. Their latest checks are running.
 
-Exact next action: obtain the user's direction for protected-preview access, inspect the existing READY preview, then implement/rollback-test canonical archives and continue visual refinement. No production changes or charges. Do not repeat completed research or regenerate codes.
+Exact next action: replace the legacy global presentation and primary homepage components with the documented new visual system, run copy/type/theme tests, publish a coherent experimental milestone, and inspect desktop/mobile screenshots. No production changes or charges. Do not regenerate codes.
 
 ## Preview / next data milestone — 2026-10-09
 - Vercel authenticated account reports active `hobby` billing, default team matching the existing project, and one concurrent build. No plan upgrade or paid feature was activated. Team-level `get_team` still returns 403; do not retry unchanged.
