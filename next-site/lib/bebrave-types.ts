@@ -9,7 +9,8 @@ export const BEBRAVE_INITIAL_FEET = 30;
 export const BEBRAVE_INITIAL_HEIGHT = BEBRAVE_UNITS_PER_FOOT * BEBRAVE_INITIAL_FEET;
 export const BEBRAVE_DRAWING_SECONDS = 60;
 
-export type BeBraveRarity = "common" | "uncommon" | "superior" | "epic";
+export type BeBraveRarity = "common" | "uncommon" | "superior" | "epic" | "legendary";
+export type BeBraveRandomRarity = Exclude<BeBraveRarity,"legendary">;
 export type BeBraveNormalTool = "arrowhead" | "nail" | "key";
 export type BeBraveTool = BeBraveNormalTool | "cache";
 export type BeBraveSessionStatus =
@@ -43,6 +44,7 @@ export type BeBraveSessionView = {
   chosenRarity: BeBraveRarity | null;
   chosenColor: string | null;
   effectSeed: number | null;
+  chosenEffect?: string | null;
   toolResults: ToolReveal | null;
   drawingStartedAt: string | null;
   drawingDeadline: string | null;
@@ -65,6 +67,7 @@ export type BeBravePublicDrawing = {
   rarity: BeBraveRarity;
   color: string;
   effectSeed: number;
+  effectId?: string;
   strokes: BeBravePublicStroke[];
 };
 

@@ -32,6 +32,17 @@
 .bebrave-sparkle-star{fill:color-mix(in srgb,var(--stroke-color) 15%,white);stroke:var(--stroke-color);stroke-width:.5;filter:drop-shadow(0 0 2px var(--stroke-color));transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 3.8s ease-in-out infinite}
 .bebrave-sparkle-core{fill:white;opacity:.85}
 @keyframes bebrave-shimmer{to{stroke-dashoffset:-132}}
+/* Will-o-wisp: a warm engraved core, cool phosphorescence, and quiet orbiting embers.
+   The same layered paths are used during drawing and after publication. */
+.bebrave-legendary .bebrave-stroke-glow{stroke:#91d6c2;stroke-width:25;opacity:.38;filter:blur(7px)}
+.bebrave-legendary .bebrave-stroke-line{stroke:var(--stroke-color);stroke-width:8;filter:drop-shadow(0 0 3px #d7efc2)}
+.bebrave-legendary .bebrave-epic-shimmer{stroke:#fff4c9;stroke-width:2.2;stroke-dasharray:9 36 2 47;opacity:.86;animation-duration:8s}
+.bebrave-legendary .bebrave-sparkle-star{fill:#fff4c9;stroke:#c4e3b0;animation-duration:5.6s}
+.bebrave-wisp-orbit{fill:none;stroke:#a2e3ce;stroke-width:1;stroke-dasharray:8 10;opacity:.6;transform-box:fill-box;transform-origin:center;animation:bebrave-wisp-orbit 12s linear infinite}
+@keyframes bebrave-wisp-orbit{to{transform:rotate(360deg)}}
+html[data-effects="reduced"] .bebrave-wisp-orbit,html[data-motion="reduced"] .bebrave-wisp-orbit{animation:none}
+html[data-effects="reduced"] .bebrave-legendary .bebrave-stroke-glow{filter:none;stroke-width:14;opacity:.2}
+@media(prefers-reduced-motion:reduce){.bebrave-wisp-orbit{animation:none}}
 @keyframes bebrave-sparkle{0%,100%{opacity:.28;transform:scale(.72)}45%{opacity:.9;transform:scale(1.08)}65%{opacity:.5;transform:scale(.9)}}
 .bebrave-local-drawing{opacity:1}
 .bebrave-save-error{--surface-bg:color-mix(in srgb,var(--paper) 92%,transparent);position:sticky;bottom:12px;z-index:20;width:min(90vw,620px);margin:12px auto;padding:10px 14px;border-radius:12px;text-align:center;background:color-mix(in srgb,var(--paper) 92%,transparent);color:var(--ink);backdrop-filter:blur(9px)}

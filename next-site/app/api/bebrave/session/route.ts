@@ -11,7 +11,7 @@ async function remaining(visitorHash: string) {
   const { data, error } = await serviceSupabase()
     .from("bebrave_tree_state").select("height").eq("id", true).single();
   if (error) throw error;
-  return growthFeetRemaining(visitor.id, Number(data.height));
+  return growthFeetRemaining(visitor.id, Number(data.height),Number(visitor.test_reset_sequence||0));
 }
 
 export async function GET(request: Request) {
@@ -66,6 +66,8 @@ export async function POST(request: Request) {
       throw new Error("The tree could not prepare your tools. Please try again.");
     }
 
+    const reward = await serviceSupabase().rpc("bebrave_apply_legendary_unlock", {p_session:id,p_visitor_hash:context.visitorHash});
+    if(reward.error)throw new Error("The tree could not prepare your tools. Please try again.");
     const row = await ownedSession(id, context.visitorHash);
     return Response.json({
       session:sessionView(row),

@@ -26,18 +26,6 @@ export function beBraveConfigured() {
   return Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
 }
 
-export async function resetBeBraveTestVisitor() {
-  if (!beBraveTestMode()) throw new Error("Test reset is unavailable.");
-  const jar = await cookies();
-  jar.set(visitorCookie, randomBytes(32).toString("hex"), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 365 * 2,
-  });
-}
-
 function hmacKey() {
   const key = process.env.BEBRAVE_HMAC_KEY;
   if (!key || key.length < 32) throw new Error("Be Brave server security is not configured.");
@@ -150,20 +138,21 @@ export function assertSessionId(value: unknown) {
 export async function visitorRow(visitorHash: string) {
   const { data, error } = await serviceSupabase()
     .from("bebrave_visitors")
-    .select("id,visitor_hash,last_carved_at,epic_pity")
+    .select("id,visitor_hash,last_carved_at,epic_pity,test_reset_sequence")
     .eq("visitor_hash", visitorHash)
     .maybeSingle();
   if (error) throw new Error("The tree could not check your carving status.");
   return data;
 }
 
-export async function growthFeetRemaining(visitorId: string | null | undefined, treeHeight: number) {
+export async function growthFeetRemaining(visitorId: string | null | undefined, treeHeight: number, resetSequence=0) {
   if (!visitorId) return 0;
   const { data, error } = await serviceSupabase()
     .from("bebrave_sessions")
     .select("zone_bottom")
     .eq("visitor_id", visitorId)
     .eq("status", "completed")
+    .gt("public_sequence",resetSequence)
     .not("zone_bottom", "is", null)
     .order("public_sequence", { ascending: false })
     .limit(1)
@@ -213,6 +202,7 @@ export function sessionView(row: Record<string, any> | null): BeBraveSessionView
     chosenRarity: row.chosen_rarity,
     chosenColor: row.chosen_color,
     effectSeed: row.effect_seed == null ? null : Number(row.effect_seed),
+    chosenEffect: row.chosen_effect || null,
     toolResults: revealed,
     drawingStartedAt: row.drawing_started_at,
     drawingDeadline: row.drawing_deadline,

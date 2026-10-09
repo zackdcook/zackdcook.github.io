@@ -1,11 +1,11 @@
-import type { BeBraveRarity } from "@/lib/bebrave-types";
+import type { BeBraveRarity,BeBraveRandomRarity } from "@/lib/bebrave-types";
 
 export const BEBRAVE_RARITY_WEIGHTS = {
   common: 42,
   uncommon: 35,
   superior: 18,
   epic: 5,
-} as const satisfies Record<BeBraveRarity, number>;
+} as const satisfies Record<BeBraveRandomRarity, number>;
 
 export const BEBRAVE_EPIC_ROLL_START = 10_000 - 100 * BEBRAVE_RARITY_WEIGHTS.epic;
 
@@ -46,7 +46,7 @@ export const BEBRAVE_EPIC_COLORS = [
   ...BEBRAVE_SUPERIOR_COLORS,
 ] as const;
 
-export function tierFromRoll(roll: number): BeBraveRarity {
+export function tierFromRoll(roll: number): BeBraveRandomRarity {
   const bounded = Math.max(0, Math.min(9_999, Math.floor(roll)));
   let ceiling = 0;
   for (const rarity of ["common", "uncommon", "superior", "epic"] as const) {

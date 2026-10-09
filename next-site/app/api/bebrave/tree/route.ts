@@ -15,7 +15,7 @@ export async function GET(request: Request) {
     if (before !== undefined && (!Number.isSafeInteger(before) || before < 1)) return Response.json({ error: "Invalid page cursor." }, { status: 400 });
     const from = section * BEBRAVE_SECTION_HEIGHT, to = from + BEBRAVE_SECTION_HEIGHT;
     let query = serviceSupabase().from("bebrave_sessions")
-      .select("id,public_sequence,chosen_rarity,chosen_color,effect_seed,zone_top,zone_bottom")
+      .select("id,public_sequence,chosen_rarity,chosen_color,effect_seed,chosen_effect,zone_top,zone_bottom")
       .eq("status", "completed")
       .not("public_sequence", "is", null)
       .gt("zone_bottom", from)
@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     const bySession = assembleStrokes(chunks);
     const drawings = (sessions || []).map((row) => ({
       id:row.id, publicSequence:Number(row.public_sequence), rarity:row.chosen_rarity,
-      color:row.chosen_color, effectSeed:Number(row.effect_seed||0), strokes:bySession.get(row.id)||[],
+      color:row.chosen_color, effectSeed:Number(row.effect_seed||0), effectId:row.chosen_effect||undefined, strokes:bySession.get(row.id)||[],
     })) as BeBravePublicDrawing[];
     const nextBefore = drawings.length === 12 ? Math.min(...drawings.map((d) => d.publicSequence)) : null;
     return Response.json({ drawings:params.get("format")==="compact-v1"?drawings.map(packDrawing):drawings, more: nextBefore !== null, nextBefore }, { headers: { "Cache-Control": "public, max-age=10, s-maxage=10" } });

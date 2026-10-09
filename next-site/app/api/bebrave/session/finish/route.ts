@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     return Response.json({
       session:sessionView(await ownedSession(id, context.visitorHash)),
-      growthFeetRemaining:await growthFeetRemaining(visitor?.id, Number(tree.height)),
+      growthFeetRemaining:await growthFeetRemaining(visitor?.id, Number(tree.height),Number(visitor?.test_reset_sequence||0)),
       serverNow:new Date().toISOString(),
     }, { headers:{ "Cache-Control":"no-store" } });
   } catch (error) {

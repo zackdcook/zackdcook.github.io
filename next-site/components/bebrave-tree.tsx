@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties,type ReactNode } from "react";
+import { legendaryEffect } from "@/lib/bebrave/effects";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
@@ -128,7 +129,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   useEffect(()=>{if(mode!=="draw"||!session?.drawingDeadline)return;let ended=false;const tick=()=>{const ms=Date.parse(session.drawingDeadline!)-(Date.now()+serverOffset.current);setRemaining(Math.max(0,Math.ceil(ms/1000)));if(ms<=0&&!ended){ended=true;void finish();}};tick();const id=setInterval(tick,100);return()=>clearInterval(id);},[mode,session?.drawingDeadline,finish]);
 
   const showLocal=mode==="draw"||(mode==="admire"&&session?.status==="completed"&&!drawings.some(d=>d.id===session.id));
-  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,strokes:localStrokes}:undefined;
+  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,strokes:localStrokes}:undefined;
   const widthStyle=mode==="fallen"?{width:state.height*scale,height:BEBRAVE_TREE_WIDTH*scale}:{height:state.height*scale};
   const treeTransform=mode==="fallen"?`translateX(${state.height*scale}px) rotate(90deg) scale(${scale})`:`scale(${scale})`;
   const minutes=Math.floor(remaining/60),seconds=String(remaining%60).padStart(2,"0");
@@ -186,13 +187,13 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
           {mode==="draw"&&session?.zoneTop!=null&&session.zoneBottom!=null&&<div className="bebrave-active-zone" style={{top:session.zoneTop,height:session.zoneBottom-session.zoneTop}} aria-hidden="true"/>}
           <svg className="bebrave-drawings" viewBox={`0 0 ${BEBRAVE_TREE_WIDTH} ${state.height}`} aria-label="Drawings carved into the shared cypress tree">
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
-            {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed}/>)}</g>}
-            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} style={{"--stroke-color":visual.color} as CSSProperties}>
-              {(visual.rarity==="superior"||visual.rarity==="epic")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
+            {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed} effectId={localDrawing.effectId}/>)}</g>}
+            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} data-effect={visual.rarity==="legendary"?legendaryEffect(session.chosenEffect):undefined} style={{"--stroke-color":visual.color} as CSSProperties}>
+              {(visual.rarity==="superior"||visual.rarity==="epic"||visual.rarity==="legendary")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
               <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
-              {visual.rarity==="epic"&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle"><path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
+              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle">{visual.rarity==="legendary"&&<circle className="bebrave-wisp-orbit" r="8"/>}<path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
             </g>}
-            {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed}/>)}</g>)}
+            {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
           </svg>
           {mode==="fallen"&&<div className="bebrave-fallen-cut" aria-hidden="true"/>}
         </div>

@@ -28,7 +28,7 @@ export async function GET(request: Request) {
     return Response.json({
       enabled:true,
       state,
-      growthFeetRemaining:await growthFeetRemaining(visitor?.id, state.height),
+      growthFeetRemaining:await growthFeetRemaining(visitor?.id, state.height,Number(visitor?.test_reset_sequence||0)),
       session:sessionView(open),
       serverNow:new Date().toISOString(),
     }, { headers:{ "Cache-Control":"no-store" } });

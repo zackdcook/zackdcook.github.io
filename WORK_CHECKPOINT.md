@@ -50,4 +50,12 @@ Updated: 2026-10-09 UTC. Status: first source implementation milestone; visual o
 6. Register exactly 50 secure codes only when verifier configuration is durable and usable; deliver privately, never in this repository.
 7. Browser QA across devices/preferences, security and performance verification; resolve Vercel access and configure branch-only test envs before enabling preview builds.
 
-Exact next action: save this milestone, then implement the Legendary system. No database mutations or production changes have been made at this checkpoint. No Legendary codes have been generated or registered, no remote branch exists yet, and no working preview has been deployed. Continue from this state rather than repeating the audit.
+## Legendary milestone (before applying the migration)
+- Latest foundation commit: `1bffa64` (full SHA in Git). Recovery bundle has been saved privately because GitHub writes are blocked.
+- Implemented source for one-time Legendary verifiers, bounded lockbox input, service-only atomic redemption, persistent reward records, future code/effect mapping, and default `will-o-wisp-v1` live/published SVG treatment. These are NOT yet database/browser verified.
+- Migration: `next-site/supabase/migrations/20261009030640_bebrave_legendary_unlocks.sql`. Existing Epic cache codes remain supported. Legendary is never an ordinary tool roll.
+- Reward semantics: redemption is permanently consumed; reward is attached to the anonymous visitor, retained through empty/cancelled attempts, and spent only by the next completed nonempty carving. Normal 5-foot eligibility is retained. Test reset now preserves identity and historical records using an eligibility watermark.
+- Discovered baseline SQL tier thresholds were 50/30/15/5 while TypeScript intended 42/35/18/5. The test migration aligns SQL with the intended distribution.
+- Existing lockbox narrative is preserved verbatim, including its numeric-keypad description; keyboard/touch input now also accepts the required alphanumeric codes.
+
+Exact next action: apply and verify the Legendary migration ONLY in `qkkgcoejkqvthbjcldcw`, then run rollback integration tests and concurrent redemption fixtures. No database mutations or production changes have been made at this checkpoint. No distribution codes have been generated or registered, no remote branch exists yet, and no working preview has been deployed. Continue from this state rather than repeating the audit.
