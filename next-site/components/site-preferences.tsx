@@ -5,14 +5,19 @@ import { defaultPreferences, normalizePreferences, preferenceKey, type Preferenc
 import { livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
 import { TiltLightingControl } from "@/components/tilt-lighting-control";
 
+import { bookDismissedKey, bookSubscribedKey, analyticsOptOutKey, savedChoice } from "@/lib/book-launch/shared";
+
 const beBraveTimelineKey = "zack.bebrave.timeline.v1";
-const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
+const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, bookDismissed: false, bookSubscribed: false, analyticsOptOut: false, dismissBook: () => {}, subscribeBook: () => {}, setAnalyticsOptOut: (_value: boolean) => {}, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
 export const usePreferences = () => useContext(PreferenceContext);
 
 export function SitePreferences({ children }: { children: React.ReactNode }) {
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [systemReduced, setSystemReduced] = useState(false);
   const [timeline, setTimeline] = useState(livingTimeline);
+  const [bookDismissed, setBookDismissed] = useState(false);
+  const [bookSubscribed, setBookSubscribed] = useState(false);
+  const [analyticsOptOut, setAnalyticsChoice] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -27,6 +32,11 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     let story = livingTimeline;
     try { story = normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey) || "{}")); } catch {}
     setTimeline(story); document.documentElement.dataset.timeline = story.kind;
+    try {
+      setBookDismissed(savedChoice(localStorage.getItem(bookDismissedKey)));
+      setBookSubscribed(savedChoice(localStorage.getItem(bookSubscribedKey)));
+      setAnalyticsChoice(savedChoice(localStorage.getItem(analyticsOptOutKey)));
+    } catch { setAnalyticsChoice(true); }
     setHydrated(true);
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     const theme = matchMedia("(prefers-color-scheme: dark)");
@@ -40,6 +50,11 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     apply();
     motion.addEventListener("change", apply); theme.addEventListener("change", apply);
     const sync = (event: StorageEvent) => {
+      try {
+      if (event.key === bookDismissedKey || event.key === null) setBookDismissed(savedChoice(localStorage.getItem(bookDismissedKey)));
+      if (event.key === bookSubscribedKey || event.key === null) setBookSubscribed(savedChoice(localStorage.getItem(bookSubscribedKey)));
+      if (event.key === analyticsOptOutKey || event.key === null) setAnalyticsChoice(savedChoice(localStorage.getItem(analyticsOptOutKey)));
+      } catch { setAnalyticsChoice(true); }
       if (event.key === timelineKey) {
         let next = livingTimeline;
         try { next = normalizeTimeline(JSON.parse(event.newValue || "{}")); } catch {}
@@ -53,6 +68,9 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     return () => { motion.removeEventListener("change", apply); theme.removeEventListener("change", apply); window.removeEventListener("storage", sync); };
   }, []);
 
+  function saveChoice(key: string, value: boolean, setter: (value: boolean) => void) {
+    setter(value); try { localStorage.setItem(key, String(value)); } catch {}
+  }
   function update(patch: Partial<Preferences>) {
     const next = normalizePreferences({ ...preferences, ...patch });
     setPreferences(next); latest.current = next;
@@ -76,7 +94,11 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     resetting.current = true; dialog.current?.close();
   }
 
-  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
+  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, bookDismissed, bookSubscribed, analyticsOptOut,
+    dismissBook: () => saveChoice(bookDismissedKey, true, setBookDismissed),
+    subscribeBook: () => saveChoice(bookSubscribedKey, true, setBookSubscribed),
+    setAnalyticsOptOut: value => saveChoice(analyticsOptOutKey, value, setAnalyticsChoice),
+    timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
     {children}
     <dialog className="calendar-dialog preferences-dialog" ref={dialog} onClose={() => { const target = resetting.current ? document.querySelector<HTMLElement>("#main") : opener.current; resetting.current = false; target?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }} aria-labelledby="preferences-title">
       <div className="calendar-dialog-content">
@@ -86,6 +108,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
         {systemReduced&&<p className="calendar-help">Your device requests reduced motion, so the motion and lighting are already resting.</p>}
         <label className="preference-row"><span>Compact spacing</span><span className="checkbox-control"><input type="checkbox" checked={preferences.compact} onChange={e=>update({compact:e.target.checked})}/><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <TiltLightingControl enabled={preferences.tiltLighting} reduced={preferences.reduceEffects||systemReduced} onChange={enabled=>update({tiltLighting:enabled})}/>
+        <label className="preference-row"><span>Opt out of anonymous analytics</span><input type="checkbox" checked={analyticsOptOut} onChange={e => saveChoice(analyticsOptOutKey, e.target.checked, setAnalyticsChoice)} /></label>
         <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
       </div>
     </dialog>

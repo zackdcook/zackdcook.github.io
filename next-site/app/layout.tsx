@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/next";
+import { BookLaunchProvider } from "@/components/book-launch/provider";
+import { PrivacyAnalytics } from "@/components/book-launch/analytics";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
@@ -8,6 +9,7 @@ import "./globals.css";
 import "./motion.css";
 import "./materials.css";
 import "./theme.css";
+import "./book-launch.css";
 import "./folly.css";
 import "./bebrave.css";
 import { Suspense } from "react";
@@ -44,6 +46,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <SitePreferences>
+          <BookLaunchProvider>
+          <Suspense fallback={null}><PrivacyAnalytics /></Suspense>
           <PointerLight />
           <KittyRibbonBillow />
           <SiteIcons />
@@ -56,8 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SiteFooter />
             </div>
           </OrganicTransition>
+        </BookLaunchProvider>
         </SitePreferences>
-        <Analytics />
       </body>
     </html>
   );

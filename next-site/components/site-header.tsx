@@ -6,6 +6,8 @@ import { useEffect, useRef } from "react";
 import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
 
+import { BookMenuItem } from "@/components/book-launch/provider";
+
 const links = navigation.map(({ title, href }) => [title, href]);
 
 export function SiteHeader() {
@@ -91,6 +93,7 @@ export function SiteHeader() {
             </Link>
           ))}
 
+          <BookMenuItem />
           <div className="desktop-theme-control">
             <span className="theme-icon theme-sun" aria-hidden="true">☀</span>
 
@@ -136,6 +139,7 @@ export function SiteHeader() {
               </Link>
             ))}
 
+            <BookMenuItem closeMenu={() => { if (menu.current) menu.current.open = false; }} />
             <div className="mobile-theme-control">
               <span className="theme-icon theme-sun" aria-hidden="true">☀</span>
 
