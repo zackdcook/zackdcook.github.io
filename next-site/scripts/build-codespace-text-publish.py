@@ -1,6 +1,7 @@
 import json
 import re
 import subprocess
+import sys
 from pathlib import Path
 
 # Generates a reviewed native-terminal command; never authenticates or pushes locally.
@@ -11,13 +12,15 @@ def local(*args):
 
 assert local('branch', '--show-current').decode().strip() == 'experiment/immersive-world-2026-10-09', 'Use only the experimental branch.'
 assert local('status', '--porcelain') == b'', 'Commit and review changes first.'
-sha = local('rev-parse', 'HEAD').decode().strip()
-parent = local('rev-parse', 'HEAD^').decode().strip()
+assert len(sys.argv) <= 2, 'Pass at most one experimental commit.'
+sha = local('rev-parse', '--verify', (sys.argv[1] if len(sys.argv) == 2 else 'HEAD') + '^{commit}').decode().strip()
+subprocess.check_call(['git', '-C', str(repo), 'merge-base', '--is-ancestor', sha, 'HEAD'])
+parent = local('rev-parse', sha + '^').decode().strip()
 assert re.fullmatch('[0-9a-f]{40}', sha) and re.fullmatch('[0-9a-f]{40}', parent)
 raw = local('cat-file', 'commit', sha).decode('utf-8')
 assert sum(line.startswith('parent ') for line in raw.split('\n\n', 1)[0].splitlines()) == 1, 'Use the bundle workflow for merge commits.'
 patch = local('diff', '--binary', parent, sha).decode('utf-8')
-assert 'GIT binary patch' not in patch, 'Use the bundle flow for binary changes.'
+assert not re.search(r'^GIT binary patch$', patch, re.MULTILINE), 'Use the bundle flow for binary changes.'
 files = local('diff', '--name-only', parent, sha).decode().splitlines()
 assert files and all(f == 'WORK_CHECKPOINT.md' or f.startswith('next-site/') for f in files)
 assert all(not Path(f).name.startswith('.env') or Path(f).name == '.env.example' for f in files), 'Never publish credential files.'
