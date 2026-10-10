@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { kittyWindows, shadowFlight } from "../lib/kitty-shadows";
+import { kittyWindows, shadowFlight, shadowFlock } from "../lib/kitty-shadows";
 
 function within(point: number[], polygon: number[][]) {
   let inside = false;
@@ -26,6 +26,27 @@ test("random shadows cross the entire original window in both directions", () =>
     assert.ok(flight.duration>=5800&&flight.duration<=8800);
     assert.ok(flight.delay>=900&&flight.delay<=2800);
     assert.ok(flight.size>=22&&flight.size<=34);
+  }
+  assert.equal(directions.size,2);
+});
+
+test("flocks keep loose independent flights moving toward the same opposite edge",()=>{
+  let seed=9712;
+  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+  const directions=new Set<boolean>();
+  for(let i=0;i<1000;i++){
+    const flock=shadowFlock(random);directions.add(flock[0].reverse);
+    assert.equal(flock.length,3);
+    assert.equal(flock[0].startDelay,0);
+    assert.equal(new Set(flock.map(bird=>bird.reverse)).size,1);
+    assert.equal(new Set(flock.map(bird=>bird.wingDelay)).size,3);
+    for(const bird of flock){
+      assert.ok(!within(bird.from,kittyWindows.original.clip));
+      assert.ok(!within(bird.to,kittyWindows.original.clip));
+      assert.ok(within(bird.from.map((value,k)=>(value+bird.to[k])/2),kittyWindows.original.clip));
+      assert.ok(bird.duration+bird.startDelay<=10000,"a flock finishes within ten seconds");
+      assert.ok(bird.startDelay>=0&&bird.startDelay<=1200);
+    }
   }
   assert.equal(directions.size,2);
 });

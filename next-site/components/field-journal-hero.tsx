@@ -1,12 +1,14 @@
 import editorial from "@/content/editorial.json";
 import {Artwork,ArtworkImage} from "./artwork";
+import { StudioArtwork } from "./studio-artwork";
 import { HomepageBookCTA } from "./book-launch/signup-form";
 import styles from "./field-journal-hero.module.css";
 
 export function FieldJournalHero(){
   return <section className={`hero ${styles.hero}`}>
-    <div className={styles.atmosphere} aria-hidden="true"><Artwork slot="hero-landscape" className={`editorial-art ${styles.landscape}`}/></div>
+    <div className={styles.atmosphere} aria-hidden="true"><StudioArtwork slot="hero-landscape" variant="window" className={styles.landscape}/></div>
     <div className={styles.content}>
+      <p className={`collection-heading ${styles.identity}`}><span>Engineer<br/><span className="reaction-symbol">⇌</span><br/>Author</span></p>
       <h1 className={styles.name}>Zack <em>Cook.</em></h1>
       <div className={styles.portrait}>
         <Artwork slot="hero-orbit" className={styles.orbit}/>
@@ -19,9 +21,8 @@ export function FieldJournalHero(){
       <div className={styles.invitation}><HomepageBookCTA /></div>
       <div className={styles.details}>
         {editorial.home.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}
-        <p className={`eyebrow hero-eyebrow ${styles.eyebrow}`}>Engineer <span className="reaction-symbol">⇌</span> Author</p>
       </div>
     </div>
-    <Artwork slot="hero-foreground" className={`editorial-art ${styles.foreground}`}/>
+    <StudioArtwork slot="hero-foreground" variant="desk" className={styles.foreground}/>
   </section>;
 }

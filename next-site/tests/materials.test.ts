@@ -1,10 +1,23 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { approachLight, followLight, materialLight, panelLight } from "../lib/material-light";
+import { approachLight, followLight, materialLight, panelLight, glassReflection } from "../lib/material-light";
 import { createRibbon, dropRibbon, ribbonPaths, ribbonSpacing, stepRibbon } from "../lib/ribbon-physics";
 import { tiltLight } from "../lib/phone-tilt";
 import { defaultPreferences, normalizePreferences, preferenceBootstrap, preferenceKey } from "../lib/preferences";
 import { runInNewContext } from "node:vm";
+
+test("glass reflections move continuously inside the face, including distant light sources",()=>{
+  const bounds={left:30,top:100,width:300,height:300};
+  assert.deepEqual(glassReflection(bounds,180,250),{x:50,y:50});
+  for(const x of [-10000,-50,30,100,179,180,181,330,10000]){
+    const a=glassReflection(bounds,x,250),b=glassReflection(bounds,x+1,250);
+    assert.ok(Object.values(a).every(Number.isFinite));
+    assert.ok(a.x>=5&&a.x<=95&&a.y>=5&&a.y<=95);
+    assert.ok(b.x>=a.x&&b.x-a.x<=.25,"no hard stop or sudden edge jump");
+  }
+  const tiny=glassReflection({left:0,top:0,width:0,height:0},100,100);
+  assert.ok(Object.values(tiny).every(Number.isFinite));
+});
 
 const button = { left: 100, top: 100, width: 160, height: 50 };
 test("a single virtual source casts to the opposite side in all eight directions", () => {

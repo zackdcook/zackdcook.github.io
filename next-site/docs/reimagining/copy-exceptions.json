@@ -2,7 +2,7 @@
   {
     "path": "next-site/components/editorial-kitties.tsx",
     "text": "Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys.",
-    "reason": "Zack explicitly requested replacing the ribbon with clickable/tappable bird shadows in the window (2026-10-10). This obsolete ribbon-only instruction is removed. The original Brave question remains the shadow's accessible label; photo alternatives and editorial caption remain. The later feedback milestone explicitly replaces Yes/No with Zack's new Go look for Brave? link."
+    "reason": "Zack explicitly requested replacing the ribbon with clickable/tappable bird shadows in the window (2026-10-10). This obsolete ribbon-only instruction is removed. The original Brave question remains the shadow's accessible label; photo alternatives and editorial caption remain. The later feedback milestone explicitly replaces Yes/No with Zack's new Follow him. link."
   },
   {
     "path": "next-site/components/editorial-kitties.tsx",
@@ -12,11 +12,26 @@
   {
     "path": "next-site/components/editorial-kitties.tsx",
     "text": "Yes",
-    "reason": "Zack explicitly requested a permanent single Go look for Brave? button below the changed picture on 2026-10-10. This author-supplied label replaces the earlier Yes/No secret dialog and still leads to the original /bebrave narrative."
+    "reason": "Zack explicitly requested a permanent single Follow him. button below the changed picture on 2026-10-10. This author-supplied label replaces the earlier Yes/No secret dialog and still leads to the original /bebrave narrative."
   },
   {
     "path": "next-site/components/editorial-kitties.tsx",
     "text": "No",
-    "reason": "Zack explicitly requested no dismissal option and a single permanent Go look for Brave? button. Only this discovery dialog's No action is removed; original tree narrative choices and other Yes/No interactions remain."
+    "reason": "Zack explicitly requested no dismissal option and a single permanent Follow him. button. Only this discovery dialog's No action is removed; original tree narrative choices and other Yes/No interactions remain."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "Go look for Brave?",
+    "reason": "Zack supplied the replacement visible status Brave chased a shadow and got outside. and single permanent Follow him. action on 2026-10-10. The earlier author-supplied Go look for Brave? wording is replaced. The original full question remains the accessible bird label and tree narrative is unchanged."
+  },
+  {
+    "path": "next-site/components/preferences-button.tsx",
+    "text": "Accessibility &amp; Preferences",
+    "reason": "Zack explicitly requested naming this entry Settings and placing it at the bottom of mobile navigation and in the desktop header (2026-10-10). The corresponding dialog title also becomes Settings; all existing controls and behavior remain."
+  },
+  {
+    "path": "next-site/components/site-preferences.tsx",
+    "text": "Accessibility &amp; Preferences",
+    "reason": "Zack explicitly requested naming this entry Settings and placing it at the bottom of mobile navigation and in the desktop header (2026-10-10). The corresponding dialog title also becomes Settings; all existing controls and behavior remain."
   }
 ]

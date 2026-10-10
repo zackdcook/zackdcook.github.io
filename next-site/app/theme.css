@@ -196,6 +196,13 @@ html[data-timeline="felled"][data-theme="dark"] {
   --material-edge: color-mix(in srgb, var(--color-surface) 65%, transparent);
   --material-cut: color-mix(in srgb, var(--color-ink) 25%, transparent);
   --material-specular: color-mix(in srgb, var(--color-surface) 86%, var(--color-sun));
+  --glass-highlight: color-mix(in srgb, var(--tone-white) 88%, var(--color-sun));
+  --glass-edge: color-mix(in srgb, var(--color-ink) 15%, transparent);
+  --studio-paper: var(--color-surface);
+  --studio-accent: var(--color-accent-soft);
+  --studio-plant: color-mix(in srgb, var(--color-foliage) 65%, var(--color-surface));
+  --studio-rule: var(--color-brass);
+  --studio-light: color-mix(in srgb, var(--color-sun) 60%, var(--color-background));
   --photo-shadow: #19231F;
   --editorial-art-light: .95;
   --editorial-art-saturation: .85;

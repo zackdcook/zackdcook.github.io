@@ -11,6 +11,8 @@
 .desktop a[aria-current="page"]{font-weight:750}
 .desktop :global(.book-menu-item){min-height:44px;font:550 12px var(--sans);color:var(--color-accent)}
 .controls{display:flex;align-items:center;gap:15px}
+.controls .settings{font-size:11px;gap:7px;padding-inline:13px;min-height:44px;white-space:nowrap}
+.controls .settings :global(.site-asset-icon){width:16px;height:16px}
 .theme,.menu{border:0;padding:0;min-width:44px;min-height:44px;background:none;color:var(--color-ink);cursor:pointer}
 .theme{display:grid;place-items:center;position:relative;border:1px solid color-mix(in srgb,var(--color-border) 40%,transparent);border-radius:50%}
 .theme span{grid-area:1/1;font-size:23px;transition:opacity .18s,rotate .42s var(--ease-settle)}
@@ -23,12 +25,12 @@
 .menu>span{font-size:27px;font-weight:350;line-height:1}
 .sheet{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;padding:0;color:var(--color-ink);background:var(--color-background);overflow-x:clip;overflow-y:auto;isolation:isolate}
 .sheet::backdrop{background:var(--color-background)}
-.sheet[open]{animation:sheet-in .36s var(--ease-settle) both}
+.sheet[open]{display:flex;flex-direction:column;animation:sheet-in .55s var(--ease-settle) both}
 .sheetHeader{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;width:min(1120px,calc(100% - 96px));min-height:88px;margin-inline:auto;padding-top:env(safe-area-inset-top)}
 .sheetName{font:650 24px var(--display)}
 .sheet .menu{display:flex}
 .close{rotate:45deg}
-.destinations{position:relative;z-index:1;width:min(1120px,calc(100% - 96px));margin:clamp(32px,5vh,90px) auto 90px;display:grid}
+.destinations{position:relative;z-index:1;width:min(1120px,calc(100% - 96px));margin:clamp(24px,4vh,64px) auto 36px;display:grid}
 .destinations a{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;border-bottom:1px solid color-mix(in srgb,var(--color-border) 36%,transparent);font:650 clamp(32px,5.5vw,70px)/1.08 var(--display);letter-spacing:-.045em;text-decoration:none;transition:color .18s}
 .destinations a[aria-current="page"]{color:var(--color-accent)}
 .destinations a:hover{color:var(--color-accent)}
@@ -37,11 +39,13 @@
 .destinations :global(.artwork){width:29px;height:29px;flex-shrink:0}
 .destinations a:hover svg{translate:5px 0}
 .sceneryFrame{position:absolute;inset:0;overflow:clip;z-index:0;pointer-events:none}
-.scenery{position:absolute;right:-12%;bottom:-10%;width:100%;height:90%;opacity:.5;pointer-events:none;filter:brightness(var(--editorial-art-light)) saturate(var(--editorial-art-saturation)) sepia(var(--editorial-art-sepia)) hue-rotate(var(--editorial-art-hue));mask-image:linear-gradient(transparent 10%,#000 75%)}
-@keyframes sheet-in{from{opacity:0;translate:0 -12px}to{opacity:1;translate:0 0}}
+.scenery{position:absolute;right:-20%;bottom:-8%;width:90%;height:100%;opacity:.45;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 70%)}
+.sheetFooter{position:relative;z-index:2;width:min(1120px,calc(100% - 96px));margin:auto auto 0;padding:18px 0 max(24px,env(safe-area-inset-bottom));border-top:1px solid var(--glass-edge)}
+.sheetFooter :global(.settings-button){min-height:48px;padding-inline:20px}
+@keyframes sheet-in{from{opacity:0;clip-path:inset(0 0 100%);translate:0 -24px}to{opacity:1;clip-path:inset(0);translate:0 0}}
 @media(max-width:1180px){.inner{width:calc(100% - 64px)}.desktop{gap:18px}.desktop a{font-size:11px}.wordmark{font-size:22px}}
-@media(max-width:1000px){.desktop{display:none}.menu{display:flex}.inner{min-height:76px}}
-@media(max-width:600px){.inner,.sheetHeader,.destinations{width:calc(100% - 40px)}.inner{gap:14px;min-height:72px}.wordmark{font-size:22px}.wordmark svg{width:26px}.controls{gap:12px}.theme{min-width:40px;min-height:40px}.menu{gap:10px}.destinations{margin-top:30px;margin-bottom:70px}.destinations a{font-size:clamp(30px,8vw,44px);padding-block:18px}.scenery{width:150%;height:60%;right:-30%}}
+@media(max-width:1120px){.desktop{display:none}.controls .settings{display:none}.menu{display:flex}.inner{min-height:76px}}
+@media(max-width:600px){.inner,.sheetHeader,.destinations,.sheetFooter{width:calc(100% - 40px)}.inner{gap:14px;min-height:72px}.wordmark{font-size:22px}.wordmark svg{width:26px}.controls{gap:12px}.theme{min-width:44px;min-height:44px}.menu{gap:10px}.sheetHeader{min-height:72px;flex-shrink:0}.destinations{margin-top:22px;margin-bottom:28px}.destinations a{font-size:clamp(29px,8vw,44px);padding-block:14px}.destinations :global(.book-menu-item){font-size:clamp(29px,8vw,44px);padding-block:14px}.scenery{width:170%;height:85%;right:-50%}.sheetFooter{padding-top:14px}}
 @media(prefers-reduced-motion:reduce){.sheet[open]{animation:none}.wordmark svg,.destinations svg,.theme span{transition:none}}
 :global(html[data-effects="reduced"]) .sheet[open]{animation:none}
 :global(html[data-effects="reduced"]) .header{backdrop-filter:none;background:var(--color-background)}

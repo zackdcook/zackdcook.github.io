@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { approachLight, followLight, materialLight, panelLight, materialPose, materialGeometryEvent } from "@/lib/material-light";
+import { approachLight, followLight, materialLight, panelLight, materialPose, glassReflection, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
 const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.preferences-dialog,.zacky-c-preview,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
@@ -24,9 +24,13 @@ export function PointerLight() {
       element.style.setProperty("--shadow-x",dynamicCast?px(light.shadowX):"0px");element.style.setProperty("--shadow-y",dynamicCast?px(light.shadowY):"0px");element.style.setProperty("--shadow-blur",dynamicCast?px(light.blur):"0px");element.style.setProperty("--rim-x",px(light.rimX));element.style.setProperty("--rim-y",px(light.rimY));element.style.setProperty("--light-angle",`${Math.atan2(light.rimY,light.rimX)*180/Math.PI}deg`);
       element.style.setProperty("--cast-x",dynamicCast?px(light.shadowX):"0px");element.style.setProperty("--cast-y",dynamicCast?px(light.shadowY):"0px");
       if(element.hasAttribute("data-material-surface")){
-        const pose=materialPose(bounds,x,y,light.strength);
-        element.style.setProperty("--material-yaw",`${pose.yaw.toFixed(2)}deg`);element.style.setProperty("--material-pitch",`${pose.pitch.toFixed(2)}deg`);
-        element.style.setProperty("--material-cast-x",px(pose.castX));element.style.setProperty("--material-cast-y",px(pose.castY));
+        const reflection=glassReflection(bounds,x,y);
+        element.style.setProperty("--glass-x",`${reflection.x.toFixed(2)}%`);element.style.setProperty("--glass-y",`${reflection.y.toFixed(2)}%`);
+        if(!element.classList.contains("tactile-photo")){
+          const pose=materialPose(bounds,x,y,light.strength);
+          element.style.setProperty("--material-yaw",`${pose.yaw.toFixed(2)}deg`);element.style.setProperty("--material-pitch",`${pose.pitch.toFixed(2)}deg`);
+          element.style.setProperty("--material-cast-x",px(pose.castX));element.style.setProperty("--material-cast-y",px(pose.castY));
+        }
       }
     }
     function resetSurface(element:HTMLElement){element.style.setProperty("--light-strength","0");for(const name of ["--shadow-x","--shadow-y","--shadow-blur","--cast-x","--cast-y","--material-cast-x"])element.style.setProperty(name,"0px");for(const name of ["--rim-x","--rim-y","--material-pitch","--material-yaw","--material-cast-y"])element.style.removeProperty(name);}

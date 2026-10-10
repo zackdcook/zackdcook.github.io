@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
-import { SwampLandscape } from "./swamp-landscape";
+import { StudioArtwork } from "./studio-artwork";
+import { PreferencesButton } from "./preferences-button";
 import { Artwork } from "./artwork";
 import { BookMenuItem } from "./book-launch/provider";
 import styles from "./site-header.module.css";
@@ -17,8 +18,9 @@ export function SiteHeader() {
   const dialog = useRef<HTMLDialogElement>(null);
   const opener = useRef<HTMLButtonElement>(null);
   const explicitHome = useRef(false);
+  const pendingSettings = useRef(false);
   const [open, setOpen] = useState(false);
-  const { update } = usePreferences();
+  const { update, openPreferences } = usePreferences();
   const current = (href: string) => (href === "/" ? visiblePath === "/" : visiblePath === href || visiblePath.startsWith(href + "/")) ? "page" as const : undefined;
   const close = () => { dialog.current?.close(); setOpen(false); };
 
@@ -63,12 +65,17 @@ export function SiteHeader() {
       </nav>
       <div className={styles.controls}>
         {themeControl}
+        <PreferencesButton className={styles.settings} />
         <button ref={opener} data-menu-opener type="button" className={styles.menu} aria-haspopup="dialog" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}>
           Menu <span aria-hidden="true">＋</span>
         </button>
       </div>
     </div>
-    <dialog ref={dialog} className={styles.sheet} aria-label="Mobile navigation" onCancel={() => setOpen(false)} onClose={() => { setOpen(false); opener.current?.focus({preventScroll:true}); }} onClick={event => { if(event.target === event.currentTarget) close(); }}>
+    <dialog ref={dialog} className={styles.sheet} aria-label="Mobile navigation" onCancel={() => setOpen(false)} onClose={() => {
+      setOpen(false);
+      if(pendingSettings.current && opener.current){pendingSettings.current=false;openPreferences(opener.current);}
+      else opener.current?.focus({preventScroll:true});
+    }} onClick={event => { if(event.target === event.currentTarget) close(); }}>
       <div className={styles.sheetHeader}>
         <span className={styles.sheetName}>Zack Cook</span>
         <button type="button" className={styles.menu} onClick={close}>Menu <span aria-hidden="true" className={styles.close}>＋</span></button>
@@ -79,7 +86,8 @@ export function SiteHeader() {
         </Link>)}
         <BookMenuItem closeMenu={close} />
       </nav>
-      <div className={styles.sceneryFrame}><Artwork slot="navigation-scenery" className={styles.scenery}><SwampLandscape/></Artwork></div>
+      <div className={styles.sheetFooter}><PreferencesButton onRequest={()=>{pendingSettings.current=true;close();}} /></div>
+      <div className={styles.sceneryFrame}><StudioArtwork slot="navigation-scenery" variant="window" className={styles.scenery}/></div>
     </dialog>
   </header>;
 }

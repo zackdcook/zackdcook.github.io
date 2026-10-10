@@ -1,6 +1,6 @@
 # Website reimagining checkpoint
 
-Updated 2026-10-10 UTC (feedback milestone 1 delivered: homepage/Brave/motion). The overall overhaul is IN PROGRESS, not final design sign-off. Previous CTA/bird and Creative Works commits are preserved. This milestone has implementation, source and focused deployed-browser verification; pause for Zack's direction feedback before the next design milestone. Tree development remains behind ordinary-page design and experience work. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
+Updated 2026-10-10 UTC (feedback milestone 2 underway; milestone 1 preserved). The overall overhaul is IN PROGRESS, not final design sign-off. Previous CTA/bird and Creative Works commits are preserved. This milestone has implementation, source and focused deployed-browser verification; pause for Zack's direction feedback before the next design milestone. Tree development remains behind ordinary-page design and experience work. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
 
 ## Branch, sources and isolation
 
@@ -94,6 +94,16 @@ Updated 2026-10-10 UTC (feedback milestone 1 delivered: homepage/Brave/motion). 
 - At real desktop light input, photo pitch .72°, yaw -1.50°, strength 1: face, rim and border had identical computed matrices and unchanged 290.16px square outer geometry. Physical mobile tilt, actual touchscreen selection/scroll cancellation and sensor permissions remain unverified; iframe tests cannot supply that evidence. Platform permission requirements cannot be silently bypassed. Focused supporting docs: MDN animation-timeline/animation-range and DeviceOrientationEvent.requestPermission; W3C Device Orientation and Motion.
 - Mobile visual checkpoint saved privately outside source as zack-cook-opening-milestone-1791652122228.jpg (390×844 actual viewport). Existing ARTWORK_REPLACEMENT_BRIEF.md remains the modular art recommendation. No new bitmap, dependency, paid resource, environment/configuration/migration or production change. All plaintext distribution codes untouched.
 - Native Codespace publishing imported/pushed exact b7c962e → e0414e9 → eaec3bc with ordinary fast-forwards, intact history and original clean checkout. External remote verification matched each final SHA and unchanged main. Publish this documentation checkpoint, stop the existing Codespace, then pause for Zack's feedback. No new design milestone is started this turn.
+
+## Feedback milestone 2 — warm public world and clearer discovery (IN PROGRESS)
+
+- Start verified experimental head 881ade75a76d7f9989f89ae715b6221923d44f23; remote main still 64ebf8a4773889eb8278901512b30dd9aa34c071. Previous files/history/recovery bundle and private code file remain intact.
+- New author direction: Engineer ⇌ Author above Zack Cook, the same small section-label style; permanent Brave chased a shadow and got outside. / Follow him. reveal; continuous loose side-profile bird flocks; Settings at menu bottom / desktop header. These explicitly replace earlier discovery wording/presentation. No tree narrative wording changes.
+- Root Folly bug: .follyHeading h2 styled both Note to self and CollectionHeading. Scope typography to .follyTitle; retain 11px section labels.
+- Recordings reviewed: side-profile bird flock and Apple Home Screen edge reflections. Neither is a current-site scroll recording. Apple primary materials/Liquid Glass docs support restrained optical feedback on steady surfaces, with glass used chiefly for controls; no universal photo tilting.
+- Public direction is a warm reading room: original modular SVG window/paper/books/botanical placeholders painted by semantic theme roles. Remove public swamp/cypress scene assets; tree-* slots and secret-world implementation remain unchanged. Retain four palette system. Stronger native section/route transformations and opposite-depth artwork, without replacing native scroll.
+- Relevant edits: components/studio-artwork.tsx, field-journal-hero, editorial-kitties, site-header/preferences-button, pointer-light; app/home.module.css, materials.css, motion.css, globals.css; design/art-assets.json / semantic-roles.css and generated tokens. No database, credentials, dependency, production or paid-resource changes planned.
+- Implementation is partial and NOT YET verified/published. Next: finish flock + menu + steady reflections + chapter motion; generate art/theme CSS; run tests/typecheck/build; publish exact milestone via existing native Codespace Git; verify responsive/keyboard/motion/real discovery in preview; save evidence and pause for feedback. Physical touch/tilt remains unverified without a real device.
 
 ## Files, migrations and recovery
 

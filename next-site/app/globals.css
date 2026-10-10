@@ -55,7 +55,9 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .tactile-photo>img{width:100%;height:100%;object-fit:cover}
 .portrait-frame{aspect-ratio:1;max-width:440px;border-radius:clamp(18px,3vw,34px);box-shadow:var(--material-cast-x,0px) calc(24px + var(--material-cast-y,0px)) 60px -10px var(--material-shadow)}
 .page-wrap{position:relative;isolation:isolate;padding-block:clamp(52px,6.5vw,100px) var(--section-gap);min-height:65svh}
-.page-wrap:is(.creative-works-page,.about-me-page,.events-page,.shoutouts-page)::before{content:"";position:absolute;inset:0 0 auto auto;width:min(78%,1050px);height:560px;background:var(--asset-page-scenery) center bottom/cover no-repeat;filter:brightness(var(--editorial-art-light)) saturate(var(--editorial-art-saturation)) sepia(var(--editorial-art-sepia)) hue-rotate(var(--editorial-art-hue));opacity:.3;mask-image:linear-gradient(110deg,transparent 5%,#000 70%);z-index:-1;pointer-events:none}
+#main{position:relative;isolation:isolate}
+.public-page-art{display:none;position:absolute;inset:-100px -5% auto 20%;height:850px;z-index:-1;opacity:.42;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 60%),linear-gradient(#000 60%,transparent);mask-composite:intersect}
+#main:has(.about-me-page,.events-page,.shoutouts-page,.folly-page)>.public-page-art{display:block}
 .page-intro{max-width:980px;margin-bottom:clamp(50px,6vw,84px)}
 .page-intro .eyebrow{margin-bottom:28px}
 .page-intro h1,.folly-page-heading{font-size:var(--page-heading-size);line-height:1;letter-spacing:-.055em}

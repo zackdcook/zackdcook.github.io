@@ -19,6 +19,7 @@ import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
+import { StudioArtwork } from "@/components/studio-artwork";
 import { preferenceBootstrap } from "@/lib/preferences";
 import { testModeEnabled } from "@/lib/experimental-environment";
 
@@ -56,6 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <OrganicTransition name="zacks-corner">
             <div id="page-sheet">
               <main id="main" tabIndex={-1}>
+                <StudioArtwork slot="page-scenery" variant="window" className="public-page-art" />
                 <Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense>
               </main>
               <SiteFooter />

@@ -10,7 +10,7 @@ import { getShoutouts } from "@/lib/shoutouts";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
-import { Artwork } from "@/components/artwork";
+import { StudioArtwork } from "@/components/studio-artwork";
 import styles from "./home.module.css";
 
 export const metadata = { alternates: { canonical: "/" } };
@@ -42,11 +42,11 @@ export default async function Home() {
       </div>
     </section>
     <section id="words-of-folly" className={`folly-feature ${styles.clearing}`}>
-      <Artwork slot="folly-scenery" className={`editorial-art ${styles.reeds}`}/>
+      <StudioArtwork slot="folly-scenery" variant="botanical" className={styles.reeds}/>
       <div className={`shell ${styles.follySpread}`}>
         <div className={styles.follyHeading}>
           <CollectionHeading>Words of Folly</CollectionHeading>
-          <h2>Note to self:</h2>
+          <h2 className={styles.follyTitle}>Note to self:</h2>
           <div className="rail-more"><Link className="button button-outline" href="/words-of-folly">The whole pile</Link></div>
         </div>
         <div className={`folly-latest ${styles.leaf}`} role="img" aria-label={latestFolly.text}>

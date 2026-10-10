@@ -1,7 +1,7 @@
 .world{position:relative}
 .manuscript{background:var(--color-surface);isolation:isolate;padding-block:clamp(85px,10vw,150px);border-top:1px solid color-mix(in srgb,var(--color-brass) 30%,transparent)}
-.events{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(105px,13vw,185px);background:var(--color-world-glass);color:var(--color-world-ink);--section-ink:var(--color-world-ink);--section-muted:color-mix(in srgb,var(--color-world-ink) 79%,var(--color-world-glass));--section-rule:color-mix(in srgb,var(--color-world-ink) 44%,transparent);--section-accent:var(--color-sun);--focus-ring:var(--color-sun)}
-.events::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 85% 50%,color-mix(in srgb,var(--color-sky-bottom) 12%,transparent),transparent 66%)}
+.events{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(105px,13vw,185px);background:color-mix(in srgb,var(--color-background) 86%,var(--color-accent-soft));color:var(--color-ink)}
+.events::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at 85% 50%,color-mix(in srgb,var(--color-sun) 16%,transparent),transparent 66%)}
 .events :global(.writing-group){position:relative;z-index:1}
 .biography{padding-block:clamp(110px,13vw,190px);position:relative;z-index:2;background:var(--color-background)}
 .biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(60px,7.4vw,105px);line-height:.95;max-width:6ch;margin-block:32px}
@@ -10,22 +10,24 @@
 .biography :global(.life-section){grid-template-columns:.85fr 1.2fr;gap:clamp(50px,9vw,140px)}
 .clearing{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(120px,15vw,225px);background:var(--color-surface-alt);view-timeline-name:--clearing-view;view-timeline-axis:block}
 .follySpread{position:relative;z-index:2;display:grid;grid-template-columns:.8fr 1.25fr;gap:70px;align-items:center}
-.follyHeading h2{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
+.follyTitle{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
 .leaf{width:100%;max-width:630px;rotate:-12deg;filter:drop-shadow(8px 26px 20px var(--material-shadow))}
 .reeds{position:absolute;inset:auto -15% -150px;width:130%;height:105%;z-index:1;opacity:.62;pointer-events:none;mask-image:linear-gradient(transparent 15%,#000 60%)}
 .shoutouts{padding-block:var(--section-gap);background:var(--color-surface)}
 @supports(animation-timeline:view()){
  @media(prefers-reduced-motion:no-preference){
+  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)>:global(.shell){animation:chapter-rise linear both;animation-timeline:view(block);animation-range:entry 0% entry 85%;transform-origin:center top}
   :global(html:not([data-effects="reduced"])) .leaf{animation:leaf-drift linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
   :global(html:not([data-effects="reduced"])) .reeds{animation:reeds-depth linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
  }
 }
+@keyframes chapter-rise{from{opacity:.35;translate:0 90px;scale:.95}to{opacity:1;translate:0 0;scale:1}}
 @keyframes leaf-drift{from{translate:0 70px;rotate:-15deg}to{translate:0 -70px;rotate:-7deg}}
 @keyframes reeds-depth{from{translate:0 160px}to{translate:0 -160px}}
 @media(max-width:740px){
  .manuscript{padding-block:80px 85px}.events{padding-block:85px 105px}
  .biography{padding-block:90px 115px}.biography :global(.life-section){grid-template-columns:1fr;gap:65px}.biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(65px,18vw,100px);max-width:none}.biography :global(.life-copy)>p{font-size:15px;max-width:360px}
- .follySpread{grid-template-columns:1fr;gap:45px}.follyHeading h2{font-size:clamp(62px,17vw,90px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:85px 145px}.reeds{width:185%;left:-48%;height:80%;bottom:-70px;opacity:.52}
+ .follySpread{grid-template-columns:1fr;gap:45px}.follyTitle{font-size:clamp(62px,17vw,90px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:85px 145px}.reeds{width:185%;left:-48%;height:80%;bottom:-70px;opacity:.52}
  @keyframes leaf-drift{from{translate:0 40px;rotate:-13deg}to{translate:0 -40px;rotate:-8deg}}
  @keyframes reeds-depth{from{translate:0 92px}to{translate:0 -92px}}
 }

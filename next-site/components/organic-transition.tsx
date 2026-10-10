@@ -10,6 +10,7 @@ export function OrganicTransition({children,name}:{children:React.ReactNode;name
   const pathname=usePathname();
   const previous=useRef(pathname);
   const routeChange=previous.current!==pathname;
+  const page=name==="zacks-corner";
   useLayoutEffect(()=>{previous.current=pathname;},[pathname]);
-  return <ViewTransition name={name} enter={reduced?"none":"leaf-unfurl"} exit={reduced?"none":"leaf-fold"} update={reduced||(name==="zacks-corner"&&!routeChange)?"none":"leaf-reshape"} share={reduced?"none":"leaf-share"}>{children}</ViewTransition>;
+  return <ViewTransition name={name} enter={reduced?"none":page?"chapter-open":"leaf-unfurl"} exit={reduced?"none":page?"chapter-close":"leaf-fold"} update={reduced||(page&&!routeChange)?"none":page?"chapter-turn":"leaf-reshape"} share={reduced?"none":page?"chapter-turn":"leaf-share"}>{children}</ViewTransition>;
 }

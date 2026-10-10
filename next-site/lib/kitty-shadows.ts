@@ -19,3 +19,21 @@ export function shadowFlight(random: () => number = Math.random): ShadowFlight {
     reverse,
   };
 }
+
+export type FlockFlight = ShadowFlight & { startDelay: number; wingDelay: number };
+
+/** A loose group shares a direction, never a rigid formation. Normalized paths
+ * cross both window edges; each bird has its own pace, height and wing phase. */
+export function shadowFlock(random: () => number = Math.random): FlockFlight[] {
+  const leader = shadowFlight(random);
+  return Array.from({length:3}, (_, index) => {
+    const follower = index ? shadowFlight(random) : leader;
+    const {left,right} = windows.original.flight;
+    return {...follower, reverse:leader.reverse,
+      from:[leader.reverse ? right : left, follower.from[1]],
+      to:[leader.reverse ? left : right, follower.to[1]],
+      startDelay:index * (240 + Math.max(0,Math.min(1,random())) * 360),
+      wingDelay:-Math.max(0,Math.min(1,random())) * 540,
+    };
+  });
+}
