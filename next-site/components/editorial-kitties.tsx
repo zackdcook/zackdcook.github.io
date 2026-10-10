@@ -26,6 +26,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   const [escaped, setEscaped] = useState(false), [secretReady, setSecretReady] = useState(!emptyPhoto);
   const photograph = useRef<HTMLDivElement>(null), bird = useRef<HTMLButtonElement>(null), destination = useRef<HTMLAnchorElement>(null);
   const flight = useRef<Animation | null>(null), focusDestination = useRef(false);
+  const press = useRef<{id:number;x:number;y:number}|null>(null);
   const changedPhoto = escaped && secretReady, windowArea = kittyWindows.original;
 
   // A discovery stays available through refreshes and return visits. Storage
@@ -47,7 +48,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
     const photo = photograph.current, target = bird.current;
     if (!photo || !target || escaped) return;
     let active = false, disposed = false, timer: ReturnType<typeof setTimeout> | undefined;
-    const coordinates = (point: number[]) => `translate3d(${point[0] * photo.clientWidth - 26}px,${point[1] * photo.clientHeight - 26}px,0)`;
+    const coordinates = (point: number[]) => `translate3d(${point[0] * photo.clientWidth - target.clientWidth / 2}px,${point[1] * photo.clientHeight - target.clientHeight / 2}px,0)`;
     function rest() {
       flight.current?.cancel(); flight.current = null;
       target!.style.transform = coordinates(windowArea.rest);
@@ -89,7 +90,17 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
             </div>
             {!escaped && artworkEnabled("kitty-shadow") && <div className={styles.window} style={{ clipPath: `polygon(${windowArea.clip.map(([x, y]) => `${x * 100}% ${y * 100}%`).join(",")})` }}>
               <button ref={bird} type="button" className={styles.shadow} data-state="rest" aria-label="Brave chased a shadow and got outside. Follow him?" style={{ "--shadow-size": "28px" } as CSSProperties}
-                onClick={discover}><BirdShadow /></button>
+                onPointerDown={event => {
+                  if (event.button !== 0 || !event.isPrimary) return;
+                  press.current = {id:event.pointerId,x:event.clientX,y:event.clientY};
+                  event.currentTarget.setPointerCapture(event.pointerId);
+                }}
+                onPointerUp={event => {
+                  const start = press.current; press.current = null;
+                  if (start?.id === event.pointerId && Math.hypot(event.clientX-start.x,event.clientY-start.y)<14) discover();
+                }}
+                onPointerCancel={() => { press.current = null; }}
+                onClick={event => { if (event.detail === 0) discover(); }}><BirdShadow /></button>
             </div>}
           </div>
         </div>

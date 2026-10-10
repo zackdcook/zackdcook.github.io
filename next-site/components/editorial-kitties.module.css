@@ -5,7 +5,7 @@
 .caption{position:relative;padding:22px 4px 0;font:450 12px/1.6 var(--sans);letter-spacing:.015em;color:var(--color-muted);text-align:right}
 .caption::before{content:"";display:inline-block;width:24px;height:1px;background:var(--color-brass);vertical-align:middle;margin-right:12px}
 .window{position:absolute;inset:0;z-index:2;pointer-events:none}
-.shadow{position:absolute;left:0;top:0;display:grid;place-items:center;width:52px;height:52px;padding:0;border:0;background:none;pointer-events:auto;touch-action:manipulation;cursor:pointer;opacity:.27;transform:translate3d(200px,30px,0);will-change:transform,opacity}
+.shadow{position:absolute;left:0;top:0;display:grid;place-items:center;width:88px;height:88px;padding:0;border:0;background:none;pointer-events:auto;touch-action:manipulation;cursor:pointer;opacity:.27;transform:translate3d(200px,30px,0);will-change:transform,opacity;scroll-margin-block:120px}
 .shadowArt{width:var(--shadow-size,28px);height:calc(var(--shadow-size,28px)*.625);filter:blur(.7px);color:var(--photo-shadow);scale:var(--shadow-direction,1) 1}
 .shadowArt svg{fill:currentColor}
 .shadow[data-state="rest"]{opacity:0;pointer-events:none}
