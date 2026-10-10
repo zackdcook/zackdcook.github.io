@@ -13,10 +13,12 @@
  mask-composite:exclude;-webkit-mask-composite:xor;
  opacity:calc(var(--light-strength,0)*.8);
 }
-.tactile-photo[data-material-surface]>.photo-clip{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg)) scale(1.012);transform-origin:center}
+.tactile-photo[data-material-surface]{--photo-pose:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg))}
+.tactile-photo::before,.tactile-photo::after,.tactile-photo[data-material-surface]>.photo-clip{transform:var(--photo-pose,none);transform-origin:center}
 .photo-clip::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--material-specular) calc(var(--light-strength,0)*7%),transparent),transparent 55%);mix-blend-mode:screen}
 .rings[data-material-surface]>svg{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 html[data-effects="reduced"] :is(.tactile-photo,.photo-clip)::after{display:none}
-html[data-effects="reduced"] :is(.tactile-photo[data-material-surface]>.photo-clip,.rings[data-material-surface]>svg){transform:none}
+html[data-effects="reduced"] .tactile-photo{--photo-pose:none}
+html[data-effects="reduced"] .rings[data-material-surface]>svg{transform:none}
 html[data-effects="reduced"] .kitty-photo-layer{transition:none}
-@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.tactile-photo[data-material-surface]>.photo-clip,.rings[data-material-surface]>svg{transform:none}.tactile-photo::after,.photo-clip::after{display:none}}
+@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.tactile-photo{--photo-pose:none}.rings[data-material-surface]>svg{transform:none}.tactile-photo::after,.photo-clip::after{display:none}}

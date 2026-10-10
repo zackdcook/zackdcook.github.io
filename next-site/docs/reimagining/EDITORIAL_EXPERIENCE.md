@@ -39,3 +39,9 @@ Only the two obsolete ribbon-specific accessible instructions are removed, expli
 TypeScript, 82 automated tests, generated theme/art checks and a clean production build passed locally. The first build hit an existing Turbopack persistence-directory error; preserving the old build cache outside the repository and rebuilding clean resolved it. Tests cover 2,000 random paths for each photograph plus all four night-spread contrast pairs.
 
 Pending: actual desktop/390/768/1024 screenshots, moving-shadow mouse interaction, native secret dialog and focus, page/menu/calendar/Folly flow, four-theme render contrast, visible parallax measurements, reduced-effects stationary behavior, and refinement after viewing the deployed result. Physical touch/orientation remains a separate limitation.
+
+## First deployed check and refinement
+
+The 7e9 Preview verifies the new scene, including distinct horizon/foreground scrolling, living light/dark treatments, a square portrait with bounded cursor pose, and the bird-shadow discovery through mouse and keyboard. The community calendar preserves its native dialog and Escape focus. The 390/768/1024 CSS viewports have no document overflow; phone menu route/close/focus semantics work. These are browser observations, not physical touch or device-sensor tests.
+
+The first check exposed scenery behind small introductory text and a cascade collision that made the menu scenery relative instead of absolute. The refinement protects the reading area with diffuse themed light, increases introductory text legibility, makes shared artwork defaults deliberately low in specificity, clips the menu scenery in its own plane, fades the community artwork into its spread, and moves the photo rim with the same inner pose. Source checks/build pass; deployed recheck follows. The broader visual design remains in progress.

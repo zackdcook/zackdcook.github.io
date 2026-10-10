@@ -76,7 +76,7 @@ export function SiteHeader() {
           <span>{title}</span><Artwork slot="icon-arrow"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 16h21M18 8l8 8-8 8" /></svg></Artwork>
         </Link>)}
       </nav>
-      <Artwork slot="navigation-scenery" className={styles.scenery}><SwampLandscape/></Artwork>
+      <div className={styles.sceneryFrame}><Artwork slot="navigation-scenery" className={styles.scenery}><SwampLandscape/></Artwork></div>
     </dialog>
   </header>;
 }
