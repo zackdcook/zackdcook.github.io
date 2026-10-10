@@ -78,3 +78,18 @@ Implemented 8ad49b707b88f0ae4d7c03fcd77ff92f93d57b3c, refined 7d1f7fff87928193c1
 | Analytics isolation | Branch BOOK_ANALYTICS_ENABLED=false, server rejects nonproduction/test storage even with flag true (automated). Direct config-URL navigation blocked by browser client; no collection/emission test or bypass. |
 
 Source: 92/92 tests (87 TS + 5 MTS API), TypeScript PASS, final production build PASS with 47 routes and generated artwork/theme checks. No lint script. Physical touchscreen/sensors and complete route/game/dense-performance sign-off remain outstanding. Vercel owner feedback overlay appears in screenshots; it is separate from site UI and no production toolbar configuration was changed. Phone proof: zack-cook-cta-phone-1791644943033.jpg (private deliverable, not a public source asset).
+
+
+## Creative Works manuscript continuation — 2026-10-10
+
+Implementation ec11ea588e3ef729ad1b518553474a0300d9f737, Preview dpl_DS1MR3cX1YsrvbztFEii1qPsG15J. The foreground fade in 5918c3a64e4f609fc0b9f08329a6a0748f23e181 is a subsequent visual correction. Final Preview dpl_FthhE7P3aNNqJZYevhPcdBcYCQVv is READY at that exact SHA, target null, with stable alias reloaded. No database/environment change.
+
+- Dedicated scoped opening and manuscript folio use existing replaceable artwork; no additional prose or bitmap. Summary and folio share the same original project content, stage data, selection and keyboard handlers.
+- Desktop stage click + ArrowRight reached the active 0th draft, exact note, focused button and 55%; End selected the planned revision and its exact original note. Reduced-effects Home selected complete Braindump and its original note.
+- Actual 320px iframe: clientWidth/scrollWidth 305/305; dial/note 265px, three stage controls about 80.33px with no overflow. Clicking revision selected it and displayed the complete original note. This is mouse-driven CSS viewport QA, not a physical touchscreen claim.
+- Actual 768px iframe: clientWidth/scrollWidth 753/753; dial/note/vertical stage controls 318.875px, no overflow. Desktop root 1348/1348. Light and dark compositions inspected.
+- In full effects, native scroll from 0 to 206px changes horizon translate from 27.3423 to 55.814px and foreground from -34.9374 to -71.3179px. These are measured transform changes, not an FPS claim.
+- Reduced effects yields none for horizon/foreground translate and both dial-face/live-SVG transforms; stage navigation remains usable. The original source contains the OS reduced-motion fallback, but no physical device/sensor QA is claimed.
+- Tablet inspection exposed a hard left edge on the near artwork. The final CSS uses intersecting horizontal/vertical fades. The final unique Preview tablet screenshot removes the visible side cut; computed masks on the stable alias contain both gradients with intersect composition.
+- 92 tests, TypeScript and production build passed; final one-line CSS correction production build also passed (47 routes and generated theme/art checks). Authored-copy/route preservation tests passed. No lint script exists.
+- Four-theme semantic contrast tests passed; this route was directly inspected in living light/dark. Full felled-page, complete route-inventory and physical mobile sign-off remain future work.

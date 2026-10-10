@@ -6,7 +6,7 @@ Source commits and complete route paths are in `baseline-manifest.json`. This is
 | --- | --- | --- |
 | Home and authored copy | `app/page.tsx`, `content/editorial.json`, main bio | Automated original-word/copy guard passes; desktop and 320px presentation checked |
 | Navigation and legacy URLs | `site-header`, `content/navigation`, Next redirects/rewrites | Routes retained; desktop and native 320px menu/Escape checked; full legacy traversal due |
-| Creative Works | active project, progress rings, stage details, project pages | Baseline retained |
+| Creative Works | active project, progress rings, stage details, project pages | Dedicated folio shares original logic/copy; deployed click/ArrowRight/End/Home, 320/768px bounds and light/dark/reduced verified |
 | Events | writing group, recurring calendar download, Google Calendar, upcoming events | Calendar tests pass |
 | About Me | full authored biography, Zacky C image modal | Baseline retained |
 | Words of Folly | physical leaves, brushing, grabbing, reading, feed, copy-feed | Physics/reader tests pass; browser verification pending |
