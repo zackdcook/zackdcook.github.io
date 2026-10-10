@@ -1,6 +1,6 @@
 # Editorial world — main-site milestone, 2026-10-10
 
-The tree inspection milestone is now verified in a real Preview browser. Zack's newest priority puts further tree development behind the ordinary site's experience. This implementation is ready for deployed visual QA; source checks alone do not constitute visual sign-off.
+The tree inspection milestone is now verified in a real Preview browser. Zack's newest priority puts further tree development behind the ordinary site's experience. This implementation has passed the focused deployed checks below; the overall redesign and full route inventory remain in progress.
 
 ## Direction and live observations
 
@@ -45,3 +45,9 @@ Pending: actual desktop/390/768/1024 screenshots, moving-shadow mouse interactio
 The 7e9 Preview verifies the new scene, including distinct horizon/foreground scrolling, living light/dark treatments, a square portrait with bounded cursor pose, and the bird-shadow discovery through mouse and keyboard. The community calendar preserves its native dialog and Escape focus. The 390/768/1024 CSS viewports have no document overflow; phone menu route/close/focus semantics work. These are browser observations, not physical touch or device-sensor tests.
 
 The first check exposed scenery behind small introductory text and a cascade collision that made the menu scenery relative instead of absolute. The refinement protects the reading area with diffuse themed light, increases introductory text legibility, makes shared artwork defaults deliberately low in specificity, clips the menu scenery in its own plane, fades the community artwork into its spread, and moves the photo rim with the same inner pose. Source checks/build pass; deployed recheck follows. The broader visual design remains in progress.
+
+## Verified milestone and next work
+
+The final 84fda Preview removes the first reading field's hard boundary with a closest-side ellipse; the portrait remains above it and phone layouts omit it. Real cursor response moves the face, border and rim with identical nonzero matrices and fixed square outer bounds. Opposing parallax, four home themes, reduced-effects fallback, original calendar/Folly/secret flows, mobile menu and 390/768/1024 CSS viewports passed the focused browser checks in BROWSER_VERIFICATION.md. Physical touch/sensors and full-route visual sign-off remain incomplete.
+
+Main independently advanced to 64ebf8a with new book signup and privacy/analytics controls. These must be selectively preserved in the experimental design using isolated test infrastructure, before the wider public-page design/flow milestone. Tree development remains behind that work. No paid service or production deployment/configuration was changed.
