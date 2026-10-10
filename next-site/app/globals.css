@@ -836,8 +836,7 @@ h3 {
   margin-top: 17px;
   color: var(--muted);
 }
-.event-callout,
-.subscribe-callout {
+.event-callout {
   padding: 40px;
   background: var(--sage);
   border-radius: 18px;
@@ -845,9 +844,6 @@ h3 {
 }
 .event-callout h2 {
   margin-block: 14px;
-}
-.subscribe-callout p {
-  margin-block: 20px;
 }
 .admin-page {
   max-width: 720px;
@@ -1418,8 +1414,7 @@ h3 {
   .collection-grid {
     margin-top: 35px;
   }
-  .event-callout,
-  .subscribe-callout {
+  .event-callout {
     padding: 27px;
   }
   .admin-panel {

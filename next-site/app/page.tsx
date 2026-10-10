@@ -11,6 +11,8 @@ import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
 
+import { HomepageBookCTA } from "@/components/book-launch/signup-form";
+
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
@@ -38,6 +40,8 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      <HomepageBookCTA />
 
       <section id="creative-works" className="desk-section">
         <div className="shell"><ActiveProject detailsLink /></div>
@@ -82,15 +86,6 @@ export default async function Home() {
         <ShoutoutList people={shoutouts.slice(0, 3)} />
         <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
       </div></section>
-      {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && (
-        <section className="subscribe-callout shell">
-          <h2>Keep in touch.</h2>
-          <p>Occasional blurbs from my noggin to your feed.</p>
-          <a className="button" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>
-            Get writing updates
-          </a>
-        </section>
-      )}
     </>
   );
 }

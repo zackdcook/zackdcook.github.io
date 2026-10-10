@@ -1,0 +1,18 @@
+/* Signup owns its layout. Surfaces/buttons use the existing material system. */
+.book-callout { margin-block: 0 64px; }
+.book-panel { position: relative; display: block; padding: clamp(24px,4vw,48px); }
+.book-panel h2,.book-dialog h2 { font-size: clamp(1.5rem,3vw,2.2rem); line-height: 1.2; max-width: 30ch; padding-right: 32px; }
+.book-panel p,.book-dialog p { margin-block: 16px; color: inherit; }
+.book-dismiss { position: absolute; top: 12px; right: 12px; min-width: 44px; min-height: 44px; padding: 8px; }
+.book-signup-fields { display: flex; flex-wrap: wrap; gap: 12px; max-width: 680px; }
+.book-signup-fields input { flex: 1 1 220px; min-width: 0; border: 2px solid currentColor; border-radius: 14px; padding: 14px 16px; font: inherit; background: var(--paper); color: var(--ink); }
+.book-signup-fields input::placeholder { color: inherit; opacity: .7; }
+.book-signup-fields input:focus-visible { outline: 3px solid var(--coral); outline-offset: 3px; }
+.book-signup-fields .button { min-height: 48px; }
+.book-honeypot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.book-dialog { width: min(640px,calc(100vw - 32px)); max-height: calc(100dvh - 32px); overflow: auto; }
+.book-dialog .calendar-dialog-content { position: relative; }
+.book-success { padding-block: 24px; font-size: 1.2rem; }
+.book-menu-item { min-height: 44px; white-space: nowrap; }
+.mobile-menu nav .book-menu-item { width: 100%; text-align: left; justify-content: flex-start; margin-block: 6px; }
+.book-signup-form .human-check { margin-top: 12px; }
