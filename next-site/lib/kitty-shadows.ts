@@ -1,6 +1,7 @@
 import windows from "@/design/kitty-window.json";
 
 export const kittyWindows = windows;
+export const braveDiscoveryKey = "zack.brave-discovered.v1";
 export type ShadowFlight = { from: [number, number]; to: [number, number]; duration: number; delay: number; size: number; reverse: boolean };
 
 /** Normalized photograph coordinates keep the shadow tied to replaceable artwork,

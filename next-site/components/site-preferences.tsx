@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { defaultPreferences, normalizePreferences, preferenceKey, type Preferences } from "@/lib/preferences";
+import { braveDiscoveryKey } from "@/lib/kitty-shadows";
 import { livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
 import { TiltLightingControl } from "@/components/tilt-lighting-control";
 
@@ -11,7 +12,7 @@ const beBraveTimelineKey = "zack.bebrave.timeline.v1";
 const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, bookDismissed: false, bookSubscribed: false, analyticsOptOut: false, dismissBook: () => {}, subscribeBook: () => {}, setAnalyticsOptOut: (_value: boolean) => {}, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
 export const usePreferences = () => useContext(PreferenceContext);
 
-export function SitePreferences({ children }: { children: React.ReactNode }) {
+export function SitePreferences({ children, testMode=false }: { children: React.ReactNode; testMode?:boolean }) {
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [systemReduced, setSystemReduced] = useState(false);
   const [timeline, setTimeline] = useState(livingTimeline);
@@ -110,6 +111,10 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
         <TiltLightingControl enabled={preferences.tiltLighting} reduced={preferences.reduceEffects||systemReduced} onChange={enabled=>update({tiltLighting:enabled})}/>
         <label className="preference-row"><span>Opt out of anonymous analytics</span><span className="checkbox-control"><input type="checkbox" checked={analyticsOptOut} onChange={e => saveChoice(analyticsOptOutKey, e.target.checked, setAnalyticsChoice)} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>
         <button className="button button-small" onClick={reset}>Reset timeline and website preferences</button>
+        {testMode&&<button type="button" className="button button-small" onClick={()=>{
+          try{localStorage.removeItem(braveDiscoveryKey);}catch{}
+          window.location.reload();
+        }}>Reset Brave discovery</button>}
       </div>
     </dialog>
   </PreferenceContext>;

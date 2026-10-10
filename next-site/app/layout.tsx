@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
-        <SitePreferences>
+        <SitePreferences testMode={testModeEnabled(process.env)}>
           <BookLaunchProvider testMode={testModeEnabled(process.env)}>
           <Suspense fallback={null}><PrivacyAnalytics /></Suspense>
           <PointerLight />

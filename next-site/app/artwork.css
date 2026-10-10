@@ -3,6 +3,14 @@
 .artwork-content>svg{display:block;width:100%;height:100%}
 .editorial-art{filter:brightness(var(--editorial-art-light)) saturate(var(--editorial-art-saturation)) sepia(var(--editorial-art-sepia)) hue-rotate(var(--editorial-art-hue))}
 .site-asset-icon{width:18px;height:18px;flex-shrink:0}
+/* Recompose native masters for a narrow crop. Image replacements keep their
+   registry framing; only these optional vector study groups are repositioned. */
+@media(max-width:740px){
+ .studio-art[data-art-slot="hero-landscape"] .studio-window{translate:-310px 0}
+ .studio-art[data-art-slot="hero-landscape"] .studio-arch{translate:300px 0}
+ .studio-art[data-art-slot="hero-foreground"] .studio-desk-books{translate:570px 0}
+ .studio-art[data-art-slot="hero-foreground"] .studio-desk-note{translate:-300px 0}
+}
 .artwork-photo{display:block;width:100%;height:100%;background-image:var(--art-image);background-repeat:no-repeat}
 .artwork-photo[data-art-kind="mask"]{background-image:none;background-color:var(--art-tint);mask:var(--art-image) center/contain no-repeat}
 .artwork-skin{width:100%;height:100%;opacity:.22}

@@ -11,14 +11,14 @@ export function StudioArtwork({slot,variant="window",className="",material="none
   return <Artwork slot={slot} className={`studio-art ${className}`} material={material}>
     <svg viewBox="0 0 1440 1100" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
       {variant==="window" && <>
-        <g transform="translate(1050 70)" fill="none">
+        <g className="studio-window" transform="translate(1050 70)" fill="none">
           <path d="M0 900V250a230 230 0 0 1 460 0v650Z" fill="var(--studio-light)" opacity=".42"/>
           <path d="M20 900V250a210 210 0 0 1 420 0v650M230 40v860M20 340h420M20 650h420" stroke="var(--studio-rule)" strokeWidth="3" opacity=".58"/>
           <path d="M0 910V250a230 230 0 0 1 460 0v660" stroke="var(--studio-rule)" strokeWidth="14" opacity=".28"/>
           <circle cx="315" cy="235" r="75" fill="var(--studio-light)" opacity=".7"/>
           <path d="M32 357  -360 1060H250L438 357Z" fill="var(--studio-light)" opacity=".12"/>
         </g>
-        <g fill="none" stroke="var(--studio-rule)" opacity=".25">
+        <g className="studio-arch" fill="none" stroke="var(--studio-rule)" opacity=".25">
           <path d="M-80 1020V395a180 180 0 0 1 360 0v625M-50 1020V395a150 150 0 0 1 300 0v625" strokeWidth="2"/>
           <path d="M-80 650h360M-80 900h360" strokeWidth="1"/>
         </g>
@@ -27,9 +27,9 @@ export function StudioArtwork({slot,variant="window",className="",material="none
         <g fill="var(--studio-rule)" opacity=".32"><circle cx="327" cy="310" r="2"/><circle cx="998" cy="115" r="2"/><circle cx="1130" cy="618" r="3"/></g>
       </>}
       {variant==="desk" && <>
-        <g transform="translate(-25 905) rotate(-12)" opacity=".9"><Books/></g>
+        <g className="studio-desk-books" transform="translate(-25 905) rotate(-12)" opacity=".9"><Books/></g>
         <g transform="translate(1380 1040) rotate(-55)" opacity=".82"><Sprig/></g>
-        <g transform="translate(1235 650) rotate(13)" fill="var(--studio-paper)" stroke="var(--studio-rule)" strokeWidth="1.3" opacity=".65">
+        <g className="studio-desk-note" transform="translate(1235 650) rotate(13)" fill="var(--studio-paper)" stroke="var(--studio-rule)" strokeWidth="1.3" opacity=".65">
           <path d="M0 0h190l-15 245H-15Z"/><path d="M5 20h175L165 250H-10" fill="none"/>
           <path d="M22 60h115M19 84h137M17 108h97M15 150h114M12 174h85" fill="none" opacity=".55"/>
           <circle cx="131" cy="204" r="15" fill="var(--studio-accent)" opacity=".65"/>

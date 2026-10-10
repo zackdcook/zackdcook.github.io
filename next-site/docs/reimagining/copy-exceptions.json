@@ -33,5 +33,10 @@
     "path": "next-site/components/site-preferences.tsx",
     "text": "Accessibility &amp; Preferences",
     "reason": "Zack explicitly requested naming this entry Settings and placing it at the bottom of mobile navigation and in the desktop header (2026-10-10). The corresponding dialog title also becomes Settings; all existing controls and behavior remain."
+  },
+  {
+    "path": "next-site/components/site-preferences.tsx",
+    "text": "Reset Brave discovery",
+    "reason": "Preview-only QA wording exception: the existing Reset \u2026 interaction pattern with the author\u2019s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
   }
 ]

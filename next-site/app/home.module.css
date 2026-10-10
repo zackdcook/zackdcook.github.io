@@ -10,6 +10,7 @@
 .biography :global(.life-section){grid-template-columns:.85fr 1.2fr;gap:clamp(50px,9vw,140px)}
 .clearing{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(120px,15vw,225px);background:var(--color-surface-alt);view-timeline-name:--clearing-view;view-timeline-axis:block}
 .follySpread{position:relative;z-index:2;display:grid;grid-template-columns:.8fr 1.25fr;gap:70px;align-items:center}
+.follyHeading{min-width:0}
 .follyTitle{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
 .leaf{width:100%;max-width:630px;rotate:-12deg;filter:drop-shadow(8px 26px 20px var(--material-shadow))}
 .reeds{position:absolute;inset:auto -15% -150px;width:130%;height:105%;z-index:1;opacity:.62;pointer-events:none;mask-image:linear-gradient(transparent 15%,#000 60%)}

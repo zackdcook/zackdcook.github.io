@@ -6,10 +6,8 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePreferences } from "./site-preferences";
 import { Artwork, ArtworkImage } from "./artwork";
 import { artworkEnabled } from "@/lib/art-assets";
-import { kittyWindows, shadowFlock } from "@/lib/kitty-shadows";
+import { kittyWindows, shadowFlock, braveDiscoveryKey } from "@/lib/kitty-shadows";
 import styles from "./editorial-kitties.module.css";
-
-const discoveryKey = "zack.brave-discovered.v1";
 
 function BirdShadow() {
   return <Artwork slot="kitty-shadow" className={styles.shadowArt}>
@@ -32,8 +30,8 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   // A discovery stays available through refreshes and return visits. Storage
   // restrictions only affect persistence, never the current interaction.
   useEffect(() => {
-    try { if (localStorage.getItem(discoveryKey) === "true") setEscaped(true); } catch {}
-    const sync = (event: StorageEvent) => { if (event.key === discoveryKey && event.newValue === "true") setEscaped(true); };
+    try { if (localStorage.getItem(braveDiscoveryKey) === "true") setEscaped(true); } catch {}
+    const sync = (event: StorageEvent) => { if (event.key === braveDiscoveryKey && event.newValue === "true") setEscaped(true); };
     window.addEventListener("storage", sync);
     return () => window.removeEventListener("storage", sync);
   }, []);
@@ -86,7 +84,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   function discover() {
     for (const animation of flights.current) animation.cancel();
     focusDestination.current = true; setEscaped(true);
-    try { localStorage.setItem(discoveryKey, "true"); } catch {}
+    try { localStorage.setItem(braveDiscoveryKey, "true"); } catch {}
   }
 
   return <div className={`kitty-discovery ${styles.discovery}`}>

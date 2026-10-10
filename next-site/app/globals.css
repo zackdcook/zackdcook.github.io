@@ -56,7 +56,7 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .portrait-frame{aspect-ratio:1;max-width:440px;border-radius:clamp(18px,3vw,34px);box-shadow:var(--material-cast-x,0px) calc(24px + var(--material-cast-y,0px)) 60px -10px var(--material-shadow)}
 .page-wrap{position:relative;isolation:isolate;padding-block:clamp(52px,6.5vw,100px) var(--section-gap);min-height:65svh}
 #main{position:relative;isolation:isolate}
-.public-page-art{display:none;position:absolute;inset:-100px -5% auto 20%;height:850px;z-index:-1;opacity:.42;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 60%),linear-gradient(#000 60%,transparent);mask-composite:intersect}
+.public-page-art{display:none;position:absolute;inset:-100px 0 auto 20%;height:850px;z-index:-1;opacity:.42;pointer-events:none;mask-image:linear-gradient(90deg,transparent,#000 60%),linear-gradient(#000 60%,transparent);mask-composite:intersect}
 #main:has(.about-me-page,.events-page,.shoutouts-page,.folly-page)>.public-page-art{display:block}
 .page-intro{max-width:980px;margin-bottom:clamp(50px,6vw,84px)}
 .page-intro .eyebrow{margin-bottom:28px}
