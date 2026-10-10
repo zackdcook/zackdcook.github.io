@@ -1,6 +1,7 @@
 .artwork{display:block;position:relative;isolation:isolate;pointer-events:none}
 .artwork-content{display:block;width:100%;height:100%;position:relative}
 .artwork-content>svg{display:block;width:100%;height:100%}
+.editorial-art{filter:brightness(var(--editorial-art-light)) saturate(var(--editorial-art-saturation)) sepia(var(--editorial-art-sepia)) hue-rotate(var(--editorial-art-hue))}
 .site-asset-icon{width:18px;height:18px;flex-shrink:0}
 .artwork-photo{display:block;width:100%;height:100%;background-image:var(--art-image);background-repeat:no-repeat}
 .artwork-photo[data-art-kind="mask"]{background-image:none;background-color:var(--art-tint);mask:var(--art-image) center/contain no-repeat}
@@ -8,7 +9,7 @@
 .artwork:is([data-art-kind="image"],[data-art-kind="mask"]) .artwork-content::before{content:"";position:absolute;inset:0;background:var(--art-image) var(--art-position)/var(--art-fit) no-repeat}
 .artwork[data-art-kind="mask"] .artwork-content::before{background:var(--art-tint);mask:var(--art-image) var(--art-position)/var(--art-fit) no-repeat}
 .artwork[data-material-surface] .artwork-content{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
-.artwork[data-material-surface]::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*22%),transparent),transparent 60%);mix-blend-mode:soft-light}
+.artwork[data-material-surface]:is([data-art-kind="image"],[data-art-kind="mask"])::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*12%),transparent),transparent 60%);mask:var(--art-image) var(--art-position)/var(--art-fit) no-repeat;mix-blend-mode:soft-light}
 .artwork[data-material-surface="paper"]{filter:drop-shadow(var(--material-cast-x,0px) var(--material-cast-y,10px) 14px var(--material-shadow))}
 html[data-effects="reduced"] .artwork[data-material-surface]{filter:none}
 html[data-effects="reduced"] .artwork .artwork-content{transform:none}

@@ -1,33 +1,38 @@
-.hero{position:relative;isolation:isolate;min-height:min(830px,calc(100svh - 86px));overflow:clip;background:var(--color-background)}
-.atmosphere{position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,84%) var(--light-y,48%),color-mix(in srgb,var(--color-accent-soft) calc(24% + var(--light-strength,0)*18%),transparent),transparent 60%),radial-gradient(ellipse at 100% 100%,color-mix(in srgb,var(--color-foliage) 8%,transparent),transparent 70%)}
-.landscape{position:absolute;inset:auto 0 0;width:100%;height:96%;opacity:.3;mask-image:linear-gradient(transparent 28%,#000)}
-.content{width:min(1240px,calc(100% - var(--gutter)*2));min-height:inherit;margin-inline:auto;display:grid;grid-template-columns:1.12fr 1fr;gap:clamp(32px,6vw,100px);align-items:center;padding-block:clamp(50px,6vw,86px) 105px}
-.copy{position:relative;z-index:2;max-width:620px}
-.hero .eyebrow{display:flex;align-items:center;gap:16px;font-size:11px;letter-spacing:.18em;color:var(--color-muted);margin-bottom:30px}
-.hero h1{font-size:clamp(100px,12vw,177px);line-height:.88;letter-spacing:-.075em;font-weight:650}
-.hero h1 em{display:inline-block;font-style:normal;color:var(--color-accent);margin-left:clamp(18px,2.4vw,38px)}
-.intro{font:450 clamp(18px,1.7vw,24px)/1.45 var(--sans);letter-spacing:-.035em;max-width:370px;margin-top:32px;text-wrap:pretty}
-.details{max-width:390px;margin-top:27px;padding-left:20px;border-left:1px solid color-mix(in srgb,var(--color-brass) 65%,transparent)}
-.details p{font-size:13px;line-height:1.85;color:var(--color-muted);margin-top:8px;text-wrap:pretty}
-.portrait{position:relative;width:100%;max-width:480px;margin-inline:auto;aspect-ratio:6/7;display:grid;align-items:center;padding:33px;isolation:isolate}
-.orbit{position:absolute;inset:0;width:100%;height:100%;color:var(--color-brass);opacity:.62;z-index:-1}
-.frame{aspect-ratio:1;rotate:0deg;overflow:hidden;border-radius:clamp(18px,3vw,34px);box-shadow:14px 24px 58px var(--material-shadow)}
+.hero{position:relative;isolation:isolate;min-height:min(940px,calc(100svh - 86px));overflow:clip;background:var(--color-background);view-timeline-name:--hero-view;view-timeline-axis:block}
+.atmosphere{position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse at 82% 42%,color-mix(in srgb,var(--color-sun) 20%,transparent),transparent 48%),linear-gradient(160deg,var(--color-background) 24%,color-mix(in srgb,var(--color-background) 86%,var(--color-sky-bottom)))}
+.landscape{position:absolute;bottom:-190px;left:-24%;width:148%;height:110%;opacity:.78;mask-image:linear-gradient(transparent 15%,#000 58%)}
+.content{width:min(1280px,calc(100% - var(--gutter)*2));min-height:inherit;margin-inline:auto;display:grid;grid-template-columns:1.12fr 1fr;gap:clamp(38px,7vw,115px);align-items:center;padding-block:clamp(58px,7vw,108px) clamp(120px,14vw,190px)}
+.copy{position:relative;z-index:3;max-width:620px}
+.hero .eyebrow{display:flex;align-items:center;gap:16px;font-size:11px;letter-spacing:.2em;color:var(--color-muted);margin-bottom:32px}
+.hero h1{font-size:clamp(112px,14.5vw,202px);line-height:.84;letter-spacing:-.075em;font-weight:650}
+.hero h1 em{display:inline-block;font-style:normal;color:var(--color-accent);margin-left:clamp(18px,2.5vw,40px)}
+.intro{font:450 clamp(19px,1.9vw,25px)/1.5 var(--sans);letter-spacing:-.025em;max-width:370px;margin-top:38px;text-wrap:pretty}
+.details{max-width:410px;margin-top:24px;padding-left:20px;border-left:1px solid color-mix(in srgb,var(--color-brass) 60%,transparent)}
+.details p{font-size:14px;line-height:1.85;color:var(--color-muted);margin-top:8px;text-wrap:pretty}
+.portrait{position:relative;z-index:2;width:100%;max-width:465px;justify-self:end;margin-top:36px;aspect-ratio:1;isolation:isolate}
+.portrait::before{content:"";position:absolute;inset:24px -24px -24px 24px;border:1px solid color-mix(in srgb,var(--color-brass) 40%,transparent);border-radius:32px;z-index:-1}
+.orbit{position:absolute;inset:-35px;width:calc(100% + 70px);height:calc(100% + 70px);z-index:-1}
+.frame{aspect-ratio:1;border-radius:clamp(18px,3vw,34px);box-shadow:var(--material-cast-x,0px) calc(26px + var(--material-cast-y,0px)) 65px -10px var(--material-shadow),0 2px 2px var(--material-cut);background:var(--color-surface)}
 .frame img{width:100%;height:100%;object-fit:cover;object-position:54% 42%}
-.branch{position:absolute;bottom:-15px;left:-30px;width:41%;color:var(--color-foliage);transform:rotate(-18deg);filter:drop-shadow(5px 9px 0 color-mix(in srgb,var(--color-background) 70%,transparent));pointer-events:none}
-.foreground{position:absolute;inset:auto 0 0;z-index:3;width:100%;height:260px;pointer-events:none;opacity:.45}
+.branch{position:absolute;bottom:-50px;left:-35px;width:45%;height:70%;pointer-events:none}
+.foreground{position:absolute;inset:auto -10% -145px;z-index:1;width:120%;height:95%;pointer-events:none;opacity:.84;mask-image:linear-gradient(transparent 15%,#000 50%)}
 @supports(animation-timeline:view()){
  @media(prefers-reduced-motion:no-preference){
-  :global(html:not([data-effects="reduced"])) .portrait{animation:portrait-drift linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
-  :global(html:not([data-effects="reduced"])) .landscape{animation:landscape-drift linear both;animation-timeline:view();animation-range:exit 0% exit 100%}
+  :global(html:not([data-effects="reduced"])) .landscape{animation:horizon-depth linear both;animation-timeline:--hero-view;animation-range:exit 0% exit 100%}
+  :global(html:not([data-effects="reduced"])) .portrait{animation:portrait-depth linear both;animation-timeline:--hero-view;animation-range:exit 0% exit 100%}
+  :global(html:not([data-effects="reduced"])) .foreground{animation:foreground-depth linear both;animation-timeline:--hero-view;animation-range:exit 0% exit 100%}
  }
 }
-@keyframes portrait-drift{to{translate:0 28px}}
-@keyframes landscape-drift{to{translate:0 50px}}
-@media(max-width:1000px){.content{gap:20px}.portrait{padding:25px}.hero h1{font-size:clamp(92px,13vw,140px)}}
+@keyframes horizon-depth{to{translate:0 180px}}
+@keyframes portrait-depth{to{translate:0 82px}}
+@keyframes foreground-depth{to{translate:0 -115px}}
+@media(max-width:1000px){.content{gap:50px}.hero h1{font-size:clamp(102px,15vw,155px)}.portrait::before{inset:18px -18px -18px 18px}.details p{font-size:13px}.foreground{bottom:-90px;height:83%}}
 @media(max-width:740px){
- .hero{min-height:0}.content{grid-template-columns:1fr;padding-block:44px 70px;gap:0}
- .copy{max-width:100%}.hero .eyebrow{font-size:10px;margin-bottom:24px}.hero h1{font-size:clamp(80px,22vw,140px);line-height:.95}.hero h1 br{display:none}.hero h1 em{margin-left:5px}
- .intro{margin-top:22px;font-size:19px;max-width:330px}.details{margin-top:24px;max-width:380px}.details p{font-size:13px}
- .portrait{width:72%;max-width:335px;justify-self:end;margin-top:18px;margin-inline:0 6px;padding:22px}.branch{left:-25px;bottom:-12px;width:43%}.foreground{height:190px}.landscape{width:150%;left:-25%;opacity:.35}
+ .hero{min-height:0}.content{grid-template-columns:1fr;padding-block:46px 145px;gap:0}
+ .copy{max-width:100%}.hero .eyebrow{font-size:10px;margin-bottom:25px}.hero h1{font-size:clamp(77px,21.7vw,154px);line-height:.97;letter-spacing:-.06em}.hero h1 br{display:none}.hero h1 em{margin-left:5px}
+ .intro{margin-top:23px;font-size:20px;max-width:350px}.details{margin-top:20px;max-width:380px}.details p{font-size:13px}
+ .portrait{width:76%;max-width:365px;justify-self:end;margin-top:38px;margin-right:14px}.portrait::before{border-radius:25px;inset:15px -14px -15px 14px}.foreground{width:175%;left:-45%;bottom:-75px;height:60%;opacity:.8}.landscape{width:240%;left:-58%;height:72%;bottom:-90px;opacity:.8}
+ @keyframes horizon-depth{to{translate:0 85px}}
+ @keyframes portrait-depth{to{translate:0 40px}}
+ @keyframes foreground-depth{to{translate:0 -66px}}
 }
-:global(html[data-effects="reduced"]) .branch{filter:none}

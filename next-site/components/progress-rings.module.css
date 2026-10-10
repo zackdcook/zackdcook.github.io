@@ -10,7 +10,9 @@
 .display :global(.stage-label sup){font-size:.65em}
 .display :global(.stage-count){display:block;font-size:11px;line-height:1.6;font-variant-numeric:tabular-nums;margin-top:4px}
 .display :global(.progress-chart){display:grid;justify-items:center;gap:15px;min-width:0}
-.display :global(.rings){width:100%;max-width:285px;position:relative}
+.display :global(.rings){width:100%;max-width:320px;position:relative;border-radius:50%;isolation:isolate;box-shadow:var(--material-cast-x,0px) calc(12px + var(--material-cast-y,0px)) 28px -12px var(--material-shadow)}
+.dialFace{position:absolute;inset:0;z-index:-1;border-radius:50%}
+.display :global(.rings[data-material-surface]) .dialFace{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 .display :global(.rings svg){display:block;width:100%;height:auto;overflow:visible}
 .display :global(.core-fill){fill:var(--color-surface-alt);stroke:var(--color-foliage);stroke-width:1;opacity:.8}
 .display :global(.ring-fill){stroke-dashoffset:100;transition:stroke-dashoffset 1.1s var(--ease-settle) var(--ring-delay)}
@@ -32,3 +34,5 @@
 @media(max-width:520px){.display{grid-template-columns:minmax(135px,1fr) minmax(130px,1fr);gap:15px}.display :global(.stage-button){min-height:74px;gap:9px;padding-block:13px}.display :global(.stage-label){font-size:13px}.display :global(.stage-count){font-size:10px}.display :global(.rings){max-width:200px}.display :global(.project-updated){font-size:9px;max-width:130px}.display :global(.progress-note){padding-top:20px;margin-top:8px}}
 @media(prefers-reduced-motion:reduce){.display :global(.ring-fill){stroke-dashoffset:var(--ring-offset)}}
 :global(html[data-effects="reduced"]) .display :global(.ring-fill){stroke-dashoffset:var(--ring-offset)}
+:global(html[data-effects="reduced"]) .dialFace{transform:none!important}
+@media(prefers-reduced-motion:reduce){.display :global(.rings[data-material-surface]) .dialFace{transform:none}}

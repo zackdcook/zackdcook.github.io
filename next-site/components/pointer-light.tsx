@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { approachLight, materialLight, panelLight, materialPose, materialGeometryEvent } from "@/lib/material-light";
 import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 
-const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.preferences-dialog,.zacky-c-preview,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.kitty-ribbon,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
+const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.preferences-dialog,.zacky-c-preview,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.text-link,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
 
 const panelsSelector = ".bebrave-human-modal,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.shoutout-card,.event-callout,.writing-panel,.bebrave-rpg-dialogue";
 
@@ -22,7 +22,6 @@ export function PointerLight() {
       // Mouse movement lights rims/borders without moving the physical cast. Tilt moves both.
       const dynamicCast=source==="tilt";
       element.style.setProperty("--shadow-x",dynamicCast?px(light.shadowX):"0px");element.style.setProperty("--shadow-y",dynamicCast?px(light.shadowY):"0px");element.style.setProperty("--shadow-blur",dynamicCast?px(light.blur):"0px");element.style.setProperty("--rim-x",px(light.rimX));element.style.setProperty("--rim-y",px(light.rimY));element.style.setProperty("--light-angle",`${Math.atan2(light.rimY,light.rimX)*180/Math.PI}deg`);
-      if(element.classList.contains("kitty-ribbon")&&bounds.width){element.style.setProperty("--ribbon-light-x",px(light.lightX*640/bounds.width));element.style.setProperty("--ribbon-light-y",px(light.lightY*640/bounds.width));}
       element.style.setProperty("--cast-x",dynamicCast?px(light.shadowX):"0px");element.style.setProperty("--cast-y",dynamicCast?px(light.shadowY):"0px");
       if(element.hasAttribute("data-material-surface")){
         const pose=materialPose(bounds,x,y,light.strength);
@@ -31,7 +30,7 @@ export function PointerLight() {
       }
     }
     function resetSurface(element:HTMLElement){element.style.setProperty("--light-strength","0");for(const name of ["--shadow-x","--shadow-y","--shadow-blur","--cast-x","--cast-y","--material-cast-x"])element.style.setProperty(name,"0px");for(const name of ["--rim-x","--rim-y","--material-pitch","--material-yaw","--material-cast-y"])element.style.removeProperty(name);}
-    function collect(){collectionFrame=0;const next=new Set(document.querySelectorAll<HTMLElement>(surfacesSelector));for(const element of surfaces)if(!next.has(element)){observer.unobserve(element);resize.unobserve(element);surfaces.delete(element);visible.delete(element);rectangles.delete(element);}for(const element of next)if(!surfaces.has(element)){surfaces.add(element);resetSurface(element);if(!element.matches(".hero h1,.kitty-ribbon,.desktop-nav a"))element.dataset.material="surface";if(element.matches(panelsSelector))element.dataset.materialKind="panel";observer.observe(element);resize.observe(element);}dirty=true;start();}
+    function collect(){collectionFrame=0;const next=new Set(document.querySelectorAll<HTMLElement>(surfacesSelector));for(const element of surfaces)if(!next.has(element)){observer.unobserve(element);resize.unobserve(element);surfaces.delete(element);visible.delete(element);rectangles.delete(element);}for(const element of next)if(!surfaces.has(element)){surfaces.add(element);resetSurface(element);if(!element.matches(".hero h1,.desktop-nav a"))element.dataset.material="surface";if(element.matches(panelsSelector))element.dataset.materialKind="panel";observer.observe(element);resize.observe(element);}dirty=true;start();}
     function reset(){for(const element of surfaces)resetSurface(element);cancelAnimationFrame(frame);frame=0;intensity=0;previousTime=0;}
     function tick(now:number){frame=0;if(reduced()||document.hidden){reset();return;}const target=hasLight&&!released?1:0,elapsed=previousTime?Math.min(64,now-previousTime):0;intensity=approachLight(intensity,target,elapsed);if(source==="tilt"){const easing=1-Math.exp(-elapsed/90);x+=(tiltX-x)*easing;y+=(tiltY-y)*easing;}previousTime=now;if(dirty){for(const element of visible)rectangles.set(element,element.getBoundingClientRect());dirty=false;}for(const element of visible){const bounds=rectangles.get(element);if(bounds)paint(element,bounds,intensity);}const settling=source==="tilt"&&Math.hypot(tiltX-x,tiltY-y)>.2;if(Math.abs(intensity-target)>.001||settling)frame=requestAnimationFrame(tick);else previousTime=0;}
     function start(){if(!frame&&!reduced())frame=requestAnimationFrame(tick);}

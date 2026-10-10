@@ -15,7 +15,6 @@ import "./bebrave.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
-import { KittyRibbonBillow } from "@/components/kitty-ribbon-billow";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { preferenceBootstrap } from "@/lib/preferences";
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a className="skip-link" href="#main">Skip to content</a>
         <SitePreferences>
           <PointerLight />
-          <KittyRibbonBillow />
           <SiteIcons />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
           <OrganicTransition name="zacks-corner">

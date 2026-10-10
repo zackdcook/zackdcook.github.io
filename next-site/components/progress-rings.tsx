@@ -5,6 +5,7 @@ import progress from "@/content/progress.json";
 import { displayDate } from "@/content/site";
 import { progressRatio } from "@/lib/validation";
 import styles from "./progress-rings.module.css";
+import { Artwork } from "./artwork";
 
 const activeIndex = Math.max(0, progress.stages.findIndex(stage => stage.status === "active"));
 const number = (value: number) => value.toLocaleString("en-US");
@@ -91,6 +92,17 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
       </li>)}</ol>
     </div>
     <div className="progress-chart"><div className="rings" data-material-surface="glass" onPointerLeave={() => setHovered(null)}>
+      <Artwork slot="progress-dial" className={styles.dialFace}>
+        <svg viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+          <defs><radialGradient id={`${id}-face`} cx=".32" cy=".24" r=".85"><stop stopColor="var(--color-surface)"/><stop offset="1" stopColor="var(--color-surface-alt)"/></radialGradient></defs>
+          <circle cx="160" cy="160" r="158" fill={`url(#${id}-face)`} stroke="var(--material-cut)" strokeWidth=".7"/>
+          <circle cx="160" cy="160" r="151" fill="none" stroke="var(--color-brass)" strokeWidth=".5" opacity=".5"/>
+          <g stroke="var(--color-brass)" strokeWidth=".8" opacity=".45">{Array.from({length:60},(_,index)=>{
+            const angle=index*Math.PI/30,inner=index%5===0?150:153;
+            return <path key={index} d={`M${(160+inner*Math.sin(angle)).toFixed(2)},${(160-inner*Math.cos(angle)).toFixed(2)}L${(160+156*Math.sin(angle)).toFixed(2)},${(160-156*Math.cos(angle)).toFixed(2)}`}/>;
+          })}</g>
+        </svg>
+      </Artwork>
       <svg viewBox="0 0 320 320" aria-hidden="true">
         <defs>{progress.stages.map((item, index) => {
           const tone = toneFor(index);

@@ -1,0 +1,12 @@
+[
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "Play with the editorial kitty committee ribbon. Drag it, or use the arrow keys.",
+    "reason": "Zack explicitly requested replacing the ribbon with clickable/tappable bird shadows in the window (2026-10-10). This obsolete ribbon-only instruction is removed. The original Brave question, Yes/No, photo alternatives and editorial caption remain."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": ". Pick up the strip to see it twist; release it to leave it there.",
+    "reason": "The same explicitly requested replacement makes the strip-only instruction inaccurate. No new prose is substituted; the shadow uses the original Brave question as its accessible label."
+  }
+]

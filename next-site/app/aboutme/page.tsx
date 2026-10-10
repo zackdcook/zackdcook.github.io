@@ -1,6 +1,6 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
-import Image from "next/image";
+import { ArtworkImage } from "@/components/artwork";
 import { ZackyCPreview } from "@/components/zacky-c-preview";
 import { site } from "@/content/site";
 
@@ -31,9 +31,9 @@ export default function AboutMe() {
         <h1>I’m Zack<br /><em>Cook.</em></h1>
       </div>
 
-      <div className="portrait-frame tactile-photo">
-        <Image src="/images/portrait.webp" alt="Zack Cook" width={1200} height={1200}
-          sizes="(max-width: 740px) 90vw, 40vw" priority />
+      <div className="portrait-frame tactile-photo" data-material-surface="glass">
+        <div className="photo-clip"><ArtworkImage slot="portrait" alt="Zack Cook" width={1200} height={1200}
+          sizes="(max-width: 740px) 90vw, 40vw" preload /></div>
       </div>
     </section>
   </div>

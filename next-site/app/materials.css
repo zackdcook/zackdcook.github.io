@@ -1,40 +1,22 @@
-/* One restrained interaction treatment; never turns a spread into a card. */
+/* Lighting follows the material's geometry. The photo clips its image; the
+   outer frame remains open so its curved rim and cast never end at a crop. */
 .button:not(a),.preference-control{
- background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*12%),transparent),transparent 70%);
- box-shadow:inset var(--rim-x,0px) var(--rim-y,0px) 1px color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*50%),transparent);
+ background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*8%),transparent),transparent 70%);
+ box-shadow:inset var(--rim-x,0px) var(--rim-y,0px) 1px color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*35%),transparent);
 }
 .button:not(a):not(:disabled):active{box-shadow:inset 0 2px 5px var(--material-shadow)}
+.tactile-photo::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;border:1px solid var(--material-cut)}
 .tactile-photo::after{
- content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
- background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*18%),transparent),transparent 62%);
- box-shadow:inset var(--rim-x,0px) var(--rim-y,0px) 2px color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*80%),transparent);
+ content:"";position:absolute;inset:-1px;z-index:4;pointer-events:none;border-radius:inherit;padding:1.5px;
+ background:conic-gradient(from calc(var(--light-angle,0deg) + 90deg),transparent 0deg,var(--material-specular) 65deg,transparent 145deg,transparent 220deg,color-mix(in srgb,var(--color-sun) 35%,transparent) 265deg,transparent 330deg);
+ mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+ mask-composite:exclude;-webkit-mask-composite:xor;
+ opacity:calc(var(--light-strength,0)*.8);
 }
-.tactile-photo[data-material-surface]>:is(img,.artwork-photo){transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg)) scale(1.025)}
-[data-material-surface="glass"]{background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*22%),transparent),transparent 68%)}
+.tactile-photo[data-material-surface]>.photo-clip{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg)) scale(1.012);transform-origin:center}
+.photo-clip::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--material-specular) calc(var(--light-strength,0)*7%),transparent),transparent 55%);mix-blend-mode:screen}
 .rings[data-material-surface]>svg{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
-.kitty-ribbon{
- --ribbon-face-bg:var(--color-chrome);
- --ribbon-face-ink:var(--color-on-chrome);
- --ribbon-face-highlight:color-mix(in srgb,var(--color-chrome) 78%,var(--color-accent-soft));
- position:absolute;left:0;top:0;width:100%;max-width:none;padding:0;border:0;border-radius:0;
- background:none;box-shadow:none;color:var(--ribbon-face-ink);pointer-events:none;touch-action:none;user-select:none;
- -webkit-user-select:none;-webkit-touch-callout:none;z-index:50;transform:none;transition:none;
-}
-.kitty-ribbon svg{display:block;width:100%;height:auto;overflow:visible;pointer-events:none;touch-action:none}
-.ribbon-hit{fill:transparent;pointer-events:fill;cursor:grab;touch-action:none}
-.kitty-ribbon:active .ribbon-hit{cursor:grabbing}
-.kitty-ribbon:focus-visible{outline:none}
-.kitty-ribbon:focus-visible .ribbon-thickness{stroke:var(--color-accent);stroke-width:3}
-.ribbon-face{stroke-width:.65;stroke-linejoin:round}
-.ribbon-back-face{display:none}
-.ribbon-patch[data-face="back"] .ribbon-front-face{display:none}
-.ribbon-patch[data-face="back"] .ribbon-back-face{display:inline}
-.ribbon-patch[data-face="back"] .ribbon-front-label{display:none}
-.ribbon-cast{fill:var(--material-shadow);transform:translate(calc(var(--shadow-x,0px) + var(--ribbon-height,0px)*.12),calc(var(--shadow-y,0px) + var(--ribbon-height,0px)*.15))}
-.ribbon-thickness{fill:var(--ribbon-face-bg);stroke:var(--ribbon-face-bg);stroke-width:1.2;stroke-linejoin:round;transform:translateY(1.2px)}
-.ribbon-lettering{fill:var(--ribbon-face-ink);font:600 21px var(--sans)}
-html[data-effects="reduced"] :is(.button,.preference-control,.tactile-photo)::after{box-shadow:none;background:none}
-html[data-effects="reduced"] [data-material-surface]{background-image:none}
-html[data-effects="reduced"] :is(.tactile-photo[data-material-surface]>:is(img,.artwork-photo),.rings[data-material-surface]>svg){transform:none}
+html[data-effects="reduced"] :is(.tactile-photo,.photo-clip)::after{display:none}
+html[data-effects="reduced"] :is(.tactile-photo[data-material-surface]>.photo-clip,.rings[data-material-surface]>svg){transform:none}
 html[data-effects="reduced"] .kitty-photo-layer{transition:none}
-@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.tactile-photo[data-material-surface]>:is(img,.artwork-photo),.rings[data-material-surface]>svg{transform:none}}
+@media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.tactile-photo[data-material-surface]>.photo-clip,.rings[data-material-surface]>svg{transform:none}.tactile-photo::after,.photo-clip::after{display:none}}

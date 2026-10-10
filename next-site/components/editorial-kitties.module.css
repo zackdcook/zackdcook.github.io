@@ -1,0 +1,30 @@
+.discovery{position:relative;min-width:0;view-timeline-name:--kitty-view;view-timeline-axis:block}
+.figure{margin:0;position:relative}
+.photo{border-radius:12px;rotate:-2deg;box-shadow:var(--material-cast-x,0px) calc(26px + var(--material-cast-y,0px)) 50px -10px var(--material-shadow)}
+.photoClip{aspect-ratio:1400/1034}
+.caption{position:relative;padding:22px 4px 0;font:450 12px/1.6 var(--sans);letter-spacing:.015em;color:var(--color-muted);text-align:right}
+.caption::before{content:"";display:inline-block;width:24px;height:1px;background:var(--color-brass);vertical-align:middle;margin-right:12px}
+.window{position:absolute;inset:0;z-index:2;pointer-events:none}
+.shadow{position:absolute;left:0;top:0;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;pointer-events:auto;touch-action:manipulation;cursor:pointer;opacity:.27;transform:translate3d(200px,30px,0);will-change:transform,opacity;transition:opacity 160ms}
+.shadowArt{width:var(--shadow-size,28px);height:calc(var(--shadow-size,28px)*.625);filter:blur(.7px);color:var(--photo-shadow);scale:var(--shadow-direction,1) 1}
+.shadowArt svg{fill:currentColor}
+.shadow[data-state="rest"]{opacity:.23}
+.shadow:focus-visible{opacity:.8!important;outline:2px solid var(--photo-shadow);outline-offset:-3px;border-radius:50%}
+.shadow:focus-visible .shadowArt{filter:none}
+.shadow[data-state="flying"] :is(.leftWing,.rightWing){animation:wing-beat 420ms ease-in-out infinite alternate;transform-origin:32px 22px}
+.rightWing{animation-delay:-210ms!important}
+.secret{border-radius:22px;max-width:460px}
+.secret p{font:650 27px/1.35 var(--display);letter-spacing:-.03em;max-width:350px}
+.choices{margin-top:30px;gap:26px}
+.choices .button{min-width:65px}
+@keyframes wing-beat{from{scale:1 .68;rotate:-5deg}to{scale:1 1;rotate:5deg}}
+@supports(animation-timeline:view()){
+ @media(prefers-reduced-motion:no-preference){
+  :global(html:not([data-effects="reduced"])) .figure{animation:photo-depth linear both;animation-timeline:--kitty-view;animation-range:entry 0% exit 100%}
+ }
+}
+@keyframes photo-depth{from{translate:0 48px}to{translate:0 -48px}}
+@media(max-width:740px){.caption{padding-top:18px;font-size:11px}.photo{rotate:-1deg}.secret p{font-size:25px}@keyframes photo-depth{from{translate:0 22px}to{translate:0 -22px}}}
+:global(html[data-effects="reduced"]) .shadow{will-change:auto}
+:global(html[data-effects="reduced"]) .shadowArt{filter:none}
+@media(prefers-reduced-motion:reduce){.shadow{will-change:auto}.shadowArt{filter:none}}

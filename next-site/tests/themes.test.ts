@@ -22,5 +22,8 @@ for(const [name,colors] of Object.entries(themes)) {
     // Glass is 96% opaque; white behind it is the worst lightening case.
     const glassOnWhite="#"+[1,3,5].map(i=>Math.round(parseInt(colors["world-glass"].slice(i,i+2),16)*.96+255*.04).toString(16).padStart(2,"0")).join("");
     assert.ok(contrast(glassOnWhite,colors["world-ink"])>=4.5,"world glass over white");
+    const eventMuted="#"+[1,3,5].map(i=>Math.round(parseInt(colors["world-ink"].slice(i,i+2),16)*.79+parseInt(colors["world-glass"].slice(i,i+2),16)*.21).toString(16).padStart(2,"0")).join("");
+    assert.ok(contrast(colors["world-glass"],eventMuted)>=4.5,"editorial night spread secondary text");
+    assert.ok(contrast(colors["world-glass"],colors.sun)>=3,"editorial night spread focus cue");
   });
 }

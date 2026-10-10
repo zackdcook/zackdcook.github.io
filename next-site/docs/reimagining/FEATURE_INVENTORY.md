@@ -10,13 +10,13 @@ Source commits and complete route paths are in `baseline-manifest.json`. This is
 | Events | writing group, recurring calendar download, Google Calendar, upcoming events | Calendar tests pass |
 | About Me | full authored biography, Zacky C image modal | Baseline retained |
 | Words of Folly | physical leaves, brushing, grabbing, reading, feed, copy-feed | Physics/reader tests pass; browser verification pending |
-| Kitty secret | editorial photo, ribbon physics, escape confirmation, empty window, tree access | Physics tests and prior desktop keyboard secret flow pass; optional skins preserve geometry |
+| Kitty secret | Original caption/photo/empty window/Brave Yes-No/tree access; user-requested bird-shadow trigger replaces ribbon | Random window-route tests pass; deployed keyboard/mouse/reduced/modal checks pending. Two obsolete ribbon instructions explicitly excepted. |
 | Tree introduction | Nothing / Admire / Carve / Chop down, narrative and base cache | Main mechanics retained |
 | Carving | anonymous httpOnly cookie, Turnstile, rate limits, tools, hidden rolls, pity, colors, 60 seconds, coalesced pointer samples | Rarity tests pass; actual Legendary mouse/stream/timer/color DB flow passes; ordinary tools/touch QA due |
 | Eligibility | five feet since prior completed carving, enforced again at drawing start | Actual post-publication cooldown persists after refresh; create/resume DB gate rejects visitor; start logic retained |
 | Publication | streamed chunks, deadline enforcement, overdue finalization, one-foot growth, individual sessions, stable overlap order | 21 originals restored exactly after backfill; actual timed publication 22 automatically archives and renders saved effect; individual records retained |
 | Admire | viewport sections, zoom anchor, parallax, completed strokes | Actual archived-carving scroll/zoom/reset and offcamera effect sleep pass; broader responsive/art refinement due |
-| Felling | first strike, confirmation, d4 additional strikes, snapshot cutoff, sideways tree, later stump, regret, reset | Local state retained; browser verification pending |
+| Felling | first strike, confirmation, d4 additional strikes, snapshot cutoff, sideways tree, later stump, regret, reset | Actual fd789 browser return-home/persistence/reachable sideways Admire/canonical inspection/Back/stump/regret/preferences reset pass. |
 | Lockbox | code entry, server digest, visitor/network limits, color selection | 50 distribution codes remain unused; actual SQL concurrency and disposable browser redemption/refresh/replay/nonempty consumption pass |
 | Test infrastructure | spring-clean bypass and reset; test DB | Strict exact-test/Preview guards and READY Preview verified; browser reset restores eligibility and retains carving/identity/reward history |
 | Preferences | light/dark, motion/effects, phone tilt, restore timeline/reset, persistence/bootstrap | Existing preference tests pass |

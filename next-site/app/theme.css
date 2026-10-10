@@ -195,6 +195,12 @@ html[data-timeline="felled"][data-theme="dark"] {
   --material-shadow: color-mix(in srgb, var(--tone-dark-neutral) 22%, transparent);
   --material-edge: color-mix(in srgb, var(--color-surface) 65%, transparent);
   --material-cut: color-mix(in srgb, var(--color-ink) 25%, transparent);
+  --material-specular: color-mix(in srgb, var(--color-surface) 86%, var(--color-sun));
+  --photo-shadow: #19231F;
+  --editorial-art-light: .95;
+  --editorial-art-saturation: .85;
+  --editorial-art-sepia: 0;
+  --editorial-art-hue: 0deg;
   --page-heading-accent: var(--color-accent);
   --bebrave-sky-top: var(--color-sky-top);
   --bebrave-sky-bottom: var(--color-sky-bottom);
@@ -236,10 +242,17 @@ html[data-timeline="felled"][data-theme="dark"] {
 }
 html[data-theme="dark"] {
   --material-shadow: rgb(0 0 0 / .42);
+  --material-specular: var(--color-sun);
+  --editorial-art-light: .67;
+  --editorial-art-saturation: .75;
   --world-art-light: .7;
   --world-bark-light: .84;
 }
 html[data-timeline="felled"] {
+  --editorial-art-light: .85;
+  --editorial-art-saturation: .38;
+  --editorial-art-sepia: .2;
+  --editorial-art-hue: -15deg;
   --tone-dark-neutral: #393039;
   --tone-dark-color: #3F2936;
   --tone-medium-color: #DDA7AF;
@@ -251,6 +264,7 @@ html[data-timeline="felled"] {
   --world-bark-light: .9;
 }
 html[data-theme="dark"][data-timeline="felled"] {
+  --editorial-art-light: .55;
   --world-art-light: .58;
   --world-bark-light: .72;
 }

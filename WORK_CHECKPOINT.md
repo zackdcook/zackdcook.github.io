@@ -84,4 +84,14 @@ Updated: 2026-10-10 UTC. The overhaul is IN PROGRESS. Publishing is restored aga
 4. Then return to remaining tree polish, ordinary rarity/input tests and actual browser scale/camera capacity including dense same-zone populations. Synthetic Node results do not certify extreme-height browser scrolling or FPS.
 5. Final delivery follows full inventory and visual sign-off. The original project is not complete.
 
-Exact next action: integrate the two newly generated, original transparent environment layers as optimized versioned WebPs in the central artwork registry, then implement the main-site compositions/parallax/material refinements and the bird-shadow discovery. Review Impilo/Hellboy live scroll findings once and record them; do not repeat the audit or canonical backfill. No blockers require user input presently. Never regenerate or test with distribution codes.
+Exact next action: publish the main-site editorial-world implementation through the authorized Codespace mirror, deploy one deliberate Preview, then perform desktop/390/768/1024 visual and functional QA and refine the actual result. Source TypeScript/82 tests/generated checks/clean production build pass; visual sign-off is pending. See EDITORIAL_EXPERIENCE.md for the renewed live-reference observations, assets, motion, material architecture and exact kitty copy exceptions. Do not repeat the audit or canonical backfill. No blockers require user input presently. Never regenerate or test with distribution codes.
+
+## Current local main-site implementation
+
+Two original transparent environment WebPs (~0.9 MB combined) are integrated through the replaceable registry. Hero horizon/portrait/foreground depth is now 180/82/-115px on desktop, bounded smaller on phones; named native CSS view timelines preserve stationary fallbacks. Community becomes a dusk spread, biography and Folly have stronger depth/hierarchy, public-page and menu scenery share the same artwork. The manuscript dial has an independently replaceable decorative face.
+
+Photos now clip their contents separately from the rounded, masked light rim and cast. Broad photo/illustration lighting washes are removed; shared pointer and opt-in tilt retain stable hit bounds and idle scheduling. The darker common carving color and rounded-square portrait remain.
+
+Kitty photo now has the original caption below it. Random winged shadows are confined to configured original/escaped window polygons; click/tap/keyboard opens the original Brave Yes/No dialog. Original empty photo persists. Offscreen/hidden/open-dialog flights stop, hover/focus pauses, reduced effects keeps a stationary target. Two obsolete ribbon-only instructions are explicitly documented and excluded individually from preservation checks, per Zack's request.
+
+Changed files: hero/home/writing-group/progress/header/artwork/material styles; editorial-kitties.tsx/module; lib/kitty-shadows.ts; design/kitty-window.json; design/art-assets.json/semantic-roles.css; docs/reimagining/EDITORIAL_EXPERIENCE.md and copy-exceptions.json. Local source validation passes. New Preview/visual QA must follow publication; do not call the design finished.
