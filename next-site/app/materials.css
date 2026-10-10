@@ -11,11 +11,11 @@
  background:conic-gradient(from calc(var(--light-angle,0deg) + 90deg),transparent 0deg,var(--material-specular) 65deg,transparent 145deg,transparent 220deg,color-mix(in srgb,var(--color-sun) 35%,transparent) 265deg,transparent 330deg);
  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
  mask-composite:exclude;-webkit-mask-composite:xor;
- opacity:calc(var(--light-strength,0)*.8);
+ opacity:calc(var(--light-strength,0)*.68);
 }
 .tactile-photo[data-material-surface]{--photo-pose:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg))}
 .tactile-photo::before,.tactile-photo::after,.tactile-photo[data-material-surface]>.photo-clip{transform:var(--photo-pose,none);transform-origin:center}
-.photo-clip::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--material-specular) calc(var(--light-strength,0)*7%),transparent),transparent 55%);mix-blend-mode:screen}
+.photo-clip::after{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse 85% 72% at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--material-specular) calc(var(--light-strength,0)*16%),transparent),transparent 82%),linear-gradient(calc(var(--light-angle,0deg) + 110deg),transparent 28%,color-mix(in srgb,var(--material-specular) calc(var(--light-strength,0)*5%),transparent) 48%,transparent 72%);mix-blend-mode:screen}
 .rings[data-material-surface]>svg{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 html[data-effects="reduced"] :is(.tactile-photo,.photo-clip)::after{display:none}
 html[data-effects="reduced"] .tactile-photo{--photo-pose:none}

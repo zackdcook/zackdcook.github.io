@@ -24,7 +24,7 @@ test("random shadows cross the entire original window in both directions", () =>
     assert.ok(within(middle,window.clip),"each crossing passes through the window");
     assert.ok(Math.abs(flight.from[0]-flight.to[0])>.7,"cross the whole window, not hover in its center");
     assert.ok(flight.duration>=5800&&flight.duration<=8800);
-    assert.ok(flight.delay>=5200&&flight.delay<=11800);
+    assert.ok(flight.delay>=900&&flight.delay<=2800);
     assert.ok(flight.size>=22&&flight.size<=34);
   }
   assert.equal(directions.size,2);

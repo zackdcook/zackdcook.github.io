@@ -1,9 +1,10 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { approachLight, materialLight, panelLight } from "../lib/material-light";
+import { approachLight, followLight, materialLight, panelLight } from "../lib/material-light";
 import { createRibbon, dropRibbon, ribbonPaths, ribbonSpacing, stepRibbon } from "../lib/ribbon-physics";
 import { tiltLight } from "../lib/phone-tilt";
-import { normalizePreferences } from "../lib/preferences";
+import { defaultPreferences, normalizePreferences, preferenceBootstrap, preferenceKey } from "../lib/preferences";
+import { runInNewContext } from "node:vm";
 
 const button = { left: 100, top: 100, width: 160, height: 50 };
 test("a single virtual source casts to the opposite side in all eight directions", () => {
@@ -129,10 +130,45 @@ test("tilt handles landscape, angular wrap and malformed sensor readings", () =>
   assert.equal(tiltLight({ beta: NaN, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 400, 800), null);
   assert.equal(tiltLight({ beta: 0, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 0, 800), null);
 });
-test("tilt lighting stays opt-in when loading legacy or explicit preferences", () => {
-  assert.equal(normalizePreferences({ theme: "dark" }).tiltLighting, false);
+test("tilt lighting defaults on while preserving an explicit opt-out", () => {
+  assert.equal(defaultPreferences.tiltLighting, true);
+  assert.equal(normalizePreferences({ theme: "dark" }).tiltLighting, true);
+  assert.equal(normalizePreferences(null).tiltLighting, true);
   assert.equal(normalizePreferences({ tiltLighting: false }).tiltLighting, false);
   assert.equal(normalizePreferences({ tiltLighting: true }).tiltLighting, true);
+});
+test("first-paint lighting agrees with hydrated preferences and respects reduced motion", () => {
+  for (const saved of [{}, { theme: "dark" }, { tiltLighting: false }, { tiltLighting: true, reduceEffects: true }]) {
+    for (const systemReduced of [false, true]) {
+      const root = { dataset: {} as Record<string,string> };
+      runInNewContext(preferenceBootstrap, { document: { documentElement: root },
+        localStorage: { getItem: (key: string) => key === preferenceKey ? JSON.stringify(saved) : null },
+        matchMedia: (query: string) => ({ matches: query.includes("reduced-motion") && systemReduced }),
+      });
+      const preferences = normalizePreferences(saved);
+      assert.equal(root.dataset.tilt, String(preferences.tiltLighting));
+      assert.equal(root.dataset.effects, preferences.reduceEffects || systemReduced ? "reduced" : "full");
+    }
+  }
+});
+test("light travel is frame-rate independent, bounded and continuous on reversal", () => {
+  const start = { x: 0, y: 100 }, target = { x: 320, y: -80 };
+  let slow = start, fast = start;
+  for (let frame=0;frame<60;frame++) slow = followLight(slow,target,1000/60);
+  for (let frame=0;frame<120;frame++) fast = followLight(fast,target,1000/120);
+  assert.ok(Math.hypot(slow.x-fast.x,slow.y-fast.y)<1e-9);
+  assert.ok(slow.x>319 && slow.x<320 && slow.y>-80);
+  const reversed = followLight(slow,start,16);
+  assert.ok(reversed.x>0 && reversed.x<slow.x && reversed.y>slow.y);
+  assert.deepEqual(followLight(start,target,0),start);
+});
+test("mobile light retains a smooth response beyond the old clamp angle", () => {
+  const neutral={beta:55,gamma:0};
+  const a=tiltLight({beta:55,gamma:35},neutral,0,400,800)!;
+  const b=tiltLight({beta:55,gamma:36},neutral,0,400,800)!;
+  const extreme=tiltLight({beta:55,gamma:89},neutral,0,400,800)!;
+  assert.ok(b.x<a.x && a.x-b.x<4);
+  assert.ok(extreme.x>=400*(.5-.68) && extreme.x<0);
 });
 
 test("quick drags cannot create repeated corkscrew reversals or paper-thin faces", () => {

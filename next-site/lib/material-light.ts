@@ -35,13 +35,19 @@ export function approachLight(current: number, target: number, elapsed: number) 
   return current < target ? Math.min(target, current + distance) : Math.max(target, current - distance);
 }
 
+/** Frame-rate-independent light travel; reversals keep their current position. */
+export function followLight(current: {x:number;y:number}, target: {x:number;y:number}, elapsed: number) {
+  const weight = 1 - Math.exp(-Math.max(0, elapsed) / 130);
+  return { x: current.x + (target.x - current.x) * weight, y: current.y + (target.y - current.y) * weight };
+}
+
 /** Small, bounded optical pose. Geometry/hit targets never depend on this pose. */
 export function materialPose(bounds:SurfaceBounds,x:number,y:number,strength:number) {
   const clamp=(value:number)=>Math.max(-1,Math.min(1,value));
   const u=clamp((x-bounds.left)/Math.max(1,bounds.width)*2-1);
   const v=clamp((y-bounds.top)/Math.max(1,bounds.height)*2-1);
   const intensity=Math.max(0,Math.min(1,strength));
-  return {yaw:u*1.8*intensity,pitch:-v*1.8*intensity,castX:-u*6*intensity,castY:10-v*6*intensity};
+  return {yaw:u*2.4*intensity,pitch:-v*2.4*intensity,castX:-u*8*intensity,castY:10-v*8*intensity};
 }
 
 /** Large panels light the portion the visitor can see, rather than an

@@ -20,13 +20,13 @@
   :global(html:not([data-effects="reduced"])) .reeds{animation:reeds-depth linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
  }
 }
-@keyframes leaf-drift{from{translate:0 55px;rotate:-15deg}to{translate:0 -55px;rotate:-7deg}}
-@keyframes reeds-depth{from{translate:0 95px}to{translate:0 -95px}}
+@keyframes leaf-drift{from{translate:0 70px;rotate:-15deg}to{translate:0 -70px;rotate:-7deg}}
+@keyframes reeds-depth{from{translate:0 160px}to{translate:0 -160px}}
 @media(max-width:740px){
  .manuscript{padding-block:80px 85px}.events{padding-block:85px 105px}
  .biography{padding-block:90px 115px}.biography :global(.life-section){grid-template-columns:1fr;gap:65px}.biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(65px,18vw,100px);max-width:none}.biography :global(.life-copy)>p{font-size:15px;max-width:360px}
  .follySpread{grid-template-columns:1fr;gap:45px}.follyHeading h2{font-size:clamp(62px,17vw,90px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:85px 145px}.reeds{width:185%;left:-48%;height:80%;bottom:-70px;opacity:.52}
- @keyframes leaf-drift{from{translate:0 30px;rotate:-13deg}to{translate:0 -30px;rotate:-8deg}}
- @keyframes reeds-depth{from{translate:0 50px}to{translate:0 -50px}}
+ @keyframes leaf-drift{from{translate:0 40px;rotate:-13deg}to{translate:0 -40px;rotate:-8deg}}
+ @keyframes reeds-depth{from{translate:0 92px}to{translate:0 -92px}}
 }
 :global(html[data-effects="reduced"]) .leaf{filter:none}

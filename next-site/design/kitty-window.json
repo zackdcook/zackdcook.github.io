@@ -5,5 +5,5 @@
     "flight": { "left": 0.13, "right": 0.86, "top": 0.066, "bottom": 0.139 }
   },
   "durationMs": [5800, 8800],
-  "intervalMs": [5200, 11800]
+  "intervalMs": [900, 2800]
 }
