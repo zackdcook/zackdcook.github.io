@@ -1,15 +1,30 @@
-# Living marginalia — experimental art direction
+# Living marginalia — a warm reading room
+
+## Latest direction, feedback milestone 2 — 2026-10-10
+The public website is a warm, imaginative reading room, independent of the tentative novel's swamp setting. Swamp artwork belongs only in the hidden tree. Zack's reference recordings show loose side-profile bird flocks and Apple Home Screen reflections: translate those principles into original flight silhouettes and steady optical surfaces, without copying footage or artwork.
+
+Original modular SVG placeholders establish window light, paper, books, open pages and botanical details. Semantic roles paint them across the four timelines/modes; registry slots accept native/image/mask/none and individually replaceable theme variants. Final commissioned or author-supplied assets should preserve independent depth planes, quiet text areas, transparent edges and intentional phone crops. See ARTWORK_REPLACEMENT_BRIEF.md. These placeholders are not final artwork approval.
+
+Photos stay steady, with restrained face sheen and a one-pixel curved edge reflection. Glass primarily marks controls and navigation. One shared smoothed pointer/sensor loop drives bounded local reflection positions; explicit sensor opt-outs and reduced effects remain. Strong native scroll depth separates window/desk planes; section entry and 680ms route chapter reveals make exploration legible without controlling the visitor's scrolling.
+
+The small Engineer ⇌ Author label precedes the name; the exact main CTA remains in the initial phone view. Folly labels inherit 11px section typography. Kitty discovery uses repeating three-bird flocks and permanently changes the photo/reveals Zack's exact Brave chased a shadow and got outside. / Follow him. wording. Settings belongs at the bottom of phone navigation and beside appearance on wide screens. Milestone 2 is implemented and focused browser/source checks pass; pause for direction feedback before further route composition.
+
+Focused primary references:
+- Apple materials: https://developer.apple.com/design/human-interface-guidelines/materials
+- Apple Liquid Glass: https://developer.apple.com/documentation/TechnologyOverviews/liquid-glass
+- React ViewTransition: https://react.dev/reference/react/ViewTransition
+The design inference is restrained edge/optical feedback on steady surfaces, not a claim that a CSS effect reproduces Apple's compositor. Physical sensor behavior needs device verification.
 
 ## Constraint clarification, 2026-10-09
 Zack explicitly rejected retaining the old boxes, folder navigation, menu buttons, layout, and visual hierarchy. Authored words remain exact; presentation is free to change comprehensively. The tree's original dream and established functional experience remain the starting point. No extra website prose or navigation destinations are needed for this redesign.
 
 ## Original visual system
-- An open, warm editorial landscape: oversized but carefully balanced display typography; fine engineering rules, orbital diagrams, and botanical silhouettes; photographs treated as windows into the place rather than nested cards.
+- An open, warm editorial reading room: oversized but balanced display typography; fine engineering rules, useful progress diagrams, paper/books and botanical detail; photographs treated as windows into the person rather than nested cards.
 - Content spreads instead of a card stack. The manuscript is an asymmetric title/progress composition; events have a typographic schedule/venue composition; biography is an open image-and-text spread; Folly leaves inhabit an illustrated clearing; shoutouts are a restrained directory.
 - A slim transparent/blurred header and an accessible full-screen navigation sheet on smaller screens. Existing names and routes only. Controls are ink-like links or small purpose-specific surfaces, not universal bevelled rectangles.
-- Shared art primitives and palette roles connect the ordinary site to the hidden swamp. Living and felled modes change light, foliage, and atmosphere without changing legibility.
-- Native scrolling. Compositor-only, modest parallax and reveal distances; no scroll hijacking, obligatory intro, cursor replacement, or continuous animation over reading text. Reduced-motion/effects users receive complete stationary content.
-- Component-scoped styles for new compositions. Replace legacy global/material overrides instead of adding another final-corrections layer. Interactive preferences, ribbon physics, leaves, calendars, server integration, and secret behavior stay functional.
+- Shared semantic palettes connect timeline states while public artwork and the hidden swamp remain distinct. Living and felled modes change light and atmosphere without changing legibility.
+- Native scrolling. Pronounced opposing art planes and progressive chapter reveals; no scroll hijacking, obligatory intro, cursor replacement, or continuous motion over reading text. Reduced-motion/effects users receive complete stationary content.
+- Component-scoped styles for new compositions. Replace legacy global/material overrides instead of adding another final-corrections layer. Interactive preferences, leaves, calendars, server integration and secret intent stay functional; the ribbon presentation is superseded by the author-requested flock.
 
 ## Focused live reference observations
 On 2026-10-09 the actual reference sites were inspected in the cloud browser, including initial composition and subsequent scrolling (desktop). These are observed principles, not copied assets or layouts:

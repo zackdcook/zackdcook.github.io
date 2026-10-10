@@ -93,3 +93,31 @@ Implementation ec11ea588e3ef729ad1b518553474a0300d9f737, Preview dpl_DS1MR3cX1Ys
 - Tablet inspection exposed a hard left edge on the near artwork. The final CSS uses intersecting horizontal/vertical fades. The final unique Preview tablet screenshot removes the visible side cut; computed masks on the stable alias contain both gradients with intersect composition.
 - 92 tests, TypeScript and production build passed; final one-line CSS correction production build also passed (47 routes and generated theme/art checks). Authored-copy/route preservation tests passed. No lint script exists.
 - Four-theme semantic contrast tests passed; this route was directly inspected in living light/dark. Full felled-page, complete route-inventory and physical mobile sign-off remain future work.
+
+## Feedback milestone 2 — warm public world / flock / steady glass — 2026-10-10
+
+Implementation 28b52e3653e6dee0e38efcabe1427f8565685a1a, refined 30e8fdc8e140baec54e33bfab81d167d86073c52. Final READY Preview dpl_CviyK3XWLsh7UhZxcgsx1FqXQh6j, target null, exact refined SHA. Tested on the existing authorized stable branch origin: https://zack-cook-git-experiment-immersive-worl-054476-dove-mack0o-3684.vercel.app/ . Unique preview protection was retained; temporary-access API returned 403, so no security configuration changed.
+
+| Check | Measured / observed result |
+| --- | --- |
+| Folly root cause | Broad .follyHeading h2 gave the section label Note to self typography. Scoped .follyTitle fixes it. Home label and route title both 11px. |
+| Opening order | 11px Engineer ⇌ Author above name, square portrait, exact Easily distracted… intro, exact main CTA, original greeting/biography. |
+| First-view CTA | 320×568 bottom525.59px; 375×667 570.72px; 390×844 695.86px; 768×1024 852.88px; 1024×667 624.19px. Loaded fonts; no horizontal overflow. |
+| Repeating flock | Three separately phased side-profile silhouettes. Recurring full right→left crossings x1149→672; left→right x749→1149. Short randomized gaps and renewed flights observed. |
+| Actual moving activation | Native press on hit-tested moving bird, opacity .68, center785.55,587.36. Photo changed, all visible shadows removed, one exact status and Follow him. link focused. |
+| Permanent discovery | Escape and refresh retained it. Link top1129.40px below photo bottom1046.49px. Follow him reached original tree introduction/four choices/test carve reset; no gameplay or database mutation. |
+| Reduced discovery | Server-guarded preview Reset Brave discovery replay utility; one stationary visible keyboard target, two followers hidden, artwork/wing motion disabled. Enter produces same permanent reveal. |
+| Phone Settings | 375×667 sheet height/scrollHeight667; Settings top595/bottom643, beneath all navigation. Native close hands off to one preferences modal; Escape returns Menu focus. |
+| Desktop Settings | Opens all preserved preferences; close/Escape restores Settings. Pale inherited solid-button text found and fixed. Footer entry removed. |
+| Native parallax | At scrollY468 / viewport936, horizon+160px scale1.0175; foreground−122.5px scale1.035; title+60.53px scale.936841 opacity.578941. |
+| Navigation reveal | Events navigation triggered chapter-open, .68s; clip inset100%→91.56%→74.71% with rising opacity. Native scrolling retained. |
+| Steady optics | Changed kitty photo computed transform none while cursor reflection moved (glass-x32.08%). Restrained sheen/one-pixel edge, stable geometry. |
+| Public routes | Home/Events/About/Folly/Shoutouts/Creative Works smoke checks and settled desktop1348/1348 width/scrollWidth. Warm public SVG art, no public swamp assets; hidden tree slots unchanged. |
+| Folly reader | Enter opens original leaf; ArrowLeft reads7of8; Escape returns leaf-build-the-system focus. |
+| Themes / artwork | Living light/dark inspected; four semantic contrast tests pass. Mobile desk book translate570px and intentional warm-window crop verified. |
+
+97/97 source tests (92 TS + 5 MTS), TypeScript and final CTA-enabled production build PASS (47 routes and theme/art generation checks). No lint script. No new migration, environment variable, dependency, paid resource or production change. Private distribution codes untouched.
+
+Public art is modular placeholder work, not final visual approval. Physical touch/tilt/sensor permissions, actual device FPS, full felled-page sign-off, dense tree browser performance and comprehensive original-inventory sign-off remain outstanding. Native desktop visual checkpoint: zack-cook-reading-room-milestone-1791665477113.jpg, saved outside public source. The black floating Vercel owner-feedback control is separate from the website. User videos reviewed this milestone are a bird-flock reference and Apple Home Screen; neither records the current site scrolling.
+
+Both implementation commits were published as exact native Git fast-forwards with original Codespace checkout clean and unchanged main. This documentation checkpoint is recoverable on the same experimental branch. Stop the existing Codespace and pause for Zack's direction feedback before milestone 3; tree development remains deferred.
