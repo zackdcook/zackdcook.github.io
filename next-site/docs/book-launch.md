@@ -207,3 +207,7 @@ here before the overhaul integrates the feature.
 Future email delivery, domain authentication, one-time sending approvals,
 duplicate-send protection, required sender/opt-out information, and optional
 separate newsletter enrollment remain explicitly unimplemented.
+
+## Isolated experimental integration (2026-10-10)
+
+The preceding handoff reflects its original main-branch release context. The experimental branch selectively carries its source at 64ebf8a into the new design, with the exact invitation in the opening hero. Preview uses only TEST qkkgcoejkqvthbjcldcw, the same migration version, a separate branch-scoped HMAC secret and existing strictly gated test verification bypass. Analytics cannot collect from Preview/test storage. No production rollout, subscriber inspection, message delivery or production configuration change is part of this integration. Actual synthetic signup/duplicate/consent/persistence checks are in docs/reimagining/BROWSER_VERIFICATION.md; current status/next work is in the root WORK_CHECKPOINT.md.

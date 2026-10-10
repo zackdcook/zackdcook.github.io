@@ -54,3 +54,27 @@ Final 84fda Preview (dpl_ERBM8LRwSBQ2eunZs8pXXyUz6Byo) is READY and browser chec
 The existing experimental branch alias was opened and verified: https://zack-cook-git-experiment-immersive-worl-054476-dove-mack0o-3684.vercel.app/ . It provides a stable origin across future experimental deployments; it does not import identities/preferences from older unique preview hosts. No production alias/configuration was changed.
 
 Exact 84fda commit/tree/history were imported using a reviewed text patch and raw commit in the existing Codespace's separate bare mirror, then normal fast-forward pushed. Remote main remained 64ebf8a4773889eb8278901512b30dd9aa34c071 and original checkout remained clean. Newer main book-launch/analytics/privacy features at that SHA still require selective integration; the entire preservation inventory and overhaul are not yet signed off.
+
+## CTA and discovery continuation — 2026-10-10
+
+Implemented 8ad49b707b88f0ae4d7c03fcd77ff92f93d57b3c, refined 7d1f7fff87928193c1c1ba5f516486d99202d5a1. READY final dpl_AymeLMW2yGRGdtAfZbS9cxtBSdo6, https://zack-cook-artckgc8l-dove-mack0o-3684.vercel.app/. Stable experimental alias reloaded/verified with final 174px desktop hero heading.
+
+| Check | Actual result |
+| --- | --- |
+| Exact main CTA + Privacy source | Main fetched at 64ebf8a; author copy and updated Privacy preserved. No whole branch merge. |
+| First phone view | 320×568 button bottom 532.92px; 375×667 535.11px; final 390×844 541.39px. No scrolling required, no root overflow. |
+| Short laptop view | Final 1024×667: button bottom 616.95px, CTA bottom 640.95px; no root overflow. |
+| Form appearance | Final scoped email field top border 0px; correct underline, readable promise and 48px submit control. |
+| Deliberate menu modal | Mobile 320px opens Book Alert after closing menu, focuses Email address. Desktop open/close restores Book Alert. |
+| Home dismissal | Home hides, menu remains; independent tab updates immediately. |
+| Menu submit | Native click accepted a synthetic reserved-domain address, correct consent/version stored in TEST; no delivery provider or email sent. |
+| Duplicate home submit | Final unique preview, uppercase variant, Enter accepted exact receipt; same DB record hash, original consent/status/attribution unchanged. |
+| Preference persistence | Accepted signup hides both home/menu across tabs, refresh and appearance/timeline reset. Analytics opt-out also survives reset. |
+| Database/rate security | TEST RLS, no anon/authenticated access, service-role grants. Rolled-back real RPC test allows six/denies seventh/eighth; suppressed upsert duplicate unchanged. Advisors have no warning/error. |
+| Random bird flight | Observed recurring rest→flying→rest, invisible gaps; reverse horizontal translations 362.776→236.830→111.824px through the original window. Full-edge routes additionally tested with 2000 seeded samples. |
+| Moving discovery | Accessible live flying control click opened exact Yes/No. A coordinate click missed during motion; locator click succeeded. |
+| Persistent question | Still open after backdrop click + 22 seconds, zero shadow buttons and changed photo. No returns focus to caption. |
+| Reduced effects/keyboard/Yes | Stationary original-window alternative; Enter opens secret/removes overlay. Yes reaches original tree intro with all original choices/reset control. No tree gameplay or distribution code used. |
+| Analytics isolation | Branch BOOK_ANALYTICS_ENABLED=false, server rejects nonproduction/test storage even with flag true (automated). Direct config-URL navigation blocked by browser client; no collection/emission test or bypass. |
+
+Source: 92/92 tests (87 TS + 5 MTS API), TypeScript PASS, final production build PASS with 47 routes and generated artwork/theme checks. No lint script. Physical touchscreen/sensors and complete route/game/dense-performance sign-off remain outstanding. Vercel owner feedback overlay appears in screenshots; it is separate from site UI and no production toolbar configuration was changed. Phone proof: zack-cook-cta-phone-1791644943033.jpg (private deliverable, not a public source asset).
