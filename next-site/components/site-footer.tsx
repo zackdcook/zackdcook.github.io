@@ -19,6 +19,7 @@ export function SiteFooter() {
         </div>
         {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
         <PreferencesButton />
+        <Link className="text-link" href="/privacy">Privacy</Link>
         <CopyrightNote startYear={2023} year={2026} name={site.name} />
       </div>
     </footer>

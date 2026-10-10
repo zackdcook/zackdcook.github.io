@@ -8,7 +8,8 @@
 .shadow{position:absolute;left:0;top:0;display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;background:none;pointer-events:auto;touch-action:manipulation;cursor:pointer;opacity:.27;transform:translate3d(200px,30px,0);will-change:transform,opacity;transition:opacity 160ms}
 .shadowArt{width:var(--shadow-size,28px);height:calc(var(--shadow-size,28px)*.625);filter:blur(.7px);color:var(--photo-shadow);scale:var(--shadow-direction,1) 1}
 .shadowArt svg{fill:currentColor}
-.shadow[data-state="rest"]{opacity:.23}
+.shadow[data-state="rest"]{opacity:0;pointer-events:none}
+.shadow[data-state="rest"]:focus-visible{pointer-events:auto}
 .shadow:focus-visible{opacity:.8!important;outline:2px solid var(--photo-shadow);outline-offset:-3px;border-radius:50%}
 .shadow:focus-visible .shadowArt{filter:none}
 .shadow[data-state="flying"] :is(.leftWing,.rightWing){animation:wing-beat 420ms ease-in-out infinite alternate;transform-origin:32px 22px}
@@ -25,6 +26,6 @@
 }
 @keyframes photo-depth{from{translate:0 48px}to{translate:0 -48px}}
 @media(max-width:740px){.caption{padding-top:18px;font-size:11px}.photo{rotate:-1deg}.secret p{font-size:25px}@keyframes photo-depth{from{translate:0 22px}to{translate:0 -22px}}}
-:global(html[data-effects="reduced"]) .shadow{will-change:auto}
+:global(html[data-effects="reduced"]) .shadow{will-change:auto;opacity:.35;pointer-events:auto}
 :global(html[data-effects="reduced"]) .shadowArt{filter:none}
-@media(prefers-reduced-motion:reduce){.shadow{will-change:auto}.shadowArt{filter:none}}
+@media(prefers-reduced-motion:reduce){.shadow{will-change:auto;opacity:.35;pointer-events:auto}.shadowArt{filter:none}}

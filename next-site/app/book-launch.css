@@ -1,0 +1,24 @@
+/* The author's invitation sits in the opening composition, with the exact main copy. */
+.book-callout{position:relative;margin-top:30px;width:100%;max-width:480px}
+.book-panel{position:relative;border-block:1px solid color-mix(in srgb,var(--color-brass) 45%,transparent);padding:20px 0 23px}
+.book-panel h2,.book-dialog h2{font:650 clamp(21px,2vw,26px)/1.2 var(--display);letter-spacing:-.025em;text-wrap:pretty;padding-right:32px;max-width:30ch}
+.book-panel p,.book-dialog p{margin-block:12px 16px;font-size:14px;line-height:1.55;color:var(--color-ink);max-width:38ch}
+.book-dismiss{position:absolute;top:3px;right:-8px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:none;color:var(--color-muted);font-size:23px;cursor:pointer}
+.book-dismiss:hover{color:var(--color-accent)}
+.book-signup-fields{display:flex;gap:14px;align-items:center}
+.book-signup-fields input{flex:1;min-width:0;width:100%;border:0;border-bottom:1px solid var(--color-muted);border-radius:0;padding:12px 0;font:450 16px var(--sans);background:transparent;color:var(--color-ink)}
+.book-signup-fields input::placeholder{color:var(--color-muted);opacity:1}
+.book-signup-fields input:focus-visible{outline:2px solid var(--focus-ring);outline-offset:4px}
+.book-signup-fields .button{flex-shrink:0;min-height:48px;white-space:nowrap}
+.book-signup-form[aria-busy="true"] button::after{content:"";display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;margin-left:8px;animation:book-wait .7s linear infinite}
+.book-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.book-dialog{width:min(640px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
+.book-dialog .calendar-dialog-content{position:relative}
+.book-dialog h2{font-size:clamp(25px,4vw,34px)}
+.book-success{margin-block:30px;padding-block:22px;border-block:1px solid var(--color-brass);font:650 22px/1.4 var(--display)}
+.book-menu-item{border:0;background:none;min-height:44px;padding:0;cursor:pointer;white-space:nowrap}
+.book-signup-form .human-check{margin-top:12px}
+@keyframes book-wait{to{rotate:360deg}}
+@media(max-width:740px){.book-callout{margin-top:24px}.book-panel{padding-block:17px 20px}.book-panel h2{font-size:22px}.book-panel p{font-size:14px}.book-signup-fields{gap:12px}.book-signup-fields .button{padding-inline:18px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){.book-signup-form[aria-busy="true"] button::after{animation:none}}
+html[data-effects="reduced"] .book-signup-form[aria-busy="true"] button::after{animation:none}

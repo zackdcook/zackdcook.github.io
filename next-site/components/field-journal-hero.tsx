@@ -1,5 +1,6 @@
 import editorial from "@/content/editorial.json";
 import {Artwork,ArtworkImage} from "./artwork";
+import { HomepageBookCTA } from "./book-launch/signup-form";
 import styles from "./field-journal-hero.module.css";
 
 export function FieldJournalHero(){
@@ -9,6 +10,7 @@ export function FieldJournalHero(){
       <div className={styles.copy}>
         <p className={`eyebrow hero-eyebrow ${styles.eyebrow}`}>Engineer <span className="reaction-symbol">⇌</span> Author</p>
         <h1>Zack<br /> <em>Cook.</em></h1>
+        <HomepageBookCTA />
         <p className={styles.intro}>{editorial.home.intro}</p>
         <div className={styles.details}>{editorial.home.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}</div>
       </div>

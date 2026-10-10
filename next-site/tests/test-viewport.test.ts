@@ -29,3 +29,12 @@ test("harness allows only bounded viewport sizes and exact same-origin site path
     assert.ok(!html.includes(path));
   }
 });
+
+test("initial CTA QA has explicit small phone heights without accepting arbitrary CSS", () => {
+  const phone=testViewportDocument(new URLSearchParams({width:"375",height:"667"}),preview)!;
+  assert.ok(phone.includes("width:375px;height:667px"));
+  const small=testViewportDocument(new URLSearchParams({width:"320",height:"568"}),preview)!;
+  assert.ok(small.includes("width:320px;height:568px"));
+  const invalid=testViewportDocument(new URLSearchParams({height:"0;display:none"}),preview)!;
+  assert.ok(invalid.includes("height:calc(100dvh - 28px)"));
+});

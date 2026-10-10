@@ -5,8 +5,8 @@ export type ShadowFlight = { from: [number, number]; to: [number, number]; durat
 
 /** Normalized photograph coordinates keep the shadow tied to replaceable artwork,
  * independently of viewport size, optical tilt, and display pixel density. */
-export function shadowFlight(escaped = false, random: () => number = Math.random): ShadowFlight {
-  const area = windows[escaped ? "escaped" : "original"].flight;
+export function shadowFlight(random: () => number = Math.random): ShadowFlight {
+  const area = windows.original.flight;
   const sample = () => Math.max(0, Math.min(1, random()));
   const reverse = sample() > .5;
   const y = () => area.top + (area.bottom - area.top) * sample();

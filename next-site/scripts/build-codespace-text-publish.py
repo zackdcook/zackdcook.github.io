@@ -1,5 +1,6 @@
 import json
 import re
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -53,6 +54,10 @@ with tempfile.TemporaryDirectory(prefix='editorial-index-', dir=str(Path(mirror)
     print('PUBLISHED_EXACT ' + payload['sha'])
 '''.replace('PAYLOAD_LITERAL', repr(json.dumps(payload, ensure_ascii=True)))
 output = repo.parent / ('editorial-native-git-publish-' + sha[:7] + '.txt')
-output.write_text("python3 - <<'REVIEWED_EXPERIMENTAL_GIT_COMMIT'\n" + script + 'REVIEWED_EXPERIMENTAL_GIT_COMMIT', encoding='utf-8')
+compile(script, '<reviewed-native-publish>', 'exec')
+output.write_text('python3 -c ' + shlex.quote('exec(' + repr(script) + ')') + ' # reviewed experimental commit\n', encoding='utf-8')
 output.chmod(0o600)
-print(json.dumps({'command_file': str(output), 'sha': sha, 'parent': parent, 'files': files, 'characters': output.stat().st_size}))
+script_file = output.with_suffix('.py')
+script_file.write_text(script, encoding='utf-8')
+script_file.chmod(0o600)
+print(json.dumps({'script_file': str(script_file), 'command_file': str(output), 'sha': sha, 'parent': parent, 'files': files, 'characters': output.stat().st_size}))

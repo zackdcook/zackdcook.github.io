@@ -7,6 +7,7 @@ import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
 import { SwampLandscape } from "./swamp-landscape";
 import { Artwork } from "./artwork";
+import { BookMenuItem } from "./book-launch/provider";
 import styles from "./site-header.module.css";
 
 export function SiteHeader() {
@@ -58,10 +59,11 @@ export function SiteHeader() {
       </Link>
       <nav className={styles.desktop} aria-label="Main navigation">
         {navigation.map(({title,href}) => <Link key={href} href={href} prefetch scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)}>{title}</Link>)}
+        <BookMenuItem />
       </nav>
       <div className={styles.controls}>
         {themeControl}
-        <button ref={opener} type="button" className={styles.menu} aria-haspopup="dialog" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}>
+        <button ref={opener} data-menu-opener type="button" className={styles.menu} aria-haspopup="dialog" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}>
           Menu <span aria-hidden="true">＋</span>
         </button>
       </div>
@@ -75,6 +77,7 @@ export function SiteHeader() {
         {navigation.map(({title,href}) => <Link key={href} href={href} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)} onClick={close}>
           <span>{title}</span><Artwork slot="icon-arrow"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 16h21M18 8l8 8-8 8" /></svg></Artwork>
         </Link>)}
+        <BookMenuItem closeMenu={close} />
       </nav>
       <div className={styles.sceneryFrame}><Artwork slot="navigation-scenery" className={styles.scenery}><SwampLandscape/></Artwork></div>
     </dialog>

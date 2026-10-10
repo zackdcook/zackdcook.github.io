@@ -27,3 +27,9 @@ Source commits and complete route paths are in `baseline-manifest.json`. This is
 | Optional newsletter | existing configured external link | Source retained; env configuration unknown |
 
 No content or behavior may be silently removed because it is absent from this initial ledger. Update discoveries and record any baseline failures separately from regressions.
+
+## New main addition and revised discovery (2026-10-10)
+
+Source main 64ebf8a: exact book-release invitation and promise; email submission; home-only dismissal; Book Alert menu dialog; accepted subscription hides both entry points; versioned independent choices and cross-tab sync; analytics opt-out retained through appearance/tree reset; exact updated Privacy copy/footer link. Signup remains server-only, normalized/idempotent and rate/challenge protected; it sends no email. Preview uses isolated test storage, gated Cloudflare bypass and disabled analytics. Source tests passed; browser verification must be recorded separately.
+
+Requested kitty discovery revision: full side-to-side random recurring window crossings; no resting shadow between flights (keyboard/reduced-effects stationary alternative retained); clicking opens original Yes/No indefinitely without backdrop dismissal; changed photograph has no shadow overlay. Caption retains exact original label. No extra site copy.

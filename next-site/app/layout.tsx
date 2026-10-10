@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/next";
+import { BookLaunchProvider } from "@/components/book-launch/provider";
+import { PrivacyAnalytics } from "@/components/book-launch/analytics";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { site } from "@/content/site";
@@ -10,6 +11,7 @@ import "./materials.css";
 import "./theme.css";
 import "./art-assets.css";
 import "./artwork.css";
+import "./book-launch.css";
 import "./folly.css";
 import "./bebrave.css";
 import { Suspense } from "react";
@@ -18,6 +20,7 @@ import { PointerLight } from "@/components/pointer-light";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { preferenceBootstrap } from "@/lib/preferences";
+import { testModeEnabled } from "@/lib/experimental-environment";
 
 const displayFont = localFont({
   src: "../public/fonts/Fraunces-Soft-Semibold.ttf",
@@ -45,6 +48,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <SitePreferences>
+          <BookLaunchProvider testMode={testModeEnabled(process.env)}>
+          <Suspense fallback={null}><PrivacyAnalytics /></Suspense>
           <PointerLight />
           <SiteIcons />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
@@ -56,8 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SiteFooter />
             </div>
           </OrganicTransition>
+          </BookLaunchProvider>
         </SitePreferences>
-        <Analytics />
       </body>
     </html>
   );

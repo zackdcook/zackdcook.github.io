@@ -29,7 +29,7 @@
 @keyframes foreground-depth{to{translate:0 -115px}}
 @media(max-width:1000px){.content{gap:50px}.hero h1{font-size:clamp(102px,15vw,155px)}.portrait::before{inset:18px -18px -18px 18px}.details p{font-size:14px}.foreground{bottom:-90px;height:83%}}
 @media(max-width:740px){
- .hero{min-height:0}.content{grid-template-columns:1fr;padding-block:46px 145px;gap:0}
+ .hero{min-height:0}.content{grid-template-columns:1fr;padding-block:30px 145px;gap:0}
  .copy{max-width:100%}.copy::before{display:none}.hero .eyebrow{font-size:10px;margin-bottom:25px}.hero h1{font-size:clamp(77px,21.7vw,154px);line-height:.97;letter-spacing:-.06em}.hero h1 br{display:none}.hero h1 em{margin-left:5px}
  .intro{margin-top:23px;font-size:20px;max-width:350px}.details{margin-top:20px;max-width:380px}.details p{font-size:14px}
  .portrait{width:76%;max-width:365px;justify-self:end;margin-top:38px;margin-right:14px}.portrait::before{border-radius:25px;inset:15px -14px -15px 14px}.foreground{width:175%;left:-45%;bottom:-75px;height:60%;opacity:.8}.landscape{width:240%;left:-58%;height:72%;bottom:-90px;opacity:.8}

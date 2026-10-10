@@ -26,11 +26,12 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   const [escaped, setEscaped] = useState(false), [secretReady, setSecretReady] = useState(!emptyPhoto), [open, setOpen] = useState(false);
   const photograph = useRef<HTMLDivElement>(null), bird = useRef<HTMLButtonElement>(null), dialog = useRef<HTMLDialogElement>(null);
   const flight = useRef<Animation | null>(null), resumeFlight = useRef<() => void>(() => {});
-  const id = useId(), changedPhoto = escaped && secretReady, windowArea = kittyWindows[changedPhoto ? "escaped" : "original"];
+  const caption = useRef<HTMLElement>(null);
+  const id = useId(), changedPhoto = escaped && secretReady, windowArea = kittyWindows.original;
 
   useEffect(() => {
     const photo = photograph.current, target = bird.current;
-    if (!photo || !target) return;
+    if (!photo || !target || escaped) return;
     let active = false, disposed = false, timer: ReturnType<typeof setTimeout> | undefined;
     const coordinates = (point: number[]) => `translate3d(${point[0] * photo.clientWidth - 22}px,${point[1] * photo.clientHeight - 22}px,0)`;
     function rest() {
@@ -43,12 +44,12 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
     function fly() {
       if (!active || document.hidden || disposed || open || reduced) return;
       if (document.activeElement === target || target!.matches(":hover")) { schedule(1000); return; }
-      const path = shadowFlight(changedPhoto);
+      const path = shadowFlight();
       target!.style.setProperty("--shadow-size", `${path.size}px`);
       target!.style.setProperty("--shadow-direction", path.reverse ? "-1" : "1");
       target!.dataset.state = "flying";
       const from = coordinates(path.from), to = coordinates(path.to);
-      const animation = target!.animate([{ transform: from, opacity: .08 }, { opacity: .64, offset: .15 }, { opacity: .64, offset: .85 }, { transform: to, opacity: .08 }], { duration: path.duration, fill: "forwards", easing: "linear" });
+      const animation = target!.animate([{ transform: from, opacity: 0 }, { opacity: .64, offset: .15 }, { opacity: .64, offset: .85 }, { transform: to, opacity: 0 }], { duration: path.duration, fill: "forwards", easing: "linear" });
       flight.current = animation;
       animation.onfinish = () => { if (disposed) return; rest(); schedule(path.delay); };
     }
@@ -58,7 +59,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
     const visibility = () => { if (document.hidden) stop(); else schedule(1600); };
     rest(); observer.observe(photo); resize.observe(photo); document.addEventListener("visibilitychange", visibility);
     return () => { disposed = true; stop(); observer.disconnect(); resize.disconnect(); document.removeEventListener("visibilitychange", visibility); resumeFlight.current = () => {}; };
-  }, [changedPhoto, reduced, open, windowArea]);
+  }, [escaped, reduced, open, windowArea]);
 
   function discover() {
     flight.current?.pause(); setEscaped(true); setOpen(true); dialog.current?.showModal();
@@ -74,16 +75,16 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
             <div className="kitty-photo-layer kitty-photo-secret" aria-hidden={!changedPhoto}>
               {emptyPhoto ? <Image src={emptyPhoto} alt="A sunny window and cat tree, with two cats relaxing" width={1400} height={1034} sizes="(max-width:740px) 90vw,48vw" onLoad={() => setSecretReady(true)} /> : <div className="empty-window-placeholder" role="img" aria-label="The cats have left. Zack’s empty-window photograph will go here."><span>Empty-window photo coming soon.</span></div>}
             </div>
-            {artworkEnabled("kitty-shadow") && <div className={styles.window} style={{ clipPath: `polygon(${windowArea.clip.map(([x, y]) => `${x * 100}% ${y * 100}%`).join(",")})` }}>
+            {!escaped && artworkEnabled("kitty-shadow") && <div className={styles.window} style={{ clipPath: `polygon(${windowArea.clip.map(([x, y]) => `${x * 100}% ${y * 100}%`).join(",")})` }}>
               <button ref={bird} type="button" className={styles.shadow} data-state="rest" aria-label={question} aria-haspopup="dialog" aria-controls={`${id}-secret`} style={{ "--shadow-size": "28px" } as CSSProperties}
                 onClick={discover} onPointerEnter={() => flight.current?.pause()} onPointerLeave={() => resumeFlight.current()} onPointerDown={() => flight.current?.pause()} onFocus={() => flight.current?.pause()} onBlur={() => resumeFlight.current()}><BirdShadow /></button>
             </div>}
           </div>
         </div>
       </div>
-      <figcaption className={styles.caption}>{label}</figcaption>
+      <figcaption ref={caption} tabIndex={-1} className={styles.caption}>{label}</figcaption>
     </figure>
-    <dialog ref={dialog} id={`${id}-secret`} className={`calendar-dialog ${styles.secret}`} aria-labelledby={`${id}-question`} onClose={() => { setOpen(false); bird.current?.focus({ preventScroll: true }); }} onClick={event => { if (event.target === event.currentTarget) close(); }}>
+    <dialog ref={dialog} id={`${id}-secret`} className={`calendar-dialog ${styles.secret}`} aria-labelledby={`${id}-question`} onClose={() => { setOpen(false); (bird.current ?? caption.current)?.focus({ preventScroll: true }); }}>
       <div className="calendar-dialog-content"><p id={`${id}-question`}>Brave chased a shadow and got outside. Follow him?</p><div className={`actions ${styles.choices}`}><Link href="/bebrave" className="button" onClick={close}>Yes</Link><button className="button" onClick={close}>No</button></div></div>
     </dialog>
   </div>;
