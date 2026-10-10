@@ -1,6 +1,6 @@
 # Website reimagining checkpoint
 
-Updated 2026-10-10 UTC (CTA/bird milestone). IN PROGRESS, not final design sign-off. The main-site editorial-world milestone is implemented, published and browser verified. Tree development remains behind ordinary-page design and experience work, as Zack requested. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
+Updated 2026-10-10 UTC (CTA/bird milestone, followed by Creative Works implementation). IN PROGRESS, not final design sign-off. The main-site editorial-world milestone is implemented, published and browser verified. Tree development remains behind ordinary-page design and experience work, as Zack requested. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
 
 ## Branch, sources and isolation
 
@@ -71,6 +71,13 @@ Updated 2026-10-10 UTC (CTA/bird milestone). IN PROGRESS, not final design sign-
 - Physical touch/tilt and full route/game/performance sign-off remain unverified. Viewport harness is CSS/browser QA, not proof of a physical phone. Vercel's owner-only VERCEL-LIVE-FEEDBACK overlay is visible in preview screenshots and is separate from site UI; production configuration was not changed.
 - Initial phone proof is preserved outside source; artwork recommendation is in ARTWORK_REPLACEMENT_BRIEF.md. Full overhaul remains in progress.
 
+## Creative Works continuation — implementation awaiting Preview verification
+
+- Dedicated Creative Works now has its own scoped composition instead of inheriting the generic page background. Two existing replaceable artwork planes move in opposite directions on a native view timeline; reduced effects/motion and unsupported browsers keep a static composition. No new bitmap or public prose.
+- ActiveProject/ProgressRings share the same content and interaction logic across summary and folio presentations. The folio uses a sticky manuscript title on wide screens, a larger live instrument, three stage controls and a readable note field; phones use normal one-column flow. Cursor pose moves the dial face and its live arc/text together. Homepage summary behavior remains on its original presentation.
+- Source checks: 92/92 tests PASS including authored-copy/route preservation; TypeScript and production build PASS (47 generated routes and theme/art checks). Browser visual/keyboard/responsive checks still required before calling this continuation finished.
+- Relevant files: app/creativeworks/{page.tsx,creativeworks.module.css}, components/{active-project,progress-rings}.tsx and their CSS modules. No database/environment change.
+
 ## Files, migrations and recovery
 
 - Main design: docs/reimagining/{ART_DIRECTION,EDITORIAL_EXPERIENCE,ARTWORK_SYSTEM,ART_ASSETS,FEATURE_INVENTORY,BROWSER_VERIFICATION}.md, baseline-manifest.json, copy-exceptions.json; design/{themes,art-assets,kitty-window}.json and semantic-roles.css; generated app/{theme,art-assets}.css.
@@ -93,6 +100,6 @@ Updated 2026-10-10 UTC (CTA/bird milestone). IN PROGRESS, not final design sign-
 2. Only after main-site milestones, resume tree art/input/effect polish, texture seams, dense/extreme-height browser scalability and all remaining gameplay checks.
 3. Finish physical mobile/touch/tilt verification where possible; otherwise document it accurately. Final responsive/accessibility/security/route/performance sign-off and private code delivery. Deploy experimental previews only; never declare all done without verification.
 
-Exact next action: fetch/verify the experimental branch and latest main, then work on the ordinary Creative Works page and its manuscript/progress flow using the established modular artwork, semantic themes and native motion system. Read the existing feature/copy inventory for those routes only; do not repeat the full audit/research. Carry the specific artwork brief forward, keeping placeholders until Zack supplies replacements. Then Events/About/Folly/Shoutouts/legal flow and full route sign-off; tree work remains behind main-site milestones. The CTA/bird task is completed and should not be rebuilt or retested wholesale without a new change. Publishing still uses the existing Codespace separate mirror with exact fast-forwards; stop it after checkpoint publishing.
+Exact next action: publish the Creative Works implementation with exact native Git history, deploy one experimental Preview and verify desktop/mobile composition, stage selection/arrow keys, all themes and reduced effects. Refine only observed failures. Then continue ordinary public-page flow using the established modular artwork, semantic themes and native motion system. Read the existing feature/copy inventory for those routes only; do not repeat the full audit/research. Carry the specific artwork brief forward, keeping placeholders until Zack supplies replacements. Then Events/About/Folly/Shoutouts/legal flow and full route sign-off; tree work remains behind main-site milestones. The CTA/bird task is completed and should not be rebuilt or retested wholesale without a new change. Publishing still uses the existing Codespace separate mirror with exact fast-forwards; stop it after checkpoint publishing.
 
 No user decision is currently blocking the next step. All production isolation/no-cost constraints remain.

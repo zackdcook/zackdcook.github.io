@@ -28,7 +28,7 @@ function toneFor(index: number) {
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
 
-export function ProgressRings({ compact = false }: { compact?: boolean }) {
+export function ProgressRings({ compact = false, presentation = "summary" }: { compact?: boolean; presentation?: "summary" | "folio" }) {
   const [selected, setSelected] = useState(activeIndex);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
@@ -59,7 +59,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
 
   return <div
     ref={container}
-    className={`progress-display ${styles.display} ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
+    className={`progress-display ${styles.display} ${presentation === "folio" ? styles.folio : ""} ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
   >
     <div className="progress-details">
       <ol className="stage-list">{progress.stages.map((item, index) => <li key={item.id}>

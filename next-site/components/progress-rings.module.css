@@ -36,3 +36,32 @@
 :global(html[data-effects="reduced"]) .display :global(.ring-fill){stroke-dashoffset:var(--ring-offset)}
 :global(html[data-effects="reduced"]) .dialFace{transform:none!important}
 @media(prefers-reduced-motion:reduce){.display :global(.rings[data-material-surface]) .dialFace{transform:none}}
+
+/* A larger live instrument and an open stage rail for the dedicated manuscript. */
+.display.folio{grid-template-columns:minmax(0,1fr);gap:32px;align-items:start}
+.folio :global(.progress-chart){grid-row:1;gap:18px}
+.folio :global(.rings){max-width:400px}
+.folio :global(.rings)>svg{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
+.folio :global(.progress-details){grid-row:2}
+.folio :global(.stage-list){grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.folio :global(.stage-button){min-height:100px;gap:9px;padding-block:13px}
+.folio :global(.stage-label){font-size:14px}
+.folio :global(.stage-count){font-size:11px}
+.folio :global(.stage-dot){margin-top:8px}
+.folio :global(.progress-note){grid-column:1;grid-row:3;min-height:155px;border:0;padding:24px 28px;background:var(--color-surface-alt);border-left:2px solid var(--color-brass)}
+.folio :global(.progress-note h3){font:650 23px/1.2 var(--display);margin-bottom:14px}
+.folio :global(.progress-note p){font-size:14px;max-width:none}
+.folio :global(.project-updated){font-size:11px}
+@media(max-width:1000px) and (min-width:741px){
+ .folio :global(.stage-list){grid-template-columns:1fr;gap:0}.folio :global(.stage-button){min-height:69px}
+ .folio :global(.stage-button)>span:last-child{display:flex;justify-content:space-between;width:100%;gap:15px}
+ .folio :global(.stage-count){text-align:right;max-width:130px;margin-top:0}
+}
+@media(max-width:740px){
+ .display.folio{gap:27px}.folio :global(.rings){width:min(100%,340px)}
+ .folio :global(.stage-list){gap:12px}.folio :global(.stage-button){gap:7px;min-height:100px}
+ .folio :global(.stage-label){font-size:12px}.folio :global(.stage-count){font-size:10px}
+ .folio :global(.progress-note){min-height:170px;padding:23px 22px;margin-top:0}
+}
+:global(html[data-effects="reduced"]) .folio :global(.rings)>svg{transform:none}
+@media(prefers-reduced-motion:reduce){.folio :global(.rings)>svg{transform:none}}
