@@ -51,7 +51,7 @@ export function SiteHeader() {
     <span className={styles.moon} aria-hidden="true"><Artwork slot="icon-dark"><svg viewBox="0 0 24 24"><title>🌙</title><path d="M19.8 15.6A8.5 8.5 0 0 1 8.4 4.2 8.5 8.5 0 1 0 19.8 15.6Z"/></svg></Artwork></span>
   </button>;
 
-  return <header className={`site-header ${styles.header}`}>
+  return <header className={`site-header ${styles.header}`} data-page-route={visiblePath}>
     <div className={styles.inner}>
       <Link href="/" scroll={false} onNavigate={goHome} className={styles.wordmark} aria-label="Zack Cook, home" aria-current={current("/")}>
         <Artwork slot="brand-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
