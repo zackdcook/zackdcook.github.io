@@ -1,6 +1,12 @@
 # Website reimagining checkpoint
 
-Updated 2026-10-10 UTC (feedback milestone 2 implemented, published and focused verification complete; milestone 1 preserved). The overall overhaul is IN PROGRESS, not final design sign-off. Previous CTA/bird and Creative Works commits are preserved. Pause for Zack's direction feedback before the next design milestone. Tree development remains behind ordinary-page design and experience work. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
+Updated 2026-10-11 UTC: public-experience feedback milestone 3 has started from verified local/remote 89b13f010c790455cf4c7c6d5178549650caedc1. The overall overhaul is IN PROGRESS, not final design sign-off. Previous CTA/bird and Creative Works commits are preserved. Zack authorized the remaining public-site fixes, research-informed hierarchy and visual refinement; see next-site/docs/reimagining/PUBLIC_EXPERIENCE_MILESTONE_3.md for the bounded scope and verification status. Tree development remains behind ordinary-page design and experience work. No exact remaining Work usage counter is available; save recoverable milestones and never assume work runs between sessions.
+
+## Separate-chat handoffs (do not duplicate their work)
+
+- Listening/reading is independently implemented on feature/listening-reading-sandbox-2026-10-10 from 89b13f0. User reports source 7e72590 in protected Preview dpl_J49GWZ17qPr9KLY3SPhx2cpFefwK; its commits are not published and owner/provider/browser verification is incomplete. Do not merge it, decide placement, configure owner credentials, or modify its LISTENING_READING_CHECKPOINT.md in this milestone. Its production guards must remain intact.
+- Artwork sourcing report was read in full: one botanical reading room with original separate window/desk/light planes; Redouté/rawpixel 2870381 and 263642 are supporting CC0 candidates, not prepared masters. ABC Library elements have source redistribution restrictions. No paid selection or purchase. Use the direction and existing replaceable native studies; do not blindly commit unprepared/restricted pack files. Preserve photographs; public swamp/origami remain excluded.
+- The author-provided IMG_2525.gif is now accessible locally: 200×153, nine frames, 38,282 bytes, looping with transparency. Latest bird request supersedes the previous silhouette/flock: right-to-left only, randomized intervals/heights, ±25% scale with smaller/slower and larger/faster. Permanent exact discovery text/Follow him. and photo cleanup remain unchanged.
 
 ## Branch, sources and isolation
 
