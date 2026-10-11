@@ -37,9 +37,16 @@ No package change, database migration, new website copy, secret, plaintext code,
 - Current hydration/navigation source independently hash-verified in the isolated checkout; root view transition none and route-based scenery correct on settled Home.
 - TypeScript, all 101 automated tests (95 TS plus 6 API/controller), final optimized CTA-enabled build (47 routes), generated theme/art and original-copy/route assertions, and whitespace checks pass.
 
-## Delivery checks to record after the single final Preview
+## Final optimized Preview acceptance
 
-Fresh first-visit homepage invitation, shortest phones/tablet/short desktop, optimized hydration and shared-heading values, down/up paper travel, calendar/book focus return, exact source SHA, alias preservation and stopped Codespace.
+- https://zack-cook-da7jbra30-dove-mack0o-3684.vercel.app/ — dpl_5t1bScRe3FbMF8DhkLeeEpM3cSjj, source f34b5c78b45f4391590c7b2282ae80cae013780f, READY Preview/target null. One new Vercel deployment only. Main and the prior branch shortcut remain unchanged.
+- Fresh first-visit invitation present. CTA bottom: desktop 898.03px / height 936; 320×568 515.86px; 375×667 556.88px; 390×844 687.75px; 768×1024 848.66px; 1024×667 612.53px. Settled root clientWidth equals scrollWidth at all five QA sizes. Input 46px, dismiss 44px, submit 48px (44px shortest phone).
+- Requested headings share exact font on the deployed 390×844 viewport; Home heading starts at the 20px phone gutter.
+- Opening paper y 351.40 → 793.46 while scrolling 0 → 562, then y 484.94 when scrolling back to 187. SVG shape and depth change with scroll, and the paper remains fixed while idle. Fourteen motes remain.
+- Default and saved dark/reduced-effects optimized reloads have no application console warnings/errors. Browser-extension diagnostics are excluded. Reduced effects hides all six papers and keeps section text opacity 1/translate none; CTA remains visible.
+- Desktop Book Alert/Escape restores Book Alert. Fresh phone menu→book→Escape closes dialogs, expanded=false, and returns to the visible wordmark; private QA returned Menu. These are safe visible header fallbacks, not identical outcomes. Calendar click/Enter/Escape and current source hydration/navigation were already verified privately.
+- Refreshed detailed Vercel view still displays 8.18 GB, Updated just now. No deletion or storage savings claimed. Eight-target cleanup remains pending action-time confirmation.
+- Source/checkpoint published exactly by ordinary fast-forward; final documentation publication and Codespace stop are the only delivery housekeeping steps. The own private server was stopped after private QA.
 
 Limits: physical Safari browser chrome and touchscreen/sensor behavior are not certified by Chromium/iframe tests. Real device GPU/frame-rate and crash reproduction remain pending. OS reduced-motion, unsupported-browser and print fallbacks exist in source, with reduced effects exercised in the browser. Tree backend and Legendary acceptance reuse prior verified work and were not resubmitted in this UI milestone.
 

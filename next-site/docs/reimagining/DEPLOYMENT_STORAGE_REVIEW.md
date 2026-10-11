@@ -7,7 +7,7 @@
 - Current B Resources lists 40 Functions. Representative page functions are 19.9 MB, API functions 19.6 MB, and middleware 601 kB, in IAD1 with Node.js 24.x.
 - Latest 100-deployment inventory contains 32 previews from this experimental branch, 41 main deployments, and unrelated branches. Inventory pagination indicates older deployments also exist; this is not an exhaustive team history.
 - Inference: retained compiled function bundles from repeated previews are a substantial contributor. Function Storage is separate from Supabase database/carving storage and from Deployment Storage, so compressing carving records will not remove these retained bundles.
-- No deployment, production data, security setting, budget, paid plan, or retention setting was changed during the review.
+- No retained deployment was deleted. Production data, security settings, budgets, paid plans and retention settings remain unchanged. After one new final Preview, the refreshed detailed view still displayed 8.18 GB (Updated just now); this does not establish immediate per-deployment accounting.
 
 ## Concrete proposed cleanup
 
@@ -32,7 +32,7 @@ Keep:
 - Preserved B: `dpl_afzChy7QG7WzbLKYQuJB4weAFUXR` / `mo9gfql7g`.
 - Existing branch shortcut target: `dpl_CviyK3XWLsh7UhZxcgsx1FqXQh6j` / `cszi1ed87`.
 - Listening/reading branch previews and every other project or branch.
-- New falling-paper preview from this feedback milestone.
+- New falling-paper Preview: `dpl_5t1bScRe3FbMF8DhkLeeEpM3cSjj` / `da7jbra30`, exact source `f34b5c78b45f4391590c7b2282ae80cae013780f`.
 
 **Status: proposed, not executed. No storage savings claimed.** Obtain confirmation for the exact eight targets, delete through project deployment controls, and then read the detailed usage view after its update delay. Do not infer exact reclaimed GB by multiplying Resources sizes, since Vercel's accounting can differ.
 
