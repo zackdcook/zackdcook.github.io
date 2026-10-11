@@ -4,9 +4,9 @@ import { StudioArtwork } from "./studio-artwork";
 import { HomepageBookCTA } from "./book-launch/signup-form";
 import styles from "./field-journal-hero.module.css";
 
-export function FieldJournalHero(){
-  return <section className={`hero ${styles.hero}`}>
-    <div className={styles.atmosphere} aria-hidden="true"><StudioArtwork slot="hero-landscape" variant="window" className={styles.landscape}/></div>
+export function FieldJournalHero({ floatingPaper = false }: { floatingPaper?: boolean } = {}){
+  return <section className={`hero ${styles.hero} ${floatingPaper ? styles.paperHero : ""}`}>
+    {!floatingPaper && <div className={styles.atmosphere} aria-hidden="true"><StudioArtwork slot="hero-landscape" variant="window" className={styles.landscape}/></div>}
     <div className={styles.content}>
       <p className={`collection-heading ${styles.identity}`}><span>Engineer <span className="reaction-symbol">⇌</span> Author</span></p>
       <h1 className={styles.name}>Zack <em>Cook.</em></h1>
@@ -23,6 +23,6 @@ export function FieldJournalHero(){
         {editorial.home.paragraphs.map(paragraph=><p key={paragraph}>{paragraph}</p>)}
       </div>
     </div>
-    <StudioArtwork slot="hero-foreground" variant="desk" className={styles.foreground}/>
+    {!floatingPaper && <StudioArtwork slot="hero-foreground" variant="desk" className={styles.foreground}/>}
   </section>;
 }

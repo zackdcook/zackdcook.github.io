@@ -1,5 +1,11 @@
 # Replaceable artwork brief
 
+## Home floating-paper iteration — 2026-10-11
+
+The new Home composition replaces its decorative studio scenery with one real paper per actual section. Slots `paper-opening`, `paper-project`, `paper-community`, `paper-biography`, `paper-folly` and `paper-shoutouts` are independently replaceable. `paper-event` and `paper-subscribe` appear only when their original conditional sections exist. Native outlines are the starting art; each slot also accepts an image, mask, theme variants or none through the established registry.
+
+Replacement artwork must remain an empty, transparent-edged paper with a quiet readable center. It carries live text and original controls; do not bake in words, controls or photos. Keep corner curl and fibers at the edges. The section owns its measured height, the single sheet owns flight/depth and the existing content owns functionality. The shared motes remain. Other routes' studio artwork and the hidden tree are unchanged by this iteration.
+
 These are working placeholders, not final artwork. The composition, depth and lighting are independent of the illustrations. Zack supplies all visible words; artwork should contain no lettering, invented slogans or baked-in interface controls.
 
 ## Recommended identity
