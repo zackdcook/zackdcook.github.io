@@ -3,7 +3,6 @@ import { CalendarMenu } from "@/components/calendar-menu";
 import { writingGroup } from "@/content/site";
 import type { ReactNode } from "react";
 import styles from "./writing-group-card.module.css";
-import { StudioArtwork } from "./studio-artwork";
 import { CollectionHeading } from "./collection-heading";
 
 export function WritingGroupCard({ eyebrow = "Find me at…", children }: { eyebrow?: string; children?: ReactNode }) {
@@ -11,7 +10,6 @@ export function WritingGroupCard({ eyebrow = "Find me at…", children }: { eyeb
     <div className={styles.title}>
       <CollectionHeading>{eyebrow}</CollectionHeading>
       <h2 id="writing-group-title">{writingGroup.title}</h2>
-      <StudioArtwork slot="event-illustration" variant="pages" className={styles.illustration}/>
     </div>
     <div className={styles.details}>
       <p className={`event-schedule ${styles.schedule}`}>{writingGroup.schedule}</p>

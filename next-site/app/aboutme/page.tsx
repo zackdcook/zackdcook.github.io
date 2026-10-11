@@ -2,7 +2,6 @@ import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { ReversiblePortrait } from "@/components/reversible-portrait";
 import { site } from "@/content/site";
-import { StudioArtwork } from "@/components/studio-artwork";
 import styles from "./aboutme.module.css";
 
 export const metadata: Metadata = pageMetadata("about", "About Me");
@@ -40,8 +39,6 @@ export default function AboutMe() {
     <div className={`shell ${styles.readingGrid}`}>
       <div className={styles.margin} aria-hidden="true">
         <div className={styles.readTrack}><span /></div>
-        <StudioArtwork slot="about-marginalia" variant="pages" className={styles.marginalia} />
-        <span className={styles.marginRule} />
       </div>
       <div className={`prose about-story ${styles.story}`}>
       <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <strong>Zacky C</strong>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>

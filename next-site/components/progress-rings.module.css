@@ -10,7 +10,7 @@
 .display :global(.stage-label sup){font-size:.65em}
 .display :global(.stage-count){display:block;font-size:11px;line-height:1.6;font-variant-numeric:tabular-nums;margin-top:4px}
 .display :global(.progress-chart){display:grid;justify-items:center;gap:15px;min-width:0}
-.display :global(.rings){width:100%;max-width:320px;position:relative;border-radius:50%;isolation:isolate;box-shadow:var(--material-cast-x,0px) calc(12px + var(--material-cast-y,0px)) 28px -12px var(--material-shadow)}
+.display :global(.rings){width:100%;max-width:320px;position:relative;border-radius:50%;isolation:isolate}
 .dialFace{position:absolute;inset:0;z-index:-1;border-radius:50%}
 .display :global(.rings[data-material-surface]) .dialFace{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 .display :global(.rings svg){display:block;width:100%;height:auto;overflow:visible}

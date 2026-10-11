@@ -8,7 +8,7 @@
 .folly-page-heading{max-width:17ch}
 .folly-panel{position:relative;background:none;padding:0;border:0}
 .folly-label{font:450 13px/1.8 var(--sans);color:var(--color-muted);margin:0 0 22px;max-width:650px}
-.folly-ground{position:relative;width:100%;height:clamp(440px,62vw,760px);isolation:isolate;overflow:hidden;touch-action:auto;margin-top:12px;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;border-bottom:1px solid color-mix(in srgb,var(--color-border) 35%,transparent)}
+.folly-ground{position:relative;width:100%;height:clamp(440px,62vw,760px);isolation:isolate;overflow:hidden;touch-action:auto;margin-top:12px;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .folly-ground[data-dragging],.folly-ground[data-grab-ready]{cursor:grabbing}
 .folly-leaves{margin:0;padding:0;list-style:none}
 .folly-leaves,.folly-leaves>li,.folly-litter{transform-style:flat}

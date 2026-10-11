@@ -10,7 +10,6 @@ import { getShoutouts } from "@/lib/shoutouts";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
-import { PaperChapter } from "@/components/paper-chapter";
 import styles from "./home.module.css";
 
 export const metadata = { alternates: { canonical: "/" } };
@@ -19,18 +18,18 @@ export default async function Home() {
   const [events, shoutouts] = await Promise.all([getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
   return <div className={styles.world}>
-    <PaperChapter id="home" slot="paper-opening" opening><FieldJournalHero /></PaperChapter>
-    <PaperChapter id="creative-works" slot="paper-project" className={`desk-section ${styles.manuscript}`}>
+    <section id="home"><FieldJournalHero /></section>
+    <section id="creative-works" className={`desk-section ${styles.manuscript}`}>
       <div className="shell"><ActiveProject detailsLink /></div>
-    </PaperChapter>
-    <PaperChapter id="find-me-at" slot="paper-community" drift="left" className={`events-section ${styles.events}`}><div className="shell">
+    </section>
+    <section id="find-me-at" className={`events-section ${styles.events}`}><div className="shell">
       <WritingGroupCard><div className="rail-more"><Link className="text-link" href="/events">Other events</Link></div></WritingGroupCard>
-    </div></PaperChapter>
-    {event && <PaperChapter slot="paper-event" className="event-callout upcoming-callout"><div className="shell">
+    </div></section>
+    {event && <section className="event-callout upcoming-callout"><div className="shell">
       <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
       <Link className="text-link" href="/events">Event details</Link>
-    </div></PaperChapter>}
-    <PaperChapter id="about-me" slot="paper-biography" className={`bio-section ${styles.biography}`}>
+    </div></section>}
+    <section id="about-me" className={`bio-section ${styles.biography}`}>
       <div className="life-section shell">
         <div className="life-copy">
           <CollectionHeading>BIO1990</CollectionHeading>
@@ -40,8 +39,8 @@ export default async function Home() {
         </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
       </div>
-    </PaperChapter>
-    <PaperChapter id="words-of-folly" slot="paper-folly" drift="left" className={`folly-feature ${styles.clearing}`}>
+    </section>
+    <section id="words-of-folly" className={`folly-feature ${styles.clearing}`}>
       <div className={`shell ${styles.follySpread}`}>
         <div className={styles.follyHeading}>
           <CollectionHeading>Words of Folly</CollectionHeading>
@@ -52,15 +51,15 @@ export default async function Home() {
         </div>
         <div className={styles.follyDestination}><Link className="text-link" href="/words-of-folly">The whole pile</Link></div>
       </div>
-    </PaperChapter>
-    <PaperChapter id="shoutouts" slot="paper-shoutouts" className={`shoutouts-section ${styles.shoutouts}`}><div className="shell">
+    </section>
+    <section id="shoutouts" className={`shoutouts-section ${styles.shoutouts}`}><div className="shell">
       <CollectionHeading>Cool peeps</CollectionHeading>
       <ShoutoutList people={shoutouts.slice(0,3)} />
       <div className="rail-more"><Link className="text-link" href="/shoutouts">Other shoutouts</Link></div>
-    </div></PaperChapter>
-    {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <PaperChapter slot="paper-subscribe" drift="left" className="subscribe-callout"><div className="shell">
+    </div></section>
+    {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <section className="subscribe-callout"><div className="shell">
       <h2>Keep in touch.</h2><p>Occasional blurbs from my noggin to your feed.</p>
       <a className="text-link" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>Get writing updates</a>
-    </div></PaperChapter>}
+    </div></section>}
   </div>;
 }

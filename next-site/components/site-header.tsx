@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { ViewTransition, useEffect, useRef, useState } from "react";
 import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
-import { StudioArtwork } from "./studio-artwork";
 import { PreferencesButton } from "./preferences-button";
 import { Artwork } from "./artwork";
 import { BookMenuItem } from "./book-launch/provider";
@@ -87,7 +86,6 @@ export function SiteHeader() {
         <BookMenuItem closeMenu={close} />
       </nav>
       <div className={styles.sheetFooter}><PreferencesButton onRequest={()=>{pendingSettings.current=true;close();}} /></div>
-      <div className={styles.sceneryFrame}><StudioArtwork slot="navigation-scenery" variant="window" className={styles.scenery}/></div>
     </dialog>
   </header></ViewTransition>;
 }
