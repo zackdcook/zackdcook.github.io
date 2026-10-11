@@ -39,14 +39,18 @@ sup{font-size:.65em;line-height:0}
 .skip-link{position:fixed;top:-100px;left:20px;z-index:200;padding:12px 20px;background:var(--color-ink);color:var(--color-background)}
 .skip-link:focus{top:10px}
 section[id]{scroll-margin-top:100px}
-.button,.text-link{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:10px 20px;border:1px solid var(--color-border);border-radius:999px;background:var(--color-chrome);color:var(--color-on-chrome);font:600 13px/1.45 var(--sans);text-decoration:none;cursor:pointer;transition:background-color var(--duration-hover),color var(--duration-hover)}
-a.button,a.text-link{justify-content:start;padding:8px 0;border:0;border-bottom:1px solid var(--color-border);border-radius:0;background:none;color:var(--color-ink);gap:18px}
-a:is(.button,.text-link)::after{content:"";width:22px;height:16px;margin-left:10px;flex-shrink:0;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cpath d='M1 9h21M15 2l7 7-7 7' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") center/contain no-repeat;transition:translate .24s var(--ease-settle)}
-a:is(.button,.text-link):hover::after{translate:4px 0}
-.button:not(a):hover{background:var(--color-hover);color:var(--color-on-hover)}
+.button,.text-link,.icon-button{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:46px;padding:10px 20px;border:1px solid var(--color-border);border-radius:999px;background:var(--color-chrome);color:var(--color-on-chrome);font:600 13px/1.45 var(--sans);text-decoration:none;cursor:pointer;transition:background-color var(--duration-hover),color var(--duration-hover),translate var(--duration-hover) var(--ease-settle)}
+.text-link{justify-content:start;padding:8px 0;border:0;border-bottom:1px solid var(--color-border);border-radius:0;background:none;color:var(--color-ink);gap:18px}
+.text-link::after{content:"";width:22px;height:16px;margin-left:10px;flex-shrink:0;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cpath d='M1 9h21M15 2l7 7-7 7' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") center/contain no-repeat;transition:translate .24s var(--ease-settle)}
+.text-link:hover::after{translate:4px 0}
+.text-link:hover{color:var(--color-accent)}
+.button:not(:disabled):hover{background-color:var(--color-hover);color:var(--color-on-hover)}
+.icon-button{width:44px;min-height:44px;padding:0;background:color-mix(in srgb,var(--color-surface) 65%,transparent);color:var(--color-ink);border-color:var(--glass-edge)}
+.icon-button:hover{background-color:var(--color-surface-alt)}
+.button:not(:disabled):active,.icon-button:active{translate:0 1px}
 .button:disabled{opacity:.45;cursor:default}
 .button-small{min-height:44px;font-size:12px}
-.button svg,.text-link svg{width:18px;height:18px;flex-shrink:0}
+.button svg,.text-link svg,.icon-button svg{width:18px;height:18px;flex-shrink:0}
 .actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px}
 .rail-more{margin-top:28px}
 .tactile-photo{position:relative;isolation:isolate;overflow:visible}
@@ -72,7 +76,7 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .life-section{display:grid;grid-template-columns:1fr 1.1fr;align-items:center;gap:clamp(40px,7vw,110px)}
 .life-copy>h2:not(.section-label){margin-block:25px}
 .life-copy>p{max-width:360px;font-size:15px;color:var(--color-muted)}
-.life-copy>.button{margin-top:25px}
+.life-copy>:is(.button,.text-link){margin-top:25px}
 .life-photo{position:relative;overflow:visible}
 .kitty-discovery{min-width:0}
 .kitty-photo{aspect-ratio:1400/1034;border-radius:12px;box-shadow:0 20px 48px var(--material-shadow)}
@@ -93,7 +97,6 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .about-intro .page-intro{margin:0}
 .about-biography{margin-top:80px;position:relative;border-top:1px solid color-mix(in srgb,var(--color-border) 36%,transparent)}
 .about-story{max-width:730px;text-wrap:pretty}
-.about-story p:first-child{font-size:clamp(20px,2.3vw,29px);line-height:1.65}
 .zacky-c-hover{position:relative;display:inline-block}
 .zacky-c-trigger{appearance:none;border:0;padding:0;background:none;color:inherit;font:inherit;font-weight:650;text-decoration:underline dotted;text-underline-offset:.18em;cursor:help}
 .zacky-c-backdrop{position:fixed;inset:0;z-index:99;background:var(--material-shadow);opacity:0;pointer-events:none;transition:opacity .18s}
@@ -106,7 +109,7 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .site-footer{border-top:1px solid color-mix(in srgb,var(--color-border) 36%,transparent);padding-block:55px 30px}
 .site-footer-inner{display:grid;grid-template-columns:1fr auto;gap:28px}
 .footer-links{display:flex;flex-wrap:wrap;gap:8px 26px;align-items:center;grid-column:1/-1}
-.footer-links a.button{font-size:12px;border-bottom-color:transparent;min-height:44px;gap:8px}
+.footer-links .text-link{font-size:12px;border-bottom-color:transparent;min-height:44px;gap:8px}
 .footer-links a::after{display:none}
 .footer-links a:hover{border-bottom-color:var(--color-accent)}
 .footer-links svg{width:17px;height:17px}
@@ -122,6 +125,7 @@ a:is(.button,.text-link):hover::after{translate:4px 0}
 .calendar-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
 .calendar-dialog-heading h2{font-size:29px;line-height:1.15}
 .dialog-close{width:44px;min-height:44px;padding:0;font-size:25px;flex-shrink:0}
+.dialog-close:focus-visible{outline-offset:2px}
 .calendar-event-title{font-weight:700}
 .calendar-help,.form-help,.form-hint{font-size:13px;line-height:1.7;color:var(--color-muted);margin-top:18px}
 .calendar-options{display:grid;gap:12px;margin-top:25px}

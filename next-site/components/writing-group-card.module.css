@@ -7,7 +7,7 @@
 .venue{font-family:var(--display);font-size:30px;line-height:1.25;margin-top:29px;max-width:320px}
 .details :global(.event-address){font-size:12px;color:var(--section-muted,var(--color-muted));margin-top:10px}
 .details :global(.event-actions){margin-top:28px;gap:20px}
-.details :global(a.button){color:var(--section-ink,var(--color-ink));border-bottom-color:var(--section-rule,var(--color-border))}
+.details :global(.text-link){color:var(--section-ink,var(--color-ink));border-bottom-color:var(--section-rule,var(--color-border))}
 .description{font-size:15px;line-height:1.85;color:var(--section-muted,var(--color-muted));margin-top:31px;max-width:445px;text-wrap:pretty}
 .illustration{width:calc(100% + 120px);height:360px;margin-top:-30px;margin-left:-50px;position:relative;z-index:-1;opacity:.9;mask-image:linear-gradient(transparent 5%,#000 24%,#000 88%,transparent);view-timeline-name:--open-book;view-timeline-axis:block}
 @supports(animation-timeline:view()){@media(prefers-reduced-motion:no-preference){:global(html:not([data-effects="reduced"])) .illustration{animation:book-lift linear both;animation-timeline:--open-book;animation-range:entry 0% exit 100%}}}

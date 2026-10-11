@@ -16,7 +16,7 @@ export function CalendarMenu() {
   const close = () => dialog.current?.close();
 
   return <>
-    <button className="button" type="button" aria-haspopup="dialog" onClick={open}><CalendarIcon />Add to calendar</button>
+    <button className="text-link" data-material-surface="glass" type="button" aria-haspopup="dialog" onClick={open}><CalendarIcon />Add to calendar</button>
     <dialog
       className="calendar-dialog"
       ref={dialog}
@@ -25,20 +25,18 @@ export function CalendarMenu() {
     >
       <div className="calendar-dialog-content">
         <div className="calendar-dialog-heading">
-          <h2 id={heading}>Write it in.</h2>
-          <button className="button button-small calendar-close dialog-close" type="button" aria-label="Close calendar choices" onClick={close}>×</button>
+          <h2 id={heading} tabIndex={-1} autoFocus>Write it in.</h2>
+          <button className="icon-button calendar-close dialog-close" data-material-surface="glass" type="button" aria-label="Close calendar choices" onClick={close}>×</button>
         </div>
         <p className="calendar-event-title">{writingGroup.title}</p>
         <p>{writingGroup.schedule}</p>
-        <p className="calendar-help">Choose your calendar, then save or import the weekly series.</p>
         <div className="calendar-options">
-          <a className="button" href={googleUrl} target="_blank" rel="noopener noreferrer">Google Calendar</a>
-          <a className="button" href={writingGroupCalendarPath}>Apple Calendar</a>
-          <a className="button" href={writingGroupCalendarPath} download="write-on-lakeland.ics">Outlook & other calendars</a>
+          <a className="text-link" href={googleUrl} target="_blank" rel="noopener noreferrer">Google Calendar</a>
+          <a className="text-link" href={writingGroupCalendarPath}>Apple Calendar</a>
+          <a className="text-link" href={writingGroupCalendarPath} download="write-on-lakeland.ics">Outlook & other calendars</a>
         </div>
-        <p className="calendar-help">For a downloaded file, open it in your calendar app. Google on mobile may need the calendar file too.</p>
       </div>
     </dialog>
-    <noscript><a className="button" href={writingGroupCalendarPath}>Download calendar event</a></noscript>
+    <noscript><a className="text-link" href={writingGroupCalendarPath}>Download calendar event</a></noscript>
   </>;
 }

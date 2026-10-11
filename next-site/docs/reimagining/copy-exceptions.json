@@ -37,6 +37,36 @@
   {
     "path": "next-site/components/site-preferences.tsx",
     "text": "Reset Brave discovery",
-    "reason": "Preview-only QA wording exception: the existing Reset \u2026 interaction pattern with the author\u2019s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
+    "reason": "Preview-only QA wording exception: the existing Reset … interaction pattern with the author’s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
+  },
+  {
+    "path": "next-site/components/calendar-menu.tsx",
+    "text": "Choose your calendar, then save or import the weekly series.",
+    "reason": "Zack explicitly requested removing the marked extraneous calendar helper prose in feedback milestone 3. Event title/schedule and all calendar choices remain."
+  },
+  {
+    "path": "next-site/components/calendar-menu.tsx",
+    "text": "For a downloaded file, open it in your calendar app. Google on mobile may need the calendar file too.",
+    "reason": "The same author-requested calendar simplification removes this helper paragraph; actual ICS/download/Google calendar behavior remains."
+  },
+  {
+    "path": "next-site/app/rss/page.tsx",
+    "text": "Stay in the",
+    "reason": "Zack explicitly authorized simplifying RSS wording in his writing voice in milestone 3. New heading: Follow the folly."
+  },
+  {
+    "path": "next-site/app/rss/page.tsx",
+    "text": "know.",
+    "reason": "The same RSS rewrite replaces this heading fragment with folly.; the route, XML feed and controls remain."
+  },
+  {
+    "path": "next-site/app/rss/page.tsx",
+    "text": "RSS lets you follow new Words of Folly without an account here. Copy this address into the “Add feed” or “Follow website” box in your feed reader.",
+    "reason": "Explicit RSS rewrite: Let your feed reader do the checking. Copy this address into it for new Words of Folly."
+  },
+  {
+    "path": "next-site/app/rss/page.tsx",
+    "text": "Your reader will check for new entries automatically. If you open the feed directly in a browser, you may see XML code—that’s the format feed readers use.",
+    "reason": "Author-requested RSS simplification removes this technical explanation. The server RSS endpoint still emits valid XML."
   }
 ]

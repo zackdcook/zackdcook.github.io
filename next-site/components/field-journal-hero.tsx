@@ -8,7 +8,7 @@ export function FieldJournalHero(){
   return <section className={`hero ${styles.hero}`}>
     <div className={styles.atmosphere} aria-hidden="true"><StudioArtwork slot="hero-landscape" variant="window" className={styles.landscape}/></div>
     <div className={styles.content}>
-      <p className={`collection-heading ${styles.identity}`}><span>Engineer<br/><span className="reaction-symbol">⇌</span><br/>Author</span></p>
+      <p className={`collection-heading ${styles.identity}`}><span>Engineer <span className="reaction-symbol">⇌</span> Author</span></p>
       <h1 className={styles.name}>Zack <em>Cook.</em></h1>
       <div className={styles.portrait}>
         <Artwork slot="hero-orbit" className={styles.orbit}/>

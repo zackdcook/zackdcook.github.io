@@ -24,10 +24,12 @@
 .display :global(.ring-highlight){opacity:0;stroke-width:1;transition:opacity .18s}
 .display :global(.is-highlighted .ring-highlight){opacity:.45}
 .display :global(.ring-hit){cursor:pointer}
-.display :global(.ring-dots){opacity:.65}
+.display :global(.ring-planned){opacity:.45}
 .display :global(.project-updated){font-size:10px;color:var(--color-muted);text-align:center}
+.display :global(.project-updated time){display:block;white-space:nowrap}
 .display :global(.progress-note){min-width:0;min-height:150px;display:grid;align-items:center}
-.display :global(.progress-note h3){font:650 16px/1.5 var(--sans);letter-spacing:0;margin-bottom:16px}
+.display :global(.progress-note)>div{grid-area:1/1;visibility:hidden;pointer-events:none}
+.display :global(.progress-note)>div[data-selected="true"]{visibility:visible;pointer-events:auto}
 .display :global(.progress-note p){font:400 13px/1.8 var(--sans);color:var(--color-muted);max-width:330px;text-wrap:pretty}
 .display :global([hidden]){display:none}
 @media(max-width:950px){.display{grid-template-columns:minmax(180px,1fr) minmax(180px,1fr);gap:26px}.display :global(.progress-note){grid-column:1/-1;min-height:100px;border-top:1px solid color-mix(in srgb,var(--color-border) 32%,transparent);padding-top:24px}.display :global(.progress-note p){max-width:550px}}
@@ -49,7 +51,6 @@
 .folio :global(.stage-count){font-size:11px}
 .folio :global(.stage-dot){margin-top:8px}
 .folio :global(.progress-note){grid-column:1;grid-row:3;min-height:155px;border:0;padding:24px 28px;background:var(--color-surface-alt);border-left:2px solid var(--color-brass)}
-.folio :global(.progress-note h3){font:650 23px/1.2 var(--display);margin-bottom:14px}
 .folio :global(.progress-note p){font-size:14px;max-width:none}
 .folio :global(.project-updated){font-size:11px}
 @media(max-width:1000px) and (min-width:741px){

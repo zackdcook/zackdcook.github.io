@@ -52,8 +52,8 @@ Zack explicitly permits the RSS rewrite and calendar helper removals. All other 
 
 ## Verification
 
-Not yet tested after implementation. Run existing meaningful suites, type checking, optimized CTA-enabled build, native browser action checks and responsive geometry. Physical device orientation, touch hardware and representative low-end FPS require real-device evidence; do not certify them from desktop iframes.
+Local implementation complete; first automated pass: type checking PASS, optimized CTA-enabled build PASS (47 routes and generated theme/art checks), authored route/copy preservation PASS within the explicit RSS/calendar exceptions. Native browser checks and final visual refinement remain pending. Physical device orientation, touch hardware and representative low-end FPS require real-device evidence; do not certify them from desktop iframes.
 
 ## Exact next action
 
-Implement the shared public control/typography fixes and corrected progress layout, then the supplied GIF flight scheduler, continuous atmosphere and About composition. Verify, refine, commit exact history, publish only the experimental preview and update this record before pausing for direction feedback.
+Commit and publish the implemented public milestone using the established authorized native Git path. Create only an experimental Preview. Verify the actual responsive control/scroll/discovery flows, refine observed issues, then update this record and WORK_CHECKPOINT.md before pausing for direction feedback.

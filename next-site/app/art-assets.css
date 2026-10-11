@@ -11,6 +11,10 @@
   --asset-folly-scenery: none;
   --asset-navigation-scenery: none;
   --asset-page-scenery: none;
+  --asset-chapter-scenery: none;
+  --asset-chapter-foreground: none;
+  --asset-about-marginalia: none;
+  --asset-public-mote: none;
   --asset-kitty-shadow: none;
   --asset-portrait: url("/images/portrait.webp");
   --asset-cats: url("/images/cats.webp");
@@ -52,6 +56,10 @@ html[data-theme="dark"] {
   --asset-folly-scenery: none;
   --asset-navigation-scenery: none;
   --asset-page-scenery: none;
+  --asset-chapter-scenery: none;
+  --asset-chapter-foreground: none;
+  --asset-about-marginalia: none;
+  --asset-public-mote: none;
   --asset-kitty-shadow: none;
   --asset-portrait: url("/images/portrait.webp");
   --asset-cats: url("/images/cats.webp");
@@ -93,6 +101,10 @@ html[data-timeline="felled"] {
   --asset-folly-scenery: none;
   --asset-navigation-scenery: none;
   --asset-page-scenery: none;
+  --asset-chapter-scenery: none;
+  --asset-chapter-foreground: none;
+  --asset-about-marginalia: none;
+  --asset-public-mote: none;
   --asset-kitty-shadow: none;
   --asset-portrait: url("/images/portrait.webp");
   --asset-cats: url("/images/cats.webp");
@@ -134,6 +146,10 @@ html[data-timeline="felled"][data-theme="dark"] {
   --asset-folly-scenery: none;
   --asset-navigation-scenery: none;
   --asset-page-scenery: none;
+  --asset-chapter-scenery: none;
+  --asset-chapter-foreground: none;
+  --asset-about-marginalia: none;
+  --asset-public-mote: none;
   --asset-kitty-shadow: none;
   --asset-portrait: url("/images/portrait.webp");
   --asset-cats: url("/images/cats.webp");

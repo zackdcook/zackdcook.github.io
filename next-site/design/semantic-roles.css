@@ -102,6 +102,10 @@
   --studio-plant: color-mix(in srgb, var(--color-foliage) 65%, var(--color-surface));
   --studio-rule: var(--color-brass);
   --studio-light: color-mix(in srgb, var(--color-sun) 60%, var(--color-background));
+  --world-light-warm: color-mix(in srgb, var(--color-sun) 18%, transparent);
+  --world-light-rose: color-mix(in srgb, var(--color-accent-soft) 12%, transparent);
+  --world-mote: color-mix(in srgb, var(--color-brass) 70%, var(--color-sun));
+  --world-mote-glow: color-mix(in srgb, var(--color-sun) 35%, transparent);
   --photo-shadow: #19231F;
   --editorial-art-light: .95;
   --editorial-art-saturation: .85;

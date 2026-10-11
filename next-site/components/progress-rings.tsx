@@ -97,8 +97,8 @@ export function ProgressRings({ compact = false, presentation = "summary" }: { c
           <defs><radialGradient id={`${id}-face`} cx=".32" cy=".24" r=".85"><stop stopColor="var(--color-surface)"/><stop offset="1" stopColor="var(--color-surface-alt)"/></radialGradient></defs>
           <circle cx="160" cy="160" r="158" fill={`url(#${id}-face)`} stroke="var(--material-cut)" strokeWidth=".7"/>
           <circle cx="160" cy="160" r="151" fill="none" stroke="var(--color-brass)" strokeWidth=".5" opacity=".5"/>
-          <g stroke="var(--color-brass)" strokeWidth=".8" opacity=".45">{Array.from({length:60},(_,index)=>{
-            const angle=index*Math.PI/30,inner=index%5===0?150:153;
+          <g stroke="var(--color-brass)" strokeWidth=".8" opacity=".45">{Array.from({length:20},(_,index)=>{
+            const angle=index*Math.PI/10,inner=index%5===0?150:153;
             return <path key={index} d={`M${(160+inner*Math.sin(angle)).toFixed(2)},${(160-inner*Math.cos(angle)).toFixed(2)}L${(160+156*Math.sin(angle)).toFixed(2)},${(160-156*Math.cos(angle)).toFixed(2)}`}/>;
           })}</g>
         </svg>
@@ -124,12 +124,7 @@ export function ProgressRings({ compact = false, presentation = "summary" }: { c
           >
             {index === 0 ? <circle className="core-fill" cx="160" cy="160" r={coreRadius} fill={`url(#${id}-tone-${index})`} /> : <>
               <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--progress-track)" strokeWidth={width} />
-              {item.status === "planned" ? <g className="ring-dots" fill={`url(#${id}-tone-${index})`}>{Array.from({ length: 40 }, (_, dot) => {
-                const angle = dot * Math.PI * 2 / 40 - Math.PI / 2;
-                // Fixed world geometry avoids Safari's dashed-stroke resampling
-                // when a nearby :active control repaints. Positions never animate.
-                return <circle key={dot} cx={Number((160 + radius * Math.cos(angle)).toFixed(3))} cy={Number((160 + radius * Math.sin(angle)).toFixed(3))} r="3.5" />;
-              })}</g> :
+              {item.status === "planned" && ratio === 0 ? <circle className="ring-planned" cx="160" cy="160" r={radius} fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth="1" /> :
                 <circle className="ring-fill" cx="160" cy="160" r={radius} pathLength="100" fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth={width} strokeLinecap="round" strokeDasharray="100 100" transform="rotate(-90 160 160)" />}
             </>}
             {(index === 0 ? [coreRadius + 3] : [radius - width / 2 - 3, radius + width / 2 + 3]).map(edge => <circle
@@ -155,8 +150,7 @@ export function ProgressRings({ compact = false, presentation = "summary" }: { c
       </svg>
     </div><p className="project-updated">Progress updated <time dateTime={progress.updated}>{displayDate(progress.updated)}</time></p></div>
     <div className="progress-note" aria-live="polite" aria-atomic="true">
-      {progress.stages.map((item, index) => <div key={item.id} hidden={current !== index} aria-hidden={current !== index}>
-        <h3><StageLabel label={item.label} /></h3>
+      {progress.stages.map((item, index) => <div key={item.id} data-selected={current === index} aria-hidden={current !== index}>
         <p id={`${id}-note-${item.id}`}><OrdinalText text={noteFor(item)} /></p>
       </div>)}
     </div>

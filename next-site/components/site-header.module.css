@@ -15,12 +15,14 @@
 .controls .settings :global(.site-asset-icon){width:16px;height:16px}
 .theme,.menu{border:0;padding:0;min-width:44px;min-height:44px;background:none;color:var(--color-ink);cursor:pointer}
 .theme{display:grid;place-items:center;position:relative;border:1px solid color-mix(in srgb,var(--color-border) 40%,transparent);border-radius:50%}
-.theme span{grid-area:1/1;font-size:23px;transition:opacity .18s,rotate .42s var(--ease-settle)}
+.theme span{grid-area:1/1;font-size:23px;transform-origin:center;transition:opacity .24s,rotate .55s var(--ease-settle),scale .55s var(--ease-settle),translate .55s var(--ease-settle)}
 .theme svg{display:block;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
 .theme :global(.artwork){width:20px;height:20px}
-.moon{opacity:0;filter:grayscale(1)}
-:global(html[data-theme="dark"]) .sun{opacity:0;rotate:90deg}
-:global(html[data-theme="dark"]) .moon{opacity:1}
+.moon{opacity:0;rotate:-75deg;scale:.5;translate:0 5px}
+:global(html[data-theme="dark"]) .sun{opacity:0;rotate:90deg;scale:.5;translate:0 -5px}
+:global(html[data-theme="dark"]) .moon{opacity:1;rotate:0deg;scale:1;translate:0 0}
+.theme:hover .sun{rotate:30deg}
+:global(html[data-theme="dark"]) .theme:hover .moon{rotate:-14deg;translate:0 -1px}
 .menu{display:none;align-items:center;gap:16px;font-size:13px;font-weight:650}
 .menu>span{font-size:27px;font-weight:350;line-height:1}
 .sheet{position:fixed;inset:0;width:100%;max-width:none;height:100dvh;max-height:none;margin:0;border:0;padding:0;color:var(--color-ink);background:var(--color-background);overflow-x:clip;overflow-y:auto;isolation:isolate}
@@ -48,4 +50,5 @@
 @media(max-width:600px){.inner,.sheetHeader,.destinations,.sheetFooter{width:calc(100% - 40px)}.inner{gap:14px;min-height:72px}.wordmark{font-size:22px}.wordmark svg{width:26px}.controls{gap:12px}.theme{min-width:44px;min-height:44px}.menu{gap:10px}.sheetHeader{min-height:72px;flex-shrink:0}.destinations{margin-top:22px;margin-bottom:28px}.destinations a{font-size:clamp(29px,8vw,44px);padding-block:14px}.destinations :global(.book-menu-item){font-size:clamp(29px,8vw,44px);padding-block:14px}.scenery{width:170%;height:85%;right:-50%}.sheetFooter{padding-top:14px}}
 @media(prefers-reduced-motion:reduce){.sheet[open]{animation:none}.wordmark svg,.destinations svg,.theme span{transition:none}}
 :global(html[data-effects="reduced"]) .sheet[open]{animation:none}
+:global(html[data-effects="reduced"]) .theme span{transition:none}
 :global(html[data-effects="reduced"]) .header{backdrop-filter:none;background:var(--color-background)}

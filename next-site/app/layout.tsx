@@ -17,6 +17,7 @@ import "./bebrave.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
+import { PublicAtmosphere } from "@/components/public-atmosphere";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { StudioArtwork } from "@/components/studio-artwork";
@@ -52,6 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BookLaunchProvider testMode={testModeEnabled(process.env)}>
           <Suspense fallback={null}><PrivacyAnalytics /></Suspense>
           <PointerLight />
+          <PublicAtmosphere />
           <SiteIcons />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
           <OrganicTransition name="zacks-corner">

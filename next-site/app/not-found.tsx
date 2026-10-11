@@ -10,7 +10,7 @@ export default function NotFound() {
         <em>turn.</em>
       </h1>
       <p>The page you’re looking for isn’t here.</p>
-      <Link className="button" href="/">
+      <Link className="text-link" href="/">
         Back home
       </Link>
     </div>

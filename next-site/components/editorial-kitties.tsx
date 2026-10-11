@@ -6,16 +6,12 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePreferences } from "./site-preferences";
 import { Artwork, ArtworkImage } from "./artwork";
 import { artworkEnabled } from "@/lib/art-assets";
-import { kittyWindows, shadowFlock, braveDiscoveryKey } from "@/lib/kitty-shadows";
+import { kittyWindows, shadowFlight, braveDiscoveryKey } from "@/lib/kitty-shadows";
 import styles from "./editorial-kitties.module.css";
 
-function BirdShadow() {
+function BirdShadow({ reduced }: { reduced: boolean }) {
   return <Artwork slot="kitty-shadow" className={styles.shadowArt}>
-    <svg viewBox="0 0 68 46" aria-hidden="true" focusable="false">
-      <path className={styles.farWing} d="M36 30C37 17 32 7 26 2c-1 12-4 20 3 31Z"/>
-      <path d="M13 27 5 25l8 8-7 4 16-3c8 3 20 3 28-1l7-6 8-1-7-3c-3-9-13-5-15 0l-10 4-10 3Z"/>
-      <path className={styles.nearWing} d="M38 30C30 11 17 4 5 3c7 8 12 18 20 28l9 3Z"/>
-    </svg>
+    <Image src={reduced ? "/artwork/kitty-shadow-still.png" : "/artwork/kitty-shadow-flight.gif"} alt="" width={200} height={153} unoptimized aria-hidden="true" />
   </Artwork>;
 }
 
@@ -45,44 +41,48 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   useEffect(() => {
     const photo = photograph.current, targets = birds.current.filter((bird):bird is HTMLButtonElement=>Boolean(bird));
     if (!photo || !targets.length || escaped) return;
-    let active = false, disposed = false, timer: ReturnType<typeof setTimeout> | undefined;
+    let active = false, disposed = false;
+    const timers: (ReturnType<typeof setTimeout> | undefined)[] = [];
     const coordinates = (point: number[], target:HTMLButtonElement) => `translate3d(${point[0] * photo.clientWidth - target.clientWidth / 2}px,${point[1] * photo.clientHeight - target.clientHeight / 2}px,0)`;
     function rest() {
-      for (const animation of flights.current) animation.cancel();
+      for (const animation of flights.current) animation?.cancel();
       flights.current = [];
       for (const target of targets) {
         target.style.transform = coordinates(windowArea.rest,target);
         target.dataset.state = "rest";
       }
     }
-    function stop() { clearTimeout(timer); rest(); }
-    function schedule(delay: number) { clearTimeout(timer); if (active && !disposed && !document.hidden && !reduced) timer = setTimeout(fly, delay); }
-    function fly() {
-      if (!active || document.hidden || disposed || reduced) return;
-      const flock = shadowFlock();
-      rest();
-      flights.current = targets.map((target,index)=>{
-        const path = flock[index];
-        target.style.setProperty("--shadow-size", `${path.size}px`);
-        target.style.setProperty("--shadow-direction", path.reverse ? "-1" : "1");
-        target.style.setProperty("--wing-delay", `${path.wingDelay}ms`);
-        target.dataset.state = "flying";
-        return target.animate([{ transform: coordinates(path.from,target), opacity: 0 }, { opacity: .68, offset: .12 }, { opacity: .68, offset: .88 }, { transform: coordinates(path.to,target), opacity: 0 }], { duration: path.duration, delay:path.startDelay, fill:"both", easing:"linear" });
-      });
-      // Only one scheduler per flock; discovery, visibility and cleanup cancel
-      // every animation together. No accumulated timers or React frame updates.
-      const last=flock.reduce((latest,path,index)=>path.duration+path.startDelay>flock[latest].duration+flock[latest].startDelay?index:latest,0);
-      flights.current[last].onfinish=()=>{if(disposed)return;rest();schedule(flock[0].delay);};
+    function stop() { timers.forEach(clearTimeout); rest(); }
+    function schedule(index: number, delay: number) {
+      clearTimeout(timers[index]);
+      if (active && !disposed && !document.hidden && !reduced) timers[index] = setTimeout(() => fly(index), delay);
     }
-    const observer = new IntersectionObserver(([entry]) => { active = entry.isIntersecting; if (active) schedule(500 + Math.random() * 800); else stop(); }, { threshold: .05 });
-    const resize = new ResizeObserver(() => { rest(); schedule(800); });
-    const visibility = () => { if (document.hidden) stop(); else schedule(800); };
+    function resume() { targets.forEach((_, index) => schedule(index, 600 + Math.random() * 3000 + index * 1600)); }
+    function fly(index: number) {
+      if (!active || document.hidden || disposed || reduced) return;
+      const target = targets[index], path = shadowFlight();
+      flights.current[index]?.cancel();
+        target.style.setProperty("--shadow-size", `${path.size}px`);
+        target.dataset.state = "flying";
+      const animation = target.animate([{ transform: coordinates(path.from,target), opacity: 0 }, { opacity: .62, offset: .12 }, { opacity: .62, offset: .88 }, { transform: coordinates(path.to,target), opacity: 0 }], { duration: path.duration, fill:"both", easing:"linear" });
+      flights.current[index] = animation;
+      // Three independent bounded tracks overlap naturally. Every completion
+      // schedules another crossing; no finite batch or frame-by-frame state.
+      animation.onfinish = () => {
+        if (disposed) return;
+        animation.cancel(); target.style.transform = coordinates(windowArea.rest, target); target.dataset.state = "rest";
+        schedule(index, path.delay);
+      };
+    }
+    const observer = new IntersectionObserver(([entry]) => { active = entry.isIntersecting; if (active) resume(); else stop(); }, { threshold: .05 });
+    const resize = new ResizeObserver(() => { stop(); resume(); });
+    const visibility = () => { if (document.hidden) stop(); else resume(); };
     rest(); observer.observe(photo); resize.observe(photo); document.addEventListener("visibilitychange", visibility);
     return () => { disposed = true; stop(); observer.disconnect(); resize.disconnect(); document.removeEventListener("visibilitychange", visibility); };
   }, [escaped, reduced, windowArea]);
 
   function discover() {
-    for (const animation of flights.current) animation.cancel();
+    for (const animation of flights.current) animation?.cancel();
     focusDestination.current = true; setEscaped(true);
     try { localStorage.setItem(braveDiscoveryKey, "true"); } catch {}
   }
@@ -108,13 +108,13 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
                   if (start?.id === event.pointerId && Math.hypot(event.clientX-start.x,event.clientY-start.y)<14) discover();
                 }}
                 onPointerCancel={() => { press.current = null; }}
-                onClick={event => { if (event.detail === 0) discover(); }}><BirdShadow /></button>)}
+                onClick={event => { if (event.detail === 0) discover(); }}><BirdShadow reduced={reduced} /></button>)}
             </div>}
           </div>
         </div>
       </div>
       <figcaption className={styles.caption}>{label}</figcaption>
-      {escaped && <div className={styles.reveal}><p role="status">Brave chased a shadow and got outside.</p><Link ref={destination} href="/bebrave" className={`button ${styles.destination}`}>Follow him.</Link></div>}
+      {escaped && <div className={styles.reveal}><p role="status">Brave chased a shadow and got outside.</p><Link ref={destination} href="/bebrave" className={`text-link ${styles.destination}`}>Follow him.</Link></div>}
     </figure>
   </div>;
 }

@@ -1,12 +1,18 @@
 /* Steady glass faces, moving reflections. Each rim shares the face's radius;
    highlights are masked to that geometry instead of clipped to a section. */
-.button:not(a),.preference-control{
+.button,.icon-button,.preference-control{
  background-image:radial-gradient(ellipse at var(--light-x,50%) var(--light-y,0%),color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*8%),transparent),transparent 70%);
  box-shadow:inset var(--rim-x,0px) var(--rim-y,0px) 1px color-mix(in srgb,var(--color-surface) calc(var(--light-strength,0)*35%),transparent);
 }
-.button:not(a):not(:disabled):active{box-shadow:inset 0 2px 5px var(--material-shadow)}
+.button:not(:disabled):active{box-shadow:inset 0 2px 5px var(--material-shadow)}
+.button:not(.settings-button)::before,.icon-button::before{
+ content:"";position:absolute;inset:0;z-index:2;padding:1px;border-radius:inherit;pointer-events:none;
+ background:radial-gradient(ellipse 65% 90% at var(--glass-x,50%) var(--glass-y,0%),var(--glass-highlight),transparent 76%);
+ mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;-webkit-mask-composite:xor;opacity:calc(var(--light-strength,0)*.8);
+}
+.text-link::before{content:"";position:absolute;inset:auto 0 -1px;height:1px;pointer-events:none;background:radial-gradient(ellipse 45% 100% at var(--glass-x,50%) 50%,var(--color-accent),transparent);opacity:var(--light-strength,0)}
 .settings-button{border-radius:999px;position:relative;isolation:isolate;color:var(--color-ink);border-color:var(--glass-edge);background-color:color-mix(in srgb,var(--color-surface) 75%,transparent)}
-.settings-button:hover{background-color:var(--color-surface)}
+.settings-button.button:hover{background-color:var(--color-surface);color:var(--color-ink)}
 .settings-button svg{stroke:currentColor}
 .settings-button:active{translate:0 1px}
 .site-header button[data-material-surface="glass"]{position:relative;isolation:isolate;box-shadow:inset 0 1px 0 color-mix(in srgb,var(--glass-highlight) 30%,transparent),0 3px 12px -8px var(--material-shadow)}
@@ -28,4 +34,6 @@
 html[data-effects="reduced"] :is(.tactile-photo,.photo-clip,.site-header button[data-material-surface])::after{display:none}
 html[data-effects="reduced"] .rings[data-material-surface]>svg{transform:none}
 html[data-effects="reduced"] .kitty-photo-layer{transition:none}
+html[data-effects="reduced"] :is(.button,.icon-button,.text-link)::before{display:none}
+@media(prefers-reduced-motion:reduce){:is(.button,.icon-button,.text-link)::before{display:none}}
 @media(prefers-reduced-motion:reduce){.kitty-photo-layer{transition:none}.rings[data-material-surface]>svg{transform:none}.tactile-photo::after,.photo-clip::after,.site-header button[data-material-surface]::after{display:none}}
