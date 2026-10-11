@@ -124,7 +124,7 @@ export function ProgressRings({ compact = false, presentation = "summary" }: { c
           >
             {index === 0 ? <circle className="core-fill" cx="160" cy="160" r={coreRadius} fill={`url(#${id}-tone-${index})`} /> : <>
               <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--progress-track)" strokeWidth={width} />
-              {item.status === "planned" && ratio === 0 ? <circle className="ring-planned" cx="160" cy="160" r={radius} fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth="1" /> :
+              {item.status === "planned" && ratio === 0 ? null :
                 <circle className="ring-fill" cx="160" cy="160" r={radius} pathLength="100" fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth={width} strokeLinecap="round" strokeDasharray="100 100" transform="rotate(-90 160 160)" />}
             </>}
             {(index === 0 ? [coreRadius + 3] : [radius - width / 2 - 3, radius + width / 2 + 3]).map(edge => <circle

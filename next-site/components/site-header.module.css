@@ -1,4 +1,5 @@
-.header{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--color-background) 84%,transparent);border-bottom:1px solid color-mix(in srgb,var(--color-border) 25%,transparent);backdrop-filter:blur(24px) saturate(1.15);box-shadow:0 8px 24px -18px var(--material-shadow)}
+.header{position:sticky;top:0;z-index:30;isolation:isolate;border-bottom:1px solid color-mix(in srgb,var(--color-border) 25%,transparent)}
+.header::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:color-mix(in srgb,var(--color-background) 84%,transparent);backdrop-filter:blur(24px) saturate(1.15);mask-image:linear-gradient(transparent,#000 30px);box-shadow:0 8px 24px -18px var(--material-shadow)}
 .inner{width:min(1440px,calc(100% - 96px));margin-inline:auto;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:30px;padding-top:env(safe-area-inset-top)}
 .wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;font:650 24px/1 var(--display);letter-spacing:-.05em}
 .wordmark svg{width:31px;height:36px;color:var(--color-accent);transition:transform var(--duration-reveal) var(--ease-settle)}
@@ -51,4 +52,4 @@
 @media(prefers-reduced-motion:reduce){.sheet[open]{animation:none}.wordmark svg,.destinations svg,.theme span{transition:none}}
 :global(html[data-effects="reduced"]) .sheet[open]{animation:none}
 :global(html[data-effects="reduced"]) .theme span{transition:none}
-:global(html[data-effects="reduced"]) .header{backdrop-filter:none;background:var(--color-background)}
+:global(html[data-effects="reduced"]) .header::before{backdrop-filter:none;background:var(--color-background)}

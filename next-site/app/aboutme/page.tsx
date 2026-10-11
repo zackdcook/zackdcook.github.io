@@ -1,7 +1,6 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
-import { ArtworkImage } from "@/components/artwork";
-import { ZackyCPreview } from "@/components/zacky-c-preview";
+import { ReversiblePortrait } from "@/components/reversible-portrait";
 import { site } from "@/content/site";
 import { StudioArtwork } from "@/components/studio-artwork";
 import styles from "./aboutme.module.css";
@@ -33,10 +32,7 @@ export default function AboutMe() {
         <h1 className="responsive-title">I’m Zack<br className="title-break" /> <em>Cook.</em></h1>
       </div>
 
-      <div className="portrait-frame tactile-photo" data-material-surface="glass">
-        <div className="photo-clip"><ArtworkImage slot="portrait" alt="Zack Cook" width={1200} height={1200}
-          sizes="(max-width: 740px) 90vw, 40vw" preload /></div>
-      </div>
+      <ReversiblePortrait />
     </section>
   </div>
 
@@ -48,7 +44,7 @@ export default function AboutMe() {
         <span className={styles.marginRule} />
       </div>
       <div className={`prose about-story ${styles.story}`}>
-      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me {" "}<ZackyCPreview />. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
+      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <strong>Zacky C</strong>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
 
       <p>Hello there!</p>
 

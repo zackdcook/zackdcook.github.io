@@ -1,7 +1,7 @@
 .field{position:fixed;inset:0;z-index:18;pointer-events:none;overflow:clip;contain:strict}
 /* One bounded, prepainted wash moves as a plane. It does not tint navigation
    or use an oversized blend surface or a gradient inherited from the root. */
-.light{position:absolute;top:0;left:0;width:min(1050px,120vw);height:min(900px,115vh);background:radial-gradient(ellipse at 58% 42%,var(--world-light-warm),transparent 68%),radial-gradient(ellipse at 32% 65%,var(--world-light-rose),transparent 65%);opacity:calc(var(--world-light-strength,0)*.5);transform:translate3d(calc(var(--world-light-x,80vw) - 50%),calc(var(--world-light-y,25vh) - 50%),0)}
+.light{position:absolute;top:0;left:0;width:min(1050px,120vw);height:min(900px,115vh);background:radial-gradient(ellipse closest-side at center,var(--world-light-warm),transparent 100%),radial-gradient(ellipse closest-side at center,var(--world-light-rose),transparent 100%);opacity:calc(var(--world-light-strength,0)*.5);transform:translate3d(calc(var(--world-light-x,80vw) - 50%),calc(var(--world-light-y,25vh) - 50%),0)}
 .mote{position:absolute;top:0;width:var(--mote-size);height:var(--mote-size);pointer-events:none}
 .grain{position:relative;width:100%;height:100%;animation:mote-breathe var(--mote-period) ease-in-out var(--mote-phase) infinite;transform-origin:center;opacity:0}
 .grain::before{content:"";position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(var(--world-mote-glow),transparent 70%);pointer-events:none}

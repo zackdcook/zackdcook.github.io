@@ -1,25 +1,26 @@
-.world{position:relative;background:var(--color-background)}
+.world{position:relative;isolation:isolate;overflow:clip;background:var(--color-background)}
+.world::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 80% 850px at 80% 8%,color-mix(in srgb,var(--studio-light) 7%,transparent),transparent 100%),radial-gradient(ellipse 80% 1100px at 15% 65%,color-mix(in srgb,var(--studio-plant) 5%,transparent),transparent 100%)}
 .world>section{view-timeline-name:--chapter-view;view-timeline-axis:block}
-.world>section:not(:first-child){position:relative;isolation:isolate}
-.world>section:not(:first-child)::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(180deg,transparent,var(--chapter-paper,var(--color-surface)) 22%,var(--chapter-paper,var(--color-surface)) 76%,transparent)}
-.manuscript{--chapter-paper:var(--color-surface);padding-block:clamp(85px,10vw,150px)}
-.events{--chapter-paper:color-mix(in srgb,var(--color-background) 86%,var(--color-accent-soft));overflow:clip;padding-block:clamp(105px,13vw,185px);color:var(--color-ink)}
+.world>section:not(:first-child){position:relative}
+.world>section>:global(.shell){position:relative;z-index:2}
+.manuscript{padding-block:clamp(85px,10vw,150px)}
+.events{padding-block:clamp(105px,13vw,185px);color:var(--color-ink)}
 .events :global(.writing-group){position:relative;z-index:1}
-.biography{--chapter-paper:var(--color-background);padding-block:clamp(110px,13vw,190px);overflow:clip;z-index:2}
+.biography{padding-block:clamp(110px,13vw,190px)}
 .biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(60px,7.4vw,105px);line-height:.95;max-width:6ch;margin-block:32px}
 .biography :global(.life-copy)>p{font-size:16px;max-width:330px}
 .biography :global(.identity-aside){font-size:11px;line-height:1.7;margin-top:24px}
 .biography :global(.life-section){grid-template-columns:.85fr 1.2fr;gap:clamp(50px,9vw,140px)}
-.world>.clearing{--chapter-paper:var(--color-surface-alt);overflow:clip;padding-block:clamp(120px,15vw,225px);view-timeline-name:--chapter-view,--clearing-view}
+.world>.clearing{padding-block:clamp(120px,15vw,225px);view-timeline-name:--chapter-view,--clearing-view}
 .follySpread{position:relative;z-index:2;display:grid;grid-template-columns:.8fr 1.25fr;column-gap:70px;row-gap:32px;align-items:center}
 .follyDestination{grid-column:2;justify-self:center;padding-top:35px}
 .follyHeading{min-width:0}
 .follyTitle{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
 .leaf{width:100%;max-width:630px;rotate:-12deg;filter:drop-shadow(8px 26px 20px var(--material-shadow))}
 .reeds{position:absolute;inset:auto -15% -150px;width:130%;height:105%;z-index:1;opacity:.62;pointer-events:none;mask-image:linear-gradient(transparent 15%,#000 60%)}
-.shoutouts{--chapter-paper:var(--color-surface);overflow:clip;padding-block:var(--section-gap)}
+.shoutouts{padding-block:var(--section-gap)}
 .shoutouts>:global(.shell){position:relative;z-index:2}
-.communityWindow,.biographyMargin,.shoutoutsDesk{position:absolute;pointer-events:none;z-index:-1;mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
+.communityWindow,.biographyMargin,.shoutoutsDesk{position:absolute;pointer-events:none;z-index:-1;mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent),linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-composite:intersect}
 .communityWindow{inset:-15% -10% auto auto;width:85%;height:130%;opacity:.38}
 .biographyMargin{inset:-5% auto auto -12%;width:70%;height:115%;opacity:.33;mask-image:linear-gradient(90deg,#000,transparent 55%),linear-gradient(transparent,#000 35%,#000 75%,transparent);mask-composite:intersect}
 .shoutoutsDesk{inset:auto -5% -45%;width:110%;height:145%;opacity:.46;mask-image:linear-gradient(90deg,#000,transparent 36%,transparent 70%,#000),linear-gradient(transparent,#000 30%,#000 75%,transparent);mask-composite:intersect}
@@ -27,14 +28,12 @@
  @media(prefers-reduced-motion:no-preference){
   /* Stable parent timelines: artwork/content never measure their own motion. */
   :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)>:global(.shell){animation:chapter-rise linear both;animation-timeline:--chapter-view;animation-range:entry 0% entry 80%}
-  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)::before{animation:chapter-light linear both;animation-timeline:--chapter-view;animation-range:entry 0% entry 90%}
   :global(html:not([data-effects="reduced"])) .leaf{animation:leaf-drift linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
   :global(html:not([data-effects="reduced"])) .reeds{animation:reeds-depth linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
   :global(html:not([data-effects="reduced"])) :is(.communityWindow,.biographyMargin,.shoutoutsDesk){animation:chapter-depth linear both;animation-timeline:--chapter-view;animation-range:entry 0% exit 100%}
  }
 }
 @keyframes chapter-rise{from{opacity:.72;translate:0 54px}to{opacity:1;translate:0 0}}
-@keyframes chapter-light{from{opacity:.5}to{opacity:1}}
 @keyframes leaf-drift{from{translate:0 70px;rotate:-15deg}to{translate:0 -70px;rotate:-7deg}}
 @keyframes reeds-depth{from{translate:0 160px}to{translate:0 -160px}}
 @keyframes chapter-depth{from{translate:0 180px;scale:1.035}to{translate:0 -180px;scale:1}}

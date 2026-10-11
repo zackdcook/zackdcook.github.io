@@ -24,7 +24,6 @@
 .display :global(.ring-highlight){opacity:0;stroke-width:1;transition:opacity .18s}
 .display :global(.is-highlighted .ring-highlight){opacity:.45}
 .display :global(.ring-hit){cursor:pointer}
-.display :global(.ring-planned){opacity:.45}
 .display :global(.project-updated){font-size:10px;color:var(--color-muted);text-align:center}
 .display :global(.project-updated time){display:block;white-space:nowrap}
 .display :global(.progress-note){min-width:0;min-height:150px;display:grid;align-items:center}
