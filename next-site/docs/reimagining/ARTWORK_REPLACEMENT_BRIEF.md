@@ -18,7 +18,7 @@ First prepare a coherent window-light composition in separate transparent planes
 | `hero-orbit`, `hero-branch`, `manuscript` (currently disabled) | Optional personal objects: a marked manuscript, drafting instrument or detail from Zack's fiction | Isolated transparent cutouts, about 1200 px on the long side. Introduce only objects with personal relevance; leaving a slot empty is supported. |
 | `progress-dial` | Optional custom instrument/hand-drawn dial face | Square transparent face, 1000 × 1000. The progress, numbers and controls remain live; do not paint them into the face. |
 | `portrait`, `cats`, and other photo slots | Zack's own photographs with intentional crops | Full-resolution originals; portrait crops to a rounded square. Cat photo must include its window; update normalized `design/kitty-window.json` coordinates if the photo/crop changes. |
-| `kitty-shadow` | A simple bird seen as a soft shadow, with a recognizable body/wing silhouette | Transparent mask or native SVG, around 256 × 160. No origami geometry. The original photo alone receives recurring side-to-side flights; the revealed photo has no shadow overlay. |
+| `kitty-shadow` | A simple bird seen as a soft shadow, with a recognizable body/wing silhouette | Transparent mask or native SVG, around 256 × 160. No origami geometry. The original photo alone receives recurring right-to-left flights; the revealed photo has no shadow overlay. |
 | Tree world (deferred) | One substantial bark master, separate base/roots, swamp distance and near scrub | Bark must tile vertically without seams; ground/base must join it. Deliver layered originals so perspective, carving visibility and both timelines can be evaluated together. |
 
 ## Light and timeline variants
@@ -35,11 +35,11 @@ Keep sun/moon glow, atmospheric haze and foreground shadows separate when prepar
 - Test at 320/375/390 px phone widths, tablet and wide desktop. Preserve generous quiet areas for the existing text and CTA, especially in the first viewport. Check all four palettes and reduced effects after replacement.
 
 No additional website prose or external art license is required by this brief. The original native window, book and botanical studies are the current placeholders. Tree scenery is a separate later artwork commission and does not set the public identity.
-# Feedback milestone 3 additions
+
+## Feedback milestone 3 additions
 
 The supplied 200×153 looping bird GIF is copied unchanged as `public/artwork/kitty-shadow-flight.gif`; `kitty-shadow-still.png` is its first frame for reduced effects. Both are inside the existing replaceable kitty-shadow slot. The native implementation flips the source to face left and blends its transparent feathers as a window shadow; no synthetic wing flap remains. Flight coordinates stay in `design/kitty-window.json`, independently of the artwork. Do not replace the photographed window or bake the bird into either cat image.
 
 Additional independently replaceable slots are chapter-scenery, chapter-foreground, about-marginalia and public-mote. Native reading-room studies remain placeholders. The new slots carry imagery through the whole public page while keeping central text areas quiet. Small native mote grains can also be replaced or disabled through the registry; their particle budgets and movement remain presentation logic, separate from the image.
 
 The separate sourcing report recommends original softly painted window/desk masters and optional CC0 botanical accents. Those high-resolution masters are not supplied/prepared by the report; restricted ABC Library pack sources must not be committed wholesale. No stock purchase or subscription is part of this milestone.
-
