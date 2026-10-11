@@ -9,22 +9,22 @@
 - Inference: retained compiled function bundles from repeated previews are a substantial contributor. Function Storage is separate from Supabase database/carving storage and from Deployment Storage, so compressing carving records will not remove these retained bundles.
 - No retained deployment was deleted. Production data, security settings, budgets, paid plans and retention settings remain unchanged. After one new final Preview, the refreshed detailed view still displayed 8.18 GB (Updated just now); this does not establish immediate per-deployment accounting.
 
-## Concrete proposed cleanup
+## Reviewed cleanup — seven deleted, one held
 
-Delete **only these eight retained experimental deployments**, after action-time confirmation for permanent deletion. Code history remains in GitHub. These immutable preview URLs would stop working; deletion cannot be reversed through Vercel's normal recovery flow.
+The user authorised the exact eight targets at 18:07 EDT on 2026-10-11, conditional on preserving current versions. **Seven were deleted; row 5 remains held.** Deleted URLs no longer work; source history remains in GitHub.
 
 Each was independently read through the deployment API as READY, target `null` (Preview), correct experimental branch and project. Seven report no aliases. The `lh04c9lyd` deployment has a historical branch alias in its metadata, but an independent `get_alias` read confirms the actual live alias resolves to `dpl_CviyK3XWLsh7UhZxcgsx1FqXQh6j` (`cszi1ed87`). Recheck active aliases immediately before deletion.
 
-| # | Deployment ID | Immutable URL | Source | Reason |
+| # | Deployment ID | Immutable URL | Source | Reason / outcome |
 | --- | --- | --- | --- | --- |
-| 1 | `dpl_7fxaXBgejMHEAM2JEfH68erFhEe4` | [zack-cook-i1c5rzumy-dove-mack0o-3684.vercel.app](https://zack-cook-i1c5rzumy-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA |
-| 2 | `dpl_moFt4cgfysq4CtFaK2AFDutfEmrL` | [zack-cook-dvwwq0kot-dove-mack0o-3684.vercel.app](https://zack-cook-dvwwq0kot-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA |
-| 3 | `dpl_EXbu6RCF93JoTEByPW5L1vbvrwcF` | [zack-cook-apjisa90u-dove-mack0o-3684.vercel.app](https://zack-cook-apjisa90u-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA |
-| 4 | `dpl_DgR1fShDFLEEkU9ii36soYDdECXt` | [zack-cook-c74v1vykv-dove-mack0o-3684.vercel.app](https://zack-cook-c74v1vykv-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA |
-| 5 | `dpl_DS7NhA5sqMFmyxVxsyELFX1zVZEb` | [zack-cook-lh04c9lyd-dove-mack0o-3684.vercel.app](https://zack-cook-lh04c9lyd-dove-mack0o-3684.vercel.app/) | `6b5b4c1` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved |
-| 6 | `dpl_CvbPPKULRy8t5DRGWyRsPjUfpimP` | [zack-cook-i0l42suv6-dove-mack0o-3684.vercel.app](https://zack-cook-i0l42suv6-dove-mack0o-3684.vercel.app/) | `29b2946` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved |
-| 7 | `dpl_CvYsgaCttQSXmmyhzNDJBGKU8Pgz` | [zack-cook-ly25s3plz-dove-mack0o-3684.vercel.app](https://zack-cook-ly25s3plz-dove-mack0o-3684.vercel.app/) | `2adb464` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved |
-| 8 | `dpl_FsRg8jCvjrvyrTnwFWUpMsAzdyFt` | [zack-cook-p54b6iw5x-dove-mack0o-3684.vercel.app](https://zack-cook-p54b6iw5x-dove-mack0o-3684.vercel.app/) | `5a92393` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved |
+| 1 | `dpl_7fxaXBgejMHEAM2JEfH68erFhEe4` | [zack-cook-i1c5rzumy-dove-mack0o-3684.vercel.app](https://zack-cook-i1c5rzumy-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA — **DELETED; independent API read returns 404.** |
+| 2 | `dpl_moFt4cgfysq4CtFaK2AFDutfEmrL` | [zack-cook-dvwwq0kot-dove-mack0o-3684.vercel.app](https://zack-cook-dvwwq0kot-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA — **DELETED; independent API read returns 404.** |
+| 3 | `dpl_EXbu6RCF93JoTEByPW5L1vbvrwcF` | [zack-cook-apjisa90u-dove-mack0o-3684.vercel.app](https://zack-cook-apjisa90u-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA — **DELETED; independent API read returns 404.** |
+| 4 | `dpl_DgR1fShDFLEEkU9ii36soYDdECXt` | [zack-cook-c74v1vykv-dove-mack0o-3684.vercel.app](https://zack-cook-c74v1vykv-dove-mack0o-3684.vercel.app/) | `a0b5660` | Duplicate of preserved A (`7efdku8ep`), same source SHA — **DELETED; independent API read returns 404.** |
+| 5 | `dpl_DS7NhA5sqMFmyxVxsyELFX1zVZEb` | [zack-cook-lh04c9lyd-dove-mack0o-3684.vercel.app](https://zack-cook-lh04c9lyd-dove-mack0o-3684.vercel.app/) | `6b5b4c1` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved — **HELD: automatic approval review blocked deletion; alias association needs reconciliation.** |
+| 6 | `dpl_CvbPPKULRy8t5DRGWyRsPjUfpimP` | [zack-cook-i0l42suv6-dove-mack0o-3684.vercel.app](https://zack-cook-i0l42suv6-dove-mack0o-3684.vercel.app/) | `29b2946` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved — **DELETED; independent API read returns 404.** |
+| 7 | `dpl_CvYsgaCttQSXmmyhzNDJBGKU8Pgz` | [zack-cook-ly25s3plz-dove-mack0o-3684.vercel.app](https://zack-cook-ly25s3plz-dove-mack0o-3684.vercel.app/) | `2adb464` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved — **DELETED; independent API read returns 404.** |
+| 8 | `dpl_FsRg8jCvjrvyrTnwFWUpMsAzdyFt` | [zack-cook-p54b6iw5x-dove-mack0o-3684.vercel.app](https://zack-cook-p54b6iw5x-dove-mack0o-3684.vercel.app/) | `5a92393` | Superseded B diagnostic; final B (`mo9gfql7g`) and source commit preserved — **DELETED; independent API read returns 404.** |
 
 Keep:
 - Production deployments, domains, database and all main branch history.
@@ -34,7 +34,9 @@ Keep:
 - Listening/reading branch previews and every other project or branch.
 - New falling-paper Preview: `dpl_5t1bScRe3FbMF8DhkLeeEpM3cSjj` / `da7jbra30`, exact source `f34b5c78b45f4391590c7b2282ae80cae013780f`.
 
-**Status: proposed, not executed. No storage savings claimed.** Obtain confirmation for the exact eight targets, delete through project deployment controls, and then read the detailed usage view after its update delay. Do not infer exact reclaimed GB by multiplying Resources sizes, since Vercel's accounting can differ.
+**Status: seven deletions confirmed; one held.** A, B and the current Preview remain READY; current website reload works. Main and the live shortcut assignment remain unchanged. Automatic approval review rejected row 5 because its deployment page visibly lists the retained shortcut despite the API assigning that alias to another preserved deployment. Do not bypass the rejection; leave that build intact until reconciled.
+
+The refreshed meter still reads 8.18 GB. Official storage documentation specifies GB-month accounting from each project's daily maximum. Removing output does not undo already counted daily peaks. Do not claim an immediate decrease or exact reclaimed GB; review future daily measurements. No paid plan, retention policy, production resource or unrelated branch was changed.
 
 ## Avoid repeating the growth
 
