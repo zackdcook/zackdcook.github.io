@@ -1,25 +1,42 @@
-.world{position:relative;isolation:isolate;overflow:clip;background:var(--color-background)}
+.world{position:relative;isolation:isolate;overflow:clip;background:var(--color-background);--home-heading-size:clamp(42px,4.7vw,72px)}
 .world::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 80% 850px at 80% 8%,color-mix(in srgb,var(--studio-light) 7%,transparent),transparent 100%),radial-gradient(ellipse 80% 1100px at 15% 65%,color-mix(in srgb,var(--studio-plant) 5%,transparent),transparent 100%)}
-.world>section[data-paper-chapter]{padding-block:0}
-.manuscript,.events,.clearing,.shoutouts{color:var(--color-ink)}
+/* Home's feature headings inherit the manuscript title's exact type scale. */
+.world :is(:global(.project-title),:global(#writing-group-title),:global(.life-copy)>h2:not(:global(.section-label)),.follyTitle,:global(.shoutout-card) h3){font:650 var(--home-heading-size)/1.08 var(--display);letter-spacing:-.05em;color:var(--color-ink)}
+.manuscript{padding-block:clamp(85px,10vw,150px)}
+.events{padding-block:clamp(105px,13vw,185px);color:var(--color-ink)}
 .events :global(.writing-group){position:relative;z-index:1}
-.biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(60px,7.4vw,105px);line-height:.95;max-width:6ch;margin-block:32px}
+.biography{padding-block:clamp(110px,13vw,190px)}
+.biography :global(.life-copy)>h2:not(:global(.section-label)){max-width:10ch;margin-block:32px}
 .biography :global(.life-copy)>p{font-size:16px;max-width:330px}
 .biography :global(.identity-aside){font-size:11px;line-height:1.7;margin-top:24px}
 .biography :global(.life-section){grid-template-columns:.85fr 1.2fr;gap:clamp(50px,9vw,140px)}
+.world>.clearing{padding-block:clamp(120px,15vw,225px);view-timeline-name:--paper-view,--chapter-view,--clearing-view}
 .follySpread{position:relative;display:grid;grid-template-columns:.8fr 1.25fr;column-gap:70px;row-gap:32px;align-items:center}
 .follyDestination{grid-column:2;justify-self:center;padding-top:35px}
 .follyHeading{min-width:0}
-.follyTitle{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
-.leaf{width:100%;max-width:630px;rotate:-8deg;filter:drop-shadow(4px 14px 15px var(--material-shadow))}
-@media(max-width:740px){
- .biography :global(.life-section){grid-template-columns:1fr;gap:50px}
- .biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(62px,17vw,94px);max-width:none}
- .biography :global(.life-copy)>p{font-size:15px;max-width:360px}
- .follySpread{grid-template-columns:1fr;gap:35px}
- .follyDestination{grid-column:1;padding-top:15px}
- .follyTitle{font-size:clamp(59px,16vw,85px);max-width:none;margin-top:25px}
- .leaf{max-width:500px;margin:0 auto;rotate:-5deg}
+.follyTitle{margin-top:35px;max-width:7ch}
+.leaf{width:100%;max-width:630px;rotate:-12deg;filter:drop-shadow(8px 26px 20px var(--material-shadow))}
+.shoutouts{padding-block:var(--section-gap)}
+@supports(animation-timeline:view()){
+ @media(prefers-reduced-motion:no-preference){
+  /* Restore the earlier gentle content plane, independent of falling scenery. */
+  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)>[data-paper-content]>:global(.shell){animation:chapter-rise linear both;animation-timeline:--chapter-view;animation-range:entry 0% entry 80%}
+  :global(html:not([data-effects="reduced"])) .leaf{animation:leaf-drift linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
+ }
 }
+@keyframes chapter-rise{from{opacity:.72;translate:0 54px}to{opacity:1;translate:0 0}}
+@keyframes leaf-drift{from{translate:0 70px;rotate:-15deg}to{translate:0 -70px;rotate:-7deg}}
+@media(max-width:850px){.world{--home-heading-size:clamp(39px,5.7vw,54px)}}
+@media(max-width:740px){
+ .manuscript{padding-block:80px 85px}.events{padding-block:85px 105px}
+ .biography{padding-block:90px 115px}.biography :global(.life-section){grid-template-columns:1fr;gap:65px}
+ .biography :global(.life-copy)>h2:not(:global(.section-label)){max-width:none}
+ .biography :global(.life-copy)>p{font-size:15px;max-width:360px}
+ .follySpread{grid-template-columns:1fr;gap:45px}.follyDestination{grid-column:1;padding-top:20px}
+ .follyTitle{max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}
+ .world>.clearing{padding-block:85px 145px}
+ @keyframes leaf-drift{from{translate:0 40px;rotate:-13deg}to{translate:0 -40px;rotate:-8deg}}
+}
+@media(max-width:600px){.world{--home-heading-size:clamp(38px,10.7vw,55px)}}
 :global(html[data-effects="reduced"]) .leaf{filter:none}
 @media(prefers-reduced-motion:reduce){.leaf{filter:none}}

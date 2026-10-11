@@ -1,6 +1,8 @@
 .header{position:sticky;top:0;z-index:30;isolation:isolate;border-bottom:1px solid color-mix(in srgb,var(--color-border) 25%,transparent)}
-.header::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:color-mix(in srgb,var(--color-background) 84%,transparent);backdrop-filter:blur(24px) saturate(1.15);mask-image:linear-gradient(transparent,#000 30px);box-shadow:0 8px 24px -18px var(--material-shadow)}
-.inner{width:min(1440px,calc(100% - 96px));margin-inline:auto;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:30px;padding-top:env(safe-area-inset-top)}
+/* Keep the reading edge opaque. A transparent top mask exposed moving title
+   fragments above the navigation when Safari's browser chrome changed height. */
+.header::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(var(--color-background),color-mix(in srgb,var(--color-background) 96%,transparent) 65%,color-mix(in srgb,var(--color-background) 92%,transparent));backdrop-filter:blur(20px) saturate(1.1);box-shadow:0 8px 24px -18px var(--material-shadow)}
+.inner{position:relative;z-index:1;width:min(1440px,calc(100% - 96px));margin-inline:auto;min-height:86px;display:flex;align-items:center;justify-content:space-between;gap:30px;padding-top:env(safe-area-inset-top)}
 .wordmark{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap;font:650 24px/1 var(--display);letter-spacing:-.05em}
 .wordmark svg{width:31px;height:36px;color:var(--color-accent);transition:transform var(--duration-reveal) var(--ease-settle)}
 .wordmark :global(.artwork){width:31px;height:36px;color:var(--color-accent)}

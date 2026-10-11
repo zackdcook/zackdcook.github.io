@@ -1,73 +1,62 @@
-/* The section stays in normal document flow. Only its sheet is transformed.
-   Named entry/exit ranges leave an extended stationary reading interval. */
-.chapter{
- position:relative;isolation:isolate;perspective:1800px;
- margin-block:clamp(70px,10svh,130px);scroll-margin-block-start:110px;
- --paper-enter-x:24vw;--paper-leave-x:-22vw;
- --paper-enter-roll:-14deg;--paper-leave-roll:12deg;
- --paper-enter-yaw:22deg;--paper-leave-yaw:-18deg;
- --paper-pad-block:clamp(48px,6vw,90px);
-}
-.chapter[data-drift="left"]{
- --paper-enter-x:-24vw;--paper-leave-x:23vw;
- --paper-enter-roll:13deg;--paper-leave-roll:-11deg;
- --paper-enter-yaw:-22deg;--paper-leave-yaw:18deg;
-}
-.opening{margin-block:14px 85px;--paper-pad-block:16px}
-.sheet{
- position:relative;isolation:isolate;width:min(1340px,calc(100% - var(--gutter)));
- margin-inline:auto;transform-origin:50% 50%;
-}
-.sheet::before{
- content:"";position:absolute;inset:18px 12px -12px;z-index:-2;
- border-radius:9px 40px 13px 8px;pointer-events:none;
- box-shadow:0 28px 55px -28px var(--material-shadow),0 5px 12px -7px var(--material-shadow);
-}
-.surface{position:absolute;inset:0;z-index:-1;width:100%;height:100%;pointer-events:none}
-.surface :global(.artwork-content),.surface svg{display:block;width:100%;height:100%}
-.face{fill:var(--color-surface);stroke:color-mix(in srgb,var(--color-brass) 28%,transparent);stroke-width:1.25;vector-effect:non-scaling-stroke}
-.fold{fill:var(--color-surface-alt)}
-.crease{fill:none;stroke:color-mix(in srgb,var(--color-brass) 35%,transparent);stroke-width:1;vector-effect:non-scaling-stroke}
-.body{position:relative;padding:var(--paper-pad-block) clamp(30px,5vw,76px);min-width:0}
-.body :global(.shell){width:100%;min-width:0}
-.notes{position:absolute;inset:10% 8%;pointer-events:none;opacity:0}
-.notes svg{width:100%;height:100%;fill:none;stroke:var(--color-muted);stroke-width:2;stroke-linecap:round}
-.notes .margin{stroke:var(--color-accent-soft);stroke-width:3}
+/* One curved sheet per section; its parent measures scroll without moving.
+   Fall distance includes document travel, so the sheet moves DOWN the viewport
+   while the reading content moves up. Sway and depth live on a separate plane. */
+.chapter{position:relative;isolation:isolate;view-timeline-name:--paper-view,--chapter-view;view-timeline-axis:block;--paper-size:clamp(160px,19vw,270px);--paper-sway:12vw;--paper-roll:1;--paper-base:72%;--paper-opacity:.7}
+.chapter[data-drift="left"]{--paper-roll:-1;--paper-sway:-12vw;--paper-base:14%}
+.chapter:nth-child(3n){--paper-size:clamp(120px,13vw,200px);--paper-opacity:.5;--paper-sway:18vw}
+.opening{--paper-base:69%;--paper-size:clamp(190px,25vw,350px)}
+.body{position:relative;z-index:1}
+.flight{position:absolute;z-index:0;left:var(--paper-base);top:18%;width:var(--paper-size);pointer-events:none;opacity:.35}
+.sway{width:100%;transform:rotate(-12deg);transform-origin:50% 40%;perspective:900px}
+.surface{display:block;width:100%;aspect-ratio:280/340;filter:drop-shadow(9px 16px 12px color-mix(in srgb,var(--material-shadow) 40%,transparent))}
+.surface svg{display:block;width:100%;height:100%;overflow:visible}
+.face{fill:color-mix(in srgb,var(--studio-paper) 70%,var(--color-brass))}
+.back{fill:var(--color-surface-alt)}
+.curl{fill:color-mix(in srgb,var(--studio-paper) 68%,var(--color-brass));opacity:.75}
+.ink{fill:none;stroke:var(--color-muted);stroke-width:1.2;stroke-linecap:round;opacity:.18}
 
 @supports(animation-timeline:view()){
  @media(prefers-reduced-motion:no-preference){
-  :global(html:not([data-effects="reduced"])) .chapter{view-timeline:--paper-view block}
-  :global(html:not([data-effects="reduced"])) .sheet{animation:paper-flight linear both;animation-timeline:--paper-view}
-  :global(html:not([data-effects="reduced"])) .body{animation:paper-ink linear both;animation-timeline:--paper-view}
-  :global(html:not([data-effects="reduced"])) .notes{animation:paper-notes linear both;animation-timeline:--paper-view}
-  :global(html:not([data-effects="reduced"])) .opening .sheet{animation-name:opening-flight}
-  :global(html:not([data-effects="reduced"])) .opening .body{animation-name:opening-ink}
-  :global(html:not([data-effects="reduced"])) .opening .notes{animation-name:opening-notes}
-  /* Keyboard and direct anchors always receive the complete, steady surface. */
-  :global(html:not([data-effects="reduced"])) .chapter:is(:focus-within,:target) :is(.sheet,.body,.notes){animation:none}
+  :global(html:not([data-effects="reduced"])) .flight{top:-125svh;height:calc(100% + 250svh);animation:paper-fall linear both;animation-timeline:--paper-view}
+  :global(html:not([data-effects="reduced"])) .sway{animation:paper-flutter linear both;animation-timeline:--paper-view}
+  :global(html:not([data-effects="reduced"])) .face{animation:paper-bend linear both;animation-timeline:--paper-view}
+  :global(html:not([data-effects="reduced"])) .ink{animation:ink-bend linear both;animation-timeline:--paper-view}
+  :global(html:not([data-effects="reduced"])) .curl{animation:curl-bend linear both;animation-timeline:--paper-view}
  }
 }
-@keyframes paper-flight{
- entry 0%{transform:translate3d(var(--paper-enter-x),calc(-50% - 130px),-1100px) rotateX(10deg) rotateY(var(--paper-enter-yaw)) rotateZ(var(--paper-enter-roll)) scale(.34)}
- entry 24%{transform:translate3d(calc(var(--paper-enter-x)*.55),-110px,-540px) rotateX(-6deg) rotateY(calc(var(--paper-enter-yaw)*.55)) rotateZ(calc(var(--paper-enter-roll)*-.35)) scale(.64)}
- entry 55%,exit 75%{transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)}
- exit 100%{transform:translate3d(var(--paper-leave-x),calc(50% + 100px),-1100px) rotateX(-12deg) rotateY(var(--paper-leave-yaw)) rotateZ(var(--paper-leave-roll)) scale(.34)}
+@keyframes paper-fall{
+ 0%{transform:translateY(0);opacity:0}
+ 12%{opacity:var(--paper-opacity)}
+ 85%{opacity:var(--paper-opacity)}
+ 100%{transform:translateY(100%);opacity:0}
 }
-@keyframes paper-ink{entry 0%,entry 20%{opacity:0}entry 55%,exit 75%{opacity:1}exit 100%{opacity:0}}
-@keyframes paper-notes{entry 0%,entry 20%{opacity:.45}entry 55%,exit 75%{opacity:0}exit 100%{opacity:.45}}
-@keyframes opening-flight{exit 75%{transform:translate3d(0,0,0) rotateX(0deg) rotateY(0deg) rotateZ(0deg) scale(1)}exit 100%{transform:translate3d(var(--paper-leave-x),calc(50% + 100px),-1100px) rotateX(-12deg) rotateY(var(--paper-leave-yaw)) rotateZ(var(--paper-leave-roll)) scale(.34)}}
-@keyframes opening-ink{exit 75%{opacity:1}exit 100%{opacity:0}}
-@keyframes opening-notes{exit 75%{opacity:0}exit 100%{opacity:.45}}
-
+@keyframes paper-flutter{
+ 0%{transform:perspective(900px) translateX(calc(var(--paper-sway)*-.65)) rotateZ(calc(var(--paper-roll)*-26deg)) rotateX(50deg) rotateY(-42deg) scale(.48)}
+ 18%{transform:perspective(900px) translateX(calc(var(--paper-sway)*.5)) rotateZ(calc(var(--paper-roll)*18deg)) rotateX(-18deg) rotateY(48deg) scale(.78)}
+ 37%{transform:perspective(900px) translateX(calc(var(--paper-sway)*-.6)) rotateZ(calc(var(--paper-roll)*-16deg)) rotateX(28deg) rotateY(-24deg) scale(1.12)}
+ 55%{transform:perspective(900px) translateX(calc(var(--paper-sway)*.25)) rotateZ(calc(var(--paper-roll)*11deg)) rotateX(-30deg) rotateY(34deg) scale(1.28)}
+ 73%{transform:perspective(900px) translateX(calc(var(--paper-sway)*-.4)) rotateZ(calc(var(--paper-roll)*-21deg)) rotateX(65deg) rotateY(-52deg) scale(.9)}
+ 88%{transform:perspective(900px) translateX(calc(var(--paper-sway)*.55)) rotateZ(calc(var(--paper-roll)*16deg)) rotateX(-24deg) rotateY(26deg) scale(.65)}
+ 100%{transform:perspective(900px) translateX(calc(var(--paper-sway)*-.3)) rotateZ(calc(var(--paper-roll)*-12deg)) rotateX(56deg) rotateY(-38deg) scale(.4)}
+}
+/* Matching Bézier topology lets the illustration itself flex like the GIFs.
+   Browsers without animated SVG paths retain the curved native silhouette. */
+@keyframes paper-bend{
+ 0%,37%,73%,100%{d:path("M22 38C94 13 184 52 254 30C245 119 280 227 240 304C163 325 109 270 32 295C68 211 8 136 22 38Z")}
+ 18%,55%,88%{d:path("M22 38C99 68 175 7 254 30C214 119 243 219 240 304C164 273 104 328 32 295C16 211 60 135 22 38Z")}
+}
+@keyframes ink-bend{
+ 0%,37%,73%,100%{d:path("M60 91C108 73 162 100 213 80M62 117C111 99 165 126 216 106M65 143C113 125 168 151 219 132M68 169C116 151 171 178 222 158M70 214C118 196 173 223 224 203M68 241C116 223 171 250 222 230")}
+ 18%,55%,88%{d:path("M60 91C108 112 162 67 213 80M62 117C111 138 165 93 216 106M65 143C113 164 168 119 219 132M68 169C116 190 171 145 222 158M70 214C118 235 173 190 224 203M68 241C116 262 171 217 222 230")}
+}
+@keyframes curl-bend{0%,37%,73%,100%{opacity:.75;scale:1 1}18%,55%,88%{opacity:0;scale:1 .15}}
 @media(max-width:740px){
- .chapter{perspective:1400px;margin-block:60px;--paper-enter-x:17vw;--paper-leave-x:-16vw;--paper-pad-block:40px}
- .chapter[data-drift="left"]{--paper-enter-x:-17vw;--paper-leave-x:16vw}
- .opening{margin-block:8px 65px;--paper-pad-block:8px}
- .sheet{width:calc(100% - 12px)}.body{padding-inline:20px}
- .sheet::before{box-shadow:0 18px 32px -22px var(--material-shadow)}
+ .chapter{--paper-size:140px;--paper-base:70%;--paper-sway:20vw;--paper-opacity:.38}
+ .chapter[data-drift="left"]{--paper-base:-8%;--paper-sway:-20vw}
+ .chapter:nth-child(3n){--paper-size:110px;--paper-opacity:.28;--paper-sway:22vw}
+ .opening{--paper-base:72%;--paper-size:170px}
+ .surface{filter:drop-shadow(4px 10px 8px color-mix(in srgb,var(--material-shadow) 30%,transparent))}
 }
-@media print{
- .chapter{perspective:none;margin-block:20px;break-inside:avoid}
- .chapter :is(.sheet,.body,.notes){animation:none!important;transform:none!important}
- .notes{display:none}.body{opacity:1!important}.sheet::before{display:none}
-}
+:global(html[data-effects="reduced"]) .flight{display:none}
+@media(prefers-reduced-motion:reduce){.flight{display:none}}
+@media print{.flight{display:none}.body{animation:none!important;transform:none!important;opacity:1!important}}

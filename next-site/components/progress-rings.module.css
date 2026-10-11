@@ -14,7 +14,7 @@
 .dialFace{position:absolute;inset:0;z-index:-1;border-radius:50%}
 .display :global(.rings[data-material-surface]) .dialFace{transform:perspective(1200px) rotateX(var(--material-pitch,0deg)) rotateY(var(--material-yaw,0deg));transform-origin:center}
 .display :global(.rings svg){display:block;width:100%;height:auto;overflow:visible}
-.display :global(.core-fill){fill:var(--color-surface-alt);stroke:var(--color-foliage);stroke-width:1;opacity:.8}
+.display :global(.core-fill){fill:var(--color-surface-alt);opacity:.8}
 .display :global(.ring-fill){stroke-dashoffset:100;transition:stroke-dashoffset 1.1s var(--ease-settle) var(--ring-delay)}
 .display:global(.rings-visible) :global(.ring-fill){stroke-dashoffset:var(--ring-offset)}
 .display :global(.ring-center){fill:var(--color-ink)}

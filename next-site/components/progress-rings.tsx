@@ -95,8 +95,7 @@ export function ProgressRings({ compact = false, presentation = "summary" }: { c
       <Artwork slot="progress-dial" className={styles.dialFace}>
         <svg viewBox="0 0 320 320" aria-hidden="true" focusable="false">
           <defs><radialGradient id={`${id}-face`} cx=".32" cy=".24" r=".85"><stop stopColor="var(--color-surface)"/><stop offset="1" stopColor="var(--color-surface-alt)"/></radialGradient></defs>
-          <circle cx="160" cy="160" r="158" fill={`url(#${id}-face)`} stroke="var(--material-cut)" strokeWidth=".7"/>
-          <circle cx="160" cy="160" r="151" fill="none" stroke="var(--color-brass)" strokeWidth=".5" opacity=".5"/>
+          <circle cx="160" cy="160" r="158" fill={`url(#${id}-face)`}/>
           <g stroke="var(--color-brass)" strokeWidth=".8" opacity=".45">{Array.from({length:20},(_,index)=>{
             const angle=index*Math.PI/10,inner=index%5===0?150:153;
             return <path key={index} d={`M${(160+inner*Math.sin(angle)).toFixed(2)},${(160-inner*Math.cos(angle)).toFixed(2)}L${(160+156*Math.sin(angle)).toFixed(2)},${(160-156*Math.cos(angle)).toFixed(2)}`}/>;

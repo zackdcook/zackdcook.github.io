@@ -19,17 +19,17 @@ export default async function Home() {
   const [events, shoutouts] = await Promise.all([getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
   return <div className={styles.world}>
-    <PaperChapter id="home" slot="paper-opening" opening><FieldJournalHero floatingPaper /></PaperChapter>
+    <PaperChapter id="home" slot="paper-opening" opening><FieldJournalHero /></PaperChapter>
     <PaperChapter id="creative-works" slot="paper-project" className={`desk-section ${styles.manuscript}`}>
       <div className="shell"><ActiveProject detailsLink /></div>
     </PaperChapter>
     <PaperChapter id="find-me-at" slot="paper-community" drift="left" className={`events-section ${styles.events}`}><div className="shell">
       <WritingGroupCard><div className="rail-more"><Link className="text-link" href="/events">Other events</Link></div></WritingGroupCard>
     </div></PaperChapter>
-    {event && <PaperChapter slot="paper-event" className="event-callout upcoming-callout">
+    {event && <PaperChapter slot="paper-event" className="event-callout upcoming-callout"><div className="shell">
       <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
       <Link className="text-link" href="/events">Event details</Link>
-    </PaperChapter>}
+    </div></PaperChapter>}
     <PaperChapter id="about-me" slot="paper-biography" className={`bio-section ${styles.biography}`}>
       <div className="life-section shell">
         <div className="life-copy">
@@ -58,9 +58,9 @@ export default async function Home() {
       <ShoutoutList people={shoutouts.slice(0,3)} />
       <div className="rail-more"><Link className="text-link" href="/shoutouts">Other shoutouts</Link></div>
     </div></PaperChapter>
-    {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <PaperChapter slot="paper-subscribe" drift="left" className="subscribe-callout">
+    {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <PaperChapter slot="paper-subscribe" drift="left" className="subscribe-callout"><div className="shell">
       <h2>Keep in touch.</h2><p>Occasional blurbs from my noggin to your feed.</p>
       <a className="text-link" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>Get writing updates</a>
-    </PaperChapter>}
+    </div></PaperChapter>}
   </div>;
 }
