@@ -1,5 +1,14 @@
 # Website reimagining checkpoint
 
+## In progress — two-iteration feedback milestone 5 (2026-10-11)
+
+- Continue exact local d646f693180f0a5928dd80999c35c02a66bf4c59 on experiment/immersive-world-2026-10-09. Preserve all prior previews/history. User requests first a fixes-only Preview, then a distinct floating-paper concept Preview; no shared alias or production changes.
+- Fix scope: continuous unclipped page art and background; edge-transparent ambient light; top-fading glass header; About portrait reversibly flips to name doodles at equal dimensions, replacing the buggy inline overlay; remove planned revision ring's middle stroke.
+- Second iteration: one modular paper per homepage section, distant wind/parallax transforming into that section's reading surface. Keep the approved opening order/CTA, original copy/functionality, motes and About biography/progress experience. Tree and separate-chat sandbox integration remain deferred.
+- Vercel browser dashboard and protected milestone-4 Preview are now accessible as the existing account; no credential or protection changes. Inspect supplied local screenshots/video; no need to fetch attachments from Library. Source, browser/keyboard/reduced-effects checks and two immutable Preview references will be recorded before delivery.
+- Next action: implement and verify fixes-only source, commit and publish its Preview; only then implement paper concept. Git publication remains unverified until the existing authorized native route is accessible; never rewrite the preserved descendant history.
+
+
 ## Current delivery — feedback milestone 4 (2026-10-11)
 
 - Branch: experiment/immersive-world-2026-10-09. Latest application commit: 29a20c93db592be9380902cd1dbec8e4760ea0bd (LOCAL, following 10bd538, 038d0fa and bc7a3cf). This checkpoint's documentation commit is the next descendant; do not rewrite history.
