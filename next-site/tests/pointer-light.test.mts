@@ -74,6 +74,8 @@ test("one thousand surfaces keep scroll reads culled, idle writes zero and teard
     PointerLight(); cleanup=mount?.();
     observers[0].callback(surfaces.slice(0,25).concat(dialog).map(target=>({target,isIntersecting:true})));
     flush();
+    assert.ok(surfaces.every(surface => surface.style.properties.size === 0), "idle initialization must preserve streamed HTML styles");
+    assert.ok(surfaces.every(surface => Object.keys(surface.dataset).length === 0), "surface classification must not change server-rendered attributes");
     const pointer=Object.assign(new Event("pointermove"),{pointerType:"mouse",clientX:140,clientY:260});
     windowFixture.dispatchEvent(pointer); flush();
     reads=0; writes=0;

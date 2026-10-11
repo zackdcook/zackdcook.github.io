@@ -1,6 +1,7 @@
 /* Pages reveal like a fresh sheet; local discoveries use the shorter curve.
    Native scroll remains native and every effect has a static fallback. */
 /* Decorative snapshots must not swallow a second navigation click. */
+:root{view-transition-name:none}
 ::view-transition{background:transparent;pointer-events:none}
 ::view-transition-group(.chapter-turn){animation-duration:680ms;animation-timing-function:var(--ease-settle)}
 ::view-transition-image-pair(.chapter-turn){isolation:isolate}

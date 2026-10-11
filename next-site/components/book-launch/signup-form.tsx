@@ -62,12 +62,13 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
   </>;
 }
 export function HomepageBookCTA() {
-  const { hydrated, bookDismissed, bookSubscribed, dismissBook } = usePreferences();
+  const { bookDismissed, bookSubscribed, dismissBook } = usePreferences();
+  const { enabled } = useBookLaunch();
   const [success, setSuccess] = useState(false);
   const host = useRef<HTMLElement>(null);
   const receipt = useRef<HTMLDivElement>(null);
   useEffect(() => { if (success) receipt.current?.focus({ preventScroll: true }); }, [success]);
-  const visible = process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED === "true" && hydrated && bookVisibility(bookDismissed, bookSubscribed).homepage;
+  const visible = enabled && bookVisibility(bookDismissed, bookSubscribed).homepage;
   useEffect(() => {
     if (!visible || !host.current) return;
     let timer: ReturnType<typeof setTimeout> | undefined, qualified = false, emitted = false;

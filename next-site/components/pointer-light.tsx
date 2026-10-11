@@ -15,6 +15,7 @@ export function PointerLight() {
   useEffect(() => {
     const root = document.documentElement;
     const surfaces = new Set<HTMLElement>(), visible = new Set<HTMLElement>();
+    const panels = new WeakSet<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
     let motes: HTMLElement[] = [], ambient: HTMLElement | null = null;
     let x = -1000, y = -1000, targetX = 0, targetY = 0, significantX = 0, significantY = 0;
@@ -30,7 +31,9 @@ export function PointerLight() {
       if (element.style.getPropertyValue(name) !== value) element.style.setProperty(name, value);
     }
     function resetSurface(element: HTMLElement) {
-      style(element, "--light-strength", "0");
+      // Untouched faces already inherit zero from the theme. Writing an inline
+      // zero before a streamed boundary hydrates would alter its server HTML.
+      if (element.style.getPropertyValue("--light-strength")) style(element, "--light-strength", "0");
       for (const name of dynamicProperties) element.style.removeProperty(name);
     }
     const observer = new IntersectionObserver(entries => {
@@ -44,7 +47,7 @@ export function PointerLight() {
     const resize = new ResizeObserver(() => { dirty = true; start(); });
 
     function paint(element: HTMLElement, bounds: DOMRect, strength: number) {
-      const light = element.dataset.materialKind === "panel"
+      const light = panels.has(element)
         ? panelLight(bounds, x, y, strength, innerHeight) : materialLight(bounds, x, y, strength);
       style(element, "--light-strength", light.strength.toFixed(3));
       style(element, "--light-x", px(light.lightX)); style(element, "--light-y", px(light.lightY));
@@ -80,8 +83,7 @@ export function PointerLight() {
       }
       for (const element of next) if (!surfaces.has(element)) {
         surfaces.add(element); resetSurface(element);
-        element.dataset.material = "surface";
-        if (element.matches(panelsSelector)) element.dataset.materialKind = "panel";
+        if (element.matches(panelsSelector)) panels.add(element);
         observer.observe(element); resize.observe(element);
       }
       dirty = true; start();
