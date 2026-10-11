@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Recovered continuation — 2026-10-11
+
+- Exact clean local head: a0b56607ff941dceda34660093e64104194af8c5 on experiment/immersive-world-2026-10-09. Live GitHub branch independently verified at 89b13f010c790455cf4c7c6d5178549650caedc1; main remains 64ebf8a4773889eb8278901512b30dd9aa34c071. Preserve the local descendants and publish them by normal fast-forward; do not restart from the older remote.
+- Iteration A already has READY immutable Preview https://zack-cook-dvwwq0kot-dove-mack0o-3684.vercel.app/ (dpl_moFt4cgfysq4CtFaK2AFDutfEmrL), exact a0b5660 source. No new deployment was needed to recover it. Existing 100-test/type/build evidence is retained. Actual desktop home has no horizontal overflow; About portrait flips both ways by click/keyboard and keeps identical 426.99px square bounds. Safari chrome/physical touch remain unverified.
+- Observed delivery gap: that file-upload Preview does not display the book CTA despite the existing experimental branch flag being true. Investigate branch-scoped configuration during publication; do not change production or other chats' Preview settings. Do not claim signup end-to-end acceptance until it is exercised on the corrected Preview.
+- Current task: Iteration B, one original replaceable paper for every actual homepage section. Each paper approaches from a distant wind/parallax pose, becomes its single real reading surface, then recedes. Preserve motes, authored copy, photos, CTA order, controls and secrets. Keep a stationary reading interval, native scrolling, keyboard and reduced-effects fallbacks. No duplicated content, new dependency, production mutation or repeated audit/research.
+- Next action: implement the paper component and home composition, run focused source/build checks, restore exact Git publication using the existing authorized Codespace if accessible, and publish/verify separate A and B references. Update this checkpoint with final SHAs, Preview IDs and honest acceptance limits.
+
 ## In progress — two-iteration feedback milestone 5 (2026-10-11)
 
 - Continue exact local d646f693180f0a5928dd80999c35c02a66bf4c59 on experiment/immersive-world-2026-10-09. Preserve all prior previews/history. User requests first a fixes-only Preview, then a distinct floating-paper concept Preview; no shared alias or production changes.
