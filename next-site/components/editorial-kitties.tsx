@@ -114,7 +114,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
         </div>
       </div>
       <figcaption className={styles.caption}>{label}</figcaption>
-      {escaped && <div className={styles.reveal}><p role="status">Brave chased a shadow and got outside.</p><Link ref={destination} href="/bebrave" className={`text-link ${styles.destination}`}>Follow him.</Link></div>}
+      {escaped && <div className={styles.reveal} data-brave-dialogue><p role="status">Brave chased a shadow and got outside.</p><Link ref={destination} href="/bebrave" className={styles.destination}>Follow him.</Link></div>}
     </figure>
   </div>;
 }

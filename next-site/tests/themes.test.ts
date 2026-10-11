@@ -8,6 +8,14 @@ function luminance(hex:string) {
   return channels[0]*.2126+channels[1]*.7152+channels[2]*.0722;
 }
 function contrast(a:string,b:string) { const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05); }
+test("fourth-wall dialogue keeps text, selection and focus cues readable",()=>{
+  const source=readFileSync(new URL("../design/semantic-roles.css",import.meta.url),"utf8");
+  const roles=Object.fromEntries([...source.matchAll(/--discovery-dialog-([a-z-]+):\s*(#[0-9A-F]{6})/g)].map(match=>[match[1],match[2]]));
+  for(const bg of ["bg","depth"]) assert.ok(contrast(roles.ink,roles[bg])>=4.5);
+  assert.ok(contrast(roles.choice,roles.selected)>=4.5);
+  assert.ok(contrast(roles.edge,roles.bg)>=3);
+  assert.ok(contrast(roles.choice,roles.bg)>=3);
+});
 for(const [name,colors] of Object.entries(themes)) {
   test(`${name}: content and control roles meet normal-text contrast`,()=>{
     for(const bg of ["background","surface","surface-alt"]) for(const ink of ["ink","muted"]) {

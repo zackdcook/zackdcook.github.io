@@ -1,43 +1,48 @@
-.world{position:relative}
-.manuscript{background:var(--color-surface);isolation:isolate;padding-block:clamp(85px,10vw,150px);border-top:1px solid color-mix(in srgb,var(--color-brass) 30%,transparent)}
-.events{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(105px,13vw,185px);background:color-mix(in srgb,var(--color-background) 86%,var(--color-accent-soft));color:var(--color-ink)}
-.events::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse at var(--light-x,85%) var(--light-y,50%),color-mix(in srgb,var(--color-sun) 16%,transparent),transparent 66%)}
+.world{position:relative;background:var(--color-background)}
+.world>section{view-timeline-name:--chapter-view;view-timeline-axis:block}
+.world>section:not(:first-child){position:relative;isolation:isolate}
+.world>section:not(:first-child)::before{content:"";position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(180deg,transparent,var(--chapter-paper,var(--color-surface)) 22%,var(--chapter-paper,var(--color-surface)) 76%,transparent)}
+.manuscript{--chapter-paper:var(--color-surface);padding-block:clamp(85px,10vw,150px)}
+.events{--chapter-paper:color-mix(in srgb,var(--color-background) 86%,var(--color-accent-soft));overflow:clip;padding-block:clamp(105px,13vw,185px);color:var(--color-ink)}
 .events :global(.writing-group){position:relative;z-index:1}
-.biography{padding-block:clamp(110px,13vw,190px);position:relative;isolation:isolate;overflow:clip;z-index:2;background:var(--color-background)}
+.biography{--chapter-paper:var(--color-background);padding-block:clamp(110px,13vw,190px);overflow:clip;z-index:2}
 .biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(60px,7.4vw,105px);line-height:.95;max-width:6ch;margin-block:32px}
 .biography :global(.life-copy)>p{font-size:16px;max-width:330px}
 .biography :global(.identity-aside){font-size:11px;line-height:1.7;margin-top:24px}
 .biography :global(.life-section){grid-template-columns:.85fr 1.2fr;gap:clamp(50px,9vw,140px)}
-.clearing{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(120px,15vw,225px);background:var(--color-surface-alt);view-timeline-name:--clearing-view;view-timeline-axis:block}
+.world>.clearing{--chapter-paper:var(--color-surface-alt);overflow:clip;padding-block:clamp(120px,15vw,225px);view-timeline-name:--chapter-view,--clearing-view}
 .follySpread{position:relative;z-index:2;display:grid;grid-template-columns:.8fr 1.25fr;column-gap:70px;row-gap:32px;align-items:center}
 .follyDestination{grid-column:2;justify-self:center;padding-top:35px}
 .follyHeading{min-width:0}
 .follyTitle{font-size:clamp(65px,8.7vw,125px);line-height:.94;margin-top:35px;letter-spacing:-.06em;max-width:7ch}
 .leaf{width:100%;max-width:630px;rotate:-12deg;filter:drop-shadow(8px 26px 20px var(--material-shadow))}
 .reeds{position:absolute;inset:auto -15% -150px;width:130%;height:105%;z-index:1;opacity:.62;pointer-events:none;mask-image:linear-gradient(transparent 15%,#000 60%)}
-.shoutouts{position:relative;isolation:isolate;overflow:clip;padding-block:var(--section-gap);background:var(--color-surface)}
+.shoutouts{--chapter-paper:var(--color-surface);overflow:clip;padding-block:var(--section-gap)}
 .shoutouts>:global(.shell){position:relative;z-index:2}
 .communityWindow,.biographyMargin,.shoutoutsDesk{position:absolute;pointer-events:none;z-index:-1;mask-image:linear-gradient(transparent,#000 25%,#000 75%,transparent)}
 .communityWindow{inset:-15% -10% auto auto;width:85%;height:130%;opacity:.38}
 .biographyMargin{inset:-5% auto auto -12%;width:70%;height:115%;opacity:.33;mask-image:linear-gradient(90deg,#000,transparent 55%),linear-gradient(transparent,#000 35%,#000 75%,transparent);mask-composite:intersect}
-.shoutoutsDesk{inset:auto -5% -70%;width:110%;height:190%;opacity:.46;mask-image:linear-gradient(90deg,#000,transparent 36%,transparent 70%,#000),linear-gradient(transparent,#000 30%,#000 75%,transparent);mask-composite:intersect}
+.shoutoutsDesk{inset:auto -5% -45%;width:110%;height:145%;opacity:.46;mask-image:linear-gradient(90deg,#000,transparent 36%,transparent 70%,#000),linear-gradient(transparent,#000 30%,#000 75%,transparent);mask-composite:intersect}
 @supports(animation-timeline:view()){
  @media(prefers-reduced-motion:no-preference){
-  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)>:global(.shell){animation:chapter-rise linear both;animation-timeline:view(block);animation-range:entry 0% entry 85%;transform-origin:center top}
+  /* Stable parent timelines: artwork/content never measure their own motion. */
+  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)>:global(.shell){animation:chapter-rise linear both;animation-timeline:--chapter-view;animation-range:entry 0% entry 80%}
+  :global(html:not([data-effects="reduced"])) .world>section:not(:first-child)::before{animation:chapter-light linear both;animation-timeline:--chapter-view;animation-range:entry 0% entry 90%}
   :global(html:not([data-effects="reduced"])) .leaf{animation:leaf-drift linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
   :global(html:not([data-effects="reduced"])) .reeds{animation:reeds-depth linear both;animation-timeline:--clearing-view;animation-range:entry 0% exit 100%}
-  :global(html:not([data-effects="reduced"])) :is(.communityWindow,.biographyMargin,.shoutoutsDesk){animation:chapter-depth linear both;animation-timeline:view(block);animation-range:entry 0% exit 100%}
+  :global(html:not([data-effects="reduced"])) :is(.communityWindow,.biographyMargin,.shoutoutsDesk){animation:chapter-depth linear both;animation-timeline:--chapter-view;animation-range:entry 0% exit 100%}
  }
 }
-@keyframes chapter-rise{from{opacity:.35;translate:0 90px;scale:.95}to{opacity:1;translate:0 0;scale:1}}
+@keyframes chapter-rise{from{opacity:.72;translate:0 54px}to{opacity:1;translate:0 0}}
+@keyframes chapter-light{from{opacity:.5}to{opacity:1}}
 @keyframes leaf-drift{from{translate:0 70px;rotate:-15deg}to{translate:0 -70px;rotate:-7deg}}
 @keyframes reeds-depth{from{translate:0 160px}to{translate:0 -160px}}
 @keyframes chapter-depth{from{translate:0 180px;scale:1.035}to{translate:0 -180px;scale:1}}
 @media(max-width:740px){
  .manuscript{padding-block:80px 85px}.events{padding-block:85px 105px}
  .biography{padding-block:90px 115px}.biography :global(.life-section){grid-template-columns:1fr;gap:65px}.biography :global(.life-copy)>h2:not(:global(.section-label)){font-size:clamp(65px,18vw,100px);max-width:none}.biography :global(.life-copy)>p{font-size:15px;max-width:360px}
- .follySpread{grid-template-columns:1fr;gap:45px}.follyDestination{grid-column:1;padding-top:20px}.follyTitle{font-size:clamp(62px,17vw,90px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.clearing{padding-block:85px 145px}.reeds{width:185%;left:-48%;height:80%;bottom:-70px;opacity:.52}
- .communityWindow{width:175%;right:-50%;opacity:.28}.biographyMargin{width:140%;left:-55%;opacity:.24}.shoutoutsDesk{width:190%;left:-45%;height:160%;bottom:-50%;opacity:.4}
+ .follySpread{grid-template-columns:1fr;gap:45px}.follyDestination{grid-column:1;padding-top:20px}.follyTitle{font-size:clamp(62px,17vw,90px);max-width:none;margin-top:25px}.leaf{max-width:500px;margin:0 auto}.world>.clearing{padding-block:85px 145px}.reeds{width:185%;left:-48%;height:80%;bottom:-70px;opacity:.52}
+ .communityWindow{width:175%;right:-50%;opacity:.28}.biographyMargin{width:140%;left:-55%;opacity:.24}.shoutoutsDesk{width:180%;left:-40%;height:135%;bottom:-30%;opacity:.4}
  @keyframes leaf-drift{from{translate:0 40px;rotate:-13deg}to{translate:0 -40px;rotate:-8deg}}
  @keyframes reeds-depth{from{translate:0 92px}to{translate:0 -92px}}
  @keyframes chapter-depth{from{translate:0 115px;scale:1.04}to{translate:0 -115px;scale:1}}

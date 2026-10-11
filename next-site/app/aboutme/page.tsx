@@ -30,7 +30,7 @@ export default function AboutMe() {
     <section className={`about-intro ${styles.opening}`}>
       <div className="page-intro">
         <p className="eyebrow">About Me</p>
-        <h1>I’m Zack<br /><em>Cook.</em></h1>
+        <h1 className="responsive-title">I’m Zack<br className="title-break" /> <em>Cook.</em></h1>
       </div>
 
       <div className="portrait-frame tactile-photo" data-material-surface="glass">

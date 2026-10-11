@@ -1,10 +1,15 @@
-.field{position:fixed;inset:0;z-index:25;pointer-events:none;overflow:clip;contain:strict}
-.light{position:absolute;inset:-30%;background:radial-gradient(ellipse 56% 62% at var(--world-light-x,76%) var(--world-light-y,24%),var(--world-light-warm),transparent 72%),radial-gradient(ellipse 48% 58% at calc(100% - var(--world-light-x,76%)) calc(100% - var(--world-light-y,24%)),var(--world-light-rose),transparent 76%);opacity:calc(.22 + var(--world-light-strength,0)*.78);mix-blend-mode:soft-light}
-.mote{position:absolute;top:0;width:var(--mote-size);height:var(--mote-size);will-change:transform;pointer-events:none}
-.grain{width:100%;height:100%;animation:mote-breathe var(--mote-period) ease-in-out var(--mote-phase) infinite;transform-origin:center;opacity:0}
-.core{display:block;width:100%;height:100%;border-radius:50%;background:var(--world-mote);box-shadow:0 0 6px 1px var(--world-mote-glow)}
-@keyframes mote-breathe{0%,100%{opacity:0;scale:.6;translate:0 4px}25%{opacity:.16}50%{opacity:.48;scale:1;translate:3px -4px}75%{opacity:.12}}
-@media(max-width:740px){.mote:nth-of-type(n+9){display:none}.light{opacity:calc(.18 + var(--world-light-strength,0)*.65)}}
-:global(body:has(.bebrave-stage,.bebrave-overlay,.test-viewport)) .field{display:none}
+.field{position:fixed;inset:0;z-index:18;pointer-events:none;overflow:clip;contain:strict}
+/* One bounded, prepainted wash moves as a plane. It does not tint navigation
+   or use an oversized blend surface or a gradient inherited from the root. */
+.light{position:absolute;top:0;left:0;width:min(1050px,120vw);height:min(900px,115vh);background:radial-gradient(ellipse at 58% 42%,var(--world-light-warm),transparent 68%),radial-gradient(ellipse at 32% 65%,var(--world-light-rose),transparent 65%);opacity:calc(var(--world-light-strength,0)*.5);transform:translate3d(calc(var(--world-light-x,80vw) - 50%),calc(var(--world-light-y,25vh) - 50%),0)}
+.mote{position:absolute;top:0;width:var(--mote-size);height:var(--mote-size);pointer-events:none}
+.grain{position:relative;width:100%;height:100%;animation:mote-breathe var(--mote-period) ease-in-out var(--mote-phase) infinite;transform-origin:center;opacity:0}
+.grain::before{content:"";position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(var(--world-mote-glow),transparent 70%);pointer-events:none}
+.core{display:block;width:100%;height:100%;background:var(--world-mote);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+:global(html[data-theme="dark"]) .core{clip-path:none;border-radius:50%}
+@keyframes mote-breathe{0%,100%{opacity:0;scale:.65;translate:0 3px}30%{opacity:.26}55%{opacity:.65;scale:1.1;translate:3px -4px}80%{opacity:.16}}
+@media(max-width:740px){.mote:nth-of-type(n+9){display:none}.light{opacity:calc(var(--world-light-strength,0)*.4)}}
+:global(body:has(.bebrave-stage,.bebrave-overlay,.test-viewport,dialog[open])) .field{visibility:hidden}
+:global(body:has(dialog[open])) .grain{animation-play-state:paused}
 :global(html[data-effects="reduced"]) .field{display:none}
 @media(prefers-reduced-motion:reduce){.field{display:none}}

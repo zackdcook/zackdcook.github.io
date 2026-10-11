@@ -102,10 +102,17 @@
   --studio-plant: color-mix(in srgb, var(--color-foliage) 65%, var(--color-surface));
   --studio-rule: var(--color-brass);
   --studio-light: color-mix(in srgb, var(--color-sun) 60%, var(--color-background));
-  --world-light-warm: color-mix(in srgb, var(--color-sun) 18%, transparent);
-  --world-light-rose: color-mix(in srgb, var(--color-accent-soft) 12%, transparent);
-  --world-mote: color-mix(in srgb, var(--color-brass) 70%, var(--color-sun));
-  --world-mote-glow: color-mix(in srgb, var(--color-sun) 35%, transparent);
+  --world-light-warm: color-mix(in srgb, var(--color-sun) 11%, transparent);
+  --world-light-rose: color-mix(in srgb, var(--color-accent-soft) 7%, transparent);
+  --world-mote: color-mix(in srgb, var(--tone-white) 92%, var(--color-sun));
+  --world-mote-glow: color-mix(in srgb, var(--color-sun) 48%, transparent);
+  /* Discovery intentionally opens a different, game-like visual language. */
+  --discovery-dialog-bg: #20243D;
+  --discovery-dialog-depth: #12172B;
+  --discovery-dialog-ink: #FFF4D8;
+  --discovery-dialog-edge: #B6BCD8;
+  --discovery-dialog-choice: #F4D58C;
+  --discovery-dialog-selected: #353C59;
   --photo-shadow: #19231F;
   --editorial-art-light: .95;
   --editorial-art-saturation: .85;
@@ -151,6 +158,7 @@
   --cast-y: 0px;
 }
 html[data-theme="dark"] {
+  --world-mote: color-mix(in srgb, var(--color-brass) 70%, var(--color-sun));
   --material-shadow: rgb(0 0 0 / .42);
   --material-specular: var(--color-sun);
   --editorial-art-light: .67;

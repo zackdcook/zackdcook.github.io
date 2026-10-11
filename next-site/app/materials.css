@@ -10,7 +10,6 @@
  background:radial-gradient(ellipse 65% 90% at var(--glass-x,50%) var(--glass-y,0%),var(--glass-highlight),transparent 76%);
  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask-composite:exclude;-webkit-mask-composite:xor;opacity:calc(var(--light-strength,0)*.8);
 }
-.text-link::before{content:"";position:absolute;inset:auto 0 -1px;height:1px;pointer-events:none;background:radial-gradient(ellipse 45% 100% at var(--glass-x,50%) 50%,var(--color-accent),transparent);opacity:var(--light-strength,0)}
 .settings-button{border-radius:999px;position:relative;isolation:isolate;color:var(--color-ink);border-color:var(--glass-edge);background-color:color-mix(in srgb,var(--color-surface) 75%,transparent)}
 .settings-button.button:hover{background-color:var(--color-surface);color:var(--color-ink)}
 .settings-button svg{stroke:currentColor}

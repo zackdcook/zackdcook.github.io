@@ -8,12 +8,13 @@
 .book-signup-fields{display:flex;gap:14px;align-items:center}
 .book-signup-form .book-signup-fields input[type="email"]{flex:1;min-width:0;width:100%;border:0;border-bottom:1px solid var(--color-muted);border-radius:0;padding:12px 0;font:450 16px var(--sans);background:transparent;color:var(--color-ink)}
 .book-signup-form .book-signup-fields input[type="email"]::placeholder{color:var(--color-muted);opacity:1}
-.book-signup-form .book-signup-fields input[type="email"]:focus-visible{outline:2px solid var(--focus-ring);outline-offset:4px}
+.book-signup-form .book-signup-fields input[type="email"]:focus-visible{outline:none;border-bottom-color:var(--focus-ring);box-shadow:0 1px 0 var(--focus-ring)}
 .book-signup-fields .button{flex-shrink:0;min-height:48px;white-space:nowrap}
 .book-signup-form[aria-busy="true"] button::after{content:"";display:inline-block;width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;margin-left:8px;animation:book-wait .7s linear infinite}
 .book-honeypot{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 .book-dialog{width:min(640px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto}
 .book-dialog .calendar-dialog-content{position:relative}
+.book-dialog .dialog-close{position:absolute;right:24px;top:24px}
 .book-dialog h2{font-size:clamp(25px,4vw,34px)}
 .book-success{margin-block:30px;padding-block:22px;border-block:1px solid var(--color-brass);font:650 22px/1.4 var(--display)}
 .book-menu-item{border:0;background:none;min-height:44px;padding:0;cursor:pointer;white-space:nowrap}

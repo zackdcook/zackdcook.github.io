@@ -16,7 +16,26 @@ Reuse the focused W3C / NN/g / Tuch review in PUBLIC_EXPERIENCE_MILESTONE_3.md. 
 
 ## Verification
 
-Pending implementation and tests. Browser service responds again, but protected Vercel sign-in rejected the submitted two-factor code. No deployment-protection setting has been altered. GitHub connector/local Git publishing remain unverified for this continuation; do not assume the previous local milestones are remote. Previous Preview stays intact.
+Implemented and automated checks pass. Browser service responds again, but protected Vercel sign-in first rejected the submitted code, then reported an expired session. A fresh login was opened for manual control. Zack reported cloud-browser input lag and explicitly deferred further sign-in. Respect that decision: no more authentication attempts until requested. No deployment-protection setting has been altered. Actual Preview/device verification remains pending, including the reported crash and deceleration jitter.
+
+| Area | Implemented / automated evidence | Remaining verification |
+| --- | --- | --- |
+| Shared lighting | Bounded static gradient plane moves by transform; no blend surface or root lighting-property writes; only changed local styles written | Actual pointer/tilt visual refinement |
+| Rendering work | Actual controller exercised with 1,000 simulated surfaces: only 26 visible surfaces measured per scroll, zero stationary-event writes, modal work culled to its one fixture surface, idle frames stop and cleanup removes listeners/observers | Real Safari GPU/FPS and crash reproduction |
+| Homepage depth | Stable parent section timelines, readable entrance opacity, no whole-shell scale; existing substantial opposing plane movement retained | Momentum/deceleration on physical iPad/iPhone |
+| Section transitions | Continuous base background, transparent gradient joins and section-light crossfades; no top border at manuscript transition | Actual appearance across the four themes |
+| Motes / underlines | Pale ivory sparkles in light mode; warm dots retained in dark; fewer phone motes; decorative field rests under dialogs; text-action shimmer removed | Visual balance and touch hardware |
+| Display titles | Required line breaks become optional at wide sizes; About/Events/Creative Works widths and sizes scoped | Wide desktop and zoom/phone layouts |
+| About reading | Biography CSS, paragraph rhythm, progress and scroll choreography left intact; only requested title break changes | Recheck after shared effects change |
+| Settings / popups | Rounded consistent appearance/check controls; rejected discovery-reset control removed; quiet shared close icons; neutral initial title focus, visible keyboard cues retained; menu signup no longer autofocuses email/opens mobile keyboard | Actual Tab/Shift-Tab/Escape, pointer and screen-reader flows |
+| Brave discovery | Persistent JRPG frame, full original message, sole Follow him. action with selected blinking arrow; animations rest under site/OS reduced motion; no dismissal or returning bird shadows | Click/tap, revisit, reduced effects and navigation in actual Preview |
+| Content / isolation | Baseline routes, authored files/JSX, hidden wording, all four themes and eligibility/bypass guards pass existing tests | Full original overhaul inventory remains broader than this milestone |
+
+Final source checks: 94 TypeScript tests and six explicit-TAP API/controller tests pass (100 total); TypeScript and CTA-enabled optimized build pass (47 generated routes); generated artwork/theme checks and git diff --check pass. New dialogue text/selection/focus contrast checks pass. There is no lint script. No database, migration, environment, production configuration or dependency change. The original darker common carving color and rounded-square portrait remain intact. All earlier commits and bundles are preserved.
+
+Concrete editorial recommendations are in TYPOGRAPHY_AND_COPY_RECOMMENDATIONS.md. No optional copy suggestion was applied. The existing RSS/calendar exceptions remain recorded in milestone 3.
+
+Publication is the next step. Last independent remote read still shows experimental 89b13f010c790455cf4c7c6d5178549650caedc1 and main 64ebf8a4773889eb8278901512b30dd9aa34c071. The prior Preview and stable alias stay intact; do not promote or assign an alias to an unverified build.
 
 ## Next action
 

@@ -25,7 +25,7 @@ export function ZackyCPreview() {
     <span className="zacky-c-backdrop" aria-hidden="true" onPointerDown={() => setPinned(false)} />
     <span className="zacky-c-preview" role="dialog" aria-label="Zacky C name doodles">
       <ArtworkImage slot="name-doodles" alt="" width={1200} height={1600} sizes="(max-width: 740px) 78vw, 360px" />
-      <button type="button" className="button zacky-c-close dialog-close" aria-label="Close name doodles" tabIndex={pinned ? 0 : -1} onClick={() => setPinned(false)}>×</button>
+      <button type="button" className="icon-button zacky-c-close dialog-close" aria-label="Close name doodles" tabIndex={pinned ? 0 : -1} onClick={() => setPinned(false)}>×</button>
     </span>
   </span>;
 }

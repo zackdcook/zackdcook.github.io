@@ -30,7 +30,7 @@ export function BookLaunchProvider({ children, testMode = false }: { children: R
         if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dialog.current?.close();
       }}>
       <div className="calendar-dialog-content">
-        <button type="button" className="button calendar-close dialog-close" aria-label="Close book alert" onClick={() => dialog.current?.close()}>×</button>
+        <button type="button" className="icon-button calendar-close dialog-close" aria-label="Close book alert" onClick={() => dialog.current?.close()}>×</button>
         {success ? <><h2 id="book-menu-title">{bookCopy.success}</h2><button autoFocus className="button" onClick={() => dialog.current?.close()}>Close</button></> : open && <BookSignupForm placement="menu" titleId="book-menu-title" onSuccess={() => setSuccess(true)} />}
       </div>
     </dialog>

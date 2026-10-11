@@ -10,7 +10,7 @@ export function PublicAtmosphere() {
   useEffect(() => { setMotes(createPublicMotes()); }, []);
 
   return <div className={`public-atmosphere ${styles.field}`} aria-hidden="true">
-    <div className={styles.light} />
+    <div className={styles.light} data-public-light />
     {motes.map((mote, index) => <span key={index} data-public-mote data-mote-start={mote.start} data-mote-depth={mote.depth}
       className={styles.mote} style={{ left: `${mote.x}%`, "--mote-size": `${mote.size}px`, "--mote-period": `${mote.period}s`, "--mote-phase": `${mote.phase}s` } as CSSProperties}>
       <Artwork slot="public-mote" className={styles.grain}><span className={styles.core} /></Artwork>

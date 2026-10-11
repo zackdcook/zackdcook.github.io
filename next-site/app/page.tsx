@@ -23,7 +23,7 @@ export default async function Home() {
     <section id="creative-works" className={`desk-section ${styles.manuscript}`}>
       <div className="shell"><ActiveProject detailsLink /></div>
     </section>
-    <section id="find-me-at" data-light-source className={`events-section ${styles.events}`}><div className="shell">
+    <section id="find-me-at" className={`events-section ${styles.events}`}><div className="shell">
       <WritingGroupCard><div className="rail-more"><Link className="text-link" href="/events">Other events</Link></div></WritingGroupCard>
     </div><StudioArtwork slot="chapter-scenery" variant="window" className={styles.communityWindow}/></section>
     {event && <section className="event-callout shell upcoming-callout">

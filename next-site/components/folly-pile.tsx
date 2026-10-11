@@ -243,7 +243,7 @@ export function FollyPile() {
         if (destination!==null) {event.preventDefault(); changeLeaf(destination);}
       }}
       onClick={event => { if (event.target === event.currentTarget) dialog.current?.close(); }}>
-      <div className="leaf-reader-toolbar"><button className="button leaf-reader-close dialog-close" autoFocus aria-label="Close leaf" onClick={() => dialog.current?.close()}>×</button></div>
+      <div className="leaf-reader-toolbar"><button className="icon-button leaf-reader-close dialog-close" autoFocus aria-label="Close leaf" onClick={() => dialog.current?.close()}>×</button></div>
       <div className="leaf-reader-content">
         <div className="reader-leaf-stage">
           {[reader.retiring,reader.underneath,reader.current].map(layer=>layer && <div key={layer.key} data-reader-key={layer.key} style={settlingPoses.current.get(layer.key)}

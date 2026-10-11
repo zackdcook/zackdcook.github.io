@@ -11,6 +11,10 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
   const { testMode } = useBookLaunch();
   const id = useId();
   const form = useRef<HTMLFormElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (placement === "menu") heading.current?.focus({ preventScroll: true });
+  }, [placement]);
   const started = useRef(false), busy = useRef(false);
   const [pending, setPending] = useState(false), [error, setError] = useState(false);
   const [reset, setReset] = useState(0);
@@ -43,11 +47,11 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
     } finally { busy.current = false; setPending(false); }
   }
   return <>
-    <h2 id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
+    <h2 ref={heading} className={placement === "menu" ? "dialog-title" : undefined} tabIndex={placement === "menu" ? -1 : undefined} id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
     <form ref={form} onSubmit={submit} className="book-signup-form" aria-busy={pending}>
       <div className="book-signup-fields">
         <label className="sr-only" htmlFor={`${id}-email`}>Email address</label>
-        <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending} autoFocus={placement === "menu"}
+        <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending}
           onChange={event => { if (!started.current && event.target.value.length) { started.current = true; bookEvent("book_signup_started", { placement }); } }} aria-describedby={error ? `${id}-error` : undefined} />
         <button className="button" type="submit" disabled={pending || (!testMode && !humanToken)}>{bookCopy.submit}</button>
       </div>

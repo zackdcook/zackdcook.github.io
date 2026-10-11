@@ -69,6 +69,12 @@ section[id]{scroll-margin-top:100px}
 .page-intro>p.hero-detail{font-size:14px;line-height:1.8;max-width:390px}
 .page-intro .page-label{font:650 11px/1.5 var(--sans);letter-spacing:.17em;text-transform:uppercase;margin-bottom:26px}
 .page-intro .title-plain{color:var(--color-ink)}
+@media(min-width:1200px){
+ .responsive-title{white-space:nowrap}
+ .responsive-title .title-break{display:none}
+ .about-intro .page-intro h1{font-size:clamp(80px,6.5vw,100px)}
+ .events-page .page-intro{max-width:none}
+}
 .desk-section{padding-block:var(--section-gap);position:relative}
 .creative-works-page .desk-section{padding-bottom:0;background:var(--color-surface-alt)}
 .hero-detail{font-size:14px;line-height:1.8;color:var(--color-muted);max-width:390px}
@@ -120,12 +126,13 @@ section[id]{scroll-margin-top:100px}
 .copyright-secret{margin-left:8px}
 .copyright-button{border:0;padding:0;background:none;color:inherit;font:inherit;cursor:pointer}
 .calendar-dialog{--section-ink:var(--color-ink);--section-muted:var(--color-muted);--section-rule:var(--color-border);--focus-ring:var(--color-accent);width:min(510px,calc(100% - 36px));max-height:calc(100dvh - 40px);overflow-y:auto;overscroll-behavior:contain;padding:0;border:1px solid var(--color-border);border-radius:18px;background:var(--color-surface);color:var(--color-ink);box-shadow:0 20px 90px var(--material-shadow)}
-.calendar-dialog::backdrop{background:color-mix(in srgb,var(--tone-dark-neutral) 45%,transparent);backdrop-filter:blur(5px)}
+.calendar-dialog::backdrop{background:color-mix(in srgb,var(--tone-dark-neutral) 58%,transparent);backdrop-filter:blur(3px)}
 .calendar-dialog-content{padding:30px}
 .calendar-dialog-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
 .calendar-dialog-heading h2{font-size:29px;line-height:1.15}
 .dialog-close{width:44px;min-height:44px;padding:0;font-size:25px;flex-shrink:0}
-.dialog-close:focus-visible{outline-offset:2px}
+.calendar-dialog .dialog-title:focus{outline:none}
+.dialog-close:focus-visible{outline:2px solid var(--focus-ring);outline-offset:-4px}
 .calendar-event-title{font-weight:700}
 .calendar-help,.form-help,.form-hint{font-size:13px;line-height:1.7;color:var(--color-muted);margin-top:18px}
 .calendar-options{display:grid;gap:12px;margin-top:25px}
@@ -135,13 +142,14 @@ section[id]{scroll-margin-top:100px}
 .appearance-selector{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:6px}
 .appearance-selector label{position:relative;display:flex;cursor:pointer;min-width:0}
 .appearance-selector input,.checkbox-control input{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}
-.preference-control{border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-ink)}
-.appearance-selector .preference-control{width:100%;display:grid;place-items:center;text-align:center;padding:12px 6px;min-height:48px;border-radius:6px;font:550 12px/1.4 var(--sans)}
-input:checked+.preference-control{background:var(--color-chrome);color:var(--color-on-chrome);font-weight:750}
+.preference-control{position:relative;isolation:isolate;border:1px solid var(--color-border);border-radius:999px;background:var(--color-surface);color:var(--color-ink);transition:background-color var(--duration-hover),color var(--duration-hover)}
+.appearance-selector .preference-control{width:100%;display:grid;place-items:center;text-align:center;padding:10px 8px;min-height:48px;font:600 13px/1.45 var(--sans)}
+input:checked+.preference-control{background:var(--color-chrome);color:var(--color-on-chrome)}
+.appearance-selector label:hover .preference-control{border-color:var(--color-accent)}
 .appearance-selector input:focus-visible+.preference-control,.checkbox-control input:focus-visible+.preference-control{outline:2px solid var(--focus-ring);outline-offset:4px}
 .preference-row{display:flex;justify-content:space-between;align-items:center;gap:18px;padding-block:20px;border-top:1px solid color-mix(in srgb,var(--color-border) 50%,transparent);font-size:14px}
 .checkbox-control{position:relative;display:inline-flex;flex-shrink:0;cursor:pointer}
-.checkbox-face{display:grid;place-items:center;width:28px;height:28px;border-radius:4px;font-size:20px;line-height:1}
+.checkbox-face{display:grid;place-items:center;width:44px;height:30px;font-size:17px;line-height:1}
 .checkbox-control input:not(:checked)+.checkbox-face{font-size:0}
 .tilt-preference{border-top:1px solid var(--color-border);padding-block:18px 25px;font-size:14px}
 .tilt-preference>.actions{margin-top:14px}
