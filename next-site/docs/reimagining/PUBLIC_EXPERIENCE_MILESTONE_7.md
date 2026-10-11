@@ -1,6 +1,6 @@
 # Public experience milestone 7 — reading flow and mote-only atmosphere
 
-Date: 2026-10-11. Branch: `experiment/immersive-world-2026-10-09`. Application parent: `9a5f927536fb8869f1b53ef51c523bcf66764059` (prior application `f34b5c7`). Pre-paper composition reference: `a0b5660`. Original main/tree sources and completed backend work remain unchanged. Final source and immutable Preview will be recorded after publication.
+Date: 2026-10-11. Branch: `experiment/immersive-world-2026-10-09`. Application parent: `9a5f927536fb8869f1b53ef51c523bcf66764059` (prior application `f34b5c7`). Pre-paper composition reference: `a0b5660`. Original main/tree sources and completed backend work remain unchanged. Final application source: `45e362f1420a93232cd890966310ad282fff3baf`. Immutable Preview: https://zack-cook-3aeu71frd-dove-mack0o-3684.vercel.app/ (`dpl_3pAwfmvhEedNaDkyG1yjwXZHbWt3`, READY, target null).
 
 ## Layout analysis after removing the papers
 
@@ -35,3 +35,13 @@ These are rendered Chrome/iframe checks, not physical Safari/touch/tilt or measu
 ## Publication and continuation
 
 Publish one final Preview from the reviewed source, test its fresh-origin homepage CTA at short-phone widths, record its exact commit/deployment/URL, and stop the isolated QA server/Codespace. Do not move the shared branch shortcut or production, upgrade a plan, delete the held eighth artifact, or merge the separate listening/reading worktree. Ask for feedback on the resulting layout, then continue the earlier physical-device and original-inventory verification work from the durable checkpoint.
+
+## Final Preview acceptance
+
+The exact git-backed application45e362f was published once and verified on its new origin. Home, About Me, Creative Works, Events, Shoutouts and Words of Folly rendered without a scenery slot or horizontal overflow; no application console error was captured. Production and the retained branch shortcut still target their prior deployments.
+
+The previously dismissed private QA invitation was verified on this fresh origin: CTA bottoms are 513.86px / 554.88px / 685.75px / 506.66px at 320×568 / 375×667 / 390×844 / 768×1024. The submit control remains 44px on the shortest phone and 48px on the other phones. All five Home feature headings measure 42.921px on the tablet. No signup was submitted during this presentation review.
+
+The deployed portrait flip visibly resolves to the complete natural-shape doodles, with no stationary square rim or shadow. Its 319.109×425.453px back and original stable outer footprint were confirmed; Enter returns to the photo. The final manuscript chart computes shadow none. Desktop light/dark screenshots were inspected. Browser proof files are transient review artifacts, not shipped assets or added function storage.
+
+This documentation descendant requires no extra build or Preview. Stop the owned private QA process and existing Codespace after publication; continue from user feedback and the earlier physical-device/original-inventory acceptance work.
