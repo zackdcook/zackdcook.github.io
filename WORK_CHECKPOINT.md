@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Be Brave requested feedback — finished test revision, 2026-10-12
+
+- Final app `d6f9492be5e64d77f9fbdade1248fba6f510a329`; READY isolated Preview `dpl_4fKt8BeedDHw2BqqWFmgTxipUo7q`: https://zack-cook-18cnn9foz-dove-mack0o-3684.vercel.app/bebrave. Two visual refinement passes; scope ends here.
+- Joins/gaps corrected; public wordmark in game colors; compact menus; straight, scaled tools; readable pigment edges and stronger rarity accents. Admire zoom/inspection UI removed by latest explicit request. Immediate-only post-chop Admire, stationary fallen background, local cutoff, stump and regret verified.
+- 108 standard + 7 module-mock tests, typecheck, art/theme checks and clean-cache production builds pass. Actual Common/Epic/Legendary/Uncommon publications 35–38 preserve original geometry/colors/seeds; original hash/anchor checks pass. Four QA completions add exactly four feet; reset preserves identity, history, growth and spent redemption. All four theme states and reduced effects reviewed in rendered desktop/emulated phone layouts.
+- Distribution campaign remains 50 unused codes, digest 025a32464a325167fa8bb9f170319f23; private CSV untouched. New disposable Legendary fixture jrpg-feedback-fixture-20261012 spent once. Main/production remain75de96b and dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ; public/independent work preserved.
+- Detailed evidence and remaining limits: next-site/docs/reimagining/BE_BRAVE_FEEDBACK_2026-10-12.md. Dense stress remains slower; no physical-device/GPU certification. Direct original-detail HTTP verification remains blocked by Vercel protection-bypass permissions; canonical bytes verified. Recordings are sampled captures. Final task action: push checkpoint, stop the owned Codespace, and hand off the live Preview.
+
 ## Be Brave authorized retry — verified final Preview, 2026-10-12
 
 - Final application `305cc2ca2f8abe94116a6c04b1ce58252e99d44d`; READY Git-backed Preview `dpl_5cskTKp2qof3JrKXmMJioRGcujC5`: https://zack-cook-n9n383h0t-dove-mack0o-3684.vercel.app/bebrave.
