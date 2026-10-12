@@ -28,7 +28,7 @@ export default function AboutMe() {
     <section className={`about-intro ${styles.opening}`}>
       <div className="page-intro">
         <p className="eyebrow">About Me</p>
-        <h1 className="responsive-title">I’m Zack<br className="title-break" /> <em>Cook.</em></h1>
+        <h1 className="responsive-title">I’m Zack<br className="title-break" />{" "}<em>Cook.</em></h1>
       </div>
 
       <ReversiblePortrait />
@@ -41,7 +41,7 @@ export default function AboutMe() {
         <div className={styles.readTrack}><span /></div>
       </div>
       <div className={`prose about-story ${styles.story}`}>
-      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <strong>Zacky C</strong>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
+      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <span>Zacky C</span>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
 
       <p>Hello there!</p>
 

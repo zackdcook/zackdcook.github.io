@@ -1,13 +1,12 @@
 .page{position:relative;isolation:isolate}
 .opening{position:relative;isolation:isolate;overflow:clip;padding-block:clamp(52px,6.5vw,96px) clamp(74px,8.5vw,128px)}
-.intro{position:relative;z-index:2;max-width:850px}
+.intro{position:relative;z-index:2;max-width:none;container-type:inline-size}
 .intro :global(.eyebrow){margin-bottom:28px}
-.intro h1{font-size:clamp(64px,8.4vw,126px);line-height:.97;letter-spacing:-.055em}
-@media(min-width:1200px){.intro{max-width:none}.intro h1:global(.responsive-title){font-size:clamp(84px,7.5vw,112px)}}
+.intro h1{font-size:clamp(30px,12cqw,112px);white-space:nowrap;line-height:.97;letter-spacing:-.055em}
 /* Keep the manuscript's deliberate drafting rules in the continuous light. */
 .desk{position:relative;isolation:isolate;padding-block:clamp(68px,8vw,118px) clamp(84px,10vw,150px);border-top:1px solid color-mix(in srgb,var(--color-brass) 35%,transparent)}
 .desk::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(transparent 3%,color-mix(in srgb,var(--color-border) 30%,transparent) 25%,transparent 95%);pointer-events:none}
 @media(max-width:740px){
- .opening{padding-block:48px 72px}.intro h1{font-size:clamp(54px,15.4vw,86px)}
+ .opening{padding-block:48px 72px}
  .desk{padding-block:55px 80px}.desk::before{display:none}
 }

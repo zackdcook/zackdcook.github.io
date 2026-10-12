@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ViewTransition, useEffect, useRef, useState } from "react";
+import { ViewTransition, useEffect, useId, useRef, useState } from "react";
 import { navigation } from "@/content/navigation";
 import { usePreferences } from "@/components/site-preferences";
 import { PreferencesButton } from "./preferences-button";
@@ -14,14 +14,15 @@ export function SiteHeader() {
   const pathname = usePathname();
   const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
   const visiblePath = ({ "/creativeworks": "/creative-works", "/aboutme": "/about-me" } as Record<string, string>)[normalized] ?? normalized;
-  const dialog = useRef<HTMLDialogElement>(null);
+  const dropdown = useRef<HTMLDivElement>(null);
+  const menuId = useId();
   const opener = useRef<HTMLButtonElement>(null);
   const explicitHome = useRef(false);
   const pendingSettings = useRef(false);
   const [open, setOpen] = useState(false);
   const { update, openPreferences } = usePreferences();
   const current = (href: string) => (href === "/" ? visiblePath === "/" : visiblePath === href || visiblePath.startsWith(href + "/")) ? "page" as const : undefined;
-  const close = () => { dialog.current?.close(); setOpen(false); };
+  const close = () => dropdown.current?.hidePopover();
 
   useEffect(() => {
     const historyTravel = () => { explicitHome.current = false; };
@@ -29,7 +30,7 @@ export function SiteHeader() {
     return () => window.removeEventListener("popstate", historyTravel);
   }, []);
   useEffect(() => {
-    dialog.current?.close();
+    dropdown.current?.hidePopover();
     setOpen(false);
     if (pathname === "/" && explicitHome.current) {
       explicitHome.current = false;
@@ -45,7 +46,7 @@ export function SiteHeader() {
     }
   };
   const toggleTheme = () => update({ theme: document.documentElement.dataset.theme === "dark" ? "light" : "dark" });
-  const themeControl = <button type="button" className={styles.theme} data-material-surface="glass" onClick={toggleTheme} aria-label="Toggle light and dark mode">
+  const themeControl = <button type="button" className={`button ${styles.theme}`} data-material-surface="glass" onClick={toggleTheme} aria-label="Toggle light and dark mode">
     <span className={styles.sun} aria-hidden="true"><Artwork slot="icon-light"><svg viewBox="0 0 24 24"><title>☀</title><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3m0 14v3M2 12h3m14 0h3M4.9 4.9l2.2 2.2m9.8 9.8 2.2 2.2M4.9 19.1l2.2-2.2m9.8-9.8 2.2-2.2"/></svg></Artwork></span>
     <span className={styles.moon} aria-hidden="true"><Artwork slot="icon-dark"><svg viewBox="0 0 24 24"><title>🌙</title><path d="M19.8 15.6A8.5 8.5 0 0 1 8.4 4.2 8.5 8.5 0 1 0 19.8 15.6Z"/></svg></Artwork></span>
   </button>;
@@ -65,20 +66,20 @@ export function SiteHeader() {
       <div className={styles.controls}>
         {themeControl}
         <PreferencesButton className={styles.settings} />
-        <button ref={opener} data-menu-opener type="button" className={styles.menu} aria-haspopup="dialog" aria-expanded={open} onClick={() => { dialog.current?.showModal(); setOpen(true); }}>
+        <button ref={opener} data-menu-opener type="button" className={`button ${styles.menu}`} aria-expanded={open} aria-controls={menuId} popoverTarget={menuId} popoverTargetAction="toggle">
           Menu <span aria-hidden="true">＋</span>
         </button>
       </div>
     </div>
-    <dialog ref={dialog} className={styles.sheet} aria-label="Mobile navigation" onCancel={() => setOpen(false)} onClose={() => {
-      setOpen(false);
-      if(pendingSettings.current && opener.current){pendingSettings.current=false;openPreferences(opener.current);}
-      else opener.current?.focus({preventScroll:true});
-    }} onClick={event => { if(event.target === event.currentTarget) close(); }}>
-      <div className={styles.sheetHeader}>
-        <span className={styles.sheetName}>Zack Cook</span>
-        <button type="button" className={styles.menu} onClick={close}>Menu <span aria-hidden="true" className={styles.close}>＋</span></button>
-      </div>
+    <div ref={dropdown} id={menuId} popover="auto" className={styles.sheet} onToggle={event => {
+      const opened = event.newState === "open";
+      setOpen(opened);
+      if (opened) dropdown.current?.querySelector<HTMLAnchorElement>("a")?.focus({ preventScroll: true });
+      else if (pendingSettings.current && opener.current) {
+        pendingSettings.current = false;
+        openPreferences(opener.current);
+      }
+    }}>
       <nav className={styles.destinations} aria-label="Mobile navigation">
         {navigation.map(({title,href}) => <Link key={href} href={href} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)} onClick={close}>
           <span>{title}</span><Artwork slot="icon-arrow"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 16h21M18 8l8 8-8 8" /></svg></Artwork>
@@ -86,6 +87,6 @@ export function SiteHeader() {
         <BookMenuItem closeMenu={close} />
       </nav>
       <div className={styles.sheetFooter}><PreferencesButton onRequest={()=>{pendingSettings.current=true;close();}} /></div>
-    </dialog>
+    </div>
   </header></ViewTransition>;
 }

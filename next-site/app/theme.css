@@ -37,8 +37,8 @@ html[data-theme="dark"] {
   --color-brass: #CDB17C;
   --color-chrome: #2E4036;
   --color-on-chrome: #F4EFDE;
-  --color-hover: #B8C3AA;
-  --color-on-hover: #28362D;
+  --color-hover: #25352D;
+  --color-on-hover: #F4EFDE;
   --color-border: #849879;
   --color-sky-top: #262A40;
   --color-sky-bottom: #8B6476;
@@ -87,8 +87,8 @@ html[data-timeline="felled"][data-theme="dark"] {
   --color-brass: #BD9573;
   --color-chrome: #3A2F3A;
   --color-on-chrome: #F2E9DE;
-  --color-hover: #AEA38C;
-  --color-on-hover: #3F323D;
+  --color-hover: #302731;
+  --color-on-hover: #F2E9DE;
   --color-border: #A493A0;
   --color-sky-top: #27202F;
   --color-sky-bottom: #715469;

@@ -23,7 +23,7 @@ export default async function Home() {
       <div className="shell"><ActiveProject detailsLink /></div>
     </section>
     <section id="find-me-at" className={`events-section ${styles.events}`}><div className="shell">
-      <WritingGroupCard><div className="rail-more"><Link className="text-link" href="/events">Other events</Link></div></WritingGroupCard>
+      <WritingGroupCard><div className="rail-more"><Link className="button" href="/events">Other events</Link></div></WritingGroupCard>
     </div></section>
     {event && <section className="event-callout upcoming-callout"><div className="shell">
       <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
@@ -32,10 +32,14 @@ export default async function Home() {
     <section id="about-me" className={`bio-section ${styles.biography}`}>
       <div className="life-section shell">
         <div className="life-copy">
+          <div className="life-heading">
           <CollectionHeading>BIO1990</CollectionHeading>
           <h2>Who am I?<sub className="identity-aside">no really // plz help // idk who I am</sub></h2>
+          </div>
+          <div className="life-body">
           {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-          <Link className="text-link" href="/about-me">A lil history</Link>
+          <Link className="button" href="/about-me">A lil history</Link>
+          </div>
         </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
       </div>
@@ -49,13 +53,13 @@ export default async function Home() {
         <div className={`folly-latest ${styles.leaf}`} role="img" aria-label={latestFolly.text}>
           <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} />
         </div>
-        <div className={styles.follyDestination}><Link className="text-link" href="/words-of-folly">The whole pile</Link></div>
+        <div className={styles.follyDestination}><Link className="button" href="/words-of-folly">Pile of leaves</Link></div>
       </div>
     </section>
     <section id="shoutouts" className={`shoutouts-section ${styles.shoutouts}`}><div className="shell">
       <CollectionHeading>Cool peeps</CollectionHeading>
       <ShoutoutList people={shoutouts.slice(0,3)} />
-      <div className="rail-more"><Link className="text-link" href="/shoutouts">Other shoutouts</Link></div>
+      <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
     </div></section>
     {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <section className="subscribe-callout"><div className="shell">
       <h2>Keep in touch.</h2><p>Occasional blurbs from my noggin to your feed.</p>

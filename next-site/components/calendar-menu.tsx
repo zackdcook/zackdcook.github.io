@@ -16,7 +16,7 @@ export function CalendarMenu() {
   const close = () => dialog.current?.close();
 
   return <>
-    <button className="text-link" data-material-surface="glass" type="button" aria-haspopup="dialog" onClick={open}><CalendarIcon />Add to calendar</button>
+    <button className="button" data-material-surface="glass" type="button" aria-haspopup="dialog" onClick={open}><CalendarIcon />Add to calendar</button>
     <dialog
       className="calendar-dialog"
       ref={dialog}

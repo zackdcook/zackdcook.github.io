@@ -23,7 +23,7 @@ assert sum(line.startswith('parent ') for line in raw.split('\n\n', 1)[0].splitl
 patch = local('diff', '--binary', parent, sha).decode('utf-8')
 assert not re.search(r'^GIT binary patch$', patch, re.MULTILINE), 'Use the bundle flow for binary changes.'
 files = local('diff', '--name-only', parent, sha).decode().splitlines()
-assert files and all(f == 'WORK_CHECKPOINT.md' or f.startswith('next-site/') for f in files)
+assert files and all(f in ('WORK_CHECKPOINT.md', 'vercel.json') or f.startswith('next-site/') for f in files)
 assert all(not Path(f).name.startswith('.env') or Path(f).name == '.env.example' for f in files), 'Never publish credential files.'
 payload = {'sha': sha, 'parent': parent, 'raw': raw, 'patch': patch}
 script = '''import json, os, subprocess, tempfile

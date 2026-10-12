@@ -10,7 +10,7 @@ export default function CreativeWorks() {
     <div className={styles.opening}>
       <div className="shell"><div className={styles.intro}>
       <p className="eyebrow">Creative Works</p>
-      <h1 className="responsive-title">I’m writing<br className="title-break" /> <span className="title-plain">a</span> <em>novel!</em></h1>
+      <h1 className="responsive-title">I’m writing<br className="title-break" />{" "}<span className="title-plain">a</span> <em>novel!</em></h1>
       </div></div>
     </div>
     <section className={styles.desk}><div className="shell"><ActiveProject presentation="folio" /></div></section>

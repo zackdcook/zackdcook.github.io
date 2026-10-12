@@ -16,8 +16,8 @@ export function SiteFooter() {
           {site.linkedin && <a className="text-link button-small" href={site.linkedin} target="_blank" rel="noopener noreferrer"><LinkedInIcon /> LinkedIn</a>}
           <Link className="text-link button-small" href="/rss"><RssIcon /> RSS</Link>
         </div>
-        {site.supportUrl && <div className="support-callout"><a className="text-link" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
-        <Link className="text-link" href="/privacy">Privacy</Link>
+        {site.supportUrl && <div className="support-callout"><a className="button" href={site.supportUrl} target="_blank" rel="noopener noreferrer"><DollarIcon /><span>{site.supportLabel}</span></a></div>}
+        <Link className="button footer-privacy" href="/privacy">Privacy</Link>
         <CopyrightNote startYear={2023} year={2026} name={site.name} />
       </div>
     </footer>

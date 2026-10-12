@@ -1,7 +1,7 @@
 .field{position:fixed;inset:0;pointer-events:none;overflow:clip;contain:strict}
 .far{z-index:0;opacity:.6;--mote-scale:.75}
-.middle{z-index:1;opacity:.8;--mote-scale:1}
-.near{z-index:18;--mote-scale:1.18}
+.middle{z-index:0;opacity:.8;--mote-scale:1}
+.near{z-index:0;--mote-scale:1.18}
 /* One bounded, prepainted wash moves as a plane. It does not tint navigation
    or use an oversized blend surface or a gradient inherited from the root. */
 .light{position:absolute;top:0;left:0;width:min(1050px,120vw);height:min(900px,115vh);background:radial-gradient(ellipse closest-side at center,var(--world-light-warm),transparent 100%),radial-gradient(ellipse closest-side at center,var(--world-light-rose),transparent 100%);opacity:calc(var(--world-light-strength,0)*.5);transform:translate3d(calc(var(--world-light-x,80vw) - 50%),calc(var(--world-light-y,25vh) - 50%),0)}

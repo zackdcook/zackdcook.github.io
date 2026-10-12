@@ -1,11 +1,11 @@
 import "server-only";
-import { assertExperimentalEnvironment } from "./experimental-environment";
+import { assertDeploymentEnvironment } from "./experimental-environment";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 
 export function authConfigured() {
-  assertExperimentalEnvironment(process.env);
+  assertDeploymentEnvironment(process.env);
   return Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
@@ -37,7 +37,7 @@ export async function serverSupabase() {
 }
 
 export function serviceSupabase() {
-  assertExperimentalEnvironment(process.env);
+  assertDeploymentEnvironment(process.env);
   if (
     !(process.env.SUPABASE_SECRET_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY) ||
     !process.env.NEXT_PUBLIC_SUPABASE_URL

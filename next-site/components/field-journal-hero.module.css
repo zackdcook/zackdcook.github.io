@@ -38,3 +38,8 @@
 @media(max-width:740px) and (max-height:620px){
  .content{padding-top:8px}.identity{margin-bottom:8px}.identity :global(.reaction-symbol){font-size:13px}.name{font-size:46px}.portrait{width:128px;margin-block:9px 10px}.intro{font-size:16px;line-height:1.35}.invitation :global(.book-callout){margin-top:10px}.invitation :global(.book-panel){padding-block:10px 12px}.invitation :global(.book-panel h2){font-size:18px;line-height:1.2}.invitation :global(.book-panel p){margin-block:7px 9px;line-height:1.4}.invitation :global(.book-signup-fields .button){min-height:44px;padding-inline:15px}
 }
+
+@media(min-width:1100px){
+ .content>.identity,.content>.name{grid-column:1/-1}
+ .portrait{grid-column:2;grid-row:3/6;align-self:start;margin-top:28px}
+}

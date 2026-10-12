@@ -1,6 +1,6 @@
 .discovery{position:relative;min-width:0;view-timeline-name:--kitty-view;view-timeline-axis:block}
 .figure{margin:0;position:relative}
-.photo{border-radius:12px;rotate:-2deg;box-shadow:var(--material-cast-x,0px) calc(26px + var(--material-cast-y,0px)) 50px -10px var(--material-shadow)}
+.photo{border-radius:clamp(18px,3vw,30px);box-shadow:var(--material-cast-x,0px) calc(26px + var(--material-cast-y,0px)) 65px -10px var(--material-shadow),0 2px 2px var(--material-cut)}
 .photoClip{aspect-ratio:1400/1034}
 .caption{position:relative;padding:22px 4px 0;font:450 12px/1.6 var(--sans);letter-spacing:.015em;color:var(--color-muted);text-align:right}
 .caption::before{content:"";display:inline-block;width:24px;height:1px;background:var(--color-brass);vertical-align:middle;margin-right:12px}
@@ -23,14 +23,10 @@
 @keyframes choice-caret{from{opacity:.4}to{opacity:1}}
 :global(html[data-effects="reduced"]) :is(.reveal,.reveal p,.destination::before){animation:none}
 @media(prefers-reduced-motion:reduce){.reveal,.reveal p,.destination::before{animation:none}}
-@supports(animation-timeline:view()){
- @media(prefers-reduced-motion:no-preference){
-  :global(html:not([data-effects="reduced"])) .figure{animation:photo-depth linear both;animation-timeline:--kitty-view;animation-range:entry 0% exit 100%}
- }
-}
-@keyframes photo-depth{from{translate:0 85px}to{translate:0 -85px}}
-@media(max-width:740px){.caption{padding-top:18px;font-size:11px}.photo{rotate:-1deg}@keyframes photo-depth{from{translate:0 48px}to{translate:0 -48px}}}
+@media(max-width:740px){.caption{padding-top:18px;font-size:11px}}
 :global(html[data-effects="reduced"]) .shadow[data-state="rest"]{will-change:auto;opacity:.35;pointer-events:auto}
 :global(html[data-effects="reduced"]) .shadowArt{filter:brightness(0)}
 :global(html[data-effects="reduced"]) .shadow:not(:first-child){display:none}
 @media(prefers-reduced-motion:reduce){.shadow[data-state="rest"]{will-change:auto;opacity:.35;pointer-events:auto}.shadowArt{filter:brightness(0)}.shadow:not(:first-child){display:none}}
+
+:global(html[data-theme="light"]) .reveal{box-shadow:inset 0 0 0 3px var(--discovery-dialog-depth)}

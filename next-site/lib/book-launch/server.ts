@@ -2,10 +2,10 @@ import "server-only";
 import { createHmac, randomUUID } from "node:crypto";
 import { serviceSupabase } from "@/lib/supabase";
 import { country, safeEventProperties } from "./shared";
-import { assertExperimentalEnvironment, isTestStorage, testModeEnabled } from "../experimental-environment";
+import { assertDeploymentEnvironment, isTestStorage, testModeEnabled } from "../experimental-environment";
 
 export function signupEnabled() {
-  assertExperimentalEnvironment(process.env);
+  assertDeploymentEnvironment(process.env);
   return process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED === "true";
 }
 export function signupTestMode() { return testModeEnabled(process.env); }

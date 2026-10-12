@@ -1,8 +1,8 @@
 import type { NextConfig } from "next";
-import { assertExperimentalEnvironment } from "./lib/experimental-environment";
+import { assertDeploymentEnvironment } from "./lib/experimental-environment";
 import { testViewportHeaders } from "./lib/test-viewport";
 
-assertExperimentalEnvironment(process.env);
+assertDeploymentEnvironment(process.env);
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,

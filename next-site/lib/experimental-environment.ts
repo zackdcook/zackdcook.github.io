@@ -1,22 +1,34 @@
-/** Public identifiers only. This branch is deliberately unable to use production storage. */
+/** Public identifiers only. Preview and production storage must never cross. */
 export const EXPERIMENTAL_BRANCH = "experiment/immersive-world-2026-10-09";
+export const PRODUCTION_BRANCH = "release/immersive-world-2026-10-12";
+export const PRODUCTION_SUPABASE_ORIGIN = "https://belqlsqnbexwkpmnptyy.supabase.co";
 export const TEST_PROJECT_REF = "qkkgcoejkqvthbjcldcw";
 export const TEST_SUPABASE_ORIGIN = `https://${TEST_PROJECT_REF}.supabase.co`;
 
 type Environment = Record<string, string | undefined>;
 
-export function isTestStorage(env: Environment) {
+function isStorage(env: Environment, origin: string) {
   try {
     const url = new URL(env.NEXT_PUBLIC_SUPABASE_URL || "");
-    return url.origin === TEST_SUPABASE_ORIGIN && !url.username && !url.password
+    return url.origin === origin && !url.username && !url.password
       && (url.pathname === "/" || url.pathname === "") && !url.search && !url.hash;
   } catch {
     return false;
   }
 }
 
-export function assertExperimentalEnvironment(env: Environment) {
-  if (env.VERCEL_ENV === "production") throw new Error("Experimental branch cannot deploy to production.");
+export function isTestStorage(env: Environment) { return isStorage(env, TEST_SUPABASE_ORIGIN); }
+
+export function assertDeploymentEnvironment(env: Environment) {
+  if (env.VERCEL_ENV === "production") {
+    if (!["main", PRODUCTION_BRANCH].includes(env.VERCEL_GIT_COMMIT_REF ?? "")) {
+      throw new Error("Only the reviewed release branch or main may deploy to production.");
+    }
+    if (!isStorage(env, PRODUCTION_SUPABASE_ORIGIN) || env.BEBRAVE_TEST_MODE === "true" || env.BEBRAVE_TEST_PROJECT_REF) {
+      throw new Error("Production requires production storage with all test flags absent.");
+    }
+    return;
+  }
   if (env.NEXT_PUBLIC_SUPABASE_URL && !isTestStorage(env)) {
     throw new Error("Experimental branch requires the isolated test database.");
   }

@@ -33,3 +33,14 @@
  .folio .progress{grid-column:auto;grid-row:auto;margin-top:45px;padding-top:35px;border-top:1px solid color-mix(in srgb,var(--color-border) 32%,transparent)}
  .folio .art{grid-column:auto;grid-row:auto;margin:35px 0 0;max-width:300px;justify-self:end}
 }
+
+@media(min-width:1100px){
+ .project,.summary[data-project-art="false"],.folio{align-items:start;row-gap:0}
+ .heading,.folio .heading{display:contents;position:static}
+ .heading :global(.section-label),.heading .title{grid-column:1/-1}
+ .heading .title,.folio .title{max-width:none}
+ .heading .subtitle{grid-column:1;grid-row:3}
+ .heading :global(.desk-followup){grid-column:1;grid-row:4;align-self:start}
+ .summary[data-project-art="false"] .progress,.folio .progress{grid-column:2;grid-row:3/6;margin-top:30px}
+ .folio .art{grid-row:5}
+}
