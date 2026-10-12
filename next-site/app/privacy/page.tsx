@@ -1,4 +1,21 @@
 import { AnalyticsChoice } from "@/components/book-launch/analytics";
-import Link from "next/link";
 
-export default function Privacy(){return <div className="shell page-wrap prose-page"><div className="page-intro"><h1>A note<br/><em>about privacy.</em></h1></div><div className="prose"><p>The book alert stores your email and the wording you accepted for one announcement about the first edition of my debut novel. No email is sent when you sign up. Your email is never sent to analytics or linked to a browsing history. Submission time, placement, coarse referral/campaign information, and country (when available) help operate the list. Records are retained until the announcement is sent or you request removal at <a href="mailto:hi@zackdcook.com">hi@zackdcook.com</a>.</p><p>Dismissal, successful signup, and analytics opt-out are separate choices remembered in your browser. Your email is not stored there. Resetting appearance or the tree timeline leaves these choices alone.</p><p>Where enabled, PostHog measures anonymous pageviews, book-alert interactions, and approximate visible time without analytics cookies, local analytics identifiers, person profiles, recordings, or automatic click tracking. Cookieless processing uses a short-lived server hash to estimate visits; it does not identify you across days. We do not collect analytics on private owner pages. Analytics is initially limited to supported US requests and respects Global Privacy Control and Do Not Track. Hosting and analytics providers process network requests to operate their services; geographic enrichment is disabled.</p><AnalyticsChoice /><p>Signup uses Cloudflare Turnstile and short-lived server rate limits. A keyed network bucket expires after ten minutes and is never linked to subscriber records. Hosting/security providers may process requests under their own operational retention policies.</p><p>Be Brave does not require an account, email address, or public profile. Carvings are published anonymously.</p><p>A random HTTP-only browser identifier, privacy-conscious security hashes, Cloudflare Turnstile, and server-side rate limits help protect the communal tree and enforce the carving cooldown. Raw IP addresses are not stored in the Be Brave database. Hosting and bot-protection providers still process requests as needed to operate and protect the site.</p><p>Your local tree story — including whether you chopped down your version of the tree — and your appearance/effects preferences stay in your browser. Resetting the local timeline does not reset or extend the server-side carving cooldown.</p><p>Please do not carve personal contact information or other sensitive information into the shared tree. <Link href="/bebrave">Back to Be Brave</Link>.</p><p>To request a correction or removal, <a href="mailto:hi@zackdcook.com">email Zack</a>.</p></div></div>;}
+export const metadata = {
+  title: "Privacy",
+  description: "How this site handles book-alert signups, anonymous analytics, and site interactions.",
+  alternates: { canonical: "https://zackdcook.com/privacy" },
+};
+
+export default function Privacy() {
+  return <div className="shell page-wrap prose-page">
+    <div className="page-intro"><h1>A note<br/><em>about privacy.</em></h1></div>
+    <div className="prose">
+      <p>Book alerts store your email, signup consent and time, signup placement, and coarse referral/country information to send exactly one announcement when the first edition of my debut novel is released. Your email is not sent to analytics or linked to your browsing history. Signup records are kept until that announcement is sent or you request removal.</p>
+      <p>Site interactions and games may publish anonymous contributions, which remain until removed. An essential, random browser cookie, short-lived security hashes, and rate limits protect these interactions. Raw IP addresses are not stored in the site database. Appearance, game progress, and signup/analytics choices are remembered in your browser; your email is not stored there.</p>
+      <p>Where enabled, PostHog measures anonymous US visits and interactions without analytics cookies, person profiles, session recordings, or automatic click tracking. It respects Global Privacy Control and Do Not Track. You can opt out below.</p>
+      <AnalyticsChoice />
+      <p>Vercel, Supabase, Cloudflare Turnstile, and PostHog process data to host, store, protect, and measure the site, including network requests under their own retention policies. I do not sell your information or share it for targeted advertising.</p>
+      <p>For access, correction, or removal requests, email <a href="mailto:hi@zackdcook.com">hi@zackdcook.com</a>.</p>
+    </div>
+  </div>;
+}

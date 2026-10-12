@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePreferences } from "./site-preferences";
 import { Artwork, ArtworkImage } from "./artwork";
 import { artworkEnabled } from "@/lib/art-assets";
-import { kittyWindows, shadowFlight, braveDiscoveryKey } from "@/lib/kitty-shadows";
+import { kittyWindows, shadowFlight } from "@/lib/kitty-shadows";
 import { BraveDiscoveryDialogue } from "./brave-discovery-dialogue";
 import styles from "./editorial-kitties.module.css";
 
@@ -17,20 +18,21 @@ function BirdShadow({ reduced }: { reduced: boolean }) {
 
 export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committee aka firing squad" }: { emptyPhoto?: string | null; label?: string }) {
   const { reduced } = usePreferences();
+  const pathname = usePathname();
   const [escaped, setEscaped] = useState(false), [secretReady, setSecretReady] = useState(!emptyPhoto);
   const photograph = useRef<HTMLDivElement>(null), birds = useRef<(HTMLButtonElement|null)[]>([]), destination = useRef<HTMLAnchorElement>(null);
   const flights = useRef<Animation[]>([]), focusDestination = useRef(false);
   const press = useRef<{id:number;x:number;y:number}|null>(null);
   const changedPhoto = escaped && secretReady, windowArea = kittyWindows.original;
 
-  // A discovery stays available through refreshes and return visits. Storage
-  // restrictions only affect persistence, never the current interaction.
+  // Next.js can preserve a page's state in Activity. Reset on each Home entry
+  // and on a browser back/forward-cache restoration, not only a full remount.
   useEffect(() => {
-    try { if (localStorage.getItem(braveDiscoveryKey) === "true") setEscaped(true); } catch {}
-    const sync = (event: StorageEvent) => { if (event.key === braveDiscoveryKey && event.newValue === "true") setEscaped(true); };
-    window.addEventListener("storage", sync);
-    return () => window.removeEventListener("storage", sync);
-  }, []);
+    const reset = () => { focusDestination.current = false; press.current = null; setEscaped(false); };
+    if (pathname === "/") reset();
+    window.addEventListener("pageshow", reset);
+    return () => window.removeEventListener("pageshow", reset);
+  }, [pathname]);
   useEffect(() => {
     if (escaped && focusDestination.current) {
       destination.current?.focus({ preventScroll: true });
@@ -84,7 +86,6 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
   function discover() {
     for (const animation of flights.current) animation?.cancel();
     focusDestination.current = true; setEscaped(true);
-    try { localStorage.setItem(braveDiscoveryKey, "true"); } catch {}
   }
 
   return <div className={`kitty-discovery ${styles.discovery}`}>

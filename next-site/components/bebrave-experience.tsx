@@ -32,16 +32,6 @@ function Stage({children,felled=false,marks=0,stump=false,homeControls,scene="en
 }
 export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:boolean;siteKey:string;testMode?:boolean}){
   const { reduced } = usePreferences();
-  useEffect(()=>{
-    // Safari can report programmatic dialog focus as focus-visible after a tap.
-    // Keep the focus ring for keyboard navigation without painting tap targets.
-    const root=document.documentElement;
-    root.dataset.bebraveInput="pointer";
-    const pointer=()=>{root.dataset.bebraveInput="pointer";};
-    const keyboard=(event:KeyboardEvent)=>{if(!event.metaKey&&!event.ctrlKey&&!event.altKey)root.dataset.bebraveInput="keyboard";};
-    document.addEventListener("pointerdown",pointer,true);document.addEventListener("keydown",keyboard,true);
-    return()=>{document.removeEventListener("pointerdown",pointer,true);document.removeEventListener("keydown",keyboard,true);delete root.dataset.bebraveInput;};
-  },[]);
   useEffect(()=>testMode?observeBeBraveBrowser():undefined,[testMode]);
   const [highlightedTool,setHighlightedTool]=useState<BeBraveNormalTool|"cache"|null>(null),[revealSettled,setRevealSettled]=useState(false),[falling,setFalling]=useState(false),[freshlyFelled,setFreshlyFelled]=useState(false);
   const strikeBusy=useRef(false);
@@ -160,8 +150,8 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<OverlayScene visual={<div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}>{!testMode&&<HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/>}<button className="button" disabled={busy} data-menu-focus>{busy?"Checking…":"Continue"}</button><button type="button" className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button>{problem&&<p className="form-hint" role="alert">{problem}</p>}</form></div>} />}
     {scene==="tools"&&<OverlayScene
-      visual={<ToolEncounter session={session} selected={highlightedTool} busy={busy} onHighlight={setHighlightedTool}/>}
-      actions={<><button className="button" onClick={()=>setScene("entry")} disabled={busy}>Back</button><button className="button" disabled={busy||!highlightedTool} onClick={()=>{if(highlightedTool==="cache")setScene("cache");else if(highlightedTool)void chooseTool(highlightedTool);}}>{busy?"Choosing…":highlightedTool==="cache"?"Mossy cache":"Continue"}</button></>}
+      visual={<ToolEncounter session={session} selected={highlightedTool} busy={busy} onHighlight={setHighlightedTool} onChoose={tool=>{setHighlightedTool(tool);if(tool==="cache")setScene("cache");else void chooseTool(tool);}}/>}
+      actions={<button className="button" onClick={()=>setScene("entry")} disabled={busy}>Back</button>}
     ><p hidden={Boolean(highlightedTool)}>You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and brass house key laying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?</p>{highlightedTool&&<p>{highlightedTool!=="cache"?toolCopy[highlightedTool].dialogue:"The lockbox rattles from within as you pick it up, nearly betraying the secret it was asked to keep."}</p>}{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
     {scene==="reveal"&&session&&<OverlayScene
       visual={<ToolEncounter session={session} reveal/>}

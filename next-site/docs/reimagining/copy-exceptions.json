@@ -113,5 +113,40 @@
     "path": "next-site/components/bebrave-tree.tsx",
     "text": "−",
     "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "A random HTTP-only browser identifier, privacy-conscious security hashes, Cloudflare Turnstile, and server-side rate limits help protect the communal tree and enforce the carving cooldown. Raw IP addresses are not stored in the Be Brave database. Hosting and bot-protection providers still process requests as needed to operate and protect the site.",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "Back to Be Brave",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "Be Brave does not require an account, email address, or public profile. Carvings are published anonymously.",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "Please do not carve personal contact information or other sensitive information into the shared tree.",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "To request a correction or removal,",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "Your local tree story — including whether you chopped down your version of the tree — and your appearance/effects preferences stay in your browser. Resetting the local timeline does not reset or extend the server-side carving cooldown.",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
+  },
+  {
+    "path": "next-site/app/privacy/page.tsx",
+    "text": "email Zack",
+    "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
   }
 ]

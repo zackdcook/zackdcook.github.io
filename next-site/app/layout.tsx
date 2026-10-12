@@ -15,6 +15,7 @@ import "./folly.css";
 import "./bebrave.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
+import { InputMode } from "@/components/input-mode";
 import { PointerLight } from "@/components/pointer-light";
 import { PublicAtmosphere } from "@/components/public-atmosphere";
 import { SiteIcons } from "@/components/site-icons";
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/words-of-folly/feed.xml`} />
       </head>
       <body>
+        <InputMode />
         <a className="skip-link" href="#main">Skip to content</a>
         <SitePreferences>
           <BookLaunchProvider testMode={testModeEnabled(process.env)}>

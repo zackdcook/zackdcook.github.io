@@ -196,5 +196,13 @@
   "tool-cache-open": {
     "kind": "image",
     "src": "/images/be-brave-ink/cache-open.webp"
+  },
+  "icon-goodreads": {
+    "kind": "native",
+    "tint": "ink"
+  },
+  "icon-spotify": {
+    "kind": "native",
+    "tint": "ink"
   }
 }

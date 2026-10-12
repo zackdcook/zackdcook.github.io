@@ -85,6 +85,7 @@ export default function AboutMe() {
       <p><span className={styles.ink}>That and the existential dread of a temporary mortal life. So I started writing my own novel.</span></p>
 
       <p><span className={styles.ink}>And that, my patient friend, is what brings us here to this peculiar intersection of space and time: me, writing this short account of my life, sitting by the window with my three cats, listening to the birds enjoy their lunch during a calm autumnal drizzle; and you, somewhere else, sometime after this moment has passed, reading these very words.</span></p>
+      <p><span className={styles.ink}>-Zack</span></p>
     </div></div>
   </section>
   <section className={styles.shadowDiscovery}><div className="shell"><BraveDiscoveryDialogue mossy/></div></section>

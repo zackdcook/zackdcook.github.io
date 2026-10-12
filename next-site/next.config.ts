@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 import { assertDeploymentEnvironment } from "./lib/experimental-environment";
 import { testViewportHeaders } from "./lib/test-viewport";
+import { canonicalRedirects } from "./lib/canonical-routes";
 
 assertDeploymentEnvironment(process.env);
 
@@ -19,25 +20,7 @@ const nextConfig: NextConfig = {
     ]}, ...testViewportHeaders(process.env)];
   },
   async redirects() {
-    return [
-      { source: "/index.html", destination: "/", permanent: true },
-      { source: "/writing", destination: "/creative-works", permanent: true },
-      { source: "/about", destination: "/about-me", permanent: true },
-      { source: "/bio.html", destination: "/about-me", permanent: true },
-      { source: "/about.html", destination: "/about-me", permanent: true },
-      { source: "/works.html", destination: "/creative-works", permanent: true },
-      { source: "/writing.html", destination: "/creative-works", permanent: true },
-      { source: "/blog/index.html", destination: "/words-of-folly", permanent: true },
-      { source: "/field-notes.html", destination: "/words-of-folly", permanent: true },
-      { source: "/blog/its-not-too-late.html", destination: "/words-of-folly", permanent: true },
-      { source: "/beta.html", destination: "/creative-works", permanent: false },
-    ];
-  },
-  async rewrites() {
-    return [
-      { source: "/creative-works", destination: "/creativeworks" },
-      { source: "/about-me", destination: "/aboutme" },
-    ];
+    return canonicalRedirects;
   },
 };
 export default nextConfig;

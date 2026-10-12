@@ -31,9 +31,9 @@
 
 :global(html[data-theme="light"]) .reveal{box-shadow:inset 0 0 0 3px var(--discovery-dialog-depth)}
 
-.mossyReveal{display:block;margin:0;text-decoration:none;animation:none;transform:none;scroll-margin-block:120px}
+.mossyReveal{display:block;isolation:isolate;margin:0;text-decoration:none;animation:none;transform:none;scroll-margin-block:120px}
 .mossyReveal .destination{margin-top:18px}
 .mossyReveal:focus-visible{outline:2px solid var(--discovery-dialog-choice);outline-offset:5px}
 .mossyReveal:hover .destination{border-color:var(--discovery-dialog-edge)}
-.mossCovered{position:relative;display:inline-block;color:transparent;white-space:nowrap}
-.mossCovered>svg{position:absolute;inset:-.08em -.04em;width:calc(100% + .08em);height:calc(100% + .16em);pointer-events:none}
+.mossyReveal>p{opacity:.72;animation:none}
+.mossGrowth{position:absolute;inset:-7px;z-index:3;width:calc(100% + 14px);height:calc(100% + 14px);overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 1px #10241dc4)}

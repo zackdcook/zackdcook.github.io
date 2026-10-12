@@ -56,3 +56,11 @@ export function LinkedInIcon(props: IconProps) {
   // https://fontawesome.com/license/free
   return <AssetIcon artSlot="icon-linkedin" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true" focusable="false" {...props}><path d="M416 32L31.9 32C14.3 32 0 46.5 0 64.3L0 447.7C0 465.5 14.3 480 31.9 480L416 480c17.6 0 32-14.5 32-32.3l0-383.4C448 46.5 433.6 32 416 32zM135.4 416l-66.4 0 0-213.8 66.5 0 0 213.8-.1 0zM102.2 96a38.5 38.5 0 1 1 0 77 38.5 38.5 0 1 1 0-77zM384.3 416l-66.4 0 0-104c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9l0 105.8-66.4 0 0-213.8 63.7 0 0 29.2 .9 0c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9l0 117.2z" /></AssetIcon>;
 }
+
+export function GoodreadsIcon(props: IconProps) {
+  return <AssetIcon artSlot="icon-goodreads" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" {...props}><path d="M17 4v12c0 4.2-2.1 6-5.4 6-2.3 0-4-.9-4.8-2.8M17 10c0 3.7-2.1 6-5.2 6S6.5 13.7 6.5 10s2.1-6 5.3-6S17 6.3 17 10Z"/></AssetIcon>;
+}
+
+export function SpotifyIcon(props: IconProps) {
+  return <AssetIcon artSlot="icon-spotify" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true" focusable="false" {...props}><circle cx="12" cy="12" r="10"/><path d="M6 8.8c4-1.1 8.4-.7 12 1.1M6.8 12c3.6-.9 7.1-.5 10.3 1M7.7 15.1c2.9-.6 5.7-.3 8.4.9"/></AssetIcon>;
+}

@@ -17,12 +17,13 @@ export function carvingToPath(strokes: BeBravePublicStroke[]) {
   return strokes.map(stroke=>pointsToPath(stroke.points)).filter(Boolean).join(" ");
 }
 
-export type StrokePathRefs = Partial<Record<"edge"|"cut"|"rim"|"glow"|"line"|"inlay"|"shimmer",RefObject<SVGPathElement|null>>>;
+export type StrokePathRefs = Partial<Record<"edge"|"cut"|"rim"|"halo"|"glow"|"line"|"inlay"|"shimmer",RefObject<SVGPathElement|null>>>;
 
 /** The exact same ink stack is used by the fast live path and every saved view. */
 export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string;rarity:BeBraveRarity;refs?:StrokePathRefs}) {
-  const magic=rarity!=="common";
+  const magic=rarity==="superior"||rarity==="epic"||rarity==="legendary";
   return <>
+    {magic&&<path ref={refs.halo} className="bebrave-stroke-halo" d={d} stroke={color}/>}
     {magic&&<path ref={refs.glow} className="bebrave-stroke-glow" d={d} stroke={color}/>}
     <path ref={refs.edge} className="bebrave-stroke-contrast" d={d}/>
     <path ref={refs.cut} className="bebrave-stroke-cut" d={d}/>
@@ -42,8 +43,30 @@ export function sparkGeometry(radius: number, legendary: boolean) {
   };
 }
 
+/** All movement is reconstructed from existing stored anchors. No frame loop,
+ * new random roll, or storage migration is needed on publication or refresh. */
+export function enchantmentParticleStyle(radius: number, delay: number): CSSProperties {
+  return {
+    "--particle-x": `${((radius-3.5)*17).toFixed(2)}px`,
+    "--particle-y": `${(-20-radius*7).toFixed(2)}px`,
+    "--particle-curl": `${((delay-1.9)*19).toFixed(2)}deg`,
+    "--particle-duration": `${(3.2+delay*.63).toFixed(2)}s`,
+    "--trail-opacity": delay>2.25 ? ".7" : "0",
+    animationDelay: `${-delay}s`,
+  } as CSSProperties;
+}
+
 export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean}) {
   const shape = sparkGeometry(r, legendary);
+  if(!legendary)return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
+    <g className="bebrave-energy-particle" style={enchantmentParticleStyle(r,delay)}>
+      <circle className="bebrave-energy-mote" r={r*1.65}/>
+      <path className="bebrave-sparkle-star" d={shape.star}/>
+      <circle className="bebrave-sparkle-core" r={shape.core*.72}/>
+      <path className="bebrave-energy-trail" d="M0 2 C-10 11 12 17 3 27 C-2 33 -5 31 -4 36"/>
+    </g>
+    <circle className="bebrave-energy-satellite" r={r*.55} style={{...enchantmentParticleStyle(r+1,delay+1.8),animationDelay:`${-delay-1.8}s`}}/>
+  </g>;
   return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
     {legendary&&<circle className="bebrave-wisp-orbit" r={shape.orbit} style={{animationDelay:`-${delay}s`}}/>}
     <path className="bebrave-sparkle-facets" d={shape.facets}/>

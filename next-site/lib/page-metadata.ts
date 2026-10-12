@@ -25,7 +25,7 @@ export function pageMetadata(id: string, title?: string): Metadata {
   return {
     title: title || record.title,
     description: record.description,
-    alternates: { canonical: record.path },
+    alternates: { canonical: new URL(record.path, site.url).toString() },
     openGraph: { type: record.date ? "article" : "website", title: `${record.title} · ${site.name}`, description: record.description, url: record.path, siteName: site.name, images: [image], ...(record.date ? { publishedTime: record.date, authors: [site.name] } : {}) },
     twitter: { card: "summary_large_image", title: `${record.title} · ${site.name}`, description: record.description, images: [image] },
   };

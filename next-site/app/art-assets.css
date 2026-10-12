@@ -52,6 +52,8 @@
   --asset-icon-preferences: none;
   --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
+  --asset-icon-goodreads: none;
+  --asset-icon-spotify: none;
 }
 
 html[data-theme="dark"] {
@@ -107,6 +109,8 @@ html[data-theme="dark"] {
   --asset-icon-preferences: none;
   --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
+  --asset-icon-goodreads: none;
+  --asset-icon-spotify: none;
 }
 
 html[data-timeline="felled"] {
@@ -162,6 +166,8 @@ html[data-timeline="felled"] {
   --asset-icon-preferences: none;
   --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
+  --asset-icon-goodreads: none;
+  --asset-icon-spotify: none;
 }
 
 html[data-timeline="felled"][data-theme="dark"] {
@@ -217,4 +223,6 @@ html[data-timeline="felled"][data-theme="dark"] {
   --asset-icon-preferences: none;
   --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
+  --asset-icon-goodreads: none;
+  --asset-icon-spotify: none;
 }
