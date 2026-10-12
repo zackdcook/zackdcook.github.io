@@ -1,10 +1,9 @@
 /* The author's invitation sits in the opening composition, with the exact main copy. */
 .book-callout{position:relative;margin-top:30px;width:100%;max-width:480px}
 .book-panel{position:relative;padding:20px 0 23px}
-.book-panel h2,.book-dialog h2{font:650 clamp(21px,2vw,26px)/1.2 var(--display);letter-spacing:-.025em;text-wrap:pretty;padding-right:32px;max-width:30ch}
+.book-panel h2,.book-dialog h2{font:650 clamp(21px,2vw,26px)/1.2 var(--display);letter-spacing:-.025em;text-wrap:pretty;padding-right:56px;max-width:30ch}
 .book-panel p,.book-dialog p{margin-block:12px 16px;font-size:14px;line-height:1.55;color:var(--color-ink);max-width:38ch}
-.book-dismiss{position:absolute;top:3px;right:-8px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:none;color:var(--color-muted);font-size:23px;cursor:pointer}
-.book-dismiss:hover{color:var(--color-accent)}
+.book-panel .book-dismiss{position:absolute;top:8px;right:0;font-size:23px;line-height:1}
 .book-signup-fields{display:flex;gap:14px;align-items:center}
 .book-signup-form .book-signup-fields input[type="email"]{flex:1;min-width:0;width:100%;border:0;border-bottom:1px solid var(--color-muted);border-radius:0;padding:12px 0;font:450 16px var(--sans);background:transparent;color:var(--color-ink)}
 .book-signup-form .book-signup-fields input[type="email"]::placeholder{color:var(--color-muted);opacity:1}

@@ -82,7 +82,7 @@ export function SiteHeader() {
     }}>
       <nav className={styles.destinations} aria-label="Mobile navigation">
         {navigation.map(({title,href}) => <Link key={href} href={href} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)} onClick={close}>
-          <span>{title}</span><Artwork slot="icon-arrow"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 16h21M18 8l8 8-8 8" /></svg></Artwork>
+          <span>{title}</span>
         </Link>)}
         <BookMenuItem closeMenu={close} />
       </nav>

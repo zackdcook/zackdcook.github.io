@@ -1,5 +1,12 @@
 # Website reimagining checkpoint
 
+## Signup and navigation refinements — tested, ready to stage, 2026-10-12
+
+- User authorised listed UI changes and live release. Local base ef5ae937; current main/live source 7e89bb5, deployment dpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy remains rollback. Original baseline be6b15d and selected tree cd697eb unchanged.
+- Implemented: filled CTA close icon; valid-email/explicit-submit verification gate in both signup placements with automatic verified submission, stale-attempt cancellation and single-use callback consumption; About portrait right alignment; manuscript structural rules removed; dropdown arrows removed; entire brand-link hover rotates logo clockwise45°.
+- PASS:106 automated tests, typecheck and optimized47-route build. Private Chrome acceptance PASS: both placements initially load no Cloudflare script/widget; empty Count click and email typing keep it hidden; valid Count mounts it; edit cancels it. Official dummy sitekey automatically invokes one POST per retry, private-host400 failure restores enabled Count/unmounts widget. No service credentials or canonical writes. Desktop/390 phone About align=end;48px filled CTA close; native dropdown arrows0 and opening/navigation pass; brand-text hover settles to clockwise45° matrix; manuscript desk border0/pseudo-content none. Physical Safari not certified. New gate helper next-site/lib/book-launch/signup-attempt.ts; focused gate/initial-render tests in tests/book-signup*. Existing server validation, cooldowns, database records and environment/security settings unchanged.
+- Next: commit and publish experimental. Stage one production build from guarded main fast-forward, verify then promote exact artifact, restore auto-domain assignment, save final proof/checkpoint and stop owned QA process/Codespace. No production signup test data or additional paid resources.
+
 ## LIVE delivery — public refinements, 2026-10-12
 
 - Live https://zackdcook.com/ is READY on production deploymentdpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy (a3izowikb), exact main/release commit7e89bb5ab8b8bf2dc14e876318affa5ac7da7487. Application refinementc5bb37d; readinessd908191. This documentation descendant records acceptance without a rebuild. Experimental branch now includes the release history by normal fast-forward; latest relevant source is7e89bb5. Baselinebe6b15d / treecd697eb retained, with main64ebf8a's book-alert work preserved.

@@ -1,0 +1,11 @@
+# Signup and navigation refinements — 2026-10-12
+
+The Home invitation and Book Alert load verification only after a valid email and explicit Count me in submission. Verification callback submits the captured intent automatically. Email edits, close/unmount, invalid replacement and a later attempt invalidate stale callbacks; each intent can be consumed once. Server-side protection/validation remains unchanged. No email is persisted locally or logged.
+
+The Home close icon uses the shared48px filled icon button. About portrait aligns right. Manuscript desk top border/vertical divider removed while stage selection rails remain. Dropdown arrows removed. Whole brand-link hover rotates the logo clockwise45 degrees. No other content, wording, database or dependency changes.
+
+Validation:106 tests(99 TS +7 module-mock/API/render), typecheck, generated asset/theme checks,47-route production build and whitespace PASS. Condensed React review: ephemeral gate per component; unmount cleanup; event-driven activation; deferred third-party script; preserved form labels/required validation/focus and busy guards; no new shared SSR state or data dependency.
+
+Private Chrome QA: Home and modal initial widget/script absent; empty click and typing do not reveal; valid Count reveals; changing address removes widget. Official Cloudflare dummy public key automatically calls the handler, producing one failed-safe private-host400 POST per retry and resetting the form error/widget state. No server credentials were configured, no real CAPTCHA solved, no canonical subscriber written. Successful acceptance remains covered by existing mocked server tests, not a real production signup. Desktop/390 phone About justify-self=end; CTA close48px filled; dropdown no SVG arrows, opens/navigates; brand text hover matrix(0.707107,0.707107,-0.707107,0.707107,0,0); desk structural border/pseudo divider absent. Physical Safari untested.
+
+Release status: application committed next; stage exact source on main once with existing production config, verify and promote same artifact. Previous live7e89bb5/dpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy retained as rollback. No schema/env/provider/plan/security change in this milestone.

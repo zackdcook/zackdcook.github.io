@@ -5,6 +5,7 @@ import { usePreferences } from "@/components/site-preferences";
 import { bookCopy, bookVisibility, type Placement } from "@/lib/book-launch/shared";
 import { bookEvent, attribution, privacySignal } from "@/lib/book-launch/analytics";
 import { restoreBookFocus, useBookLaunch } from "./context";
+import { createSignupAttemptGate, type SignupAttempt } from "@/lib/book-launch/signup-attempt";
 
 export function BookSignupForm({ placement, titleId, onSuccess }: { placement: Placement; titleId: string; onSuccess: () => void }) {
   const { subscribeBook, analyticsOptOut } = usePreferences();
@@ -17,34 +18,49 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
   }, [placement]);
   const started = useRef(false), busy = useRef(false);
   const [pending, setPending] = useState(false), [error, setError] = useState(false);
-  const [reset, setReset] = useState(0);
-  const [humanToken, setHumanToken] = useState("");
-  async function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const [gate] = useState(createSignupAttemptGate);
+  const [verification, setVerification] = useState<SignupAttempt | null>(null);
+  useEffect(() => () => gate.cancel(), [gate]);
+
+  // Consume only the current explicit intent. Old/expired/duplicate callbacks
+  // cannot submit an edited address or start a second request.
+  async function verified(id: number, token: string) {
     if (busy.current) return;
+    const attempt = gate.take(id, token);
+    if (!attempt) return;
     busy.current = true; setPending(true); setError(false);
-    bookEvent("book_signup_attempted", { placement });
-    const data = new FormData(event.currentTarget);
     try {
       const response = await fetch("/api/book-launch", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: data.get("email"), website: data.get("website"),
-          token: data.get("cf-turnstile-response"), placement,
+        body: JSON.stringify({ email: attempt.email, website: attempt.website,
+          token: attempt.token, placement,
           ...attribution(), analytics_opt_out: analyticsOptOut || privacySignal(),
         }), signal: AbortSignal.timeout(15000),
       });
       const result = await response.json();
       if (!response.ok || result.accepted !== true) {
         bookEvent("book_signup_failed", { placement, error_category: result.category || "unavailable" });
-        setError(true); setReset(v => v + 1); return;
+        setError(true); return;
       }
       // No local email, no optimistic success, and no browser completion event.
       // The server records acceptance separately from newly inserted records.
       form.current?.reset(); onSuccess(); subscribeBook();
     } catch {
-      setError(true); setReset(v => v + 1);
+      setError(true);
       bookEvent("book_signup_failed", { placement, error_category: "network" });
-    } finally { busy.current = false; setPending(false); }
+    } finally { busy.current = false; setPending(false); setVerification(null); }
+  }
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (busy.current) return;
+    setError(false);
+    try {
+      const data = new FormData(event.currentTarget);
+      const attempt = gate.begin(data.get("email"), data.get("website"));
+      bookEvent("book_signup_attempted", { placement });
+      if (testMode) void verified(attempt.id, "test-mode");
+      else setVerification(attempt);
+    } catch { setVerification(null); setError(true); }
   }
   return <>
     <h2 ref={heading} className={placement === "menu" ? "dialog-title" : undefined} tabIndex={placement === "menu" ? -1 : undefined} id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
@@ -52,11 +68,11 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
       <div className="book-signup-fields">
         <label className="sr-only" htmlFor={`${id}-email`}>Email address</label>
         <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending}
-          onChange={event => { if (!started.current && event.target.value.length) { started.current = true; bookEvent("book_signup_started", { placement }); } }} aria-describedby={error ? `${id}-error` : undefined} />
-        <button className="button" type="submit" disabled={pending || (!testMode && !humanToken)}>{bookCopy.submit}</button>
+          onChange={event => { gate.cancel(); setVerification(null); setError(false); if (!started.current && event.target.value.length) { started.current = true; bookEvent("book_signup_started", { placement }); } }} aria-describedby={error ? `${id}-error` : undefined} />
+        <button className="button" type="submit" disabled={pending}>{bookCopy.submit}</button>
       </div>
       <div className="book-honeypot" aria-hidden="true"><label htmlFor={`${id}-website`}>Website</label><input id={`${id}-website`} name="website" tabIndex={-1} autoComplete="off" /></div>
-      {testMode ? <input type="hidden" name="cf-turnstile-response" value="test-mode" /> : <HumanCheck siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} action="book_launch" resetKey={String(reset)} onToken={setHumanToken} />}
+      {verification && <HumanCheck key={verification.id} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} action="book_launch" resetKey={String(verification.id)} onToken={token => { void verified(verification.id, token); }} />}
       {error && <p id={`${id}-error`} role="alert">{bookCopy.error}</p>}
     </form>
   </>;
@@ -93,7 +109,7 @@ export function HomepageBookCTA() {
   if (!visible) return null;
   return <section ref={host} className="book-callout" aria-labelledby="book-home-title">
     <div className="book-panel">
-      <button type="button" className="button book-dismiss" aria-label="Dismiss book invitation" onClick={() => {
+      <button type="button" className="icon-button book-dismiss" aria-label="Dismiss book invitation" onClick={() => {
         bookEvent("book_cta_dismissed", { placement: "homepage" }); dismissBook();
         restoreBookFocus();
       }}>×</button>
