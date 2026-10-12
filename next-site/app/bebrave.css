@@ -304,3 +304,5 @@ html[data-effects="reduced"] :is(.bebrave-horizon,.bebrave-midground)::before{tr
 .bebrave-color-cache>.bebrave-tool-image{position:absolute;inset:0}
 html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button::before{display:block}
 @media(prefers-reduced-motion:reduce){:is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button::before{display:block}}
+.tool-cache-open{background-image:var(--asset-tool-cache-open)!important}
+@media(max-width:700px){.bebrave-color-cache{left:66%;top:0;width:32%;height:100%}}
