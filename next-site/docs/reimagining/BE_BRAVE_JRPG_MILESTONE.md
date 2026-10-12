@@ -27,3 +27,13 @@ Local supervisor could not keep a Next.js preview available; local browser QA di
 Source tests, typecheck and optimized build are recorded in the evidence package. These are not browser or physical-device certification. The planned Vercel Preview uses existing project `prj_AcuTfmUBydayvETed53KCREnlONa`, existing default Preview secrets and isolated storage. No production target, shared alias, security setting, schema, paid service or distribution code is changed.
 
 Rendered game, actual timer/publication/reset/inspection, all themes and performance are **not yet signed off** at this checkpoint. Maximum two focused visual refinement passes remain. Update this record with actual evidence and limitations after the test Preview, rather than treating builds as visual acceptance.
+
+## First rendered refinement pass
+
+Initial file-backed Preview `dpl_2WWugTZL9wu6mFShbtGtnbjFrDRy`, source `4afe9decb8361802108c51aba41f4095aadc6635`, READY target null, no aliases. The actual swamp, rooted tool stage, all-common server reveal, settings and 320×568 browser iframe were reviewed. This is a Chromium CSS viewport, not a physical phone.
+
+Found and addressed together: inherited absolute button pseudo-element displaced the choice caret; programmatic dialogue focus showed an unwanted yellow paragraph frame; test-mode verification presented a blank Continue step; camera positioning deferred to an animation frame; and React reused the drawing tree for completion, retaining drawing-mode initial state and scaling away from the finished region. Completion now has a distinct component identity and can distinguish empty attempts. Added warning/color/human Back navigation and explicit high-zoom horizontal pan controls. Test-session diagnostics are Preview-only DOM attributes, never visitor identity or a secret.
+
+The initial timed test finished empty before native drag actions arrived; no publication or growth is claimed for it. Observed background browser frame intervals around 1 second make FPS certification inappropriate; the browser exposes no visibility capability. Actual input/publication/preservation and final visual review remain pending. The first Preview remains available as an inspection checkpoint; no production resource changed.
+
+The first 320×568 tool review additionally showed decorative horizontal overflow and choices below the fold. The short-phone encounter now uses a fixed lower menu with independently scrollable description, keeping Back/Continue visible, while decorative overflow is clipped. Synthetic benchmark art does not offer canonical inspection, since its IDs are deliberately not real shared records.

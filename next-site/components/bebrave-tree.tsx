@@ -24,7 +24,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
   const [inspection,setInspection]=useState<{drawing:BeBravePublicDrawing;opener:SVGGElement|null}|null>(null);
   const inspectionTap=useRef<{pointerId:number;x:number;y:number}|null>(null);
-  const inspecting=mode==="admire"||mode==="fallen";
+  const inspecting=(mode==="admire"||mode==="fallen")&&!sectionSource;
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<{x:number;y:number;screenY:number}|null>(null),zoomRef=useRef(zoom);
   zoomRef.current=zoom;
   const [fitRecap,setFitRecap]=useState(Boolean(mode==="admire"&&session?.status==="completed"));
@@ -117,15 +117,22 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     let initial=0;
     if(!ready.current){
       ready.current=true;
-      initial=requestAnimationFrame(()=>{
+      const placeCamera=()=>{
         if(mode==="fallen"&&horizontal.current){horizontal.current.scrollTo({left:0,behavior:"instant"});}
         else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+(session?.zoneBottom??state.height)*scaleRef.current-window.innerHeight+24),behavior:"instant"});}
         parallaxOrigin.current=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
         tick();
-      });
+      };
+      placeCamera();
+      initial=requestAnimationFrame(tick);
     }
     return()=>{ro.disconnect();target.removeEventListener("scroll",scroll);window.removeEventListener("resize",measure);cancelAnimationFrame(scrollFrame.current);cancelAnimationFrame(initial);};
   },[mode,state.height]);
+
+  useLayoutEffect(()=>{
+    if(mode!=="draw"||!world.current||!session?.zoneBottom)return;
+    window.scrollTo({top:Math.max(0,worldTop.current+session.zoneBottom*scale-window.innerHeight+24),behavior:"instant"});
+  },[mode,scale,session?.zoneBottom]);
 
   function adjustZoom(next:number){
     if(mode!=="admire")return;
@@ -210,6 +217,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
           <span>{Math.round(zoom*100)}%</span>
           <button type="button" onClick={()=>adjustZoom(zoom+.1)} disabled={zoom>=1.45} aria-label="Zoom in">+</button>
           <button type="button" onClick={()=>adjustZoom(.82)} aria-label="Reset zoom">Reset</button>
+          {zoom>1.11&&<><button type="button" aria-label="Pan left" onClick={()=>horizontal.current?.scrollBy({left:-horizontal.current.clientWidth*.35,behavior:"instant"})}>←</button><button type="button" aria-label="Pan right" onClick={()=>horizontal.current?.scrollBy({left:horizontal.current.clientWidth*.35,behavior:"instant"})}>→</button></>}
         </div>
         {admireActions}
       </>}

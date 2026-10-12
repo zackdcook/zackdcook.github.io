@@ -2,6 +2,7 @@
    and canonical colors are independent of every decorative plane below. */
 body:has(.bebrave-stage) :is(.site-header,.site-footer){display:none}
 body:has(.bebrave-stage) :is(#page-sheet,#main){margin:0;padding:0;max-width:none}
+html:has(.bebrave-stage){scrollbar-gutter:auto}
 body:has(.bebrave-stage){overflow-x:clip;background:var(--bebrave-sky-top)}
 .bebrave-stage{--game-ink:var(--discovery-dialog-depth);--game-type:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;position:relative;isolation:isolate;min-height:100dvh;width:100%;background:var(--bebrave-sky-top)}
 html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.bebrave-world-stage)){height:100%;overflow:hidden;overscroll-behavior:none}
@@ -23,7 +24,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 /* Same frame, inset, type, selected plane and caret as the public discovery. */
 .bebrave-menu-panel,.bebrave-control-rail,.bebrave-center-modal,.bebrave-home-button{border:2px solid var(--discovery-dialog-edge);border-radius:5px;background:linear-gradient(145deg,var(--discovery-dialog-bg),var(--discovery-dialog-depth));color:var(--discovery-dialog-ink);box-shadow:inset 0 0 0 3px var(--discovery-dialog-depth),0 8px 0 -3px var(--discovery-dialog-depth),0 18px 32px -14px var(--world-shadow)}
 .bebrave-stage .button,.bebrave-settings .button,.bebrave-inspector .button{position:relative;display:flex;align-items:center;gap:10px;min-height:48px;padding:12px 16px;border:1px solid transparent;border-radius:3px;background:var(--discovery-dialog-selected);color:var(--discovery-dialog-choice);font:650 13px/1.5 var(--game-type,ui-monospace,monospace);text-align:left;text-decoration:none;box-shadow:none;cursor:pointer;touch-action:manipulation;transition:border-color .15s,background-color .15s,translate .12s;transform:none;letter-spacing:0}
-.bebrave-stage .button::before,.bebrave-settings .button::before,.bebrave-inspector .button::before{content:"";width:8px;height:10px;flex-shrink:0;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);opacity:.45}
+.bebrave-stage .button::before,.bebrave-settings .button::before,.bebrave-inspector .button::before{content:"";position:relative;inset:auto;box-shadow:none;filter:none;background-image:none;width:8px;height:10px;flex-shrink:0;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);opacity:.45}
 .bebrave-stage .button:hover,.bebrave-settings .button:hover,.bebrave-inspector .button:hover{border-color:var(--discovery-dialog-edge);background:var(--discovery-dialog-selected);color:var(--discovery-dialog-choice);translate:0 -1px}
 .bebrave-stage .button:is(:focus-visible,[aria-pressed="true"])::before,.bebrave-settings .button[aria-pressed="true"]::before{opacity:1;animation:bebrave-caret 1.1s steps(2,jump-none) infinite}
 .bebrave-stage .button:active,.bebrave-settings .button:active{translate:0 1px}
@@ -42,7 +43,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-rpg-dialogue{padding:0;color:inherit}
 .bebrave-rpg-copy{font:500 15px/1.75 var(--game-type);color:var(--discovery-dialog-ink);letter-spacing:.005em;text-wrap:pretty;outline:none}
 .bebrave-rpg-copy p{margin:0 0 .8em}.bebrave-rpg-copy p:last-child{margin-bottom:0}
-.bebrave-rpg-copy:focus{outline:none}
+.bebrave-stage .bebrave-rpg-copy[tabindex]:focus-visible,.bebrave-rpg-copy:focus{outline:none}
 .bebrave-menu-label{font:650 11px/1.4 var(--game-type);letter-spacing:.14em;text-transform:uppercase;color:var(--discovery-dialog-choice)}
 .bebrave-rpg-actions{position:absolute;z-index:82;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(calc(100% - 64px),740px);display:flex;gap:8px;pointer-events:auto}
 .bebrave-rpg-hud .bebrave-rpg-actions{position:static;transform:none;width:100%;padding:0}
@@ -265,7 +266,7 @@ html[data-theme="light"] :is(.bebrave-menu-panel,.bebrave-control-rail,.bebrave-
  .bebrave-setting-choices{gap:5px}.bebrave-setting-choices .button{padding:10px;font-size:11px;gap:6px}
 }
 @media(max-height:600px){
- .bebrave-overlay{overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+ .bebrave-overlay{overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;gap:12px}
  .bebrave-overlay-main{flex:1 0 190px;min-height:190px}
  .bebrave-overlay .bebrave-rpg-hud{flex:none;max-height:none;width:min(100%,780px);align-self:center;overflow:visible}
  .bebrave-ground-encounter{height:190px;min-height:190px;max-width:500px}
@@ -286,3 +287,12 @@ html[data-effects="reduced"] :is(.bebrave-horizon,.bebrave-midground)::before{tr
 }
 
 .bebrave-benchmark-label{font:500 11px/1.6 var(--game-type);color:var(--discovery-dialog-ink)}
+
+@media(max-width:700px) and (max-height:600px){
+ .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{display:grid;overflow:clip;grid-template-rows:minmax(150px,1fr) minmax(0,220px)}
+ .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay-main{min-height:150px;overflow:visible}
+ .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-rpg-hud{height:220px;min-height:0;max-height:220px;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
+ .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-rpg-dialogue{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+ .bebrave-ground-encounter .object-nail{top:52%}
+ .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-ground-encounter{height:100%;min-height:150px}
+}
