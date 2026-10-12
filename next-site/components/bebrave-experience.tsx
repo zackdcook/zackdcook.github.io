@@ -85,7 +85,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
   const growthLocked=growthRemaining>0&&!resumable;
   const sceneForSession=resumedScene;
   function admire(){ setProblem(""); setScene("admire"); }
-  async function beginCarve(){if(growthLocked)return;setProblem("");if(session&&["tool_select","epic_color","ready","drawing"].includes(session.status)){setScene(sceneForSession(session));return;}if(testMode){await prepareSession(new FormData());return;}setScene("human");}
+  async function beginCarve(){if(growthLocked)return;setProblem("");if(session&&["tool_select","epic_color","ready","drawing"].includes(session.status)){setScene(sceneForSession(session));return;}setHighlightedTool(null);if(testMode){await prepareSession(new FormData());return;}setScene("human");}
   async function createSession(event:React.FormEvent){event.preventDefault();if(humanForm.current)await prepareSession(new FormData(humanForm.current));}
   async function prepareSession(form:FormData){if(createBusy.current)return;createBusy.current=true;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session",{method:"POST",body:form});const d=await r.json();if(r.status===429&&"growthFeetRemaining" in d){applyState(d);setScene("entry");return;}if(!r.ok)throw Error(d.error||"The tools could not be prepared.");applyState(d);setScene(sceneForSession(d.session));}catch(e){setProblem(e instanceof Error?e.message:"The tools could not be prepared.");}finally{createBusy.current=false;setBusy(false);}}
   async function chooseTool(tool:BeBraveNormalTool){if(!session||toolChoiceBusy.current)return;if(session.chosenTool){setScene("reveal");return;}toolChoiceBusy.current=true;setBusy(true);setProblem("");try{const r=await fetch("/api/bebrave/session/choose",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sessionId:session.id,tool})});const d=await r.json();if(!r.ok)throw Error(d.error);applyState(d);setScene("reveal");}catch(e){setProblem(e instanceof Error?e.message:"That tool could not be selected.");}finally{toolChoiceBusy.current=false;setBusy(false);}}
@@ -107,7 +107,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
       const r=await fetch("/api/bebrave/test/reset",{method:"POST"});
       const d=await r.json();
       if(!r.ok)throw Error(d.error||"The test carving limit could not reset.");
-      setSession(null);setDraftStrokes([]);setGrowthRemaining(0);
+      setSession(null);setDraftStrokes([]);setHighlightedTool(null);setGrowthRemaining(0);
       await refreshState();setScene("entry");
     }catch(e){setProblem(e instanceof Error?e.message:"The test carving limit could not reset.");}
     finally{setBusy(false);}
@@ -162,7 +162,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     >{cacheMessage||"The mechanical keypad waits."}</OverlayScene>}
     {scene==="epic-color"&&<OverlayScene
       actions={<button className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button>}
-      visual={<div className="bebrave-center-modal bebrave-color-modal bebrave-menu-panel"><div className={`bebrave-color-emblem rarity-${session?.chosenRarity}`}><ToolImage tool={session?.chosenTool==="cache"?"knife":session?.chosenTool||"knife"}/><span className="bebrave-rarity-name">{session?.chosenRarity}</span></div><div className="bebrave-color-grid">{cacheColors.map(c=><button key={c.value} className="bebrave-color-choice" disabled={busy} style={{"--choice-color":c.value} as CSSProperties} onClick={()=>chooseEpicColor(c.value)} aria-label={c.name}><span/><small>{c.name}</small></button>)}</div></div>}
+      visual={<div className="bebrave-center-modal bebrave-color-modal bebrave-menu-panel"><div className={`bebrave-color-emblem rarity-${session?.chosenRarity}`}>{session?.chosenTool==="cache"&&<span className="bebrave-color-cache"><ToolImage tool="cache-open"/></span>}<ToolImage tool={session?.chosenTool==="cache"?"knife":session?.chosenTool||"knife"}/><span className="bebrave-rarity-name">{session?.chosenRarity}</span></div><div className="bebrave-color-grid">{cacheColors.map(c=><button key={c.value} className="bebrave-color-choice" disabled={busy} style={{"--choice-color":c.value} as CSSProperties} onClick={()=>chooseEpicColor(c.value)} aria-label={c.name}><span/><small>{c.name}</small></button>)}</div></div>}
     >{cacheMessage||"Choose the color that answers you."}{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
     {scene==="warning"&&<Dialogue actions={<><button className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button><button className="button" disabled={busy} onClick={startDrawing}>Start carving</button></>}><p>You’ll have 60 seconds to carve once you begin. There’s no undo, so be ready.</p>{problem&&<p role="alert">{problem}</p>}</Dialogue>}
     {scene==="chop"&&<ActionBar><button className="button" onClick={firstStrike}>Chop</button></ActionBar>}

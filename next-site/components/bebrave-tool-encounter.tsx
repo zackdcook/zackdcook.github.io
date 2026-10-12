@@ -5,7 +5,7 @@ import { groundTools, toolCopy } from "@/lib/bebrave/presentation";
 import { choiceKeys } from "./bebrave-menu";
 
 type GroundTool = BeBraveNormalTool | "cache";
-export function ToolImage({ tool }: { tool: GroundTool | "knife" }) {
+export function ToolImage({ tool }: { tool: GroundTool | "knife" | "cache-open" }) {
   return <span className={`bebrave-tool-image tool-${tool}`} aria-hidden="true"/>;
 }
 function RarityEffect({ rarity }: { rarity: BeBraveRarity }) {
@@ -22,7 +22,7 @@ export function ToolEncounter({ session, reveal = false, selected, busy, onHighl
         const chosen = reveal && session?.chosenTool === tool;
         const rarity = chosen ? session?.chosenRarity : tool !== "cache" ? session?.toolResults?.[tool] : null;
         const name = tool === "cache" ? "Mossy cache" : toolCopy[tool].label;
-        const content = <><ToolImage tool={chosen && knife ? "knife" : tool}/>{reveal && rarity && <RarityEffect rarity={rarity}/>}<span className="bebrave-object-label">{tool === "cache" ? chosen && knife ? "Pocket knife" : <span>Mossy cache</span> : name}{reveal && rarity && <strong className="bebrave-rarity-name">{rarity}</strong>}</span></>;
+        const content = <>{chosen&&knife&&<span className="bebrave-open-lockbox"><ToolImage tool="cache-open"/></span>}<ToolImage tool={chosen && knife ? "knife" : tool}/>{reveal && rarity && <RarityEffect rarity={rarity}/>}<span className="bebrave-object-label">{tool === "cache" ? chosen && knife ? "Pocket knife" : <span>Mossy cache</span> : name}{reveal && rarity && <strong className="bebrave-rarity-name">{rarity}</strong>}</span></>;
         return reveal ? <div key={tool} className={`bebrave-ground-object object-${tool} bebrave-reveal-tool ${chosen ? "is-chosen" : "is-missed"} rarity-${rarity || "common"}`} aria-label={`${name}${rarity ? `: ${rarity}` : ""}`}>{content}</div> :
           <button key={tool} type="button" className={`bebrave-ground-object object-${tool} bebrave-image-choice ${selected === tool ? "is-highlighted" : ""}`} disabled={busy} aria-label={name} aria-pressed={selected === tool} onPointerEnter={event => { if (event.pointerType === "mouse") onHighlight?.(tool); }} onFocus={() => onHighlight?.(tool)} onClick={() => onHighlight?.(tool)}>{content}</button>;
       })}

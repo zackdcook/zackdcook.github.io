@@ -192,5 +192,9 @@
     "kind": "image",
     "src": "/images/be-brave-ink/roots.webp",
     "fit": "contain"
+  },
+  "tool-cache-open": {
+    "kind": "image",
+    "src": "/images/be-brave-ink/cache-open.webp"
   }
 }

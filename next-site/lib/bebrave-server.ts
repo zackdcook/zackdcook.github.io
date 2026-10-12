@@ -194,7 +194,7 @@ export async function ownedSession(sessionId: string, visitorHash: string) {
 
 export function sessionView(row: Record<string, any> | null): BeBraveSessionView | null {
   if (!row) return null;
-  const revealed = row.chosen_tool && row.chosen_tool !== "cache" ? revealTools(row as any) : null;
+  const revealed = row.chosen_tool ? revealTools(row as any) : null;
   return {
     id: String(row.id),
     status: row.status,

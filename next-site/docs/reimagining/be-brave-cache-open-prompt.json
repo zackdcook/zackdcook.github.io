@@ -1,0 +1,6 @@
+{
+  "method": "Built-in image editing; preserves source lockbox design and transparency.",
+  "source": "cache.webp",
+  "output": "cache-open.webp",
+  "prompt": "Use case: precise-object-edit. Asset type: transparent original JRPG mossy lockbox sprite. Edit target: the supplied closed lockbox. Change ONLY the lid to an opened, hinged-back lid so the dark empty interior is clearly visible. Keep the same brass hardware, 3x4 mechanical keypad, indigo steel, moss, thick ink contours, angular cel-shaded planes, worn surface, lighting and three-quarter camera. Preserve the box's recognizable design. The knife is a separate sprite and MUST NOT be painted into this image. Center the entire opened box, fully contained with a little transparent breathing room, on a square canvas. Genuine transparent alpha around the whole silhouette, no ground or backdrop, no readable text, no glow, no watermark."
+}
