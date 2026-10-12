@@ -51,8 +51,8 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-rpg-actions .button:only-child{flex:1}
 .bebrave-carve-button{flex-wrap:wrap;gap:4px!important}
 .bebrave-growth-wait{width:100%;font:500 10px/1.3 var(--game-type);font-variant-numeric:tabular-nums}
-.bebrave-overlay{position:absolute;inset:0;z-index:90;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:18px;padding:90px max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));pointer-events:none}
-.bebrave-overlay-main{min-height:0;display:grid;place-items:center;pointer-events:auto}
+.bebrave-overlay{position:absolute;inset:0;z-index:90;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:18px;padding:90px max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));pointer-events:none}
+.bebrave-overlay-main{min-width:0;min-height:0;max-width:100%;display:grid;place-items:center;pointer-events:auto}
 .bebrave-overlay .bebrave-rpg-hud{position:static;transform:none;width:min(100%,780px);justify-self:center;max-height:44dvh}
 .bebrave-center-modal{width:min(100%,440px);padding:24px;position:relative;pointer-events:auto}
 .bebrave-human-modal form{display:grid;gap:20px}
@@ -75,7 +75,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-color-choice:disabled{opacity:.5}
 
 /* Four physical objects in the root scene. Only the accepted result animates. */
-.bebrave-ground-encounter{position:relative;width:min(100%,850px);height:min(100%,510px);min-height:190px;aspect-ratio:1.66;isolation:isolate}
+.bebrave-ground-encounter{position:relative;width:min(100%,850px);max-width:100%;min-width:0;height:min(100%,510px);min-height:190px;aspect-ratio:1.66;isolation:isolate}
 .bebrave-encounter-ground{position:absolute;inset:-7% -8%;z-index:-1;background:var(--asset-tree-roots) center/contain no-repeat;mask-image:linear-gradient(transparent,black 12%);filter:brightness(var(--world-bark-light))}
 .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-stage-roots{opacity:0}
 .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-stage-tree{width:min(16vw,200px);bottom:42%;transition:width .6s var(--ease-settle),bottom .6s var(--ease-settle)}
@@ -243,7 +243,9 @@ html[data-theme="light"] :is(.bebrave-menu-panel,.bebrave-control-rail,.bebrave-
  .bebrave-keypad{gap:4px;margin-bottom:8px}
  .bebrave-ground-encounter{width:100%;aspect-ratio:1.25;min-height:170px;max-height:340px}
  .bebrave-encounter-ground{inset:-2% -6%;background-size:cover}
- .bebrave-ground-object{width:24%}.object-arrowhead{left:3%;top:48%}.object-nail{left:30%;top:61%}.object-key{left:58%;top:47%}.object-cache{left:71%;top:7%;width:29%}
+ .bebrave-ground-object{width:23%}.object-arrowhead{left:7%;top:48%}.object-nail{left:32%;top:59%}.object-key{left:57%;top:50%;width:22%}.object-cache{left:66%;top:14%;width:27%}
+ .bebrave-reveal-tool.object-cache.is-chosen{left:55%;top:18%;width:28%}
+ .has-knife .object-cache.is-chosen>.bebrave-tool-image{translate:0}
  .bebrave-object-label{max-width:145%;font-size:9px;padding:3px 5px}
  .bebrave-reveal-banner{padding:8px 12px;max-width:66%;left:0;top:1%}.bebrave-reveal-banner>small{font-size:9px}
  .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-stage-tree{width:25vw;bottom:50%}
@@ -302,8 +304,8 @@ html[data-effects="reduced"] :is(.bebrave-horizon,.bebrave-midground)::before{tr
 .bebrave-color-cache{position:absolute;left:-14%;top:5%;width:76%;height:75%;opacity:.85}
 .bebrave-color-emblem>.bebrave-tool-image{position:absolute;z-index:2}
 .bebrave-color-cache>.bebrave-tool-image{position:absolute;inset:0}
-html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button::before{display:block}
-@media(prefers-reduced-motion:reduce){:is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button::before{display:block}}
+html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button:not(.bebrave-preferences,[aria-label="Back"])::before{display:block}
+@media(prefers-reduced-motion:reduce){:is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button:not(.bebrave-preferences,[aria-label="Back"])::before{display:block}}
 .tool-cache-open{background-image:var(--asset-tool-cache-open)!important}
 @media(max-width:700px){.bebrave-color-cache{left:66%;top:0;width:32%;height:100%}}
 /* Short screens keep the keypad/colors scrollable above the dialogue. */
