@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Image from "next/image";
+import { FieldJournalHero } from "@/components/field-journal-hero";
 import { ActiveProject } from "@/components/active-project";
 import { ShoutoutList } from "@/components/shoutout-list";
 import { WritingGroupCard } from "@/components/writing-group-card";
@@ -10,82 +10,60 @@ import { getShoutouts } from "@/lib/shoutouts";
 import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
-
-import { HomepageBookCTA } from "@/components/book-launch/signup-form";
+import styles from "./home.module.css";
 
 export const metadata = { alternates: { canonical: "/" } };
 
 export default async function Home() {
   const [events, shoutouts] = await Promise.all([getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
-  return (
-    <>
-      <section className="hero shell">
-        <div className="hero-copy">
-          <p className="eyebrow hero-eyebrow">Engineer <span className="reaction-symbol">⇌</span> Author</p>
-          <h1>Zack<br /> <em>Cook.</em></h1>
-          <p className="hero-intro">{editorial.home.intro}</p>
-          {editorial.home.paragraphs.map(paragraph => <p className="hero-detail" key={paragraph}>{paragraph}</p>)}
-        </div>
-        <div className="hero-photo">
-          <div className="portrait-frame tactile-photo">
-            <Image
-              src="/images/portrait.webp"
-              alt="Zack Cook smiling in a black sweater"
-              width={1200}
-              height={1200}
-              priority
-              sizes="(max-width: 740px) 85vw, 40vw"
-            />
+  return <div className={styles.world}>
+    <section id="home"><FieldJournalHero /></section>
+    <section id="creative-works" className={`desk-section ${styles.manuscript}`}>
+      <div className="shell"><ActiveProject detailsLink /></div>
+    </section>
+    <section id="find-me-at" className={`events-section ${styles.events}`}><div className="shell">
+      <WritingGroupCard><div className="rail-more"><Link className="button" href="/events">Other events</Link></div></WritingGroupCard>
+    </div></section>
+    {event && <section className="event-callout upcoming-callout"><div className="shell">
+      <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
+      <Link className="text-link" href="/events">Event details</Link>
+    </div></section>}
+    <section id="about-me" className={`bio-section ${styles.biography}`}>
+      <div className="life-section shell">
+        <div className="life-copy">
+          <div className="life-heading">
+          <CollectionHeading>BIO1990</CollectionHeading>
+          <h2>Who am I?<sub className="identity-aside">no really // plz help // idk who I am</sub></h2>
+          </div>
+          <div className="life-body">
+          {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          <Link className="button" href="/about-me">A lil history</Link>
           </div>
         </div>
-      </section>
-
-      <HomepageBookCTA />
-
-      <section id="creative-works" className="desk-section">
-        <div className="shell"><ActiveProject detailsLink /></div>
-      </section>
-
-      <section id="find-me-at" className="events-section"><div className="shell">
-        <WritingGroupCard><div className="rail-more"><Link className="button" href="/events">Other events</Link></div></WritingGroupCard>
-      </div></section>
-      {event && <section className="event-callout shell upcoming-callout">
-        <p className="eyebrow">Also coming up</p><h2>{event.title}</h2><p>{event.location}</p>
-        <Link className="button" href="/events">Event details</Link>
-      </section>}
-
-      <section id="about-me" className="bio-section section-space"><div className="life-section shell">
-        <div className="life-copy">
-          <CollectionHeading>BIO1990</CollectionHeading>
-          <h2>
-            Who am I?
-            <sub className="identity-aside">no really // plz help // idk who I am</sub>
-          </h2>
-          {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-          <Link className="button" href="/about-me">
-            A lil history
-          </Link>
-        </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
-      </div></section>
-
-      <section id="words-of-folly" className="folly-feature section-space"><div className="shell folly-panel">
-        <div className="section-heading"><div className="life-copy">
+      </div>
+    </section>
+    <section id="words-of-folly" className={`folly-feature ${styles.clearing}`}>
+      <div className={`shell ${styles.follySpread}`}>
+        <div className={styles.follyHeading}>
           <CollectionHeading>Words of Folly</CollectionHeading>
-          <h2>Note to self:</h2>
-        </div></div>
-        <div className="folly-latest" role="img" aria-label={latestFolly.text}>
+          <h2 className={styles.follyTitle}>Note to self:</h2>
+        </div>
+        <div className={`folly-latest ${styles.leaf}`} role="img" aria-label={latestFolly.text}>
           <QuoteLeaf quote={latestFolly} index={follyQuotes.length - 1} />
         </div>
-        <div className="rail-more"><Link className="button button-outline" href="/words-of-folly">The whole pile</Link></div>
-      </div></section>
-
-      <section id="shoutouts" className="shoutouts-section section-space"><div className="shell">
-        <CollectionHeading>Cool peeps</CollectionHeading>
-        <ShoutoutList people={shoutouts.slice(0, 3)} />
-        <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
-      </div></section>
-    </>
-  );
+        <div className={styles.follyDestination}><Link className="button" href="/words-of-folly">Pile of leaves</Link></div>
+      </div>
+    </section>
+    <section id="shoutouts" className={`shoutouts-section ${styles.shoutouts}`}><div className="shell">
+      <CollectionHeading>Cool peeps</CollectionHeading>
+      <ShoutoutList people={shoutouts.slice(0,3)} />
+      <div className="rail-more"><Link className="button" href="/shoutouts">Other shoutouts</Link></div>
+    </div></section>
+    {process.env.NEXT_PUBLIC_SUBSCRIBE_URL && <section className="subscribe-callout"><div className="shell">
+      <h2>Keep in touch.</h2><p>Occasional blurbs from my noggin to your feed.</p>
+      <a className="text-link" href={process.env.NEXT_PUBLIC_SUBSCRIBE_URL}>Get writing updates</a>
+    </div></section>}
+  </div>;
 }

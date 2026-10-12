@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "git": {
+    "deploymentEnabled": {
+      "experiment/immersive-world-2026-10-09": false,
+      "release/immersive-world-2026-10-12": false
+    }
+  }
+}

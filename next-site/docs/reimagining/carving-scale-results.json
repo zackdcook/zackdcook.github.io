@@ -1,0 +1,57 @@
+{
+  "method": "Synthetic 2,400-point carvings with individual IDs, lossless gzip round trips, original-path Legendary anchors and five indexed viewport sections. Geometry generated on demand; total populations are metadata indexes, not an allocated full-history geometry download. Timings are local Node measurements, not browser FPS or live-database latency.",
+  "results": [
+    {
+      "population": 100,
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1854495,
+      "gzipBytes": 425101,
+      "viewportBytes": 198541,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.034,
+      "decodeMs": 0.885,
+      "serverSvgMs": 76.951
+    },
+    {
+      "population": 1000,
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1858447,
+      "gzipBytes": 422416,
+      "viewportBytes": 199097,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.008,
+      "decodeMs": 0.415,
+      "serverSvgMs": 67.194
+    },
+    {
+      "population": 10000,
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1862399,
+      "gzipBytes": 421448,
+      "viewportBytes": 199962,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.005,
+      "decodeMs": 0.355,
+      "serverSvgMs": 63.8
+    },
+    {
+      "population": 100000,
+      "sections": 5,
+      "visibleCarvings": 19,
+      "canonicalBytes": 1862551,
+      "gzipBytes": 416900,
+      "viewportBytes": 200011,
+      "renderPoints": 2964,
+      "svgElements": 3345,
+      "lookupMs": 0.011,
+      "decodeMs": 0.196,
+      "serverSvgMs": 21.3
+    }
+  ]
+}

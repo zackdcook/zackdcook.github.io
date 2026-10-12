@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { orientationAPI, requestTiltPermission } from "@/lib/phone-tilt";
+import { orientationAPI, requestTiltPermission, tiltStatusEvent } from "@/lib/phone-tilt";
 
 export function TiltLightingControl({
   enabled,
@@ -13,13 +13,22 @@ export function TiltLightingControl({
   onChange: (enabled: boolean) => void;
 }) {
   const [supported, setSupported] = useState(false);
+  const [permissionRequired, setPermissionRequired] = useState(false);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
     const coarse = matchMedia("(pointer: coarse)");
-    const detect = () => setSupported(coarse.matches && Boolean(orientationAPI()));
+    const detect = () => {
+      const api = orientationAPI();
+      setSupported(coarse.matches && Boolean(api));
+      setPermissionRequired(Boolean(api?.requestPermission));
+    };
+    const status = () => setActive(document.documentElement.dataset.tiltStatus === "active");
     detect();
+    status();
     coarse.addEventListener("change", detect);
-    return () => coarse.removeEventListener("change", detect);
+    window.addEventListener(tiltStatusEvent, status);
+    return () => { coarse.removeEventListener("change", detect); window.removeEventListener(tiltStatusEvent, status); };
   }, []);
 
   if (!supported) return null;
@@ -43,7 +52,7 @@ export function TiltLightingControl({
     <span className="checkbox-control">
       <input
         type="checkbox"
-        checked={enabled}
+        checked={enabled && (!permissionRequired || active)}
         disabled={reduced}
         onChange={event => void toggle(event.target.checked)}
       />

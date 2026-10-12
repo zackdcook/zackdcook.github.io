@@ -87,6 +87,35 @@ test("distributed rate limit fails closed before verifying Turnstile or writing 
   assert.equal((await POST(request())).status, 503);
   dbUnavailable = false;
 });
+test("experimental bypass requires every server isolation guard and never enables analytics", async () => {
+  const { analyticsAllowed } = await import("../lib/book-launch/server.ts");
+  const before = records.size;
+  const previousChecks = verified;
+  Object.assign(process.env, {
+    VERCEL_ENV: "preview", VERCEL_URL: "isolated-preview.vercel.app",
+    VERCEL_BRANCH_URL: "isolated-branch.vercel.app",
+    NEXT_PUBLIC_SUPABASE_URL: "https://qkkgcoejkqvthbjcldcw.supabase.co",
+    BEBRAVE_TEST_PROJECT_REF: "qkkgcoejkqvthbjcldcw", BEBRAVE_TEST_MODE: "true",
+    BOOK_ANALYTICS_ENABLED: "true",
+  });
+  attempts = 0;
+  const accepted = await POST(request({email:"isolated@example.com"}, {origin:"https://isolated-branch.vercel.app"}));
+  assert.equal(accepted.status, 200);
+  assert.equal(verified, previousChecks, "only isolated mode skips the challenge");
+  assert.equal(records.size, before + 1);
+  assert.equal(analyticsAllowed(request({}, {"x-vercel-ip-country":"US"})), false);
+  process.env.BEBRAVE_TEST_PROJECT_REF = "wrong-project";
+  challenge = "expired"; attempts = 0;
+  assert.equal((await POST(request({email:"wrong-guard@example.com"}))).status, 400);
+  assert.equal(verified, previousChecks + 1);
+  assert.equal(records.has("wrong-guard@example.com"), false);
+  process.env.NEXT_PUBLIC_SUPABASE_URL = "https://belqlsqnbexwkpmnptyy.supabase.co";
+  attempts = 0;
+  assert.equal((await POST(request({email:"production-guard@example.com"}))).status, 400);
+  assert.equal(records.has("production-guard@example.com"), false);
+  for (const key of ["VERCEL_ENV","VERCEL_URL","VERCEL_BRANCH_URL","NEXT_PUBLIC_SUPABASE_URL","BEBRAVE_TEST_PROJECT_REF","BEBRAVE_TEST_MODE"]) delete process.env[key];
+  process.env.BOOK_ANALYTICS_ENABLED = "false"; challenge = "valid";
+});
 test("disabled signup fails closed and no delivery provider is called", async () => {
   process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED = "false";
   assert.equal((await POST(request())).status, 503);

@@ -1,6 +1,20 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { createElement } from "react";
+import { renderToString } from "react-dom/server";
+import { BookContext, useBookLaunch } from "../components/book-launch/context";
 import { bookVisibility, savedChoice, normalizeEmail, campaign, referral, sourcePage, safeEventProperties, bookCopy, consentVersion } from "../lib/book-launch/shared";
+
+test("a delayed book consumer retains its server state when its parent is already ready", () => {
+  function Consumer() {
+    const { enabled, testMode } = useBookLaunch();
+    return createElement("div", { "data-test-mode": String(testMode) }, enabled ? "Book Alert" : null);
+  }
+  const html = renderToString(createElement(BookContext, {
+    value: { enabled: true, testMode: true, open: () => {} },
+  }, createElement(Consumer)));
+  assert.equal(html, '<div data-test-mode="true"></div>');
+});
 
 test("homepage and menu retain the three independent visitor states on repeated visits", () => {
   for (let visit = 0; visit < 4; visit++) {

@@ -9,16 +9,18 @@ import "./globals.css";
 import "./motion.css";
 import "./materials.css";
 import "./theme.css";
+import "./art-assets.css";
 import "./book-launch.css";
 import "./folly.css";
 import "./bebrave.css";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { PointerLight } from "@/components/pointer-light";
-import { KittyRibbonBillow } from "@/components/kitty-ribbon-billow";
+import { PublicAtmosphere } from "@/components/public-atmosphere";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { preferenceBootstrap } from "@/lib/preferences";
+import { testModeEnabled } from "@/lib/experimental-environment";
 
 const displayFont = localFont({
   src: "../public/fonts/Fraunces-Soft-Semibold.ttf",
@@ -38,7 +40,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={displayFont.variable} suppressHydrationWarning>
+    <html lang="en" className={displayFont.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap }} />
         <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/words-of-folly/feed.xml`} />
@@ -46,10 +48,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a className="skip-link" href="#main">Skip to content</a>
         <SitePreferences>
-          <BookLaunchProvider>
+          <BookLaunchProvider testMode={testModeEnabled(process.env)}>
           <Suspense fallback={null}><PrivacyAnalytics /></Suspense>
           <PointerLight />
-          <KittyRibbonBillow />
+          <PublicAtmosphere />
           <SiteIcons />
           <Suspense fallback={<header className="site-header"><div className="shell">Zack Cook</div></header>}><SiteHeader /></Suspense>
           <OrganicTransition name="zacks-corner">
@@ -60,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <SiteFooter />
             </div>
           </OrganicTransition>
-        </BookLaunchProvider>
+          </BookLaunchProvider>
         </SitePreferences>
       </body>
     </html>

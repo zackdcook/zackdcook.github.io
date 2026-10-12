@@ -13,8 +13,10 @@ export function tiltLight(reading: TiltReading, reference: TiltReading, screenAn
   const angle = screenAngle * Math.PI / 180;
   const horizontal = roll * Math.cos(angle) + pitch * Math.sin(angle);
   const vertical = pitch * Math.cos(angle) - roll * Math.sin(angle);
-  const clamp = (value: number) => Math.max(-1, Math.min(1, value / 35));
-  return { x: width * (.5 - .8 * clamp(horizontal)), y: height * (.5 - .8 * clamp(vertical)) };
+  // Continuous falloff avoids the abrupt stop of a clamped spotlight. Small
+  // natural gestures travel; extreme angles settle into a bounded grazing light.
+  const curve = (value: number) => Math.tanh(value / 28);
+  return { x: width * (.5 - .68 * curve(horizontal)), y: height * (.5 - .68 * curve(vertical)) };
 }
 
 type OrientationAPI = typeof DeviceOrientationEvent & { requestPermission?: (absolute?: boolean) => Promise<"granted" | "denied"> };

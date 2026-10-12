@@ -1,0 +1,19 @@
+.field{position:fixed;inset:0;pointer-events:none;overflow:clip;contain:strict}
+.far{z-index:0;opacity:.6;--mote-scale:.75}
+.middle{z-index:0;opacity:.8;--mote-scale:1}
+.near{z-index:0;--mote-scale:1.18}
+/* One bounded, prepainted wash moves as a plane. It does not tint navigation
+   or use an oversized blend surface or a gradient inherited from the root. */
+.light{position:absolute;top:0;left:0;width:min(1050px,120vw);height:min(900px,115vh);background:radial-gradient(ellipse closest-side at center,var(--world-light-warm),transparent 100%),radial-gradient(ellipse closest-side at center,var(--world-light-rose),transparent 100%);opacity:calc(var(--world-light-strength,0)*.5);transform:translate3d(calc(var(--world-light-x,80vw) - 50%),calc(var(--world-light-y,25vh) - 50%),0)}
+.mote{position:absolute;top:0;width:calc(var(--mote-size)*var(--mote-scale));height:calc(var(--mote-size)*var(--mote-scale));pointer-events:none}
+.grain{position:relative;width:100%;height:100%;animation:mote-breathe var(--mote-period) ease-in-out var(--mote-phase) infinite;transform-origin:center;opacity:0}
+.grain::before{content:"";position:absolute;inset:-4px;border-radius:50%;background:radial-gradient(var(--world-mote-glow),transparent 70%);pointer-events:none}
+.core{display:block;width:100%;height:100%;background:var(--world-mote);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%)}
+:global(html[data-theme="dark"]) .core{clip-path:none;border-radius:50%}
+@keyframes mote-breathe{0%,100%{opacity:0;scale:.65;translate:0 3px}30%{opacity:.26}55%{opacity:.65;scale:1.1;translate:3px -4px}80%{opacity:.16}}
+@media(max-width:740px){.far .mote:nth-of-type(n+4),.middle .mote:nth-of-type(n+4),.near .mote:nth-of-type(n+3){display:none}.light{opacity:calc(var(--world-light-strength,0)*.4)}}
+/* Cached routes retain their DOM. Only the active tree route hides the field. */
+:global(body:has(.site-header[data-page-route="/bebrave"],.test-viewport,dialog[open])) .field{visibility:hidden}
+:global(body:has(dialog[open])) .grain{animation-play-state:paused}
+:global(html[data-effects="reduced"]) .field{display:none}
+@media(prefers-reduced-motion:reduce){.field{display:none}}

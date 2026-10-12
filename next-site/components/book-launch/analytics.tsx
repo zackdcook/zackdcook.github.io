@@ -69,5 +69,5 @@ export function PrivacyAnalytics() {
 }
 export function AnalyticsChoice() {
   const { analyticsOptOut, setAnalyticsOptOut } = usePreferences();
-  return <label className="preference-row"><span>Opt out of anonymous analytics</span><input type="checkbox" checked={analyticsOptOut} onChange={event => setAnalyticsOptOut(event.target.checked)} /></label>;
+  return <label className="preference-row"><span>Opt out of anonymous analytics</span><span className="checkbox-control"><input type="checkbox" checked={analyticsOptOut} onChange={event => setAnalyticsOptOut(event.target.checked)} /><span className="preference-control checkbox-face" aria-hidden="true">✓</span></span></label>;
 }

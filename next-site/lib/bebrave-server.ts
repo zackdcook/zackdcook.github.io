@@ -1,4 +1,6 @@
 import "server-only";
+import { assembleStrokes, readChunkPages, type StrokeChunk } from "./bebrave/completed-strokes";
+import { testModeEnabled } from "./experimental-environment";
 
 import { createHmac, randomBytes, randomInt } from "node:crypto";
 import { cookies, headers } from "next/headers";
@@ -11,6 +13,8 @@ const visitorCookie = "zack-bebrave-visitor";
 const uuid = /^[a-f0-9-]{36}$/i;
 
 
+export function beBraveTestMode() { return testModeEnabled(process.env); }
+
 export function beBraveConfigured() {
   const database = Boolean(
     process.env.NEXT_PUBLIC_SUPABASE_URL &&
@@ -18,6 +22,7 @@ export function beBraveConfigured() {
     process.env.BEBRAVE_HMAC_KEY
   );
   if (!database) return false;
+  if (beBraveTestMode()) return true;
   return Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && process.env.TURNSTILE_SECRET_KEY);
 }
 
@@ -81,6 +86,7 @@ export async function requestContext(request: Request, createVisitor = true) {
 export async function verifyBeBraveTurnstile(request: Request, token: string) {
   const context = await requestContext(request, true);
   if (!context) throw new Error("This browser could not start a carving session.");
+  if (beBraveTestMode()) return context;
   const limited = await serviceSupabase().rpc("bebrave_turnstile_limit", { p_visitor_hash: context.visitorHash, p_network_hash: context.networkHash });
   if (limited.error) throw new Error("Too many carving attempts. Please give the tree a little time.");
   const host = new URL(request.headers.get("origin") || request.url).hostname;
@@ -132,20 +138,21 @@ export function assertSessionId(value: unknown) {
 export async function visitorRow(visitorHash: string) {
   const { data, error } = await serviceSupabase()
     .from("bebrave_visitors")
-    .select("id,visitor_hash,last_carved_at,epic_pity")
+    .select("id,visitor_hash,last_carved_at,epic_pity,test_reset_sequence")
     .eq("visitor_hash", visitorHash)
     .maybeSingle();
   if (error) throw new Error("The tree could not check your carving status.");
   return data;
 }
 
-export async function growthFeetRemaining(visitorId: string | null | undefined, treeHeight: number) {
+export async function growthFeetRemaining(visitorId: string | null | undefined, treeHeight: number, resetSequence=0) {
   if (!visitorId) return 0;
   const { data, error } = await serviceSupabase()
     .from("bebrave_sessions")
     .select("zone_bottom")
     .eq("visitor_id", visitorId)
     .eq("status", "completed")
+    .gt("public_sequence",resetSequence)
     .not("zone_bottom", "is", null)
     .order("public_sequence", { ascending: false })
     .limit(1)
@@ -195,6 +202,7 @@ export function sessionView(row: Record<string, any> | null): BeBraveSessionView
     chosenRarity: row.chosen_rarity,
     chosenColor: row.chosen_color,
     effectSeed: row.effect_seed == null ? null : Number(row.effect_seed),
+    chosenEffect: row.chosen_effect || null,
     toolResults: revealed,
     drawingStartedAt: row.drawing_started_at,
     drawingDeadline: row.drawing_deadline,
@@ -222,16 +230,14 @@ export async function currentOpenSession(visitorHash: string) {
 }
 
 export async function sessionDraftStrokes(sessionId: string) {
-  const { data, error } = await serviceSupabase().from("bebrave_stroke_chunks").select("stroke_id,stroke_order,chunk_index,points").eq("session_id", sessionId).order("stroke_order").order("chunk_index");
-  if (error) throw new Error("Your saved carving strokes could not be reopened.");
-  const grouped = new Map<string, { strokeId: string; strokeOrder: number; points: Array<[number, number]> }>();
-  for (const row of data || []) {
-    let stroke = grouped.get(row.stroke_id);
-    if (!stroke) { stroke = { strokeId: row.stroke_id, strokeOrder: Number(row.stroke_order), points: [] }; grouped.set(row.stroke_id, stroke); }
-    for (const point of row.points as Array<[number, number]>) {
-      const last = stroke.points.at(-1);
-      if (!last || last[0] !== point[0] || last[1] !== point[1]) stroke.points.push(point);
-    }
-  }
-  return [...grouped.values()].sort((a,b)=>a.strokeOrder-b.strokeOrder);
+  const chunks=await readChunkPages(async afterId=>{
+    let query=serviceSupabase().from("bebrave_stroke_chunks")
+      .select("id,session_id,stroke_id,stroke_order,chunk_index,points")
+      .eq("session_id",sessionId).order("id",{ascending:true}).limit(500);
+    if(afterId!==null)query=query.gt("id",afterId);
+    const page=await query;
+    if(page.error)throw new Error("Your saved carving strokes could not be reopened.");
+    return (page.data||[]) as StrokeChunk[];
+  },320);
+  return assembleStrokes(chunks).get(sessionId)||[];
 }

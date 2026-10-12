@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import { assertDeploymentEnvironment } from "./lib/experimental-environment";
+import { testViewportHeaders } from "./lib/test-viewport";
+
+assertDeploymentEnvironment(process.env);
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -12,7 +16,7 @@ const nextConfig: NextConfig = {
       { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
       { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=(), usb=()" },
       { key: "Content-Security-Policy", value: "base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'" },
-    ]}];
+    ]}, ...testViewportHeaders(process.env)];
   },
   async redirects() {
     return [

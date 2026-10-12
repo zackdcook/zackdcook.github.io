@@ -1,8 +1,8 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
-import Image from "next/image";
-import { ZackyCPreview } from "@/components/zacky-c-preview";
+import { ReversiblePortrait } from "@/components/reversible-portrait";
 import { site } from "@/content/site";
+import styles from "./aboutme.module.css";
 
 export const metadata: Metadata = pageMetadata("about", "About Me");
 
@@ -20,27 +20,28 @@ export default function AboutMe() {
     sameAs: ["https://github.com/zackdcook", site.linkedin, site.instagram, site.threads],
   };
 
-  return <div className="page-wrap about-me-page"><div className="shell">
+  return <div className={`page-wrap about-me-page ${styles.page}`}><div className="shell">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
       "@context": "https://schema.org", "@type": "ProfilePage", mainEntity: person,
     }).replace(/</g, "\\u003c") }} />
 
-    <section className="about-intro">
+    <section className={`about-intro ${styles.opening}`}>
       <div className="page-intro">
         <p className="eyebrow">About Me</p>
-        <h1>I’m Zack<br /><em>Cook.</em></h1>
+        <h1 className="responsive-title">I’m Zack<br className="title-break" />{" "}<em>Cook.</em></h1>
       </div>
 
-      <div className="portrait-frame tactile-photo">
-        <Image src="/images/portrait.webp" alt="Zack Cook" width={1200} height={1200}
-          sizes="(max-width: 740px) 90vw, 40vw" priority />
-      </div>
+      <ReversiblePortrait />
     </section>
   </div>
 
-  <section className="about-biography section-space">
-    <div className="shell"><div className="prose about-story">
-      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me {" "}<ZackyCPreview />. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
+  <section className={`about-biography section-space ${styles.biography}`}>
+    <div className={`shell ${styles.readingGrid}`}>
+      <div className={styles.margin} aria-hidden="true">
+        <div className={styles.readTrack}><span /></div>
+      </div>
+      <div className={`prose about-story ${styles.story}`}>
+      <p>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <span>Zacky C</span>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</p>
 
       <p>Hello there!</p>
 

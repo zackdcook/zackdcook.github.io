@@ -4,11 +4,17 @@ import { HumanCheck } from "@/components/human-check";
 import { usePreferences } from "@/components/site-preferences";
 import { bookCopy, bookVisibility, type Placement } from "@/lib/book-launch/shared";
 import { bookEvent, attribution, privacySignal } from "@/lib/book-launch/analytics";
+import { restoreBookFocus, useBookLaunch } from "./context";
 
 export function BookSignupForm({ placement, titleId, onSuccess }: { placement: Placement; titleId: string; onSuccess: () => void }) {
   const { subscribeBook, analyticsOptOut } = usePreferences();
+  const { testMode } = useBookLaunch();
   const id = useId();
   const form = useRef<HTMLFormElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    if (placement === "menu") heading.current?.focus({ preventScroll: true });
+  }, [placement]);
   const started = useRef(false), busy = useRef(false);
   const [pending, setPending] = useState(false), [error, setError] = useState(false);
   const [reset, setReset] = useState(0);
@@ -41,27 +47,28 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
     } finally { busy.current = false; setPending(false); }
   }
   return <>
-    <h2 id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
+    <h2 ref={heading} className={placement === "menu" ? "dialog-title" : undefined} tabIndex={placement === "menu" ? -1 : undefined} id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
     <form ref={form} onSubmit={submit} className="book-signup-form" aria-busy={pending}>
       <div className="book-signup-fields">
         <label className="sr-only" htmlFor={`${id}-email`}>Email address</label>
-        <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending} autoFocus={placement === "menu"}
+        <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending}
           onChange={event => { if (!started.current && event.target.value.length) { started.current = true; bookEvent("book_signup_started", { placement }); } }} aria-describedby={error ? `${id}-error` : undefined} />
-        <button className="button" type="submit" disabled={pending || !humanToken}>{bookCopy.submit}</button>
+        <button className="button" type="submit" disabled={pending || (!testMode && !humanToken)}>{bookCopy.submit}</button>
       </div>
       <div className="book-honeypot" aria-hidden="true"><label htmlFor={`${id}-website`}>Website</label><input id={`${id}-website`} name="website" tabIndex={-1} autoComplete="off" /></div>
-      <HumanCheck siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} action="book_launch" resetKey={String(reset)} onToken={setHumanToken} />
+      {testMode ? <input type="hidden" name="cf-turnstile-response" value="test-mode" /> : <HumanCheck siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} action="book_launch" resetKey={String(reset)} onToken={setHumanToken} />}
       {error && <p id={`${id}-error`} role="alert">{bookCopy.error}</p>}
     </form>
   </>;
 }
 export function HomepageBookCTA() {
-  const { hydrated, bookDismissed, bookSubscribed, dismissBook } = usePreferences();
+  const { bookDismissed, bookSubscribed, dismissBook } = usePreferences();
+  const { enabled } = useBookLaunch();
   const [success, setSuccess] = useState(false);
   const host = useRef<HTMLElement>(null);
   const receipt = useRef<HTMLDivElement>(null);
   useEffect(() => { if (success) receipt.current?.focus({ preventScroll: true }); }, [success]);
-  const visible = process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED === "true" && hydrated && bookVisibility(bookDismissed, bookSubscribed).homepage;
+  const visible = enabled && bookVisibility(bookDismissed, bookSubscribed).homepage;
   useEffect(() => {
     if (!visible || !host.current) return;
     let timer: ReturnType<typeof setTimeout> | undefined, qualified = false, emitted = false;
@@ -82,13 +89,13 @@ export function HomepageBookCTA() {
   }, [visible]);
   // The success receipt is a status message, never a signup promotion. On a
   // subsequent homepage navigation this component resets; all entry points hide.
-  if (success) return <div className="shell book-success" role="status" tabIndex={-1} ref={receipt}>{bookCopy.success}</div>;
+  if (success) return <div className="book-success" role="status" tabIndex={-1} ref={receipt}>{bookCopy.success}</div>;
   if (!visible) return null;
-  return <section ref={host} className="shell book-callout" aria-labelledby="book-home-title">
-    <div className="writing-panel book-panel">
+  return <section ref={host} className="book-callout" aria-labelledby="book-home-title">
+    <div className="book-panel">
       <button type="button" className="button book-dismiss" aria-label="Dismiss book invitation" onClick={() => {
         bookEvent("book_cta_dismissed", { placement: "homepage" }); dismissBook();
-        document.querySelector<HTMLElement>(".home-tab")?.focus({ preventScroll: true });
+        restoreBookFocus();
       }}>×</button>
       <BookSignupForm placement="homepage" titleId="book-home-title" onSuccess={() => setSuccess(true)} />
     </div>

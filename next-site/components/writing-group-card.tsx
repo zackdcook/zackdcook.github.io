@@ -2,19 +2,25 @@ import { MapIcon } from "@/components/icons";
 import { CalendarMenu } from "@/components/calendar-menu";
 import { writingGroup } from "@/content/site";
 import type { ReactNode } from "react";
+import styles from "./writing-group-card.module.css";
+import { CollectionHeading } from "./collection-heading";
 
 export function WritingGroupCard({ eyebrow = "Find me at…", children }: { eyebrow?: string; children?: ReactNode }) {
-  return <section className="event-callout writing-group" aria-labelledby="writing-group-title">
-    <h2 className="eyebrow section-label">{eyebrow}</h2>
-    <h2 id="writing-group-title">{writingGroup.title}</h2>
-    <p className="event-schedule">{writingGroup.schedule}</p>
-    <p>{writingGroup.venue} · Downtown Lakeland</p>
-    <p className="event-address">{writingGroup.address}</p>
-    <div className="actions event-actions">
-      <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer"><MapIcon />Get directions</a>
-      <CalendarMenu />
+  return <section className={`event-callout writing-group ${styles.group}`} aria-labelledby="writing-group-title">
+    <div className={styles.title}>
+      <CollectionHeading>{eyebrow}</CollectionHeading>
+      <h2 id="writing-group-title">{writingGroup.title}</h2>
     </div>
-    <p className="event-description">{writingGroup.description}</p>
-    {children}
+    <div className={styles.details}>
+      <p className={`event-schedule ${styles.schedule}`}>{writingGroup.schedule}</p>
+      <p className={styles.venue}>{writingGroup.venue} · Downtown Lakeland</p>
+      <p className="event-address">{writingGroup.address}</p>
+      <div className="actions event-actions">
+        <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer"><MapIcon />Get directions</a>
+        <CalendarMenu />
+      </div>
+      <p className={`event-description ${styles.description}`}>{writingGroup.description}</p>
+      {children}
+    </div>
   </section>;
 }

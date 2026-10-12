@@ -2,11 +2,22 @@ import "server-only";
 import { createHmac, randomUUID } from "node:crypto";
 import { serviceSupabase } from "@/lib/supabase";
 import { country, safeEventProperties } from "./shared";
+import { assertDeploymentEnvironment, isTestStorage, testModeEnabled } from "../experimental-environment";
 
-export function signupEnabled() { return process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED === "true"; }
+export function signupEnabled() {
+  assertDeploymentEnvironment(process.env);
+  return process.env.NEXT_PUBLIC_BOOK_LAUNCH_ENABLED === "true";
+}
+export function signupTestMode() { return testModeEnabled(process.env); }
 export function assertBookOrigin(request: Request) {
   const origin = request.headers.get("origin");
   const allowed = [process.env.SITE_URL, "https://zackdcook.com", "https://www.zackdcook.com", "https://zackyc.xyz", "https://www.zackyc.xyz"];
+  if (process.env.VERCEL_ENV === "preview") {
+    for (const key of ["VERCEL_URL", "VERCEL_BRANCH_URL"]) {
+      const host = process.env[key];
+      if (host) allowed.push(new URL(`https://${host}`).origin);
+    }
+  }
   if (process.env.NODE_ENV !== "production") allowed.push("http://localhost:3000", "http://127.0.0.1:3000");
   if (!origin || !allowed.includes(origin) || request.headers.get("sec-fetch-site") === "cross-site") throw new Error("request");
 }
@@ -14,6 +25,7 @@ export function requestCountry(request: Request) {
   return process.env.VERCEL === "1" ? country(request.headers.get("x-vercel-ip-country")) : null;
 }
 export function analyticsAllowed(request: Request) {
+  if (process.env.VERCEL_ENV !== "production" || isTestStorage(process.env)) return false;
   // Fail closed outside the initially reviewed US rollout; an absent trusted
   // region also disables collection. Browser privacy signals override this.
   return process.env.BOOK_ANALYTICS_ENABLED === "true" && requestCountry(request) === "US" &&

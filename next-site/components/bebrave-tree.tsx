@@ -1,7 +1,13 @@
 "use client";
 
 import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties,type ReactNode } from "react";
+import { legendaryEffect } from "@/lib/bebrave/effects";
+import { SectionCache } from "@/lib/bebrave/section-cache";
+import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
+import { TreeAtmosphere } from "@/components/tree-atmosphere";
+import { BeBraveInspector } from "@/components/bebrave-inspector";
+import { pickCarving } from "@/lib/bebrave/carving-inspection";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
 type Mode="admire"|"draw"|"fallen"|"base";
@@ -13,7 +19,9 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const [scale,setScale]=useState(1),[zoom,setZoom]=useState(mode==="admire"?.82:1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
-  const cache=useRef(new Map<number,BeBravePublicDrawing[]>()),inflight=useRef(new Map<number,Promise<BeBravePublicDrawing[]>>());
+  const [inspection,setInspection]=useState<{drawing:BeBravePublicDrawing;opener:SVGGElement|null}|null>(null);
+  const inspectionTap=useRef<{pointerId:number;x:number;y:number}|null>(null);
+  const inspecting=mode==="admire"||mode==="fallen";
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<number|null>(null),zoomRef=useRef(zoom);
   zoomRef.current=zoom;
   const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60),[finishBusy,setFinishBusy]=useState(false);
@@ -27,14 +35,50 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   const maxSection=Math.max(0,Math.ceil(state.height/BEBRAVE_SECTION_HEIGHT)-1);
   const sections=useMemo(()=>Array.from({length:range[1]-range[0]+1},(_,i)=>range[0]+i),[range]);
-  const load=useCallback((section:number)=>{
-    if(cache.current.has(section))return Promise.resolve(cache.current.get(section)!);
-    if(inflight.current.has(section))return inflight.current.get(section)!;
-    const p=(async()=>{let all:BeBravePublicDrawing[]=[],before="";do{const q=new URLSearchParams({section:String(section)});if(cutoff!==undefined)q.set("cutoff",String(cutoff));if(before)q.set("before",before);const r=await fetch(`/api/bebrave/tree?${q}`,{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error||"Bark could not load");all.push(...d.drawings);before=d.more&&d.nextBefore?String(d.nextBefore):"";}while(before);cache.current.set(section,all);return all;})().finally(()=>inflight.current.delete(section));
-    inflight.current.set(section,p);return p;
-  },[cutoff]);
-
-  useEffect(()=>{let cancelled=false;Promise.all(sections.map(load)).then(groups=>{if(cancelled)return;const map=new Map<string,BeBravePublicDrawing>();for(const d of groups.flat())map.set(d.id,d);setDrawings([...map.values()].sort((a,b)=>b.publicSequence-a.publicSequence));}).catch(()=>{if(!cancelled)setSaveError("That stretch of bark could not load.");});for(const n of [range[0]-1,range[1]+1])if(n>=0&&n<=maxSection)load(n).catch(()=>{});for(const k of cache.current.keys())if(k<range[0]-3||k>range[1]+3)cache.current.delete(k);return()=>{cancelled=true;};},[sections,load,range,maxSection]);
+  const sectionCache=useMemo(()=>new SectionCache<BeBravePublicDrawing[]>(async(section,signal)=>{
+    const all:BeBravePublicDrawing[]=[];
+    let before="";
+    do {
+      const q=new URLSearchParams({section:String(section),format:"compact-v1",revision:String(state.revision),cutoff:String(cutoff??state.latestSequence)});
+      if(before)q.set("before",before);
+      const response=await fetch(`/api/bebrave/tree?${q}`,{signal});
+      const data=await response.json();
+      if(!response.ok)throw Error(data.error||"Bark could not load");
+      all.push(...data.drawings.map(unpackDrawing));
+      const next=data.more&&data.nextBefore?String(data.nextBefore):"";
+      if(next&&before&&Number(next)>=Number(before))throw Error("Bark could not load");
+      before=next;
+    } while(before&&!signal.aborted);
+    return all;
+  }),[state.revision,state.latestSequence,cutoff]);
+  useEffect(()=>()=>sectionCache.dispose(),[sectionCache]);
+  useEffect(()=>{
+    // Nearby sections stay cached, but effects outside the actual camera sleep.
+    // A single observer changes CSS state without a React animation loop.
+    const root=scene.current;
+    if(!root||typeof IntersectionObserver==="undefined")return;
+    const observer=new IntersectionObserver(entries=>{
+      for(const entry of entries){
+        const target=entry.target as SVGGElement;
+        target.style.setProperty("--effect-play",entry.isIntersecting?"running":"paused");
+        if(target.getAttribute("role")==="button")target.setAttribute("tabindex",entry.isIntersecting?"0":"-1");
+      }
+    },{root:mode==="fallen"?horizontal.current:null,rootMargin:"80px"});
+    for(const drawing of root.querySelectorAll(".bebrave-published-drawing"))observer.observe(drawing);
+    return()=>observer.disconnect();
+  },[drawings,mode]);
+  useEffect(()=>{
+    let cancelled=false;
+    sectionCache.setWindow(range[0],range[1]);
+    Promise.all(sections.map(n=>sectionCache.load(n))).then(groups=>{
+      if(cancelled)return;
+      const map=new Map<string,BeBravePublicDrawing>();
+      for(const drawing of groups.flat())map.set(drawing.id,drawing);
+      setDrawings([...map.values()].sort((a,b)=>b.publicSequence-a.publicSequence));
+    }).catch(()=>{if(!cancelled)setSaveError("That stretch of bark could not load.");});
+    for(const n of [range[0]-1,range[1]+1])if(n>=0&&n<=maxSection)sectionCache.load(n).catch(()=>{});
+    return()=>{cancelled=true;};
+  },[sectionCache,sections,range,maxSection]);
 
   useLayoutEffect(()=>{
     const el=world.current;if(!el)return;
@@ -126,14 +170,20 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   useEffect(()=>{if(mode!=="draw"||!session?.drawingDeadline)return;let ended=false;const tick=()=>{const ms=Date.parse(session.drawingDeadline!)-(Date.now()+serverOffset.current);setRemaining(Math.max(0,Math.ceil(ms/1000)));if(ms<=0&&!ended){ended=true;void finish();}};tick();const id=setInterval(tick,100);return()=>clearInterval(id);},[mode,session?.drawingDeadline,finish]);
 
   const showLocal=mode==="draw"||(mode==="admire"&&session?.status==="completed"&&!drawings.some(d=>d.id===session.id));
-  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,strokes:localStrokes}:undefined;
+  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,strokes:localStrokes}:undefined;
   const widthStyle=mode==="fallen"?{width:state.height*scale,height:BEBRAVE_TREE_WIDTH*scale}:{height:state.height*scale};
   const treeTransform=mode==="fallen"?`translateX(${state.height*scale}px) rotate(90deg) scale(${scale})`:`scale(${scale})`;
   const minutes=Math.floor(remaining/60),seconds=String(remaining%60).padStart(2,"0");
+  function inspectDrawing(drawing:BeBravePublicDrawing,opener?:SVGGElement){
+    const source=opener||scene.current?.querySelector<SVGGElement>(`[data-drawing-id="${drawing.id}"]`)||null;
+    source?.focus({preventScroll:true});
+    setInspection({drawing,opener:source});
+  }
 
   return <section ref={scene} className={`bebrave-scene is-${mode}`} style={{"--bebrave-tree-scale":scale,"--bebrave-tree-zoom":mode==="admire"?zoom:1} as CSSProperties}>
-    <div className="bebrave-horizon" aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
+    <div className="bebrave-horizon" data-light-source aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
+    <TreeAtmosphere/>
     {(mode==="draw"||mode==="admire")&&<aside className="bebrave-control-rail" aria-label={mode==="draw"?"Carving controls":"Tree controls"}>
       {homeControls}
       {mode==="admire"&&<>
@@ -154,6 +204,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
         onPointerDown={e=>{
+          if(inspecting){inspectionTap.current=e.isPrimary&&(e.pointerType!=="mouse"||e.button===0)?{pointerId:e.pointerId,x:e.clientX,y:e.clientY}:null;return;}
           if(mode!=="draw"||remaining<=0||!session||(e.pointerType==="touch"&&!e.isPrimary)||(e.pointerType==="mouse"&&e.button!==0))return;
           if(active.current){
             if(e.currentTarget.hasPointerCapture(active.current.pointerId))return;
@@ -165,6 +216,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
           if(!paintFrame.current)paintFrame.current=requestAnimationFrame(paint);
         }}
         onPointerMove={e=>{
+          if(inspecting){const tap=inspectionTap.current;if(tap&&Math.hypot(e.clientX-tap.x,e.clientY-tap.y)>9)inspectionTap.current=null;return;}
           if(!active.current||active.current.pointerId!==e.pointerId||mode!=="draw"||remaining<=0)return;
           e.preventDefault();
           const coalesced=e.nativeEvent.getCoalescedEvents?.();
@@ -172,30 +224,40 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
           for(const point of events){const p=worldPoint(point.clientX,point.clientY);if(p)appendPoint(p);}
         }}
         onPointerUp={e=>{
+          if(inspecting){
+            const tap=inspectionTap.current;inspectionTap.current=null;
+            if(!tap||tap.pointerId!==e.pointerId||Math.hypot(e.clientX-tap.x,e.clientY-tap.y)>9)return;
+            const rect=e.currentTarget.getBoundingClientRect(),s=scaleRef.current;
+            const point:[number,number]=mode==="fallen"?[(e.clientY-rect.top)/s,state.height-(e.clientX-rect.left)/s]:[(e.clientX-rect.left)/s,(e.clientY-rect.top)/s];
+            const drawing=pickCarving(drawings,point,18/s);
+            if(drawing)inspectDrawing(drawing);
+            return;
+          }
           if(active.current?.pointerId!==e.pointerId)return;
           e.preventDefault();stopStroke(e.pointerId,worldPoint(e.clientX,e.clientY));
           if(e.currentTarget.hasPointerCapture(e.pointerId))e.currentTarget.releasePointerCapture(e.pointerId);
         }}
-        onPointerCancel={e=>{stopStroke(e.pointerId);}}
+        onPointerCancel={e=>{inspectionTap.current=null;stopStroke(e.pointerId);}}
         onLostPointerCapture={e=>{stopStroke(e.pointerId);}}
         onContextMenu={e=>{if(mode==="draw")e.preventDefault();}}>
         <div className="bebrave-tree-space" style={{width:BEBRAVE_TREE_WIDTH,height:state.height,transform:treeTransform}}>
           <div className="bebrave-trunk" aria-hidden="true"/>
           {mode==="draw"&&session?.zoneTop!=null&&session.zoneBottom!=null&&<div className="bebrave-active-zone" style={{top:session.zoneTop,height:session.zoneBottom-session.zoneTop}} aria-hidden="true"/>}
-          <svg className="bebrave-drawings" viewBox={`0 0 ${BEBRAVE_TREE_WIDTH} ${state.height}`} aria-label="Drawings carved into the shared cypress tree">
+          <svg className="bebrave-drawings" role={inspecting?"group":"img"} viewBox={`0 0 ${BEBRAVE_TREE_WIDTH} ${state.height}`} aria-label="Drawings carved into the shared cypress tree">
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
-            {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed}/>)}</g>}
-            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} style={{"--stroke-color":visual.color} as CSSProperties}>
-              {(visual.rarity==="superior"||visual.rarity==="epic")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
+            {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed} effectId={localDrawing.effectId}/>)}</g>}
+            {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} data-effect={visual.rarity==="legendary"?legendaryEffect(session.chosenEffect):undefined} style={{"--stroke-color":visual.color} as CSSProperties}>
+              {(visual.rarity==="superior"||visual.rarity==="epic"||visual.rarity==="legendary")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
               <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
-              {visual.rarity==="epic"&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle"><path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
+              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle">{visual.rarity==="legendary"&&<circle className="bebrave-wisp-orbit" r="8"/>}<path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
             </g>}
-            {drawings.map(d=><g key={d.id} data-sequence={d.publicSequence}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed}/>)}</g>)}
+            {drawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence} data-drawing-id={d.id} role={inspecting?"button":undefined} tabIndex={inspecting?0:undefined} aria-label={inspecting?`Admire ${d.rarity}`:undefined} onKeyDown={e=>{if(inspecting&&(e.key==="Enter"||e.key===" ")){e.preventDefault();inspectDrawing(d,e.currentTarget);}}}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
           </svg>
           {mode==="fallen"&&<div className="bebrave-fallen-cut" aria-hidden="true"/>}
         </div>
       </div>
     </div>
 
+    {inspection&&<BeBraveInspector key={inspection.drawing.id} drawing={inspection.drawing} opener={inspection.opener} onClose={()=>setInspection(null)}/>}
   </section>;
 }

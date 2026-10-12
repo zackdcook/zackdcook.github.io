@@ -1,7 +1,7 @@
 import { NextResponse, after } from "next/server";
 import { serviceSupabase } from "@/lib/supabase";
 import { verifyTurnstile } from "@/lib/turnstile";
-import { assertBookOrigin, captureAccepted, rateLimit, requestCountry, signupEnabled, smallJson } from "@/lib/book-launch/server";
+import { assertBookOrigin, captureAccepted, rateLimit, requestCountry, signupEnabled, signupTestMode, smallJson } from "@/lib/book-launch/server";
 import { bookCopy, campaign, consentVersion, normalizeEmail, referral, sourcePage } from "@/lib/book-launch/shared";
 
 export async function POST(request: Request) {
@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (body.placement !== "homepage" && body.placement !== "menu") throw new Error("validation");
     category = "challenge";
     if (typeof body.token !== "string") throw new Error("challenge");
-    await verifyTurnstile(body.token, new URL(request.headers.get("origin")!).hostname, "book_launch");
+    if (!signupTestMode()) await verifyTurnstile(body.token, new URL(request.headers.get("origin")!).hostname, "book_launch");
     category = "unavailable";
     const { data, error } = await serviceSupabase().from("book_launch_subscribers").upsert({
       email, consent_at: new Date().toISOString(), consent_version: consentVersion,

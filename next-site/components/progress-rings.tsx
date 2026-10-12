@@ -4,6 +4,8 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import progress from "@/content/progress.json";
 import { displayDate } from "@/content/site";
 import { progressRatio } from "@/lib/validation";
+import styles from "./progress-rings.module.css";
+import { Artwork } from "./artwork";
 
 const activeIndex = Math.max(0, progress.stages.findIndex(stage => stage.status === "active"));
 const number = (value: number) => value.toLocaleString("en-US");
@@ -26,7 +28,7 @@ function toneFor(index: number) {
   return `color-mix(in srgb, var(--progress-hue) ${72 - position * 36}%, var(--progress-dark))`;
 }
 
-export function ProgressRings({ compact = false }: { compact?: boolean }) {
+export function ProgressRings({ compact = false, presentation = "summary" }: { compact?: boolean; presentation?: "summary" | "folio" }) {
   const [selected, setSelected] = useState(activeIndex);
   const [hovered, setHovered] = useState<number | null>(null);
   const [focused, setFocused] = useState<number | null>(null);
@@ -39,7 +41,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
   const percentage = Math.round(progressRatio(stage.value, stage.target) * 100);
   const coreRadius = 61;
   const spacing = 85 / Math.max(1, progress.stages.length - 1);
-  const width = Math.min(20, spacing * .58);
+  const width = Math.min(8, spacing * .28);
   const noteFor = (item: typeof stage) => item.note
     .replace("{target}", number(item.target ?? 0))
     .replace("{currentStep}", progress.stages[activeIndex].label);
@@ -57,7 +59,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
 
   return <div
     ref={container}
-    className={`progress-display ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
+    className={`progress-display ${styles.display} ${presentation === "folio" ? styles.folio : ""} ${compact ? "compact" : ""} ${visible ? "rings-visible" : ""}`}
   >
     <div className="progress-details">
       <ol className="stage-list">{progress.stages.map((item, index) => <li key={item.id}>
@@ -69,6 +71,15 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           onClick={() => { setSelected(index); setHovered(null); }}
           onFocus={() => setFocused(index)}
           onBlur={() => setFocused(null)}
+          onKeyDown={event => {
+            if (!["ArrowDown", "ArrowUp", "ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key)) return;
+            event.preventDefault();
+            const total = progress.stages.length;
+            const next = event.key === "Home" ? 0 : event.key === "End" ? total - 1 :
+              (index + (event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1) + total) % total;
+            setSelected(next); setHovered(null);
+            container.current?.querySelectorAll<HTMLButtonElement>(".stage-button")[next]?.focus();
+          }}
           onPointerEnter={event => { if (event.pointerType === "mouse") setHovered(index); }}
           onPointerLeave={() => setHovered(null)}
         >
@@ -80,7 +91,17 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
         {item.target && <span className="sr-only" role="progressbar" aria-label={item.label} aria-valuemin={0} aria-valuemax={item.target} aria-valuenow={Math.min(item.value, item.target)} aria-valuetext={`${number(item.value)} of ${number(item.target)} ${item.unit}`} />}
       </li>)}</ol>
     </div>
-    <div className="progress-chart"><div className="rings" onPointerLeave={() => setHovered(null)}>
+    <div className="progress-chart"><div className="rings" data-material-surface="glass" onPointerLeave={() => setHovered(null)}>
+      <Artwork slot="progress-dial" className={styles.dialFace}>
+        <svg viewBox="0 0 320 320" aria-hidden="true" focusable="false">
+          <defs><radialGradient id={`${id}-face`} cx=".32" cy=".24" r=".85"><stop stopColor="var(--color-surface)"/><stop offset="1" stopColor="var(--color-surface-alt)"/></radialGradient></defs>
+          <circle cx="160" cy="160" r="158" fill={`url(#${id}-face)`}/>
+          <g stroke="var(--color-brass)" strokeWidth=".8" opacity=".45">{Array.from({length:20},(_,index)=>{
+            const angle=index*Math.PI/10,inner=index%5===0?150:153;
+            return <path key={index} d={`M${(160+inner*Math.sin(angle)).toFixed(2)},${(160-inner*Math.cos(angle)).toFixed(2)}L${(160+156*Math.sin(angle)).toFixed(2)},${(160-156*Math.cos(angle)).toFixed(2)}`}/>;
+          })}</g>
+        </svg>
+      </Artwork>
       <svg viewBox="0 0 320 320" aria-hidden="true">
         <defs>{progress.stages.map((item, index) => {
           const tone = toneFor(index);
@@ -102,12 +123,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
           >
             {index === 0 ? <circle className="core-fill" cx="160" cy="160" r={coreRadius} fill={`url(#${id}-tone-${index})`} /> : <>
               <circle cx="160" cy="160" r={radius} fill="none" stroke="var(--progress-track)" strokeWidth={width} />
-              {item.status === "planned" ? <g className="ring-dots" fill={`url(#${id}-tone-${index})`}>{Array.from({ length: 40 }, (_, dot) => {
-                const angle = dot * Math.PI * 2 / 40 - Math.PI / 2;
-                // Fixed world geometry avoids Safari's dashed-stroke resampling
-                // when a nearby :active control repaints. Positions never animate.
-                return <circle key={dot} cx={Number((160 + radius * Math.cos(angle)).toFixed(3))} cy={Number((160 + radius * Math.sin(angle)).toFixed(3))} r="3.5" />;
-              })}</g> :
+              {item.status === "planned" && ratio === 0 ? null :
                 <circle className="ring-fill" cx="160" cy="160" r={radius} pathLength="100" fill="none" stroke={`url(#${id}-tone-${index})`} strokeWidth={width} strokeLinecap="round" strokeDasharray="100 100" transform="rotate(-90 160 160)" />}
             </>}
             {(index === 0 ? [coreRadius + 3] : [radius - width / 2 - 3, radius + width / 2 + 3]).map(edge => <circle
@@ -133,8 +149,7 @@ export function ProgressRings({ compact = false }: { compact?: boolean }) {
       </svg>
     </div><p className="project-updated">Progress updated <time dateTime={progress.updated}>{displayDate(progress.updated)}</time></p></div>
     <div className="progress-note" aria-live="polite" aria-atomic="true">
-      {progress.stages.map((item, index) => <div key={item.id} hidden={current !== index} aria-hidden={current !== index}>
-        <h3><StageLabel label={item.label} /></h3>
+      {progress.stages.map((item, index) => <div key={item.id} data-selected={current === index} aria-hidden={current !== index}>
         <p id={`${id}-note-${item.id}`}><OrdinalText text={noteFor(item)} /></p>
       </div>)}
     </div>
