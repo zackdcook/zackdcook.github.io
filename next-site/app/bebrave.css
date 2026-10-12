@@ -306,3 +306,9 @@ html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspe
 @media(prefers-reduced-motion:reduce){:is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) .button::before{display:block}}
 .tool-cache-open{background-image:var(--asset-tool-cache-open)!important}
 @media(max-width:700px){.bebrave-color-cache{left:66%;top:0;width:32%;height:100%}}
+/* Short screens keep the keypad/colors scrollable above the dialogue. */
+@media(max-width:700px) and (max-height:600px){
+ .bebrave-stage:has(.bebrave-center-modal) .bebrave-overlay{display:grid;overflow:clip;grid-template-rows:minmax(0,1fr) auto}
+ .bebrave-stage:has(.bebrave-center-modal) .bebrave-overlay-main{min-height:0;overflow-y:auto;overflow-x:hidden;align-items:start;overscroll-behavior:contain}
+ .bebrave-stage:has(.bebrave-center-modal) .bebrave-center-modal{margin:0 auto}
+}
