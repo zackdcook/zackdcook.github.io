@@ -5,8 +5,9 @@ import type { RefObject } from "react";
 export function BeBraveCypress({ marks = 0, impactRef }: { marks?: number; impactRef?: RefObject<HTMLDivElement | null> }) {
   return <div className="bebrave-cypress" aria-hidden="true">
     <div className="bebrave-cypress-base" ref={impactRef}>
-      <div className="bebrave-cypress-shaft"/>
       <div className="bebrave-cypress-roots"/>
+      <div className="bebrave-cypress-cut"/>
+      <div className="bebrave-cypress-crown"><div className="bebrave-cypress-shaft"/><div className="bebrave-cypress-upper-roots"/></div>
       {marks > 0 && <div className="bebrave-cypress-hacks">{Array.from({ length: marks }, (_, i) => <i key={i} style={{ rotate: `${-5 + i * 3}deg`, top: `${i * 6}px` }}/>)}</div>}
       <div className="bebrave-cypress-dust"><i/><i/><i/></div>
     </div>

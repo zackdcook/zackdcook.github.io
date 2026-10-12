@@ -5,7 +5,8 @@ import {createElement} from 'react';
 import {drawingInputOpen} from '../lib/bebrave/input-window';
 import {afterReveal,resumedScene} from '../lib/bebrave/presentation';
 import type {BeBraveSessionView} from '../lib/bebrave-types';
-import {BeBraveStroke,StrokeLayers,pointsToPath} from '../components/bebrave-stroke';
+import {BeBraveCarving,BeBraveStroke,StrokeLayers,carvingToPath,pointsToPath} from '../components/bebrave-stroke';
+import {sparklePoints} from '../lib/bebrave/effect-anchors';
 
 test('input closes at the server deadline even before the next HUD tick, and while finalizing',()=>{
  const deadline='2026-10-12T03:00:00Z',end=Date.parse(deadline);
@@ -14,6 +15,36 @@ test('input closes at the server deadline even before the next HUD tick, and whi
  assert.equal(drawingInputOpen(deadline,end-100,200,false),false);
  assert.equal(drawingInputOpen(deadline,end-100,0,true),false);
  assert.equal(drawingInputOpen(null,end-100,0,false),false);
+});
+
+test('crossing strokes share each ink layer without connecting or altering their original paths',()=>{
+ const strokes=[
+  {strokeId:'first',strokeOrder:0,points:[[20.1,1500.2],[120.3,1600.4]] as Array<[number,number]>},
+  {strokeId:'second',strokeOrder:1,points:[[120.3,1500.2],[20.1,1600.4]] as Array<[number,number]>},
+ ];
+ const before=JSON.stringify(strokes),d=carvingToPath(strokes);
+ assert.equal(d,'M20.1 1500.2 L120.3 1600.4 M120.3 1500.2 L20.1 1600.4');
+ for(const rarity of ['common','uncommon','superior','epic','legendary'] as const){
+  const markup=renderToStaticMarkup(createElement(BeBraveCarving,{strokes,color:'#00F5FF',rarity,seed:3812,effectId:'will-o-wisp-v1'}));
+  for(const layer of ['contrast','cut','rim','line','inlay']){
+   assert.equal((markup.match(new RegExp(`class="bebrave-stroke-${layer}"`,'g'))||[]).length,1);
+   assert.ok(markup.includes(`class="bebrave-stroke-${layer}" d="${d}"`));
+  }
+ }
+ assert.equal(JSON.stringify(strokes),before);
+});
+
+test('session-wide ink keeps each original stroke seed and sparkle anchor',()=>{
+ const strokes=[
+  {strokeId:'a',strokeOrder:1,points:[[10,1510],[50,1550],[120,1590]] as Array<[number,number]>},
+  {strokeId:'b',strokeOrder:4,points:[[140,1510],[120,1530],[10,1590]] as Array<[number,number]>},
+ ];
+ const markup=renderToStaticMarkup(createElement(BeBraveCarving,{strokes,color:'#C337AA',rarity:'legendary',seed:9001,effectId:'will-o-wisp-v1'}));
+ for(const stroke of strokes){
+  assert.ok(markup.includes(`data-stroke-id="${stroke.strokeId}"`));
+  for(const anchor of sparklePoints(stroke.points,9001,stroke.strokeOrder))assert.ok(markup.includes(`transform="translate(${anchor.x} ${anchor.y})"`));
+ }
+ assert.ok(markup.includes('--stroke-color:#C337AA'));assert.ok(markup.includes('data-effect="will-o-wisp-v1"'));
 });
 test('resumed server choices replay presentation without returning to tool selection or starting time',()=>{
  const session={status:'ready',chosenTool:'nail'} as BeBraveSessionView;

@@ -3,7 +3,7 @@
 import { useEffect,useId,useRef,useState } from 'react';
 import type { BeBravePublicDrawing } from '@/lib/bebrave-types';
 import { carvingBounds } from '@/lib/bebrave/carving-inspection';
-import { BeBraveStroke } from './bebrave-stroke';
+import { BeBraveCarving } from './bebrave-stroke';
 
 /** A selective original-art lens. The viewport projection appears immediately;
  * only this one published canonical record is fetched, never the whole tree. */
@@ -27,7 +27,7 @@ export function BeBraveInspector({drawing,opener,onClose}:{drawing:BeBravePublic
     <div className="bebrave-inspector-art" data-detail={canonical?'canonical':'projection'} aria-busy={!canonical&&!problem}>
       <span aria-hidden="true"/>
       <svg viewBox={`${bounds.left} ${bounds.top} ${bounds.width} ${bounds.height}`} role="img" aria-label="Drawings carved into the shared cypress tree">
-        {detail.strokes.map(stroke=><BeBraveStroke key={stroke.strokeId} stroke={stroke} color={detail.color} rarity={detail.rarity} seed={detail.effectSeed} effectId={detail.effectId}/>)}
+        <BeBraveCarving strokes={detail.strokes} color={detail.color} rarity={detail.rarity} seed={detail.effectSeed} effectId={detail.effectId}/>
       </svg>
     </div>
     {problem&&<p role="alert">{problem}</p>}

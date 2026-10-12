@@ -56,10 +56,11 @@ function GameSettings({ opener, onClose, onResetTimeline }: { opener: HTMLButton
   const dialog = useRef<HTMLDialogElement>(null), title = useId();
   useEffect(() => {
     dialog.current?.showModal();
+    dialog.current?.querySelector<HTMLElement>("h2")?.focus({preventScroll:true});
     return () => { if (opener?.isConnected) opener.focus({ preventScroll: true }); };
   }, [opener]);
   return <dialog ref={dialog} className="bebrave-settings bebrave-menu-panel" aria-labelledby={title} onClose={onClose}>
-    <header className="bebrave-inspector-heading"><h2 id={title}>Settings</h2><button className="button" aria-label="Back" onClick={() => dialog.current?.close()}>×</button></header>
+    <header className="bebrave-inspector-heading"><h2 id={title} tabIndex={-1}>Settings</h2><button className="button" aria-label="Back" onClick={() => dialog.current?.close()}>×</button></header>
     <fieldset><legend>Appearance</legend><div className="bebrave-setting-choices" onKeyDown={choiceKeys}>{(["system", "light", "dark"] as const).map(theme => <button key={theme} className="button" aria-pressed={preferences.theme === theme} onClick={() => update({ theme })}>{theme[0].toUpperCase() + theme.slice(1)}</button>)}</div></fieldset>
     <label className="bebrave-setting-toggle"><input type="checkbox" checked={preferences.reduceEffects} onChange={event => update({ reduceEffects: event.target.checked })}/><span>Reduce effects</span></label>
     {reduced && !preferences.reduceEffects && <p className="bebrave-setting-note">Your device’s reduced-motion setting is active.</p>}

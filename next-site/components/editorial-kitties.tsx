@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { usePreferences } from "./site-preferences";
 import { Artwork, ArtworkImage } from "./artwork";
 import { artworkEnabled } from "@/lib/art-assets";
 import { kittyWindows, shadowFlight, braveDiscoveryKey } from "@/lib/kitty-shadows";
+import { BraveDiscoveryDialogue } from "./brave-discovery-dialogue";
 import styles from "./editorial-kitties.module.css";
 
 function BirdShadow({ reduced }: { reduced: boolean }) {
@@ -114,7 +114,7 @@ export function EditorialKitties({ emptyPhoto, label = "Editorial kitty committe
         </div>
       </div>
       <figcaption className={styles.caption}>{label}</figcaption>
-      {escaped && <div className={styles.reveal} data-brave-dialogue><p role="status">Brave chased a shadow and got outside.</p><Link ref={destination} href="/bebrave" className={styles.destination}>Follow him.</Link></div>}
+      {escaped && <BraveDiscoveryDialogue destinationRef={destination}/>}
     </figure>
   </div>;
 }

@@ -148,16 +148,17 @@ html:has(.is-draw),body:has(.is-draw){overflow:hidden}
 .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 70%,#fff2c8);stroke-width:1.6;opacity:.65;translate:0 1px}
 .bebrave-common .bebrave-stroke-inlay{stroke:#fff2c8;opacity:.5;stroke-dasharray:7 21}
 .bebrave-uncommon .bebrave-stroke-inlay{stroke-width:2;opacity:.7}
-.bebrave-stroke-glow{stroke-width:25;opacity:.38;filter:none}
+.bebrave-stroke-glow{stroke-width:23;opacity:.72;filter:drop-shadow(0 0 5px var(--stroke-color))}
+.bebrave-uncommon .bebrave-stroke-glow{stroke-width:20;opacity:.28;filter:drop-shadow(0 0 2px var(--stroke-color))}
 .bebrave-superior .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 18%,white);stroke-width:2.8;opacity:.94}
-.bebrave-epic .bebrave-stroke-glow{stroke-width:32;opacity:.48;filter:none}
+.bebrave-epic .bebrave-stroke-glow{stroke-width:30;opacity:.8;filter:drop-shadow(0 0 6px var(--stroke-color))}
 .bebrave-epic .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 12%,white);stroke-width:3.2;opacity:.94}
 .bebrave-epic-shimmer{stroke:color-mix(in srgb,var(--stroke-color) 8%,white);stroke-width:4;stroke-dasharray:32 27 3 25;opacity:1;animation:bebrave-shimmer 5s linear infinite}
 .bebrave-sparkle{pointer-events:none}
-.bebrave-stroke .bebrave-sparkle-star{fill:color-mix(in srgb,var(--stroke-color) 15%,white);stroke:#121526;stroke-width:1.3;transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 3.8s ease-in-out infinite}
+.bebrave-stroke .bebrave-sparkle-star{fill:color-mix(in srgb,var(--stroke-color) 15%,white);stroke:#121526;stroke-width:1.3;filter:drop-shadow(0 0 4px var(--stroke-color));transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 3.8s ease-in-out infinite}
 .bebrave-stroke .bebrave-sparkle-facets{stroke:color-mix(in srgb,var(--stroke-color) 35%,white);stroke-width:1.8;opacity:.8;stroke-dasharray:9 4}
 .bebrave-sparkle-core{fill:white;opacity:1}
-.bebrave-legendary .bebrave-stroke-glow{stroke:var(--effect-wisp-halo);stroke-width:38;opacity:.48;filter:none}
+.bebrave-legendary .bebrave-stroke-glow{stroke:var(--stroke-color);stroke-width:36;opacity:.82;filter:drop-shadow(0 0 7px var(--stroke-color))}
 .bebrave-legendary .bebrave-stroke-inlay{stroke:var(--effect-wisp-core);stroke-width:3.6;opacity:.9}
 .bebrave-legendary .bebrave-epic-shimmer{stroke:var(--effect-wisp-core);stroke-width:4.5;stroke-dasharray:44 24 4 20;animation-duration:6s}
 .bebrave-legendary .bebrave-sparkle-star{fill:var(--effect-wisp-core);animation-duration:4.5s}
@@ -269,14 +270,19 @@ html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspe
 /* The shaft and its root neck are measured from the same illustration box. */
 .bebrave-cypress{--cypress-width:min(105vw,1200px);--cypress-bottom:-10dvh;position:absolute;inset:0;pointer-events:none}
 .bebrave-cypress-base{position:absolute;left:50%;bottom:var(--cypress-bottom);translate:-50% 0;width:var(--cypress-width);aspect-ratio:1024/680}
-.bebrave-cypress-shaft{position:absolute;left:51.2%;bottom:84%;width:20.8%;height:120dvh;translate:-50% 0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/100% auto repeat-y;filter:brightness(var(--world-bark-light));mask-image:linear-gradient(black calc(100% - 100px),transparent);transform-origin:50% 100%}
-.bebrave-cypress-roots{position:absolute;inset:0;background:var(--asset-tree-roots) center/contain no-repeat;filter:brightness(var(--world-bark-light));mask-image:linear-gradient(transparent,black 14%)}
-.bebrave-cypress-hacks{position:absolute;z-index:3;left:46%;top:11%;width:13%;height:46px}
+.bebrave-cypress-crown{position:absolute;inset:0;transform-origin:51.2% 14%}
+.bebrave-cypress-shaft{position:absolute;left:51.2%;bottom:86%;width:20.8%;height:120dvh;translate:-50% 0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/100% auto repeat-y;filter:brightness(var(--world-bark-light))}
+.bebrave-cypress-roots,.bebrave-cypress-upper-roots{position:absolute;inset:0;background:var(--asset-tree-roots) center/contain no-repeat;filter:brightness(var(--world-bark-light))}
+.bebrave-cypress-roots{clip-path:inset(14% 0 0)}
+.bebrave-cypress-upper-roots{clip-path:inset(0 0 86%);mask-image:linear-gradient(transparent,black 14%)}
+.bebrave-cypress-cut{position:absolute;z-index:1;left:51.2%;top:14%;translate:-50% -50%;width:28%;height:4%;border:3px solid #121526;border-radius:50%;background:repeating-radial-gradient(ellipse at center,#aa8a53 0 7px,#635139 8px 10px);opacity:0}
+.bebrave-cypress-hacks{position:absolute;z-index:3;left:46%;top:14%;width:13%;height:46px}
 .bebrave-cypress-hacks i{position:absolute;left:0;width:100%;height:5px;background:#121526;clip-path:polygon(0 45%,35% 0,100% 40%,63% 100%);box-shadow:0 2px var(--color-brass)}
-.bebrave-cypress-dust{position:absolute;left:45%;top:11%;width:15%;height:15%;z-index:4}
+.bebrave-cypress-dust{position:absolute;left:45%;top:14%;width:15%;height:15%;z-index:4}
 .bebrave-cypress-dust i{position:absolute;width:9px;height:5px;background:var(--color-brass);border:1px solid #121526;opacity:0;rotate:20deg}
 .bebrave-cypress-dust i:nth-child(2){left:40%;rotate:-25deg}.bebrave-cypress-dust i:nth-child(3){left:80%;rotate:55deg}
-.is-falling .bebrave-cypress-shaft{animation:bebrave-fall 1.1s cubic-bezier(.3,.05,.75,.9) both}
+.is-falling .bebrave-cypress-crown{animation:bebrave-fall 1.1s cubic-bezier(.3,.05,.75,.9) both}
+.is-falling .bebrave-cypress-cut{opacity:1}
 .is-falling .bebrave-cypress-hacks{opacity:0}
 .is-falling .bebrave-cypress-dust i{animation:bebrave-wood-dust .65s .2s ease-out both}
 @keyframes bebrave-fall{0%{rotate:0deg}16%{rotate:-1.5deg}32%{rotate:8deg}72%{rotate:48deg}100%{rotate:83deg}}
@@ -341,3 +347,36 @@ html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-cypress-dust{
  .bebrave-fallen-scroll{margin-top:90px;height:calc(100svh - 170px)}
 }
 @media(max-width:360px){.bebrave-game-nav,.bebrave-control-rail{gap:4px}.bebrave-control-rail .button{padding:7px}}
+
+/* Input provenance keeps keyboard focus visible, including in native dialogs. */
+html[data-bebrave-input="pointer"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspector) :is(a,button,input,[tabindex]):focus{outline:none}
+.bebrave-settings .bebrave-inspector-heading h2:focus{outline:none}
+.bebrave-stage .bebrave-image-choice:focus-visible{outline:none}
+
+/* Tool copy scrolls within a constant slot; the camera and roots never reflow. */
+.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{grid-template-rows:minmax(0,1fr) clamp(230px,30dvh,280px)}
+.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-rpg-hud{height:100%;max-height:none;min-height:0;grid-template-rows:minmax(0,1fr) auto;overflow:hidden}
+.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-rpg-dialogue{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-ground-encounter{height:100%;max-height:510px}
+.bebrave-encounter-objects{inset:auto;left:50%;bottom:0;translate:-50% 0;width:118%;height:auto;aspect-ratio:1024/680}
+.bebrave-ground-object.object-arrowhead{left:10%;top:63%;width:16%}
+.bebrave-ground-object.object-nail{left:32%;top:63%;width:16%}
+.bebrave-ground-object.object-key{left:51%;top:66%;width:12%}
+.bebrave-ground-object.object-cache{left:66%;top:42%;width:26%}
+
+/* Standalone Chop/Back controls retain a frame even before a tap or hover. */
+.bebrave-stage-ui>.bebrave-rpg-actions,.bebrave-world-stage>.bebrave-rpg-actions{position:fixed;padding:7px;border:1px solid var(--discovery-dialog-edge);border-radius:5px;background:linear-gradient(145deg,var(--discovery-dialog-bg),var(--discovery-dialog-depth));box-shadow:inset 0 0 0 2px var(--discovery-dialog-depth);width:min(calc(100% - 28px),360px)}
+.bebrave-stage-ui>.bebrave-rpg-actions .button,.bebrave-world-stage>.bebrave-rpg-actions .button{background:var(--discovery-dialog-selected);border-color:var(--discovery-dialog-edge)}
+.bebrave-admire-actions{position:fixed;z-index:101;bottom:max(14px,env(safe-area-inset-bottom));left:50%;translate:-50% 0;width:min(calc(100% - 28px),740px);padding:7px}
+.bebrave-admire-actions>.button{justify-content:center;width:100%;background:var(--discovery-dialog-selected)}
+.bebrave-admire-actions:not(:has(.bebrave-completion)){max-width:190px}
+.bebrave-admire-actions .bebrave-completion{padding:0;border:0;animation:none}
+.bebrave-admire-actions:has(.bebrave-benchmark-label){display:flex;flex-wrap:wrap;align-items:center;gap:6px;max-width:740px}
+.bebrave-admire-actions:has(.bebrave-benchmark-label)>.button{width:auto;flex:1;justify-content:center;padding:8px}
+.bebrave-admire-actions .bebrave-benchmark-label{width:100%;margin:0;font-size:11px;line-height:1.3}
+.is-admire .bebrave-standing-scroll{padding-bottom:var(--bebrave-admire-floor,80px)}
+.is-admire .bebrave-world::after{content:"";position:absolute;top:100%;left:0;right:0;height:var(--bebrave-admire-floor,80px);background:var(--bebrave-bark) var(--asset-tree-bark) center calc(-1 * var(--bebrave-bark-bottom))/100% auto repeat-y;filter:brightness(var(--world-bark-light));box-shadow:inset 4px 0 0 #14172b80,inset -4px 0 0 #14172b80;pointer-events:none}
+@media(max-width:700px) and (max-height:600px){.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{grid-template-rows:minmax(150px,1fr) 200px}}
+html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-stroke-glow{filter:none;opacity:.16;stroke-width:15}
+html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-sparkle-star{filter:none}
+@media(prefers-reduced-motion:reduce){.bebrave-stroke-glow,.bebrave-sparkle-star{filter:none}}
