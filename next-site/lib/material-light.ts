@@ -30,14 +30,14 @@ export function materialLight(bounds: SurfaceBounds, x: number, y: number, inten
 }
 
 /** Equal-speed arrival and departure, including reversals halfway through. */
-export function approachLight(current: number, target: number, elapsed: number) {
-  const distance = Math.max(0, elapsed) / 1100;
+export function approachLight(current: number, target: number, elapsed: number, responseMs = 1100) {
+  const distance = Math.max(0, elapsed) / responseMs;
   return current < target ? Math.min(target, current + distance) : Math.max(target, current - distance);
 }
 
 /** Frame-rate-independent light travel; reversals keep their current position. */
-export function followLight(current: {x:number;y:number}, target: {x:number;y:number}, elapsed: number) {
-  const weight = 1 - Math.exp(-Math.max(0, elapsed) / 130);
+export function followLight(current: {x:number;y:number}, target: {x:number;y:number}, elapsed: number, responseMs = 130) {
+  const weight = 1 - Math.exp(-Math.max(0, elapsed) / responseMs);
   return { x: current.x + (target.x - current.x) * weight, y: current.y + (target.y - current.y) * weight };
 }
 

@@ -5,7 +5,7 @@ export function authoredCopy(source,filename){
   const tree=ts.createSourceFile(filename,source,ts.ScriptTarget.Latest,true,ts.ScriptKind.TSX);
   const copy=new Set();
   const add=value=>{const normalized=normalize(value);if(normalized)copy.add(normalized);};
-  const visibleAttributes=new Set(["aria-label","alt","title","placeholder"]);
+  const visibleAttributes=new Set(["aria-label","alt","title","placeholder","closeLabel"]);
   function walk(node){
     if(ts.isJsxText(node))add(node.text);
     if(ts.isJsxAttribute(node)&&visibleAttributes.has(node.name.text)&&node.initializer&&ts.isStringLiteral(node.initializer))add(node.initializer.text);

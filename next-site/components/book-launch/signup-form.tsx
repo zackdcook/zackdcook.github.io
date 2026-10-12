@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { HumanCheck } from "@/components/human-check";
 import { usePreferences } from "@/components/site-preferences";
 import { bookCopy, bookVisibility, type Placement } from "@/lib/book-launch/shared";
@@ -62,14 +62,15 @@ export function BookSignupForm({ placement, titleId, onSuccess }: { placement: P
       else setVerification(attempt);
     } catch { setVerification(null); setError(true); }
   }
+  const working = pending || verification !== null;
   return <>
     <h2 ref={heading} className={placement === "menu" ? "dialog-title" : undefined} tabIndex={placement === "menu" ? -1 : undefined} id={titleId}>{bookCopy.headline}</h2><p>{bookCopy.supporting}</p>
-    <form ref={form} onSubmit={submit} className="book-signup-form" aria-busy={pending}>
+    <form ref={form} onSubmit={submit} className="book-signup-form" aria-busy={working}>
       <div className="book-signup-fields">
         <label className="sr-only" htmlFor={`${id}-email`}>Email address</label>
         <input id={`${id}-email`} type="email" name="email" placeholder={bookCopy.placeholder} autoComplete="email" inputMode="email" maxLength={254} required disabled={pending}
           onChange={event => { gate.cancel(); setVerification(null); setError(false); if (!started.current && event.target.value.length) { started.current = true; bookEvent("book_signup_started", { placement }); } }} aria-describedby={error ? `${id}-error` : undefined} />
-        <button className="button" type="submit" disabled={pending}>{bookCopy.submit}</button>
+        <button className="button" aria-disabled={pending} aria-busy={working} type="submit">{bookCopy.submit}</button>
       </div>
       <div className="book-honeypot" aria-hidden="true"><label htmlFor={`${id}-website`}>Website</label><input id={`${id}-website`} name="website" tabIndex={-1} autoComplete="off" /></div>
       {verification && <HumanCheck key={verification.id} siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""} action="book_launch" resetKey={String(verification.id)} onToken={token => { void verified(verification.id, token); }} />}
@@ -81,9 +82,17 @@ export function HomepageBookCTA() {
   const { bookDismissed, bookSubscribed, dismissBook } = usePreferences();
   const { enabled } = useBookLaunch();
   const [success, setSuccess] = useState(false);
+  const [receiptHeight, setReceiptHeight] = useState<number>();
   const host = useRef<HTMLElement>(null);
   const receipt = useRef<HTMLDivElement>(null);
-  useEffect(() => { if (success) receipt.current?.focus({ preventScroll: true }); }, [success]);
+  useLayoutEffect(() => {
+    if (!success || !receipt.current) return;
+    const message = receipt.current;
+    message.focus({ preventScroll: true });
+    // The keyboard and form may have changed the visual viewport. Bring the
+    // actual status into view after React commits, beneath the sticky header.
+    message.scrollIntoView({ block: "center", behavior: "instant" });
+  }, [success]);
   const visible = enabled && bookVisibility(bookDismissed, bookSubscribed).homepage;
   useEffect(() => {
     if (!visible || !host.current) return;
@@ -105,7 +114,7 @@ export function HomepageBookCTA() {
   }, [visible]);
   // The success receipt is a status message, never a signup promotion. On a
   // subsequent homepage navigation this component resets; all entry points hide.
-  if (success) return <div className="book-success" role="status" tabIndex={-1} ref={receipt}>{bookCopy.success}</div>;
+  if (success) return <div className="book-success" style={{ minHeight: receiptHeight }} role="status" tabIndex={-1} ref={receipt}>{bookCopy.success}</div>;
   if (!visible) return null;
   return <section ref={host} className="book-callout" aria-labelledby="book-home-title">
     <div className="book-panel">
@@ -113,7 +122,7 @@ export function HomepageBookCTA() {
         bookEvent("book_cta_dismissed", { placement: "homepage" }); dismissBook();
         restoreBookFocus();
       }}>×</button>
-      <BookSignupForm placement="homepage" titleId="book-home-title" onSuccess={() => setSuccess(true)} />
+      <BookSignupForm placement="homepage" titleId="book-home-title" onSuccess={() => { setReceiptHeight(host.current?.getBoundingClientRect().height); setSuccess(true); }} />
     </div>
   </section>;
 }

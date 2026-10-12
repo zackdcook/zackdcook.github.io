@@ -55,13 +55,13 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
       if (event.key === bookSubscribedKey || event.key === null) setBookSubscribed(savedChoice(localStorage.getItem(bookSubscribedKey)));
       if (event.key === analyticsOptOutKey || event.key === null) setAnalyticsChoice(savedChoice(localStorage.getItem(analyticsOptOutKey)));
       } catch { setAnalyticsChoice(true); }
-      if (event.key === timelineKey) {
+      if (event.key === timelineKey || event.key === null) {
         let next = livingTimeline;
-        try { next = normalizeTimeline(JSON.parse(event.newValue || "{}")); } catch {}
-        setTimeline(next); document.documentElement.dataset.timeline = next.kind; return;
+        try { next = normalizeTimeline(JSON.parse(localStorage.getItem(timelineKey) || "{}")); } catch {}
+        setTimeline(next); document.documentElement.dataset.timeline = next.kind;
       }
-      if (event.key !== preferenceKey) return;
-      try { initial = normalizePreferences(JSON.parse(event.newValue || "{}")); } catch { initial = defaultPreferences; }
+      if (event.key !== preferenceKey && event.key !== null) return;
+      try { initial = normalizePreferences(JSON.parse(localStorage.getItem(preferenceKey) || "{}")); } catch { initial = defaultPreferences; }
       latest.current = initial; setPreferences(initial); apply();
     };
     window.addEventListener("storage", sync);
@@ -72,7 +72,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     setter(value); try { localStorage.setItem(key, String(value)); } catch {}
   }
   function update(patch: Partial<Preferences>) {
-    const next = normalizePreferences({ ...preferences, ...patch });
+    const next = normalizePreferences({ ...latest.current, ...patch });
     setPreferences(next); latest.current = next;
     try { localStorage.setItem(preferenceKey, JSON.stringify(next)); } catch {}
     const root = document.documentElement;

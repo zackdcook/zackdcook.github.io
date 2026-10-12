@@ -41,22 +41,25 @@ export function TiltLightingControl({
     if (reduced) return;
 
     try {
-      onChange(await requestTiltPermission());
+      onChange(true); await requestTiltPermission();
     } catch {
-      onChange(false);
+      // Browser permission failure must not overwrite the saved preference.
     }
   }
 
-  return <label className="preference-row">
+  return <div>
+  <label className="preference-row">
     <span>Phone tilt lighting</span>
     <span className="checkbox-control">
-      <input
+      <input aria-label="Phone tilt lighting"
         type="checkbox"
-        checked={enabled && (!permissionRequired || active)}
+        checked={enabled}
         disabled={reduced}
         onChange={event => void toggle(event.target.checked)}
       />
       <span className="preference-control checkbox-face" aria-hidden="true">✓</span>
     </span>
-  </label>;
+  </label>
+    {enabled && permissionRequired && !active && !reduced && <button type="button" className="button button-small" onClick={() => { void requestTiltPermission().catch(() => {}); }}>Allow phone tilt lighting</button>}
+  </div>;
 }

@@ -15,7 +15,7 @@
 .book-dialog .calendar-dialog-content{position:relative}
 .book-dialog .dialog-close{position:absolute;right:24px;top:24px}
 .book-dialog h2{font-size:clamp(25px,4vw,34px)}
-.book-success{margin-block:30px;padding-block:22px;font:650 22px/1.4 var(--display)}
+.book-success{scroll-margin-block:110px;margin-block:30px;padding-block:22px;font:650 22px/1.4 var(--display)}
 .book-menu-item{border:0;background:none;min-height:44px;padding:0;cursor:pointer;white-space:nowrap}
 .book-signup-form .human-check{margin-top:12px}
 @keyframes book-wait{to{rotate:360deg}}
