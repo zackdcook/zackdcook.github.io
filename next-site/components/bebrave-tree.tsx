@@ -4,6 +4,7 @@ import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSP
 import { drawingInputOpen } from "@/lib/bebrave/input-window";
 import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryEffect } from "@/lib/bebrave/effects";
+import { carvingBounds } from "@/lib/bebrave/carving-inspection";
 import { SectionCache } from "@/lib/bebrave/section-cache";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveStroke,StrokeLayers,CarvingSpark,pointsToPath,sparkGeometry } from "@/components/bebrave-stroke";
@@ -22,6 +23,9 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
   const [scale,setScale]=useState(1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
+  const [paintBand,setPaintBand]=useState<[number,number]>([Math.max(0,state.height-2880),state.height]);
+  const boundedDrawings=useMemo(()=>drawings.map(drawing=>({drawing,bounds:carvingBounds(drawing,72)})),[drawings]);
+  const visibleDrawings=useMemo(()=>boundedDrawings.filter(({bounds})=>bounds.top+bounds.height>=paintBand[0]&&bounds.top<=paintBand[1]).map(({drawing})=>drawing),[boundedDrawings,paintBand]);
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null);
   const fitRecap=mode==="admire"&&session?.status==="completed";
   const initialAdmireCamera=useRef(mode==="admire");
@@ -59,15 +63,25 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
     // A single observer changes CSS state without a React animation loop.
     const root=scene.current;
     if(!root||typeof IntersectionObserver==="undefined")return;
+    const visible=new Set<SVGGElement>();
+    const update=()=>{
+      // A crowded viewport keeps every static facet and its original anchors.
+      // Fresh marks move first: up to eight, or two in a dense viewport.
+      const animated=new Set(document.visibilityState==="visible"?[...visible].sort((a,b)=>Number(b.dataset.sequence)-Number(a.dataset.sequence)).slice(0,visible.size>12?2:8):[]);
+      for(const target of visible)target.style.setProperty("--effect-play",animated.has(target)?"running":"paused");
+    };
     const observer=new IntersectionObserver(entries=>{
       for(const entry of entries){
         const target=entry.target as SVGGElement;
-        target.style.setProperty("--effect-play",entry.isIntersecting?"running":"paused");
+        if(entry.isIntersecting)visible.add(target);
+        else{visible.delete(target);target.style.setProperty("--effect-play","paused");}
       }
+      update();
     },{root:mode==="fallen"?horizontal.current:null,rootMargin:"80px"});
     for(const drawing of root.querySelectorAll(".bebrave-published-drawing"))observer.observe(drawing);
-    return()=>observer.disconnect();
-  },[drawings,mode]);
+    document.addEventListener("visibilitychange",update);
+    return()=>{observer.disconnect();document.removeEventListener("visibilitychange",update);};
+  },[visibleDrawings,mode]);
   useEffect(()=>{
     let cancelled=false;
     sectionCache.setWindow(range[0],range[1]);
@@ -89,7 +103,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       const rail=scene.current?.querySelector<HTMLElement>(".bebrave-control-rail");
       const safeTop=(rail?.getBoundingClientRect().bottom||80)+12;
       scene.current?.style.setProperty("--bebrave-safe-top",`${safeTop}px`);
-      const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;scaleRef.current=next;setScale(next);};
+      const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;scaleRef.current=next;setScale(next);
+      if(!scrollFrame.current)scrollFrame.current=requestAnimationFrame(()=>tick());};
     const ro=new ResizeObserver(measure);ro.observe(mode==="fallen"&&horizontal.current?horizontal.current:el);const rail=scene.current?.querySelector(".bebrave-control-rail");if(rail)ro.observe(rail);measure();
     const tick=()=>{
       scrollFrame.current=0;
@@ -97,6 +112,11 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       const viewport=mode==="fallen"&&horizontal.current?horizontal.current.clientWidth:window.innerHeight;
       const position=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
       const local=mode==="fallen"&&horizontal.current?Math.max(0,s.height-horizontal.current.scrollLeft/scaleRef.current-viewport/scaleRef.current):Math.max(0,(window.scrollY-worldTop.current)/scaleRef.current);
+      // Retain the five-section data cache; paint only a camera-sized band.
+      // Quantized overscan avoids a React update for every scrolling pixel.
+      const step=BEBRAVE_SECTION_HEIGHT/4;
+      const band:[number,number]=[Math.max(0,Math.floor(local/step)*step-120),Math.ceil((local+viewport/scaleRef.current)/step)*step+120];
+      setPaintBand(previous=>previous[0]===band[0]&&previous[1]===band[1]?previous:band);
       const center=Math.floor((local+viewport/scaleRef.current*.5)/BEBRAVE_SECTION_HEIGHT);
       const max=Math.max(0,Math.ceil(s.height/BEBRAVE_SECTION_HEIGHT)-1);
       const next:[number,number]=[Math.max(0,Math.min(max,center)-2),Math.min(max,center+2)];
@@ -246,7 +266,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
               {(visual.rarity==="epic"||visual.rarity==="legendary")&&<g ref={activeAnchors}>{Array.from({length:10},(_,i)=><g key={i} visibility="hidden"><CarvingSpark r={3.5} legendary={visual.rarity==="legendary"}/></g>)}</g>}
               <g ref={activeGleam} visibility="hidden" className="bebrave-contact"><circle className="bebrave-contact-ring" r="11"/><path className="bebrave-contact-ticks" d="M-17 0h5M12 0h5M0 -17v5M0 12v5"/><circle className="bebrave-contact-core" r="2.2"/></g>
             </g>}
-            {drawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence} data-drawing-id={d.id}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
+            {visibleDrawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence} data-drawing-id={d.id}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
           </svg>
           {mode==="fallen"&&<div className="bebrave-fallen-cut" aria-hidden="true"/>}
         </div>

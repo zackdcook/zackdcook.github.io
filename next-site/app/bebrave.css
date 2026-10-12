@@ -148,16 +148,16 @@ html:has(.is-draw),body:has(.is-draw){overflow:hidden}
 .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 70%,#fff2c8);stroke-width:1.6;opacity:.65;translate:0 1px}
 .bebrave-common .bebrave-stroke-inlay{stroke:#fff2c8;opacity:.5;stroke-dasharray:7 21}
 .bebrave-uncommon .bebrave-stroke-inlay{stroke-width:2;opacity:.7}
-.bebrave-stroke-glow{stroke-width:25;opacity:.38;filter:blur(1.4px)}
+.bebrave-stroke-glow{stroke-width:25;opacity:.38;filter:none}
 .bebrave-superior .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 18%,white);stroke-width:2.8;opacity:.94}
-.bebrave-epic .bebrave-stroke-glow{stroke-width:32;opacity:.48;filter:blur(1.6px)}
+.bebrave-epic .bebrave-stroke-glow{stroke-width:32;opacity:.48;filter:none}
 .bebrave-epic .bebrave-stroke-inlay{stroke:color-mix(in srgb,var(--stroke-color) 12%,white);stroke-width:3.2;opacity:.94}
 .bebrave-epic-shimmer{stroke:color-mix(in srgb,var(--stroke-color) 8%,white);stroke-width:4;stroke-dasharray:32 27 3 25;opacity:1;animation:bebrave-shimmer 5s linear infinite}
 .bebrave-sparkle{pointer-events:none}
 .bebrave-stroke .bebrave-sparkle-star{fill:color-mix(in srgb,var(--stroke-color) 15%,white);stroke:#121526;stroke-width:1.3;transform-box:fill-box;transform-origin:center;animation:bebrave-sparkle 3.8s ease-in-out infinite}
 .bebrave-stroke .bebrave-sparkle-facets{stroke:color-mix(in srgb,var(--stroke-color) 35%,white);stroke-width:1.8;opacity:.8;stroke-dasharray:9 4}
 .bebrave-sparkle-core{fill:white;opacity:1}
-.bebrave-legendary .bebrave-stroke-glow{stroke:var(--effect-wisp-halo);stroke-width:38;opacity:.48;filter:blur(1.8px)}
+.bebrave-legendary .bebrave-stroke-glow{stroke:var(--effect-wisp-halo);stroke-width:38;opacity:.48;filter:none}
 .bebrave-legendary .bebrave-stroke-inlay{stroke:var(--effect-wisp-core);stroke-width:3.6;opacity:.9}
 .bebrave-legendary .bebrave-epic-shimmer{stroke:var(--effect-wisp-core);stroke-width:4.5;stroke-dasharray:44 24 4 20;animation-duration:6s}
 .bebrave-legendary .bebrave-sparkle-star{fill:var(--effect-wisp-core);animation-duration:4.5s}
@@ -301,6 +301,8 @@ html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspe
 .bebrave-home-button{--color-accent:var(--discovery-dialog-choice);position:static;min-height:44px;padding:0;border:0;border-radius:0;background:none;color:var(--discovery-dialog-ink);box-shadow:none;flex-shrink:0}
 .bebrave-home-button::before,.bebrave-home-button::after,.bebrave-home-button>span::after{display:none!important}
 .bebrave-test-reset-button{margin-left:auto}
+.bebrave-game-nav>.bebrave-preferences{margin-left:auto}
+.bebrave-game-nav:has(.bebrave-test-reset-button)>.bebrave-preferences{margin-left:0}
 .bebrave-control-rail .bebrave-test-reset-button{order:4}
 .bebrave-control-rail .bebrave-preferences{order:5}
 .bebrave-control-rail .bebrave-back-button{order:3;margin-left:auto}
@@ -333,7 +335,7 @@ html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-cypress-dust{
  .bebrave-reset-full{display:none}.bebrave-reset-short{display:inline}
  .bebrave-rpg-hud{padding:16px;gap:12px}.bebrave-rpg-copy{font-size:13px;line-height:1.55}
  .bebrave-overlay{padding-top:86px}
- .bebrave-object-label{font-size:8px}.bebrave-reveal-banner{max-width:54%}.bebrave-reveal-banner>span{font-size:22px}
+ .bebrave-object-label{font-size:8px;width:clamp(52px,18vw,72px);max-width:clamp(52px,18vw,72px);padding:3px 4px}.bebrave-reveal-banner{max-width:54%}.bebrave-reveal-banner>span{font-size:22px}
  .bebrave-ground-object.object-arrowhead{left:6%;top:58%;width:17%}.bebrave-ground-object.object-nail{left:28%;top:58%;width:16%}.bebrave-ground-object.object-key{left:50%;top:60%;width:13%}.bebrave-ground-object.object-cache{left:69%;top:28%;width:29%}
  .bebrave-reveal-tool.object-cache.is-chosen{left:63%;top:30%;width:21%}
  .bebrave-fallen-scroll{margin-top:90px;height:calc(100svh - 170px)}
