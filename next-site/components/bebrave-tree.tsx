@@ -28,6 +28,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<{x:number;y:number;screenY:number}|null>(null),zoomRef=useRef(zoom);
   zoomRef.current=zoom;
   const [fitRecap,setFitRecap]=useState(Boolean(mode==="admire"&&session?.status==="completed"));
+  const initialAdmireCamera=useRef(mode==="admire");
   const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60),[finishBusy,setFinishBusy]=useState(false);
   const strokesRef=useRef<DraftStroke[]>(draftStrokes);
   const active=useRef<{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number}|null>(null);
@@ -130,9 +131,14 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   },[mode,state.height]);
 
   useLayoutEffect(()=>{
-    if(mode!=="draw"||!world.current||!session?.zoneBottom)return;
-    window.scrollTo({top:Math.max(0,worldTop.current+session.zoneBottom*scale-window.innerHeight+24),behavior:"instant"});
-  },[mode,scale,session?.zoneBottom]);
+    if(!world.current||(mode!=="draw"&&!(mode==="admire"&&initialAdmireCamera.current)))return;
+    // The first measurement changes the scaled spacer height. Place the camera
+    // after that render, so the browser cannot clamp it to the unscaled height.
+    if(Math.abs(scale-scaleRef.current)>.001)return;
+    const bottom=session?.zoneBottom??state.height;
+    window.scrollTo({top:Math.max(0,worldTop.current+bottom*scale-window.innerHeight+24),behavior:"instant"});
+    if(mode==="admire")initialAdmireCamera.current=false;
+  },[mode,scale,session?.zoneBottom,state.height]);
 
   function adjustZoom(next:number){
     if(mode!=="admire")return;
