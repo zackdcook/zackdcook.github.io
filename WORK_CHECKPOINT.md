@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Be Brave joined-ink feedback — finished test revision, 2026-10-12
+
+- Final app4671459163fdbeb45038b3bf5e279ce0b64805fe, READY Previewdpl_MCG9hZGxZFqt4K5gcx6qHLoJ1fQx. Stable test https://zack-cook-git-experiment-be-brave-jrpg-aaee4f-dove-mack0o-3684.vercel.app/bebrave . Only own experimental branch; main75de96b / productiondpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ preserved.
+- Own strokes share one ink stack with original geometry/seeds; stronger special halos/stars, pointer-aware focus, opaque root join, complete crown fall, stationary encounter text, bottom Admire controls, short-phone full drawing fit, Regret-only fault line. Explicitly requested public Home shadow correction and About moss entrance included in test only. Two visual refinement passes, no broader redesign.
+-117 tests/typecheck/art/theme/48-route build pass. Actual resumed Legendary session61ba9fa9,18 original points, timed60sec completion/publication40/Admire/refresh/archive hashes passed. New attempt9e87d2d7 shared same visitor after reset and was cancelled. Test tree121ft/count40/revision108, all39 prior archive hashes unchanged. Disposable joined-ink fixture spent once;50 distribution codes unused/digest unchanged/private CSV untouched.
+- All4 rendered themes and explicit reduced effects reviewed. Final record next-site/docs/reimagining/BE_BRAVE_JOINED_INK_2026-10-12.md distinguishes passed flows from limits: cloud1Hz timing/missed continuous fall, horizontal command0→0 (no final physical pan certification), original HTTP browser block, physical touch/Safari/stylus/OS motion and anonymous access unverified. Dense effects remain slower; no speculative storage rewrite.
+- Final action: push this checkpoint, save review evidence, confirm owned port3100 closed and stop existing cautious-trout Codespace. Preview stays live; milestone ends at handoff.
+
 ## Be Brave requested feedback — finished test revision, 2026-10-12
 
 - Final app `d6f9492be5e64d77f9fbdade1248fba6f510a329`; READY isolated Preview `dpl_4fKt8BeedDHw2BqqWFmgTxipUo7q`: https://zack-cook-18cnn9foz-dove-mack0o-3684.vercel.app/bebrave. Two visual refinement passes; scope ends here.
