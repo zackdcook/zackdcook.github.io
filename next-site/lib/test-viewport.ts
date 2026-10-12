@@ -3,7 +3,7 @@ import { testModeEnabled } from "./experimental-environment";
 // A QA viewport, not a site route or navigation item. Only the isolated Preview
 // may embed these documents, and only into its own origin with the explicit flag.
 export const VIEWPORT_QUERY = "_testViewport";
-export const VIEWPORT_ROUTES = ["/", "/creative-works", "/creativeworks", "/events", "/about-me", "/aboutme", "/words-of-folly", "/shoutouts", "/bebrave"] as const;
+export const VIEWPORT_ROUTES = ["/", "/creative-works", "/creativeworks", "/events", "/about-me", "/aboutme", "/words-of-folly", "/shoutouts", "/bebrave", "/test-bebrave"] as const;
 const widths = new Set([320, 375, 390, 768, 1024]);
 const heights = new Set([568, 667, 844, 1024]);
 

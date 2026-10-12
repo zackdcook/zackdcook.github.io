@@ -3,7 +3,8 @@
   "git": {
     "deploymentEnabled": {
       "experiment/immersive-world-2026-10-09": false,
-      "release/immersive-world-2026-10-12": false
+      "release/immersive-world-2026-10-12": false,
+      "experiment/be-brave-jrpg-2026-10-12": false
     }
   }
 }

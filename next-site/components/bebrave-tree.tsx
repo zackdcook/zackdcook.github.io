@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState,type CSSProperties,type ReactNode } from "react";
+import { drawingInputOpen } from "@/lib/bebrave/input-window";
+import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryEffect } from "@/lib/bebrave/effects";
 import { SectionCache } from "@/lib/bebrave/section-cache";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
-import { BeBraveStroke,pointsToPath } from "@/components/bebrave-stroke";
+import { BeBraveStroke,StrokeLayers,CarvingSpark,pointsToPath } from "@/components/bebrave-stroke";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { BeBraveInspector } from "@/components/bebrave-inspector";
 import { pickCarving } from "@/lib/bebrave/carving-inspection";
@@ -13,17 +15,19 @@ import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,typ
 type Mode="admire"|"draw"|"fallen"|"base";
 type DraftStroke=BeBravePublicStroke;
 
-export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,homeControls,admireActions}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode}) {
+export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,homeControls,admireActions,sectionSource}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode;sectionSource?:(section:number,signal:AbortSignal)=>Promise<BeBravePublicDrawing[]>}) {
   const scene=useRef<HTMLDivElement>(null),world=useRef<HTMLDivElement>(null),horizontal=useRef<HTMLDivElement>(null);
-  const activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
+  const activeCut=useRef<SVGPathElement>(null),activeRim=useRef<SVGPathElement>(null),activeInlay=useRef<SVGPathElement>(null),activeAnchors=useRef<SVGGElement>(null),
+    activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
   const [scale,setScale]=useState(1),[zoom,setZoom]=useState(mode==="admire"?.82:1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
   const [inspection,setInspection]=useState<{drawing:BeBravePublicDrawing;opener:SVGGElement|null}|null>(null);
   const inspectionTap=useRef<{pointerId:number;x:number;y:number}|null>(null);
   const inspecting=mode==="admire"||mode==="fallen";
-  const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<number|null>(null),zoomRef=useRef(zoom);
+  const worldTop=useRef(0),scaleRef=useRef(1),scrollFrame=useRef(0),ready=useRef(false),parallaxOrigin=useRef<number|null>(null),zoomAnchor=useRef<{x:number;y:number;screenY:number}|null>(null),zoomRef=useRef(zoom);
   zoomRef.current=zoom;
+  const [fitRecap,setFitRecap]=useState(Boolean(mode==="admire"&&session?.status==="completed"));
   const [localStrokes,setLocalStrokes]=useState<DraftStroke[]>(draftStrokes),[remaining,setRemaining]=useState(60),[finishBusy,setFinishBusy]=useState(false);
   const strokesRef=useRef<DraftStroke[]>(draftStrokes);
   const active=useRef<{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number}|null>(null);
@@ -36,6 +40,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   const maxSection=Math.max(0,Math.ceil(state.height/BEBRAVE_SECTION_HEIGHT)-1);
   const sections=useMemo(()=>Array.from({length:range[1]-range[0]+1},(_,i)=>range[0]+i),[range]);
   const sectionCache=useMemo(()=>new SectionCache<BeBravePublicDrawing[]>(async(section,signal)=>{
+    if(sectionSource)return sectionSource(section,signal);
     const all:BeBravePublicDrawing[]=[];
     let before="";
     do {
@@ -50,7 +55,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
       before=next;
     } while(before&&!signal.aborted);
     return all;
-  }),[state.revision,state.latestSequence,cutoff]);
+  }),[state.revision,state.latestSequence,cutoff,sectionSource]);
   useEffect(()=>()=>sectionCache.dispose(),[sectionCache]);
   useEffect(()=>{
     // Nearby sections stay cached, but effects outside the actual camera sleep.
@@ -83,8 +88,12 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   useLayoutEffect(()=>{
     const el=world.current;if(!el)return;
     parallaxOrigin.current=null;
-    const measure=()=>{const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;scaleRef.current=next;setScale(next);};
-    const ro=new ResizeObserver(measure);ro.observe(mode==="fallen"&&horizontal.current?horizontal.current:el);measure();
+    const measure=()=>{
+      const rail=scene.current?.querySelector<HTMLElement>(".bebrave-control-rail");
+      const safeTop=window.innerWidth<=700?(rail?.getBoundingClientRect().bottom||104)+16:24;
+      scene.current?.style.setProperty("--bebrave-safe-top",`${safeTop}px`);
+      const rect=el.getBoundingClientRect();worldTop.current=rect.top+window.scrollY;const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;scaleRef.current=next;setScale(next);};
+    const ro=new ResizeObserver(measure);ro.observe(mode==="fallen"&&horizontal.current?horizontal.current:el);const rail=scene.current?.querySelector(".bebrave-control-rail");if(rail)ro.observe(rail);measure();
     const tick=()=>{
       scrollFrame.current=0;
       const s=stateRef.current;
@@ -110,7 +119,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
       ready.current=true;
       initial=requestAnimationFrame(()=>{
         if(mode==="fallen"&&horizontal.current){horizontal.current.scrollTo({left:0,behavior:"instant"});}
-        else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+state.height*scaleRef.current-window.innerHeight),behavior:"instant"});}
+        else if(mode!=="base"){window.scrollTo({top:Math.max(0,worldTop.current+(session?.zoneBottom??state.height)*scaleRef.current-window.innerHeight+24),behavior:"instant"});}
         parallaxOrigin.current=mode==="fallen"&&horizontal.current?horizontal.current.scrollLeft:window.scrollY;
         tick();
       });
@@ -121,22 +130,32 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   function adjustZoom(next:number){
     if(mode!=="admire")return;
     const value=Math.max(.65,Math.min(1.45,Math.round(next*100)/100));
-    if(value===zoom)return;
-    zoomAnchor.current=Math.max(0,(window.scrollY+window.innerHeight/2-worldTop.current)/scaleRef.current);
-    setZoom(value);
+    if(value===zoom&&!fitRecap)return;
+    const container=horizontal.current,el=world.current;
+    const safeTop=window.innerWidth<=700?(scene.current?.querySelector(".bebrave-control-rail")?.getBoundingClientRect().bottom||0):0;
+    const screenY=(safeTop+window.innerHeight)/2;
+    zoomAnchor.current={
+      x:container&&el?(container.scrollLeft+container.clientWidth/2-el.offsetLeft)/scaleRef.current:360,
+      y:Math.max(0,(window.scrollY+screenY-worldTop.current)/scaleRef.current),screenY
+    };
+    setFitRecap(false);setZoom(value);
   }
   useLayoutEffect(()=>{
-    if(mode!=="admire"||zoomAnchor.current===null)return;
-    const targetScale=(horizontal.current?.clientWidth || window.innerWidth)*.9*zoom/BEBRAVE_TREE_WIDTH;
-    if(Math.abs(scale-targetScale)>.03)return;
-    const anchor=zoomAnchor.current;
+    const anchor=zoomAnchor.current,container=horizontal.current,el=world.current;
+    if(mode!=="admire"||!anchor||!container||!el)return;
+    const targetScale=container.clientWidth*.9*zoom/BEBRAVE_TREE_WIDTH;
+    if(Math.abs(scale-targetScale)>.005)return;
     zoomAnchor.current=null;
-    window.scrollTo({top:Math.max(0,worldTop.current+anchor*scale-window.innerHeight/2),behavior:"instant"});
-  },[scale,zoom,mode]);
+    window.scrollTo({top:Math.max(0,worldTop.current+anchor.y*scale-anchor.screenY),behavior:"instant"});
+    container.scrollLeft=el.offsetLeft+anchor.x*scale-container.clientWidth/2;
+  },[scale,zoom,mode,fitRecap]);
 
   const visual=useMemo(()=>({rarity:session?.chosenRarity||"common",color:session?.chosenColor||"#3B2418",seed:session?.effectSeed||0}),[session]);
   function worldPoint(clientX:number,clientY:number):[number,number]|null{const rect=world.current?.getBoundingClientRect();if(!rect||mode!=="draw"||session?.zoneTop==null||session.zoneBottom==null)return null;const x=(clientX-rect.left)/scaleRef.current,y=(clientY-rect.top)/scaleRef.current;if(x<0||x>BEBRAVE_TREE_WIDTH||y<session.zoneTop||y>session.zoneBottom)return null;return [Math.round(x*10)/10,Math.round(y*10)/10];}
-  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=pointsToPath(a.points);activeLine.current?.setAttribute("d",d);activeGlow.current?.setAttribute("d",d);activeShimmer.current?.setAttribute("d",d);const tip=a.points.at(-1);if(tip){activeGleam.current?.setAttribute("transform",`translate(${tip[0]} ${tip[1]})`);activeGleam.current?.setAttribute("visibility","visible");}}
+  function inputOpen(){return drawingInputOpen(session?.drawingDeadline,Date.now(),serverOffset.current,finishing.current);}
+  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=pointsToPath(a.points);for(const ref of [activeCut,activeRim,activeInlay,activeLine,activeGlow,activeShimmer])ref.current?.setAttribute("d",d);
+    if(activeAnchors.current){const anchors=sparklePoints(a.points,visual.seed,a.strokeOrder);for(const [i,slot] of [...activeAnchors.current.children].entries()){const p=anchors[i];slot.setAttribute("visibility",p?"visible":"hidden");if(p){slot.setAttribute("transform",`translate(${p.x} ${p.y})`);const star=slot.querySelector<SVGPathElement>(".bebrave-sparkle-star");if(star)star.style.animationDelay=`-${p.delay}s`;const orbit=slot.querySelector<SVGCircleElement>(".bebrave-wisp-orbit");if(orbit){orbit.setAttribute("r",String(p.r*2.1));orbit.style.animationDelay=`-${p.delay}s`;}star?.setAttribute("d",`M0 ${-p.r} L${p.r*.22} ${-p.r*.22} L${p.r} 0 L${p.r*.22} ${p.r*.22} L0 ${p.r} L${-p.r*.22} ${p.r*.22} L${-p.r} 0 L${-p.r*.22} ${-p.r*.22} Z`);}}}
+    const tip=a.points.at(-1);if(tip){activeGleam.current?.setAttribute("transform",`translate(${tip[0]} ${tip[1]})`);activeGleam.current?.setAttribute("visibility","visible");}}
   function appendPoint(p:[number,number]){const a=active.current;if(!a)return;const last=a.points.at(-1);if(last&&Math.hypot(p[0]-last[0],p[1]-last[1])<1.4)return;a.points.push(p);if(!paintFrame.current)paintFrame.current=requestAnimationFrame(paint);}
 
   function queueChunk(a:{pointerId:number;strokeId:string;strokeOrder:number;points:Array<[number,number]>;sentIndex:number;chunkIndex:number},force=false){
@@ -149,7 +168,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
   function stopStroke(pointerId:number,lastPoint?:[number,number]|null){
     const a=active.current;
     if(!a||a.pointerId!==pointerId)return;
-    if(lastPoint)appendPoint(lastPoint);
+    if(lastPoint&&inputOpen())appendPoint(lastPoint);
     // A quick tap still needs two nearby points for storage and a round-cap dot.
     if(a.points.length===1){const [x,y]=a.points[0];a.points.push([x<719?x+.3:x-.3,y]);}
     queueChunk(a,true);
@@ -157,9 +176,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     setLocalStrokes(strokesRef.current);
     active.current=null;
     cancelAnimationFrame(paintFrame.current);paintFrame.current=0;
-    activeLine.current?.setAttribute("d","");
-    activeGlow.current?.setAttribute("d","");
-    activeShimmer.current?.setAttribute("d","");
+    for(const ref of [activeCut,activeRim,activeInlay,activeLine,activeGlow,activeShimmer])ref.current?.setAttribute("d","");
+    if(activeAnchors.current)for(const slot of activeAnchors.current.children)slot.setAttribute("visibility","hidden");
     activeGleam.current?.setAttribute("visibility","hidden");
   }
 
@@ -180,7 +198,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
     setInspection({drawing,opener:source});
   }
 
-  return <section ref={scene} className={`bebrave-scene is-${mode}`} style={{"--bebrave-tree-scale":scale,"--bebrave-tree-zoom":mode==="admire"?zoom:1} as CSSProperties}>
+  return <section ref={scene} className={`bebrave-scene is-${mode} ${fitRecap?"is-recap":""}`} style={{"--bebrave-tree-scale":scale,"--bebrave-tree-zoom":mode==="admire"?zoom:1} as CSSProperties}>
     <div className="bebrave-horizon" data-light-source aria-hidden="true"><span className="bebrave-sun"/><span className="bebrave-cloud c1"/><span className="bebrave-cloud c2"/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
     <TreeAtmosphere/>
@@ -196,16 +214,16 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
         {admireActions}
       </>}
       {mode==="draw"&&<>
-        <div className="bebrave-timer" role="timer" aria-label="Carving time remaining" aria-live="off"><strong>{minutes}:{seconds}</strong></div>
+        <div className="bebrave-timer" data-urgent={remaining<=10} role="timer" aria-label="Carving time remaining" aria-live="off"><strong>{minutes}:{seconds}</strong></div>
         <button type="button" className="button bebrave-done-button" disabled={finishBusy} onClick={()=>void finish()}>{finishBusy?"Finishing…":"Done"}</button>
       </>}
     </aside>}
     {saveError&&<p className="bebrave-save-error" role="alert">{saveError}</p>}
-    <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={mode==="fallen"?0:undefined}>
+    <div ref={horizontal} className={mode==="fallen"?"bebrave-fallen-scroll":"bebrave-standing-scroll"} tabIndex={inspecting?0:undefined} aria-label={inspecting?"Pan along the tree":undefined}>
       <div ref={world} className="bebrave-world" style={widthStyle}
         onPointerDown={e=>{
           if(inspecting){inspectionTap.current=e.isPrimary&&(e.pointerType!=="mouse"||e.button===0)?{pointerId:e.pointerId,x:e.clientX,y:e.clientY}:null;return;}
-          if(mode!=="draw"||remaining<=0||!session||(e.pointerType==="touch"&&!e.isPrimary)||(e.pointerType==="mouse"&&e.button!==0))return;
+          if(mode!=="draw"||!inputOpen()||!session||(e.pointerType==="touch"&&!e.isPrimary)||(e.pointerType==="mouse"&&e.button!==0))return;
           if(active.current){
             if(e.currentTarget.hasPointerCapture(active.current.pointerId))return;
             stopStroke(active.current.pointerId);
@@ -217,7 +235,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
         }}
         onPointerMove={e=>{
           if(inspecting){const tap=inspectionTap.current;if(tap&&Math.hypot(e.clientX-tap.x,e.clientY-tap.y)>9)inspectionTap.current=null;return;}
-          if(!active.current||active.current.pointerId!==e.pointerId||mode!=="draw"||remaining<=0)return;
+          if(!active.current||active.current.pointerId!==e.pointerId||mode!=="draw"||!inputOpen())return;
           e.preventDefault();
           const coalesced=e.nativeEvent.getCoalescedEvents?.();
           const events=coalesced?.length?coalesced:[e.nativeEvent];
@@ -247,9 +265,9 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
             {localDrawing&&<g className="bebrave-local-drawing">{localDrawing.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed} effectId={localDrawing.effectId}/>)}</g>}
             {mode==="draw"&&session?.chosenColor&&session.chosenRarity&&<g className={`bebrave-stroke bebrave-${visual.rarity} is-active`} data-effect={visual.rarity==="legendary"?legendaryEffect(session.chosenEffect):undefined} style={{"--stroke-color":visual.color} as CSSProperties}>
-              {(visual.rarity==="superior"||visual.rarity==="epic"||visual.rarity==="legendary")&&<path ref={activeGlow} className="bebrave-stroke-glow" stroke={visual.color}/>}
-              <path ref={activeLine} className="bebrave-stroke-line" stroke={visual.color}/>
-              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<><path ref={activeShimmer} className="bebrave-epic-shimmer" stroke={visual.color}/><g ref={activeGleam} visibility="hidden" className="bebrave-sparkle">{visual.rarity==="legendary"&&<circle className="bebrave-wisp-orbit" r="8"/>}<path className="bebrave-sparkle-star" d="M0 -4 L1 -1 L4 0 L1 1 L0 4 L-1 1 L-4 0 L-1 -1 Z"/><circle className="bebrave-sparkle-core" r="1"/></g></>}
+              <StrokeLayers color={visual.color} rarity={visual.rarity} refs={{cut:activeCut,rim:activeRim,inlay:activeInlay,line:activeLine,glow:activeGlow,shimmer:activeShimmer}}/>
+              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<g ref={activeAnchors}>{Array.from({length:10},(_,i)=><g key={i} visibility="hidden"><CarvingSpark r={3.5} legendary={visual.rarity==="legendary"}/></g>)}</g>}
+              <g ref={activeGleam} visibility="hidden" className="bebrave-contact"><circle className="bebrave-contact-ring" r="11"/><path className="bebrave-contact-ticks" d="M-17 0h5M12 0h5M0 -17v5M0 12v5"/><circle className="bebrave-contact-core" r="2.2"/></g>
             </g>}
             {drawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence} data-drawing-id={d.id} role={inspecting?"button":undefined} tabIndex={inspecting?0:undefined} aria-label={inspecting?`Admire ${d.rarity}`:undefined} onKeyDown={e=>{if(inspecting&&(e.key==="Enter"||e.key===" ")){e.preventDefault();inspectDrawing(d,e.currentTarget);}}}>{d.strokes.map(st=><BeBraveStroke key={st.strokeId} stroke={st} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId}/>)}</g>)}
           </svg>

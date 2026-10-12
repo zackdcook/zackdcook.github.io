@@ -29,15 +29,15 @@
   --asset-name-doodles: url("/images/name-doodles.webp");
   --asset-leaf-texture: none;
   --asset-ribbon-texture: none;
-  --asset-tree-sky: url("/images/cypress-twilight-v2.webp");
-  --asset-tree-foreground: url("/images/cypress-foreground-v2.webp");
-  --asset-tree-bark: url("/images/cypress-bark-v2.webp");
-  --asset-tree-stump: url("/images/bebrave-stump.png");
-  --asset-tool-arrowhead: url("/images/bebrave-tool-arrowhead.webp");
-  --asset-tool-nail: url("/images/bebrave-tool-nail.webp");
-  --asset-tool-key: url("/images/bebrave-tool-key.webp");
-  --asset-tool-cache: url("/images/bebrave-cache.webp");
-  --asset-tool-knife: url("/images/bebrave-tool-knife.webp");
+  --asset-tree-sky: url("/images/be-brave-ink/sky.webp");
+  --asset-tree-foreground: url("/images/be-brave-ink/foreground.webp");
+  --asset-tree-bark: url("/images/be-brave-ink/bark-repeat.svg");
+  --asset-tree-stump: url("/images/be-brave-ink/stump.webp");
+  --asset-tool-arrowhead: url("/images/be-brave-ink/arrowhead.webp");
+  --asset-tool-nail: url("/images/be-brave-ink/nail.webp");
+  --asset-tool-key: url("/images/be-brave-ink/key.webp");
+  --asset-tool-cache: url("/images/be-brave-ink/cache.webp");
+  --asset-tool-knife: url("/images/be-brave-ink/knife.webp");
   --asset-icon-light: none;
   --asset-icon-dark: none;
   --asset-icon-map: none;
@@ -50,6 +50,7 @@
   --asset-icon-threads: none;
   --asset-icon-linkedin: none;
   --asset-icon-preferences: none;
+  --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
 }
 
 html[data-theme="dark"] {
@@ -82,15 +83,15 @@ html[data-theme="dark"] {
   --asset-name-doodles: url("/images/name-doodles.webp");
   --asset-leaf-texture: none;
   --asset-ribbon-texture: none;
-  --asset-tree-sky: url("/images/cypress-twilight-v2.webp");
-  --asset-tree-foreground: url("/images/cypress-foreground-v2.webp");
-  --asset-tree-bark: url("/images/cypress-bark-v2.webp");
-  --asset-tree-stump: url("/images/bebrave-stump.png");
-  --asset-tool-arrowhead: url("/images/bebrave-tool-arrowhead.webp");
-  --asset-tool-nail: url("/images/bebrave-tool-nail.webp");
-  --asset-tool-key: url("/images/bebrave-tool-key.webp");
-  --asset-tool-cache: url("/images/bebrave-cache.webp");
-  --asset-tool-knife: url("/images/bebrave-tool-knife.webp");
+  --asset-tree-sky: url("/images/be-brave-ink/sky.webp");
+  --asset-tree-foreground: url("/images/be-brave-ink/foreground.webp");
+  --asset-tree-bark: url("/images/be-brave-ink/bark-repeat.svg");
+  --asset-tree-stump: url("/images/be-brave-ink/stump.webp");
+  --asset-tool-arrowhead: url("/images/be-brave-ink/arrowhead.webp");
+  --asset-tool-nail: url("/images/be-brave-ink/nail.webp");
+  --asset-tool-key: url("/images/be-brave-ink/key.webp");
+  --asset-tool-cache: url("/images/be-brave-ink/cache.webp");
+  --asset-tool-knife: url("/images/be-brave-ink/knife.webp");
   --asset-icon-light: none;
   --asset-icon-dark: none;
   --asset-icon-map: none;
@@ -103,6 +104,7 @@ html[data-theme="dark"] {
   --asset-icon-threads: none;
   --asset-icon-linkedin: none;
   --asset-icon-preferences: none;
+  --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
 }
 
 html[data-timeline="felled"] {
@@ -135,15 +137,15 @@ html[data-timeline="felled"] {
   --asset-name-doodles: url("/images/name-doodles.webp");
   --asset-leaf-texture: none;
   --asset-ribbon-texture: none;
-  --asset-tree-sky: url("/images/cypress-twilight-v2.webp");
-  --asset-tree-foreground: url("/images/cypress-foreground-v2.webp");
-  --asset-tree-bark: url("/images/cypress-bark-v2.webp");
-  --asset-tree-stump: url("/images/bebrave-stump.png");
-  --asset-tool-arrowhead: url("/images/bebrave-tool-arrowhead.webp");
-  --asset-tool-nail: url("/images/bebrave-tool-nail.webp");
-  --asset-tool-key: url("/images/bebrave-tool-key.webp");
-  --asset-tool-cache: url("/images/bebrave-cache.webp");
-  --asset-tool-knife: url("/images/bebrave-tool-knife.webp");
+  --asset-tree-sky: url("/images/be-brave-ink/sky.webp");
+  --asset-tree-foreground: url("/images/be-brave-ink/foreground.webp");
+  --asset-tree-bark: url("/images/be-brave-ink/bark-repeat.svg");
+  --asset-tree-stump: url("/images/be-brave-ink/stump.webp");
+  --asset-tool-arrowhead: url("/images/be-brave-ink/arrowhead.webp");
+  --asset-tool-nail: url("/images/be-brave-ink/nail.webp");
+  --asset-tool-key: url("/images/be-brave-ink/key.webp");
+  --asset-tool-cache: url("/images/be-brave-ink/cache.webp");
+  --asset-tool-knife: url("/images/be-brave-ink/knife.webp");
   --asset-icon-light: none;
   --asset-icon-dark: none;
   --asset-icon-map: none;
@@ -156,6 +158,7 @@ html[data-timeline="felled"] {
   --asset-icon-threads: none;
   --asset-icon-linkedin: none;
   --asset-icon-preferences: none;
+  --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
 }
 
 html[data-timeline="felled"][data-theme="dark"] {
@@ -188,15 +191,15 @@ html[data-timeline="felled"][data-theme="dark"] {
   --asset-name-doodles: url("/images/name-doodles.webp");
   --asset-leaf-texture: none;
   --asset-ribbon-texture: none;
-  --asset-tree-sky: url("/images/cypress-twilight-v2.webp");
-  --asset-tree-foreground: url("/images/cypress-foreground-v2.webp");
-  --asset-tree-bark: url("/images/cypress-bark-v2.webp");
-  --asset-tree-stump: url("/images/bebrave-stump.png");
-  --asset-tool-arrowhead: url("/images/bebrave-tool-arrowhead.webp");
-  --asset-tool-nail: url("/images/bebrave-tool-nail.webp");
-  --asset-tool-key: url("/images/bebrave-tool-key.webp");
-  --asset-tool-cache: url("/images/bebrave-cache.webp");
-  --asset-tool-knife: url("/images/bebrave-tool-knife.webp");
+  --asset-tree-sky: url("/images/be-brave-ink/sky.webp");
+  --asset-tree-foreground: url("/images/be-brave-ink/foreground.webp");
+  --asset-tree-bark: url("/images/be-brave-ink/bark-repeat.svg");
+  --asset-tree-stump: url("/images/be-brave-ink/stump.webp");
+  --asset-tool-arrowhead: url("/images/be-brave-ink/arrowhead.webp");
+  --asset-tool-nail: url("/images/be-brave-ink/nail.webp");
+  --asset-tool-key: url("/images/be-brave-ink/key.webp");
+  --asset-tool-cache: url("/images/be-brave-ink/cache.webp");
+  --asset-tool-knife: url("/images/be-brave-ink/knife.webp");
   --asset-icon-light: none;
   --asset-icon-dark: none;
   --asset-icon-map: none;
@@ -209,4 +212,5 @@ html[data-timeline="felled"][data-theme="dark"] {
   --asset-icon-threads: none;
   --asset-icon-linkedin: none;
   --asset-icon-preferences: none;
+  --asset-tree-roots: url("/images/be-brave-ink/roots.webp");
 }
