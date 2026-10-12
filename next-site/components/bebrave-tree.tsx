@@ -14,8 +14,10 @@ import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,typ
 
 type Mode="admire"|"draw"|"fallen"|"base";
 type DraftStroke=BeBravePublicStroke;
+// The draft-sync effect depends on identity, including when the prop is omitted.
+const emptyDraftStrokes:DraftStroke[]=[];
 
-export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff,onFinished,homeControls,admireActions,sectionSource}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode;sectionSource?:(section:number,signal:AbortSignal)=>Promise<BeBravePublicDrawing[]>}) {
+export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraftStrokes,cutoff,onFinished,homeControls,admireActions,sectionSource}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode;sectionSource?:(section:number,signal:AbortSignal)=>Promise<BeBravePublicDrawing[]>}) {
   const scene=useRef<HTMLDivElement>(null),world=useRef<HTMLDivElement>(null),horizontal=useRef<HTMLDivElement>(null);
   const activeCut=useRef<SVGPathElement>(null),activeRim=useRef<SVGPathElement>(null),activeInlay=useRef<SVGPathElement>(null),activeAnchors=useRef<SVGGElement>(null),
     activeLine=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
