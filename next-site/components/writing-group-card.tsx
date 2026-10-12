@@ -1,4 +1,4 @@
-import { MapIcon } from "@/components/icons";
+import { DirectionsMenu } from "@/components/directions-menu";
 import { CalendarMenu } from "@/components/calendar-menu";
 import { writingGroup } from "@/content/site";
 import type { ReactNode } from "react";
@@ -16,7 +16,7 @@ export function WritingGroupCard({ eyebrow = "Find me at…", children }: { eyeb
       <p className={styles.venue}>{writingGroup.venue} · Downtown Lakeland</p>
       <p className="event-address">{writingGroup.address}</p>
       <div className="actions event-actions">
-        <a className="button" href={writingGroup.directionsUrl} target="_blank" rel="noopener noreferrer"><MapIcon />Get directions</a>
+        <DirectionsMenu />
         <CalendarMenu />
       </div>
       <p className={`event-description ${styles.description}`}>{writingGroup.description}</p>

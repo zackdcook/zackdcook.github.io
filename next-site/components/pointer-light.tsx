@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { approachLight, followLight, materialLight, panelLight, materialPose, glassReflection, materialGeometryEvent } from "@/lib/material-light";
-import { orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
+import { enrollTiltOnTap, orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 import { publicMoteY } from "@/lib/public-atmosphere";
 
 const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.icon-button,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
@@ -18,7 +18,7 @@ export function PointerLight() {
     const panels = new WeakSet<HTMLElement>();
     const rectangles = new Map<HTMLElement, DOMRect>();
     let motes: HTMLElement[] = [], ambient: HTMLElement | null = null;
-    let x = -1000, y = -1000, targetX = 0, targetY = 0, significantX = 0, significantY = 0;
+    let x = -1000, y = -1000, targetX = 0, targetY = 0;
     let source: "mouse" | "tilt" = "mouse", reference: TiltReading | null = null;
     let released = false, hasLight = false, listening = false, orientationAngle = 0;
     let intensity = 0, previousTime = 0, frame = 0, collectionFrame = 0, dirty = true;
@@ -63,6 +63,10 @@ export function PointerLight() {
       const reflection = glassReflection(bounds, x, y);
       style(element, "--glass-x", `${reflection.x.toFixed(2)}%`);
       style(element, "--glass-y", `${reflection.y.toFixed(2)}%`);
+      if (element.matches(".tactile-photo")) {
+        style(element, "--material-cast-x", dynamicCast ? px(light.shadowX) : "0px");
+        style(element, "--material-cast-y", dynamicCast ? px(light.shadowY) : "0px");
+      }
       if (element.hasAttribute("data-material-surface") && !element.matches(".tactile-photo,.icon-button")) {
         const pose = materialPose(bounds, x, y, light.strength);
         style(element, "--material-yaw", `${pose.yaw.toFixed(2)}deg`);
@@ -98,8 +102,8 @@ export function PointerLight() {
       if (reduced() || document.hidden) { reset(); return; }
       const target = hasLight && !released ? 1 : 0;
       const elapsed = previousTime ? Math.min(64, now - previousTime) : 0;
-      intensity = approachLight(intensity, target, elapsed);
-      if (target) { const point = followLight({x,y}, {x:targetX,y:targetY}, elapsed); x = point.x; y = point.y; }
+      intensity = approachLight(intensity, target, elapsed, source === "tilt" ? 240 : 1100);
+      if (target) { const point = followLight({x,y}, {x:targetX,y:targetY}, elapsed, source === "tilt" ? 70 : 130); x = point.x; y = point.y; }
       previousTime = now;
       const dialog = document.querySelector<HTMLDialogElement>("dialog[open]");
       // All geometry reads precede writes; behind a modal only its faces matter.
@@ -156,9 +160,7 @@ export function PointerLight() {
         window.dispatchEvent(new Event(tiltStatusEvent));
       }
       targetX = point.x; targetY = point.y;
-      if (first || Math.hypot(point.x-significantX,point.y-significantY) > 2) {
-        significantX = point.x; significantY = point.y; source = "tilt"; hasLight = true; released = false; start();
-      }
+      source = "tilt"; hasLight = true; released = false; start();
     };
     const recenter = () => { reference = null; };
     const syncTilt = () => {
@@ -187,6 +189,7 @@ export function PointerLight() {
     changes.observe(document.body, {subtree:true,childList:true,attributes:true,attributeFilter:["open"]});
     settings.observe(root, {attributes:true,attributeFilter:["data-effects","data-theme","data-timeline","data-tilt"]});
     syncTilt(); coarse.addEventListener("change", syncTilt);
+    const stopEnrollment = enrollTiltOnTap(window, () => coarse.matches && root.dataset.tilt !== "false" && !reduced() && Boolean(orientationAPI()?.requestPermission) && root.dataset.tiltStatus !== "active");
     window.addEventListener(recenterTiltEvent, recenter);
     window.addEventListener("pointermove", move, {passive:true});
     window.addEventListener("pointerdown", move, {passive:true});
@@ -197,7 +200,7 @@ export function PointerLight() {
     window.addEventListener(materialGeometryEvent, geometry, {passive:true});
     document.addEventListener("visibilitychange", visibility);
     return () => {
-      reset(); cancelAnimationFrame(collectionFrame); observer.disconnect(); resize.disconnect(); changes.disconnect(); settings.disconnect();
+      stopEnrollment(); reset(); cancelAnimationFrame(collectionFrame); observer.disconnect(); resize.disconnect(); changes.disconnect(); settings.disconnect();
       coarse.removeEventListener("change", syncTilt); window.removeEventListener("deviceorientation", orientation);
       window.removeEventListener(recenterTiltEvent, recenter); window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerdown", move); window.removeEventListener("pointercancel", release);

@@ -9,6 +9,14 @@ import { createLeafReader, requestReaderLeaf, finishReaderFall, leafRetireMs, ty
 
 type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect; leafIndex: number | null; grip: LeafPoint };
 export function FollyPile() {
+  const [keyboardFocus, setKeyboardFocus] = useState(true);
+  useEffect(() => {
+    const keyboard = () => setKeyboardFocus(true);
+    const pointer = () => setKeyboardFocus(false);
+    document.addEventListener("keydown", keyboard, true);
+    document.addEventListener("pointerdown", pointer, true);
+    return () => { document.removeEventListener("keydown", keyboard, true); document.removeEventListener("pointerdown", pointer, true); };
+  }, []);
   const { reduced } = usePreferences();
   const stage = useRef<HTMLDivElement>(null), dialog = useRef<HTMLDialogElement>(null);
   const buttons = useRef<(HTMLElement | null)[]>([]), bodies = useRef<LeafBody[]>([]);
@@ -223,7 +231,7 @@ export function FollyPile() {
       <ol className="folly-leaves" aria-label="Words of Folly, newest first">
         {[...follyQuotes].reverse().map((entry, position) => {
           const index = follyQuotes.length - 1 - position;
-          return <li key={entry.id}><button id={`leaf-${entry.id}`} data-leaf-index={index} ref={element => { buttons.current[index] = element; }} className="pile-leaf" type="button" aria-label={`Read: ${entry.text}`} aria-haspopup="dialog"
+          return <li key={entry.id}><button id={`leaf-${entry.id}`} data-leaf-index={index} ref={element => { buttons.current[index] = element; }} className="pile-leaf" data-keyboard-focus={keyboardFocus} type="button" aria-label={`Read: ${entry.text}`} aria-haspopup="dialog"
             style={{ left: `${43 + index % 3 * 7}%`, top: `${210 + index % 3 * 70}px`, zIndex: index + 1, transform: `translate(-50%,-50%) rotate(${index * 51 - 130}deg)` } as CSSProperties}
             onClick={event => { if (event.detail !== 0 && suppressClick.current) { suppressClick.current = false; return; } openLeaf(index, event.currentTarget); }}
             onKeyDown={event => {

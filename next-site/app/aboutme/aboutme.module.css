@@ -3,14 +3,15 @@
 .opening{view-timeline-name:--about-opening;view-timeline-axis:block}
 .page .biography{view-timeline-name:--life-story;view-timeline-axis:block;margin-top:min(clamp(64px,7vw,100px),var(--section-gap));padding-block:0}
 .readingGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,700px) minmax(0,1fr);position:relative;align-items:start}
-.story{grid-column:2;margin:0;max-width:700px;min-width:0;position:relative;z-index:1}
-.story p{font:400 17px/1.9 var(--sans);color:var(--color-ink);transform-origin:left center}
+.story{grid-column:2;margin:0;max-width:700px;min-width:0;position:relative;z-index:1;touch-action:pan-y pinch-zoom}
+.story p{font:400 17px/1.9 var(--sans);color:var(--color-ink);view-timeline-name:--paragraph-arrival;view-timeline-axis:block}
+.ink{display:block;transform-origin:left center;pointer-events:none}
 .margin{position:sticky;top:125px;grid-column:1;grid-row:1;height:calc(100svh - 210px);min-height:220px;max-height:680px;pointer-events:none}
 .readTrack{position:absolute;right:27px;top:0;bottom:0;width:1px;background:color-mix(in srgb,var(--color-border) 24%,transparent)}
 .readTrack>span{position:absolute;inset:0;background:var(--color-brass);transform-origin:top;scale:1 0}
 @supports(animation-timeline:view()){@media(prefers-reduced-motion:no-preference){
  :global(html:not([data-effects="reduced"])) .opening :global(.portrait-frame){animation:portrait-recede linear both;animation-timeline:--about-opening;animation-range:entry 0% exit 100%}
- :global(html:not([data-effects="reduced"])) .story>p{animation:paragraph-arrive linear both;animation-timeline:view(block);animation-range:entry 0% entry 85%}
+ :global(html:not([data-effects="reduced"])) .story>p>.ink{animation:paragraph-arrive linear both;animation-timeline:--paragraph-arrival;animation-range:entry 0% entry 85%}
  :global(html:not([data-effects="reduced"])) .readTrack>span{animation:reading-progress linear both;animation-timeline:--life-story;animation-range:contain 0% contain 100%}
 }}
 @keyframes portrait-recede{from{translate:0 55px;rotate:1deg}to{translate:0 -95px;rotate:-1deg}}

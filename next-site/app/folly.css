@@ -16,8 +16,9 @@
 .pile-leaf{position:absolute;left:0;top:0;width:var(--pile-leaf-width,370px);aspect-ratio:1.6;padding:0;border:0;background:transparent;cursor:grab;color:inherit;font:inherit;transform-style:flat;pointer-events:auto;touch-action:pan-y}
 .pile-leaf .leaf-hit{pointer-events:fill}
 .pile-leaf .leaf-art{pointer-events:none}
-.pile-leaf:focus-visible{outline:none;z-index:100000!important}
-.pile-leaf:focus-visible .leaf-body{stroke:var(--color-accent);stroke-width:9}
+.pile-leaf:focus-visible{outline:none}
+.pile-leaf[data-keyboard-focus="true"]:focus-visible{z-index:100000!important}
+.pile-leaf[data-keyboard-focus="true"]:focus-visible .leaf-body{stroke:var(--color-accent);stroke-width:9}
 .quote-leaf{display:block;position:relative;width:100%;aspect-ratio:1.6;color:var(--leaf-ink);background:none}
 .leaf-art{display:block;width:100%;height:100%;overflow:visible}
 .leaf-shadow{fill:var(--folly-depth);opacity:.16;pointer-events:none}

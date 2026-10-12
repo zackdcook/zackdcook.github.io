@@ -139,7 +139,7 @@ test("tilt handles landscape, angular wrap and malformed sensor readings", () =>
   const landscape = tiltLight({ beta: 20, gamma: 0 }, { beta: 0, gamma: 0 }, 90, 800, 400)!;
   assert.ok(landscape.x < 400); assert.ok(Math.abs(landscape.y - 200) < .0001);
   const wrap = tiltLight({ beta: -179, gamma: 0 }, { beta: 179, gamma: 0 }, 0, 400, 800)!;
-  assert.ok(wrap.y < 400 && wrap.y > 350);
+  assert.deepEqual(wrap, tiltLight({ beta: 2, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 400, 800));
   assert.equal(tiltLight({ beta: NaN, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 400, 800), null);
   assert.equal(tiltLight({ beta: 0, gamma: 0 }, { beta: 0, gamma: 0 }, 0, 0, 800), null);
 });
@@ -227,4 +227,16 @@ test("panel bounds accept DOMRect-style prototype getters", () => {
   const light = panelLight(new Rect(), 300, 600, 1, 800);
   assert.ok(Object.values(light).every(Number.isFinite));
   assert.ok(light.shadowY < 0);
+});
+
+test("phone light follows small gestures promptly with the same result at60 and120Hz", () => {
+  const start = { x: 0, y: 0 }, target = { x: 400, y: 800 };
+  let slow = start, fast = start;
+  for (let frame = 0; frame < 6; frame++) slow = followLight(slow, target, 1000 / 60, 70);
+  for (let frame = 0; frame < 12; frame++) fast = followLight(fast, target, 1000 / 120, 70);
+  assert.ok(Math.abs(slow.x - fast.x) < .0001);
+  assert.ok(slow.x > 300 && slow.x < 400, "responsive travel without overshoot");
+  const neutral = { beta: 55, gamma: 0 };
+  const small = tiltLight({ beta: 55, gamma: 5 }, neutral, 0, 400, 800)!;
+  assert.ok(200 - small.x > 60, "five degrees produces visible light travel");
 });

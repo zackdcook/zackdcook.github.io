@@ -44,11 +44,12 @@ section[id]{scroll-margin-top:100px}
 .text-link::after{content:"";width:22px;height:16px;margin-left:10px;flex-shrink:0;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 18'%3E%3Cpath d='M1 9h21M15 2l7 7-7 7' fill='none' stroke='black' stroke-width='1.4'/%3E%3C/svg%3E") center/contain no-repeat;transition:translate .24s var(--ease-settle)}
 .text-link:hover::after{translate:4px 0}
 .text-link:hover{color:var(--color-accent)}
-.button:not(:disabled):hover{background-color:var(--color-hover);color:var(--color-on-hover)}
+.button:not(:disabled):is(:hover,:active,[aria-busy="true"]){background-color:var(--color-hover);color:var(--color-on-hover)}
 .icon-button{width:48px;min-height:48px;padding:0;background:var(--color-chrome);color:var(--color-on-chrome)}
-.icon-button:hover{background-color:var(--color-hover);color:var(--color-on-hover)}
+.icon-button:is(:hover,:active){background-color:var(--color-hover);color:var(--color-on-hover)}
 .button:not(:disabled):active,.icon-button:active{translate:0 1px}
 .button:disabled{opacity:.45;cursor:default}
+.button[aria-disabled="true"]{cursor:wait}
 .button-small{min-height:44px;font-size:12px}
 .button svg,.text-link svg,.icon-button svg{width:18px;height:18px;flex-shrink:0}
 .actions{display:flex;align-items:center;flex-wrap:wrap;gap:18px}
