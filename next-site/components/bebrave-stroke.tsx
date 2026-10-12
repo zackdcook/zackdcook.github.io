@@ -28,7 +28,7 @@ export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string
 }
 
 export function sparkGeometry(radius: number, legendary: boolean) {
-  const r = radius * (legendary ? 2.7 : 2);
+  const r = radius * (legendary ? 3.8 : 2.7);
   return {
     star: `M0 ${-r} L${r*.22} ${-r*.22} L${r} 0 L${r*.22} ${r*.22} L0 ${r} L${-r*.22} ${r*.22} L${-r} 0 L${-r*.22} ${-r*.22} Z`,
     facets: `M0 ${-r*1.65} L${r*1.1} 0 L0 ${r*1.65} L${-r*1.1} 0 Z`,

@@ -267,7 +267,7 @@ html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspe
 }
 
 /* The shaft and its root neck are measured from the same illustration box. */
-.bebrave-cypress{--cypress-width:min(122vw,1600px);--cypress-bottom:-10dvh;position:absolute;inset:0;pointer-events:none}
+.bebrave-cypress{--cypress-width:min(105vw,1200px);--cypress-bottom:-10dvh;position:absolute;inset:0;pointer-events:none}
 .bebrave-cypress-base{position:absolute;left:50%;bottom:var(--cypress-bottom);translate:-50% 0;width:var(--cypress-width);aspect-ratio:1024/680}
 .bebrave-cypress-shaft{position:absolute;left:51.2%;bottom:84%;width:20.8%;height:120dvh;translate:-50% 0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/100% auto repeat-y;filter:brightness(var(--world-bark-light));mask-image:linear-gradient(black calc(100% - 100px),transparent);transform-origin:50% 100%}
 .bebrave-cypress-roots{position:absolute;inset:0;background:var(--asset-tree-roots) center/contain no-repeat;filter:brightness(var(--world-bark-light));mask-image:linear-gradient(transparent,black 14%)}
@@ -322,7 +322,7 @@ html[data-effects="reduced"] :is(.bebrave-stage,.bebrave-settings,.bebrave-inspe
 .bebrave-rpg-copy{font-size:14px;line-height:1.6}
 .bebrave-rpg-actions .button{padding:10px 12px;font-size:12px}
 .bebrave-overlay{padding-top:94px}
-.bebrave-completion{display:flex;align-items:center;gap:12px;width:100%;font:500 12px/1.6 var(--game-type);padding-top:8px;border-top:1px solid var(--discovery-dialog-edge);animation:bebrave-dialogue-open .28s var(--ease-settle) both}
+.bebrave-completion{order:6;display:flex;align-items:center;gap:12px;width:100%;font:500 12px/1.6 var(--game-type);padding-top:8px;border-top:1px solid var(--discovery-dialog-edge);animation:bebrave-dialogue-open .28s var(--ease-settle) both}
 .bebrave-completion p{flex:1}.bebrave-completion>.button{white-space:nowrap}
 .is-fallen :is(.bebrave-horizon,.bebrave-midground)::before{transform:none}
 .bebrave-fallen-scroll{margin-top:110px}
