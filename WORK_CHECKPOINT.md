@@ -1,5 +1,14 @@
 # Website reimagining checkpoint
 
+## LIVE delivery — signup/navigation refinements, 2026-10-12
+
+- Live https://zackdcook.com/ READY on dpl_cQ6Ft3eXT2jiDMJzENJUvBSSLKYd (nxzlj2b5j), exact main/application source483704ac0f01bdcba1eb72d3eae696fd02e80b12. Experimental branch includes source and this documentation descendant. Previous7e89bb5/dpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy retained as rollback; baselinebe6b15d/treecd697eb unchanged.
+- All latest requested refinements implemented: filled48px CTA close; valid-email/Count-click-only verification in Home and Book Alert, automatic verified submission and stale/duplicate callback guards; About portrait right aligned; manuscript horizontal/vertical structural rules removed; dropdown arrows removed; whole-brand hover clockwise45°. Details next-site/docs/reimagining/PUBLIC_EXPERIENCE_MILESTONE_9.md.
+- PASS106 tests, typecheck, assets/themes, whitespace,47-route build. Private desktop/320/390 phone acceptance pass; official dummy-widget callback generates one failed-safe POST per retry. Public staged and live Home/modal initially have no widget or Cloudflare script; Count enabled, CTA close shared style. Real production signup/carving/redemption and physical Safari were not exercised.
+- Release used ONE production build after a normal main fast-forward, staged without custom domains and promoted exact artifact. All7 aliases/redirects verified; auto-assignment restored TRUE. Main tracking, SSO protection, existing production environment/secrets and free plan unchanged. Read-only public HTTP root200, tree state200/enabled true, QA viewport404. Optional POST test-reset probe was auto-review rejected and omitted; no workaround, existing unit guard coverage retained.
+- No database/schema/record/provider/dependency change. Existing50 test codes remain isolated/test-only, no plaintext read or new issuance. Independent listening/reading work untouched. Owned private QA process3517 stopped, port3001 closed, original spring-clean checkout clean; previous1814/2731 QA groups also stopped during guarded restarts. Existing cautious-trout Codespace will be stopped immediately after checkpoint publication.
+- Proof saved live-signup-refinements-1791769598883.jpg. Next action: review user feedback on live site; resume only new refinements or original-inventory/real-device acceptance when needed. No additional deployment for this documentation alone.
+
 ## Signup and navigation refinements — tested, ready to stage, 2026-10-12
 
 - User authorised listed UI changes and live release. Local base ef5ae937; current main/live source 7e89bb5, deployment dpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy remains rollback. Original baseline be6b15d and selected tree cd697eb unchanged.
