@@ -88,6 +88,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=[],cutoff
 
   useLayoutEffect(()=>{
     const el=world.current;if(!el)return;
+    if(mode==="admire")initialAdmireCamera.current=true;
     parallaxOrigin.current=null;
     const measure=()=>{
       const rail=scene.current?.querySelector<HTMLElement>(".bebrave-control-rail");
