@@ -1,5 +1,16 @@
 # Website reimagining checkpoint
 
+## Be Brave JRPG finishing milestone — test release complete, 2026-10-12
+
+- Application `24be9724e5a9bebcb2cae7bd5afbfaf591085432`; READY dedicated Preview `dpl_EPvdZRHkF6AP866M99r5ACLMUwhS`: https://zack-cook-4wzw4bb9g-dove-mack0o-3684.vercel.app/bebrave.
+- Own separate worktree/branch `experiment/be-brave-jrpg-2026-10-12`, freshly based on main 9385b3f including 39° hover. Public discovery, listening/reading, main and production preserved.
+- Full playable sequence and exactly two visual refinement passes completed. Browser-discovered short-phone access and initial-camera races corrected. 109 tests, typecheck/generation checks and 48-route build pass; actual input, timer, publication, original detail, reset, all 5 rarities/all 4 themes, reduced effects, emulated phone/tablet, high zoom and 50,000-foot bounded history reviewed.
+- Final natural-roll carving published sequence 31. Eight QA drawings added eight feet without deleting earlier history. Personal reset/new attempt retained anonymous identity, saved session/archive/growth. Permanent Legendary redemption preserved. 50 distribution codes unused with unchanged digest; private code file untouched; 3 separately named disposable Legendary fixtures spent once.
+- Production remains `dpl_EsrxxEgZzYm7xjXwJ31mypTBKhix` from main 9385b3f. No merge, production publish, shared alias change, schema/security change or paid infrastructure.
+- Full verification/limits: `next-site/docs/reimagining/BE_BRAVE_JRPG_MILESTONE.md`. Handoff includes screenshots, sampled recordings, results/metrics and incremental Git recovery bundle. GitHub push blocked by connector permissions; automatic approval review denied private Codespace access. File-backed Vercel deployment uses exact committed application source.
+- Owned processes stopped. Physical touch/Safari/stylus and unthrottled GPU/FPS remain unverified. Milestone ended; future features/production publication are separate decisions.
+
+
 ## Signup and navigation refinements — tested, ready to stage, 2026-10-12
 
 - User authorised listed UI changes and live release. Local base ef5ae937; current main/live source 7e89bb5, deployment dpl_8fM8MBGvYbsiiYGMmqAgcxidfzhy remains rollback. Original baseline be6b15d and selected tree cd697eb unchanged.
