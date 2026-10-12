@@ -3,6 +3,7 @@
 import type { BeBraveNormalTool, BeBraveRarity, BeBraveSessionView } from "@/lib/bebrave-types";
 import { groundTools, toolCopy } from "@/lib/bebrave/presentation";
 import { choiceKeys } from "./bebrave-menu";
+import { BeBraveCypress } from "./bebrave-cypress";
 
 type GroundTool = BeBraveNormalTool | "cache";
 export function ToolImage({ tool }: { tool: GroundTool | "knife" | "cache-open" }) {
@@ -16,7 +17,7 @@ function RarityEffect({ rarity }: { rarity: BeBraveRarity }) {
 export function ToolEncounter({ session, reveal = false, selected, busy, onHighlight }: { session: BeBraveSessionView | null; reveal?: boolean; selected?: GroundTool | null; busy?: boolean; onHighlight?: (tool: GroundTool) => void }) {
   const knife = reveal && session?.chosenTool === "cache";
   return <div className={`bebrave-ground-encounter ${reveal ? "is-revealed" : "is-arriving"} ${knife ? "has-knife" : ""}`}>
-    <div className="bebrave-encounter-ground" aria-hidden="true"/>{!reveal&&<span className="bebrave-encounter-caption">Choose your carving tool</span>}
+    <BeBraveCypress/>{!reveal&&<span className="bebrave-encounter-caption">Choose your carving tool</span>}
     <div className="bebrave-encounter-objects" role="group" aria-label={reveal ? "The tools reveal their rarity" : "Choose your carving tool"} onKeyDown={choiceKeys}>
       {groundTools.map(tool => {
         const chosen = reveal && session?.chosenTool === tool;

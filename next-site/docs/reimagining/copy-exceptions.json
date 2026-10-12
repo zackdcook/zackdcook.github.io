@@ -37,7 +37,7 @@
   {
     "path": "next-site/components/site-preferences.tsx",
     "text": "Reset Brave discovery",
-    "reason": "Preview-only QA wording exception: the existing Reset \u2026 interaction pattern with the author\u2019s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
+    "reason": "Preview-only QA wording exception: the existing Reset … interaction pattern with the author’s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
   },
   {
     "path": "next-site/components/calendar-menu.tsx",
@@ -61,17 +61,57 @@
   },
   {
     "path": "next-site/app/rss/page.tsx",
-    "text": "RSS lets you follow new Words of Folly without an account here. Copy this address into the \u201cAdd feed\u201d or \u201cFollow website\u201d box in your feed reader.",
+    "text": "RSS lets you follow new Words of Folly without an account here. Copy this address into the “Add feed” or “Follow website” box in your feed reader.",
     "reason": "Explicit RSS rewrite: Let your feed reader do the checking. Copy this address into it for new Words of Folly."
   },
   {
     "path": "next-site/app/rss/page.tsx",
-    "text": "Your reader will check for new entries automatically. If you open the feed directly in a browser, you may see XML code\u2014that\u2019s the format feed readers use.",
+    "text": "Your reader will check for new entries automatically. If you open the feed directly in a browser, you may see XML code—that’s the format feed readers use.",
     "reason": "Author-requested RSS simplification removes this technical explanation. The server RSS endpoint still emits valid XML."
   },
   {
     "path": "next-site/app/page.tsx",
     "text": "The whole pile",
     "reason": "Zack explicitly renamed this homepage link to Pile of leaves in the authorised live-release feedback (2026-10-11). The destination and interactive leaves are preserved."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "Zack Cook — home",
+    "reason": "User-requested shared public wordmark now provides the home link as Zack Cook, home."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "+",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "Reset",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "Reset zoom",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "Zoom in",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "Zoom out",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "Zoom tree",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
+  },
+  {
+    "path": "next-site/components/bebrave-tree.tsx",
+    "text": "−",
+    "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
   }
 ]

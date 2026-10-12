@@ -6,6 +6,7 @@ import { BeBraveTree } from "@/components/bebrave-tree";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { ActionBar, Dialogue, HomeControls, OverlayScene } from "./bebrave-menu";
 import { ToolEncounter, ToolImage } from "./bebrave-tool-encounter";
+import { BeBraveCypress } from "./bebrave-cypress";
 import { usePreferences } from "./site-preferences";
 import { observeBeBraveBrowser } from "@/lib/bebrave/browser-metrics";
 import { afterReveal, resumedScene, toolCopy } from "@/lib/bebrave/presentation";
@@ -27,12 +28,13 @@ function normalizeTimeline(value:unknown):BeBraveLocalTimeline{
   return {kind:kind==="felled"&&seq!==null&&height!==null?"felled":kind==="felling"?"felling":"living",hacked:v.hacked===true,additionalStrikes:roll,completedAdditionalStrikes:completed,snapshotSequence:seq,snapshotHeight:height,felledAt:typeof v.felledAt==="string"?v.felledAt:null,immediateFallenSeen:v.immediateFallenSeen===true};
 }
 function Stage({children,felled=false,marks=0,stump=false,homeControls,scene="entry",impactRef,falling=false}:{children:React.ReactNode;felled?:boolean;marks?:number;stump?:boolean;homeControls?:React.ReactNode;scene?:string;impactRef?:React.RefObject<HTMLDivElement|null>;falling?:boolean}){
-  return <div data-bebrave-scene={scene} className={`bebrave-stage ${falling?"is-falling":""} ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div ref={impactRef} className="bebrave-stage-art" data-light-source aria-hidden="true"><div className="bebrave-stage-bg"/>{!stump&&<div className="bebrave-stage-tree"/>}{!stump&&<div className="bebrave-stage-roots"/>}{stump&&<div className="bebrave-stage-stump"/>}<div className="bebrave-stage-mid"/><TreeAtmosphere/>{!stump&&marks>0&&<div className="bebrave-stage-hacks">{Array.from({length:marks},(_,i)=><i key={i} style={{transform:`translate(${i*4}px,${i*5}px) rotate(${-16+i*3}deg)`}}/>)}</div>}</div>{children}</div>;
+  return <div data-bebrave-scene={scene} className={`bebrave-stage ${falling?"is-falling":""} ${felled?"is-bebrave-felled":""} ${stump?"is-bebrave-stump":""}`}>{homeControls||<HomeControls/>}<div className="bebrave-stage-art" data-light-source aria-hidden="true"><div className="bebrave-stage-bg"/>{!stump&&<BeBraveCypress marks={marks} impactRef={impactRef}/>}{stump&&<div className="bebrave-stage-stump"/>}<div className="bebrave-stage-mid"/><TreeAtmosphere/></div>{children}</div>;
 }
 export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:boolean;siteKey:string;testMode?:boolean}){
   const { reduced } = usePreferences();
   useEffect(()=>testMode?observeBeBraveBrowser():undefined,[testMode]);
-  const [highlightedTool,setHighlightedTool]=useState<BeBraveNormalTool|"cache"|null>(null),[revealSettled,setRevealSettled]=useState(false),[falling,setFalling]=useState(false);
+  const [highlightedTool,setHighlightedTool]=useState<BeBraveNormalTool|"cache"|null>(null),[revealSettled,setRevealSettled]=useState(false),[falling,setFalling]=useState(false),[freshlyFelled,setFreshlyFelled]=useState(false);
+  const strikeBusy=useRef(false);
   const cacheBusy=useRef(false),colorBusy=useRef(false),startBusy=useRef(false),createBusy=useRef(false);
   const [scene,setScene]=useState<Scene>("entry"),[tree,setTree]=useState<BeBraveTreeState>(fallbackBeBraveTreeState),[session,setSession]=useState<BeBraveSessionView|null>(null),[draftStrokes,setDraftStrokes]=useState<DraftStroke[]>([]);
   const [growthRemaining,setGrowthRemaining]=useState(0),[serverNow,setServerNow]=useState(new Date().toISOString()),[problem,setProblem]=useState(""),[busy,setBusy]=useState(false),[cacheMessage,setCacheMessage]=useState(""),[cacheCode,setCacheCode]=useState(""),[cacheColors,setCacheColors]=useState(BEBRAVE_EPIC_COLORS),[timeline,setTimelineState]=useState<BeBraveLocalTimeline>(defaultBeBraveTimeline),[hydrated,setHydrated]=useState(false);
@@ -112,22 +114,22 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     }catch(e){setProblem(e instanceof Error?e.message:"The test carving limit could not reset.");}
     finally{setBusy(false);}
   }
-  const homeControls=<HomeControls testMode={testMode} busy={busy||scene==="draw"||falling} onReset={resetTestVisitor} onResetTimeline={()=>{
-    saveTimeline(defaultBeBraveTimeline);syncSiteTimeline("living");setScene("entry");
+  const homeControls=<HomeControls testMode={testMode} drawing={scene==="draw"} busy={busy||scene==="draw"||falling} onReset={resetTestVisitor} onResetTimeline={()=>{
+    saveTimeline(defaultBeBraveTimeline);syncSiteTimeline("living");setFreshlyFelled(false);setScene("entry");
   }}/>;
 
   function impact(strong=false){const el=impactRef.current;if(!el||reduced)return;const d=strong?9:2;el.animate([{transform:"translate(0,0)"},{transform:`translate(${-d}px,${d*.25}px)`},{transform:`translate(${d*.7}px,${-d*.2}px)`},{transform:"translate(0,0)"}],{duration:strong?260:120,easing:"ease-out"});}
   function firstStrike(){impact();saveTimeline({...timeline,kind:"felling",hacked:true});setScene("confirm-chop");}
   function continueChop(){let roll=timeline.additionalStrikes;if(!roll){const b=new Uint8Array(1);crypto.getRandomValues(b);roll=b[0]%4+1;}saveTimeline({...timeline,kind:"felling",hacked:true,additionalStrikes:roll,completedAdditionalStrikes:timeline.completedAdditionalStrikes});setScene("strikes");}
-  async function strike(){const required=timeline.additionalStrikes||1,done=timeline.completedAdditionalStrikes+1;impact(done>=required);if(done<required){saveTimeline({...timeline,kind:"felling",hacked:true,completedAdditionalStrikes:done});return;}setBusy(true);try{const r=await fetch("/api/bebrave/snapshot",{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error);const now=d.serverNow||new Date().toISOString();setFalling(true);
-      if(!reduced)await new Promise(resolve=>setTimeout(resolve,720));
-      syncSiteTimeline("felled",d.state.latestSequence,now);const next:BeBraveLocalTimeline={...timeline,kind:"felled",hacked:true,completedAdditionalStrikes:done,snapshotSequence:d.state.latestSequence,snapshotHeight:d.state.height,felledAt:now,immediateFallenSeen:true};saveTimeline(next);setTree(d.state);window.location.assign("/");}catch(e){setProblem(e instanceof Error?e.message:"The final strike could not finish.");}finally{setFalling(false);setBusy(false);}}
+  async function strike(){if(strikeBusy.current)return;const required=timeline.additionalStrikes||1,done=timeline.completedAdditionalStrikes+1;impact(done>=required);if(done<required){saveTimeline({...timeline,kind:"felling",hacked:true,completedAdditionalStrikes:done});return;}strikeBusy.current=true;setBusy(true);try{const r=await fetch("/api/bebrave/snapshot",{cache:"no-store"});const d=await r.json();if(!r.ok)throw Error(d.error);const now=d.serverNow||new Date().toISOString();setFalling(true);
+      if(!reduced)await new Promise(resolve=>setTimeout(resolve,1100));
+      syncSiteTimeline("felled",d.state.latestSequence,now);const next:BeBraveLocalTimeline={...timeline,kind:"felled",hacked:true,completedAdditionalStrikes:done,snapshotSequence:d.state.latestSequence,snapshotHeight:d.state.height,felledAt:now,immediateFallenSeen:true};saveTimeline(next);setTree(d.state);setFreshlyFelled(true);setScene("entry");}catch(e){setProblem(e instanceof Error?e.message:"The final strike could not finish.");}finally{strikeBusy.current=false;setFalling(false);setBusy(false);}}
   useEffect(()=>{if(scene==="fallen"&&timeline.kind==="felled"&&!timeline.immediateFallenSeen)saveTimeline({...timeline,immediateFallenSeen:true});},[scene]);
 
   const fallenState=useMemo(()=>timeline.snapshotHeight?{...tree,height:timeline.snapshotHeight,activeBottom:timeline.snapshotHeight,activeTop:timeline.snapshotHeight-BEBRAVE_ACTIVE_HEIGHT,latestSequence:timeline.snapshotSequence||0}:tree,[tree,timeline.snapshotHeight,timeline.snapshotSequence]);
   const marks=timeline.hacked?1+timeline.completedAdditionalStrikes:0,felled=timeline.kind==="felled";
   if(!hydrated)return <Stage homeControls={homeControls}><Dialogue>You follow a humid path into the swamp…</Dialogue></Stage>;
-  if(scene==="admire")return <div data-bebrave-scene={scene} className="bebrave-stage bebrave-world-stage"><BeBraveTree state={tree} mode="admire" homeControls={homeControls} admireActions={<button className="button" onClick={()=>setScene("entry")}>What do you do?</button>}/></div>;
+  if(scene==="admire")return <div data-bebrave-scene={scene} className="bebrave-stage bebrave-world-stage"><BeBraveTree state={tree} mode="admire" homeControls={homeControls} admireActions={<button className="button bebrave-back-button" onClick={()=>setScene("entry")}>Back</button>}/></div>;
   if(scene==="complete"&&session){
     const toolName=session.chosenTool==="cache"
       ?"pocket knife"
@@ -140,11 +142,11 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     </div>;
   }
   if(scene==="draw"&&session)return <div data-bebrave-scene={scene} className="bebrave-stage bebrave-world-stage"><BeBraveTree state={tree} mode="draw" session={session} serverNow={serverNow} draftStrokes={draftStrokes} onFinished={drawingFinished} homeControls={homeControls}/></div>;
-  if(scene==="fallen"&&timeline.kind==="felled")return <div className="bebrave-stage bebrave-world-stage is-bebrave-felled">{homeControls}<BeBraveTree state={fallenState} mode="fallen" cutoff={timeline.snapshotSequence||0}/><ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar></div>;
+  if(scene==="fallen"&&timeline.kind==="felled")return <div className="bebrave-stage bebrave-world-stage is-bebrave-felled">{homeControls}<BeBraveTree state={fallenState} mode="fallen" cutoff={timeline.snapshotSequence||0}/><ActionBar><button className="button" onClick={()=>{setFreshlyFelled(false);setScene("entry");}}>Back</button></ActionBar></div>;
 
-  const dead=felled&&timeline.immediateFallenSeen,stumpView=dead||scene==="stump"||scene==="regret";
+  const dead=felled,stumpView=dead||scene==="stump"||scene==="regret";
   return <Stage homeControls={homeControls} scene={scene} felled={felled} marks={marks} stump={stumpView} impactRef={impactRef} falling={falling}><div className="bebrave-stage-ui">
-    {scene==="entry"&&<Dialogue actions={dead?<><button className="button" onClick={()=>setScene("fallen")}>Admire</button><button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button" onClick={()=>setScene("base")}>Nothing</button><button className="button" onClick={admire}>Admire</button><button className="button bebrave-carve-button" disabled={busy||growthLocked||!enabled} onClick={beginCarve}>{growthLocked&&<small className="bebrave-growth-wait">{growthRemaining}′ growth before next:</small>}<span>Carve</span></button><button className="button" onClick={()=>setScene("chop")}>Chop down</button></>}>{dead?<><p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p><p>You have the distinct feeling that this is your fault.</p></>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new; others, seemingly older, higher up and out of reach.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
+    {scene==="entry"&&<Dialogue actions={dead?<>{freshlyFelled&&<button className="button" onClick={()=>setScene("fallen")}>Admire</button>}<button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button" onClick={()=>setScene("base")}>Nothing</button><button className="button" onClick={admire}>Admire</button><button className="button bebrave-carve-button" disabled={busy||growthLocked||!enabled} onClick={beginCarve}>{growthLocked&&<small className="bebrave-growth-wait">{growthRemaining}′ growth before next:</small>}<span>Carve</span></button><button className="button" onClick={()=>setScene("chop")}>Chop down</button></>}>{dead?<><p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p><p>You have the distinct feeling that this is your fault.</p></>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new; others, seemingly older, higher up and out of reach.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<OverlayScene visual={<div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}>{!testMode&&<HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/>}<button className="button" disabled={busy} data-menu-focus>{busy?"Checking…":"Continue"}</button><button type="button" className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button>{problem&&<p className="form-hint" role="alert">{problem}</p>}</form></div>} />}
     {scene==="tools"&&<OverlayScene
@@ -168,7 +170,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     {scene==="chop"&&<ActionBar><button className="button" onClick={firstStrike}>Chop</button></ActionBar>}
     {scene==="confirm-chop"&&<Dialogue actions={<><button className="button" onClick={()=>{saveTimeline({...timeline,kind:"living",hacked:true,additionalStrikes:null,completedAdditionalStrikes:0,snapshotSequence:null,snapshotHeight:null,felledAt:null,immediateFallenSeen:false});setScene("entry");}}>Stop</button><button className="button" onClick={continueChop}>Continue</button></>}>You hack at the tree’s hardened trunk. This tree has been here a very long time. Continue?</Dialogue>}
     {scene==="strikes"&&<ActionBar><button className="button" disabled={busy} onClick={strike}>Chop</button></ActionBar>}
-    {scene==="stump"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
-    {scene==="regret"&&<Dialogue actions={<button className="button" onClick={()=>setScene("entry")}>Back</button>}><p>You have the distinct feeling that this is your fault.</p></Dialogue>}
+    {scene==="stump"&&<ActionBar><button className="button" onClick={()=>{setFreshlyFelled(false);setScene("entry");}}>Back</button></ActionBar>}
+    {scene==="regret"&&<Dialogue actions={<button className="button" onClick={()=>{setFreshlyFelled(false);setScene("entry");}}>Back</button>}><p>You have the distinct feeling that this is your fault.</p></Dialogue>}
   </div></Stage>;
 }

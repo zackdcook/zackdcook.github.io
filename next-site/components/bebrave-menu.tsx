@@ -5,6 +5,7 @@ import { Artwork } from "./artwork";
 import { usePreferences } from "./site-preferences";
 import { defaultPreferences } from "@/lib/preferences";
 import { livingTimeline } from "@/lib/local-timeline";
+import headerStyles from "./site-header.module.css";
 
 /** Native buttons retain Tab/Enter/Space; arrows also navigate a menu's choices. */
 export function choiceKeys(event: KeyboardEvent<HTMLElement>) {
@@ -33,17 +34,19 @@ export function OverlayScene({ visual, children, actions }: { visual: ReactNode;
   return <div className="bebrave-overlay"><div className="bebrave-overlay-main">{visual}</div>{children && <Dialogue actions={actions}>{children}</Dialogue>}</div>;
 }
 
-export function HomeControls({ testMode = false, busy = false, onReset, onResetTimeline }: { testMode?: boolean; busy?: boolean; onReset?: () => void; onResetTimeline?: () => void }) {
+export function HomeControls({ testMode = false, busy = false, drawing = false, onReset, onResetTimeline }: { testMode?: boolean; busy?: boolean; drawing?: boolean; onReset?: () => void; onResetTimeline?: () => void }) {
   const [settings, setSettings] = useState(false);
   const opener = useRef<HTMLButtonElement | null>(null);
   return <>
-    <a className="bebrave-home-button" href="/" aria-label="Zack Cook — home">
-      <Artwork slot="brand-mark" className="bebrave-home-mark site-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false"><path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" /></svg></Artwork><span>Zack Cook</span>
+    <nav className="bebrave-game-nav" aria-label="Game navigation">
+    <a className={`${headerStyles.wordmark} bebrave-home-button`} href="/" aria-label="Zack Cook, home">
+      <Artwork slot="brand-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false"><path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="currentColor" /></svg></Artwork><span><span>Zack</span> <span>Cook</span></span>
     </a>
-    {testMode && <button className="button bebrave-test-reset-button" disabled={busy} onClick={onReset}>Reset my carve limit</button>}
-    <button className="button bebrave-preferences" aria-label="Settings" aria-haspopup="dialog" disabled={busy} onClick={event => { opener.current = event.currentTarget; setSettings(true); }}>
+    {testMode && !drawing && <button className="button bebrave-test-reset-button" aria-label="Reset my carve limit" title="Reset my carve limit" disabled={busy} onClick={onReset}><span className="bebrave-reset-full">Reset my carve limit</span><span className="bebrave-reset-short">Reset limit</span></button>}
+    {!drawing && <button className="button bebrave-preferences" aria-label="Settings" aria-haspopup="dialog" disabled={busy} onClick={event => { opener.current = event.currentTarget; setSettings(true); }}>
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><path d="M4 7h5m4 0h7M4 17h9m4 0h3"/><circle cx="11" cy="7" r="2"/><circle cx="15" cy="17" r="2"/></svg>
-    </button>
+    </button>}
+    </nav>
     {settings && <GameSettings opener={opener.current} onClose={() => setSettings(false)} onResetTimeline={onResetTimeline}/>}
   </>;
 }

@@ -4,32 +4,45 @@ import { memo,useMemo,type CSSProperties,type RefObject } from "react";
 import type { BeBravePublicStroke, BeBraveRarity } from "@/lib/bebrave-types";
 import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryEffect } from "@/lib/bebrave/effects";
+import { carvingEdge } from "@/lib/bebrave/carving-contrast";
 
 export function pointsToPath(points: Array<[number, number]>) {
   if (!points.length) return "";
   return points.map(([x,y],i)=>`${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
 }
 
-export type StrokePathRefs = Partial<Record<"cut"|"rim"|"glow"|"line"|"inlay"|"shimmer",RefObject<SVGPathElement|null>>>;
+export type StrokePathRefs = Partial<Record<"edge"|"cut"|"rim"|"glow"|"line"|"inlay"|"shimmer",RefObject<SVGPathElement|null>>>;
 
 /** The exact same ink stack is used by the fast live path and every saved view. */
 export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string;rarity:BeBraveRarity;refs?:StrokePathRefs}) {
   const magic=rarity==="superior"||rarity==="epic"||rarity==="legendary";
   return <>
     {magic&&<path ref={refs.glow} className="bebrave-stroke-glow" d={d} stroke={color}/>}
+    <path ref={refs.edge} className="bebrave-stroke-contrast" d={d}/>
     <path ref={refs.cut} className="bebrave-stroke-cut" d={d}/>
-    <path ref={refs.rim} className="bebrave-stroke-rim" d={d}/>
+    <path ref={refs.rim} className="bebrave-stroke-rim" d={d} stroke={carvingEdge(color)}/>
     <path ref={refs.line} className="bebrave-stroke-line" d={d} stroke={color}/>
     <path ref={refs.inlay} className="bebrave-stroke-inlay" d={d}/>
     {(rarity==="epic"||rarity==="legendary")&&<path ref={refs.shimmer} className="bebrave-epic-shimmer" d={d}/>}
   </>;
 }
 
+export function sparkGeometry(radius: number, legendary: boolean) {
+  const r = radius * (legendary ? 2.7 : 2);
+  return {
+    star: `M0 ${-r} L${r*.22} ${-r*.22} L${r} 0 L${r*.22} ${r*.22} L0 ${r} L${-r*.22} ${r*.22} L${-r} 0 L${-r*.22} ${-r*.22} Z`,
+    facets: `M0 ${-r*1.65} L${r*1.1} 0 L0 ${r*1.65} L${-r*1.1} 0 Z`,
+    orbit: r * 2.05, core: Math.max(1.8, r * .32),
+  };
+}
+
 export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean}) {
+  const shape = sparkGeometry(r, legendary);
   return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
-    {legendary&&<circle className="bebrave-wisp-orbit" r={r*2.1} style={{animationDelay:`-${delay}s`}}/>}
-    <path className="bebrave-sparkle-star" d={`M0 ${-r} L${r*.22} ${-r*.22} L${r} 0 L${r*.22} ${r*.22} L0 ${r} L${-r*.22} ${r*.22} L${-r} 0 L${-r*.22} ${-r*.22} Z`} style={{animationDelay:`-${delay}s`}}/>
-    <circle className="bebrave-sparkle-core" r={Math.max(1.7,r*.26)}/>
+    {legendary&&<circle className="bebrave-wisp-orbit" r={shape.orbit} style={{animationDelay:`-${delay}s`}}/>}
+    <path className="bebrave-sparkle-facets" d={shape.facets}/>
+    <path className="bebrave-sparkle-star" d={shape.star} style={{animationDelay:`-${delay}s`}}/>
+    <circle className="bebrave-sparkle-core" r={shape.core}/>
   </g>;
 }
 
