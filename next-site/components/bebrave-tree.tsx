@@ -69,7 +69,11 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       // Every visible Epic continues emitting. Crowded views reduce emitter
       // density rather than freezing older visitors' enchantments.
       root.dataset.crowdedEffects=String(visible.size>12);
-      for(const target of visible)target.style.setProperty("--effect-play",document.visibilityState==="visible"?"running":"paused");
+      const fresh=new Set([...visible].sort((a,b)=>Number(b.dataset.sequence)-Number(a.dataset.sequence)).slice(0,visible.size>12?2:8));
+      for(const target of visible){
+        const animated=target.querySelector(".bebrave-epic,.bebrave-superior")||fresh.has(target);
+        target.style.setProperty("--effect-play",document.visibilityState==="visible"&&animated?"running":"paused");
+      }
     };
     const observer=new IntersectionObserver(entries=>{
       for(const entry of entries){

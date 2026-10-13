@@ -3,17 +3,20 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ViewTransition, useEffect, useId, useRef, useState } from "react";
-import { navigation } from "@/content/navigation";
+import { navigation as authoredNavigation } from "@/content/navigation";
+import { canonicalPath } from "@/lib/canonical-routes";
 import { usePreferences } from "@/components/site-preferences";
 import { PreferencesButton } from "./preferences-button";
 import { Artwork } from "./artwork";
 import { BookMenuItem } from "./book-launch/provider";
 import styles from "./site-header.module.css";
 
+const navigation=authoredNavigation.map(item=>({...item,href:canonicalPath(item.href)}));
+
 export function SiteHeader() {
   const pathname = usePathname();
   const normalized = pathname.length > 1 ? pathname.replace(/\/+$/, "") : pathname;
-  const visiblePath = ({ "/creativeworks": "/creative-works", "/aboutme": "/about-me" } as Record<string, string>)[normalized] ?? normalized;
+  const visiblePath = canonicalPath(normalized);
   const dropdown = useRef<HTMLDivElement>(null);
   const menuId = useId();
   const opener = useRef<HTMLButtonElement>(null);

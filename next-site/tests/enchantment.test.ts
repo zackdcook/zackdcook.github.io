@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { BeBraveCarving, enchantmentParticleStyle } from "../components/bebrave-stroke";
 import { packDrawing, unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { admireAtmosphere } from "../lib/bebrave/admire-atmosphere";
-import { canonicalRedirects } from "../lib/canonical-routes";
+import { canonicalRedirects, canonicalPath } from "../lib/canonical-routes";
 import { pageMetadata, shareRecords } from "../lib/page-metadata";
 
 const drawing={id:"published-epic",publicSequence:12,rarity:"epic" as const,color:"#FF2BD6",effectSeed:8123,
@@ -49,4 +49,7 @@ test("legacy and hyphenated URLs redirect directly to the canonical content URLs
   for(const route of canonicalRedirects)assert.ok(!aliases.has(route.destination),`redirect chain: ${route.source}`);
   for(const record of shareRecords)assert.equal(pageMetadata(record.id).alternates?.canonical,`https://zackdcook.com${record.path}`);
   for(const path of ["/aboutme","/creativeworks"])assert.ok(shareRecords.some(record=>record.path===path));
+  assert.equal(canonicalPath("/about-me"),"/aboutme");
+  assert.equal(canonicalPath("/creative-works"),"/creativeworks");
+  assert.equal(canonicalPath("/writing/first-novel"),"/writing/first-novel");
 });

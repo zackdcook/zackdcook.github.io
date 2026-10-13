@@ -35,7 +35,7 @@ export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string
 }
 
 export function sparkGeometry(radius: number, legendary: boolean) {
-  const r = radius * (legendary ? 3.8 : 2.7);
+  const r = radius * (legendary ? 3.8 : 3.6);
   return {
     star: `M0 ${-r} L${r*.22} ${-r*.22} L${r} 0 L${r*.22} ${r*.22} L0 ${r} L${-r*.22} ${r*.22} L${-r} 0 L${-r*.22} ${-r*.22} Z`,
     facets: `M0 ${-r*1.65} L${r*1.1} 0 L0 ${r*1.65} L${-r*1.1} 0 Z`,
@@ -48,7 +48,7 @@ export function sparkGeometry(radius: number, legendary: boolean) {
 export function enchantmentParticleStyle(radius: number, delay: number): CSSProperties {
   return {
     "--particle-x": `${((radius-3.5)*17).toFixed(2)}px`,
-    "--particle-y": `${(-20-radius*7).toFixed(2)}px`,
+    "--particle-y": `${(-26-radius*11).toFixed(2)}px`,
     "--particle-curl": `${((delay-1.9)*19).toFixed(2)}deg`,
     "--particle-duration": `${(3.2+delay*.63).toFixed(2)}s`,
     "--trail-opacity": delay>2.25 ? ".7" : "0",

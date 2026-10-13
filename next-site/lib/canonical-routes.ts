@@ -14,3 +14,7 @@ export const canonicalRedirects = [
   { source: "/blog/its-not-too-late.html", destination: "/words-of-folly", permanent: true },
   { source: "/beta.html", destination: "/creativeworks", permanent: false },
 ];
+
+export function canonicalPath(path:string) {
+  return canonicalRedirects.find(route=>route.source===path)?.destination ?? path;
+}

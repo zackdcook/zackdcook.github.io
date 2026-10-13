@@ -38,7 +38,7 @@ export default async function Home() {
           </div>
           <div className="life-body">
           {editorial.home.aboutParagraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
-          <Link className="button" href="/about-me">A lil history</Link>
+          <Link className="button" href="/aboutme">A lil history</Link>
           </div>
         </div>
         <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
