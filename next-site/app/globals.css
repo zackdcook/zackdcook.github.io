@@ -22,6 +22,7 @@ button,a,summary,input,textarea,select{-webkit-tap-highlight-color:transparent}
 /* Browser focus-visible heuristics can retain a ring after a tap/programmatic
    focus (especially radio faces in Safari). Input provenance owns the ring. */
 html[data-input-mode="pointer"] :is(a,button,summary,input,textarea,select,[tabindex]):focus{outline:none}
+html[data-input-mode="pointer"] :is(a,button,[tabindex]):focus [aria-hidden]{outline:none}
 html[data-input-mode="pointer"] :is(.appearance-selector,.checkbox-control) input:focus+.preference-control{outline:none}
 img{max-width:100%;display:block;height:auto}
 h1,h2,h3,p{margin:0}
