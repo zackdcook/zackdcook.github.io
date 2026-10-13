@@ -106,12 +106,14 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 /* The drawing plane never participates in decorative pose or impact effects. */
 .bebrave-scene{position:relative;isolation:isolate;min-height:100dvh;--bebrave-horizon-y:0px;--bebrave-mid-y:0px;--bebrave-safe-top:24px}
 .bebrave-horizon,.bebrave-midground{position:fixed;inset:0;height:100dvh;overflow:clip;pointer-events:none}
-.bebrave-horizon{z-index:-4;background:var(--bebrave-sky-color,#152f58)}.bebrave-midground{z-index:-3}
+.bebrave-horizon{z-index:-4;background:linear-gradient(180deg,var(--bebrave-sky-top-color,#0a1a39),var(--bebrave-sky-color,#152f58) 62%,var(--bebrave-sky-bottom-color,#23204c))}.bebrave-midground{z-index:-3}
 .bebrave-horizon>*{display:none}
 .bebrave-horizon::before,.bebrave-midground::before{content:"";position:absolute;inset:-8dvh -5vw;background-position:center;background-repeat:no-repeat}
 .bebrave-horizon::before{background-image:var(--asset-tree-sky);background-size:cover;opacity:var(--bebrave-horizon-opacity,1);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translateY(var(--bebrave-horizon-y))}
 .bebrave-midground::before{background-image:var(--asset-tree-foreground);background-size:cover;opacity:calc(var(--bebrave-mid-opacity,1)*.9);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translateY(var(--bebrave-mid-y))}
-.bebrave-horizon>.bebrave-night-stars{display:block;position:absolute;inset:0;opacity:var(--bebrave-stars,0);background:radial-gradient(1px 1px at 8% 22%,#c6ccec 80%,transparent),radial-gradient(1px 1px at 82% 19%,#c6ccec 80%,transparent),radial-gradient(1.5px 1.5px at 21% 68%,#a2a9d5 80%,transparent),radial-gradient(1px 1px at 95% 52%,#a2a9d5 80%,transparent),radial-gradient(1px 1px at 14% 86%,#8b8cab 80%,transparent),radial-gradient(1.5px 1.5px at 72% 79%,#c6ccec 80%,transparent),radial-gradient(1px 1px at 34% 13%,#8b8cab 80%,transparent)}
+.bebrave-horizon>.bebrave-night-stars{display:block;position:absolute;inset:-12dvh 0;opacity:var(--bebrave-stars,0);transform:translateY(var(--bebrave-star-travel,0px))}
+.bebrave-night-stars i{position:absolute;width:var(--star-size);height:var(--star-size);border-radius:50%;background:#c6ccec;opacity:var(--star-brightness);box-shadow:0 0 2px #c6ccec55}
+.is-admire :is(.bebrave-horizon,.bebrave-midground)::before{will-change:transform,opacity}
 .is-admire .bebrave-atmosphere{opacity:var(--bebrave-ground-atmosphere,1)}
 .is-admire .bebrave-horizon::after{opacity:var(--bebrave-ground-atmosphere,1)}
 .bebrave-atmosphere{position:fixed;inset:0;z-index:1;overflow:clip;pointer-events:none}
@@ -125,7 +127,13 @@ html[data-timeline="felled"] .bebrave-fireflies{opacity:.2}
 .bebrave-world{position:relative;width:min(90%,920px);margin-inline:auto;touch-action:pan-x pan-y;max-width:none}
 .bebrave-tree-space{position:absolute;left:0;top:0;transform-origin:0 0}
 .bebrave-trunk{position:absolute;inset:0;background:var(--bebrave-bark) var(--asset-tree-bark) center top/720px 960px repeat-y;filter:brightness(var(--world-bark-light));box-shadow:inset 8px 0 0 #14172b80,inset -8px 0 0 #14172b80}
-.bebrave-drawings{position:absolute;inset:0;width:720px;height:100%;overflow:visible;touch-action:inherit}
+.bebrave-drawings{position:absolute;z-index:3;inset:0;width:720px;height:100%;overflow:visible;touch-action:inherit}
+.bebrave-enchantment-canvas{position:absolute;left:0;top:0;width:720px;height:1px;visibility:hidden;pointer-events:none;touch-action:none}
+.bebrave-enchantment-aura{z-index:2}.bebrave-enchantment-motes{z-index:4}
+.bebrave-scene[data-enchantment-renderer="canvas"] .bebrave-enchantment-canvas{visibility:visible}
+.bebrave-scene[data-enchantment-renderer="canvas"] :is(.bebrave-stroke-halo,.bebrave-stroke-glow,.bebrave-aura-current,.bebrave-epic-shimmer,.bebrave-sparkle){display:none;animation:none!important}
+.bebrave-scene[data-enchantment-renderer="canvas"] .bebrave-sparkle *{animation:none!important}
+.bebrave-scene[data-enchantment-renderer="canvas"] .bebrave-stroke[data-effect="rainbow-v1"]{animation:none;filter:none}
 .bebrave-active-zone{position:absolute;left:0;right:0;z-index:1;border-block:2px dashed var(--discovery-dialog-choice);background:color-mix(in srgb,var(--discovery-dialog-choice) 4%,transparent);pointer-events:none}
 .bebrave-timer strong{font:inherit}.bebrave-timer[data-urgent="true"]{color:var(--discovery-dialog-choice)}
 .bebrave-completion p{margin:0;color:var(--discovery-dialog-ink)}

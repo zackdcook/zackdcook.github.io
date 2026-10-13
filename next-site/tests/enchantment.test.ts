@@ -38,7 +38,7 @@ test("Admire starts its long night transition only after the scenery has left th
   assert.equal(admireAtmosphere(viewport*4,total,viewport).progress,0);
   assert.equal(admireAtmosphere(viewport*4,total,viewport).color,"#152f58");
   for(const length of [3000,total,100000]){
-    const exit=Math.min(viewport*6,length*.45);
+    const exit=Math.min(viewport*10.8,length*.6);
     const after=admireAtmosphere(exit+1,length,viewport);
     assert.equal(after.horizonOpacity,0);assert.equal(after.midgroundOpacity,0);
     assert.ok(after.horizonY>=viewport*1.08);
@@ -51,6 +51,12 @@ test("Admire starts its long night transition only after the scenery has left th
   for(let rise=0;rise<total;rise+=500)assert.ok(admireAtmosphere(rise,total,viewport).progress<=admireAtmosphere(rise+1,total,viewport).progress);
   assert.equal(admireAtmosphere(total*2,total,viewport).color,"#020308");
   assert.ok(Number.isFinite(admireAtmosphere(0,0,0).progress));
+  const slower=admireAtmosphere(viewport*9,100000,viewport);
+  assert.equal(slower.horizonOpacity,1,"distant scenery remains until nine screen heights of ascent");
+  assert.equal(slower.progress,0);
+  const night=admireAtmosphere(100000,100000,viewport);
+  assert.equal(night.topColor,"#010205");assert.equal(night.bottomColor,"#020308");
+  assert.ok(night.starTravel>0,"sky depth continues after the scenery has left");
 });
 
 test("each Legendary identity survives archive storage and reconstructs its distinct particle design",()=>{
