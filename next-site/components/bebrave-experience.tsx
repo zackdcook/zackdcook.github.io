@@ -11,6 +11,7 @@ import { usePreferences } from "./site-preferences";
 import { observeBeBraveBrowser } from "@/lib/bebrave/browser-metrics";
 import { afterReveal, resumedScene, toolCopy } from "@/lib/bebrave/presentation";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
+import { treeHistory,initialHistoryWindow } from "@/lib/bebrave/history-cache";
 import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,type BeBraveLocalTimeline,type BeBraveNormalTool,type BeBraveRarity,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
 const timelineKey="zack.bebrave.timeline.v1";
@@ -85,6 +86,11 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
 
   const resumable=Boolean(session&&["tool_select","epic_color","ready","drawing"].includes(session.status));
   const growthLocked=growthRemaining>0&&!resumable;
+  useEffect(()=>{
+    if(!hydrated||tree.latestSequence===0)return;
+    const cache=treeHistory(tree),[first,last]=initialHistoryWindow(tree.height,window.innerHeight,Math.min(window.innerWidth*.6,570)/720);
+    cache.setWindow(first,last);void cache.load(first,last).catch(()=>{});
+  },[hydrated,tree.latestSequence,tree.height]);
   const sceneForSession=resumedScene;
   function admire(){ setProblem(""); setScene("admire"); }
   async function beginCarve(){if(growthLocked)return;setProblem("");if(session&&["tool_select","epic_color","ready","drawing"].includes(session.status)){setScene(sceneForSession(session));return;}setHighlightedTool(null);if(testMode){await prepareSession(new FormData());return;}setScene("human");}
@@ -146,7 +152,7 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
 
   const dead=felled,stumpView=dead||scene==="stump"||scene==="regret";
   return <Stage homeControls={homeControls} scene={scene} felled={felled} marks={marks} stump={stumpView} impactRef={impactRef} falling={falling}><div className="bebrave-stage-ui">
-    {scene==="entry"&&<Dialogue actions={dead?<>{freshlyFelled&&<button className="button" onClick={()=>setScene("fallen")}>Admire</button>}<button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button" onClick={()=>setScene("base")}>Nothing</button><button className="button" onClick={admire}>Admire</button><button className="button bebrave-carve-button" disabled={busy||growthLocked||!enabled} onClick={beginCarve}>{growthLocked&&<small className="bebrave-growth-wait">{growthRemaining}′ growth before next:</small>}<span>Carve</span></button><button className="button" onClick={()=>setScene("chop")}>Chop down</button></>}>{dead?<p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new; others, seemingly older, higher up and out of reach.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
+    {scene==="entry"&&<Dialogue actions={dead?<>{freshlyFelled&&<button className="button" onClick={()=>setScene("fallen")}>Admire</button>}<button className="button" onClick={()=>setScene("stump")}>Look at the stump</button><button className="button" onClick={()=>setScene("regret")}>Regret your decisions</button></>:<><button className="button bebrave-carve-button" disabled={busy||growthLocked||!enabled} onClick={beginCarve}>{growthLocked&&<small className="bebrave-growth-wait">{growthRemaining}′ growth before next:</small>}<span>Carve something new</span></button><button className="button" onClick={admire}>Admire old carvings</button><button className="button" onClick={()=>setScene("chop")}>Chop that bitch down</button><a className="button" href="/">Leave</a></>}>{dead?<p>You meander into a hot Florida swamp. The smell of rot fills your lungs. Before you sits an enormous stump.</p>:<><p>You meander into a humid Florida swamp and are greeted by a tree, impossibly tall, reaching into the clouds. The pleasant aroma of fresh cypress tingles your nose. You notice etchings in the bark of the tree, some new; others, seemingly older, higher up and out of reach.</p><p>What do you do?</p></>}{problem&&<p role="alert">{problem}</p>}</Dialogue>}
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<OverlayScene visual={<div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}>{!testMode&&<HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/>}<button className="button" disabled={busy} data-menu-focus>{busy?"Checking…":"Continue"}</button><button type="button" className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button>{problem&&<p className="form-hint" role="alert">{problem}</p>}</form></div>} />}
     {scene==="tools"&&<OverlayScene

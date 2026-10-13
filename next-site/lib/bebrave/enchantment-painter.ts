@@ -1,15 +1,18 @@
 import type { BeBravePublicDrawing } from "../bebrave-types";
 import { sparklePoints } from "./effect-anchors";
 import { legendaryColor, legendaryEffect } from "./effects";
+import { carvingEdge } from "./carving-contrast";
+import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, SYMBOL_PATHS } from "./symbol-paths";
 
 type Point = [number, number];
 type Anchor = { x: number; y: number; r: number; delay: number };
 type Sample = { x: number; y: number; nx: number; ny: number; distance: number };
-export type EnchantmentCamera = { top: number; height: number; scale: number; pixelRatio: number };
+export type EnchantmentCamera = { top: number; height: number; scale: number; pixelRatio: number; left?:number; screenTop?:number };
 export type EnchantmentParticle = {
   x: number; y: number; radius: number; opacity: number; rotation: number;
   kind: "mote" | "spark" | "trail" | "heart" | "blood" | "wisp";
   tail: Point[]; color: string; highlight: string;
+  symbol:number;
 };
 
 const tau = Math.PI * 2;
@@ -80,8 +83,9 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   const kind = blood ? "blood" : effect === "hearts-v1" ? "heart" : effect === "will-o-wisp-v1" ? "wisp" : index % 5 === 0 ? "trail" : index % 3 === 0 ? "spark" : "mote";
   const twinkle = kind === "spark" ? .72 + .28 * Math.sin(seconds * (7 + noise(seed) * 7) + seed) ** 8 : 1;
   return {
-    x, y, kind, color: blood ? "#760B20" : base, highlight: highlight(base, .45),
-    radius: (kind === "spark" ? anchor.r * 2.4 : kind === "heart" ? anchor.r * 2.5 : kind === "wisp" ? anchor.r * 1.8 : anchor.r * 1.25) * (.55 + .65 * Math.sin(age * Math.PI)),
+    x, y, kind, color: blood ? "#760B20" : base, highlight: blood?"#D82B45":highlight(base, .45),
+    symbol:blood?PERSONAL_SYMBOL:effect==="hearts-v1"?0x2665:PARTICLE_SYMBOLS[Math.floor(noise(seed+cycle*23)*PARTICLE_SYMBOLS.length)],
+    radius: anchor.r * (kind === "spark" ? 3 : 2.5) * (.55 + .65 * Math.sin(age * Math.PI)),
     opacity: clamp(age / .12) * clamp((1 - age) / .3) * twinkle,
     rotation: blood ? 0 : Math.sin(seconds * 1.5 + seed) * .3,
     tail: [position(Math.max(0, age - .035)), position(Math.max(0, age - .075)), position(Math.max(0, age - .12))],
@@ -90,11 +94,11 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
 
 export function enchantmentSurface(camera: EnchantmentCamera, totalHeight: number) {
   const scale = Math.max(.01, camera.scale);
-  const top = Math.max(0, Math.floor((camera.top - 260) / 160) * 160);
-  const height = Math.max(1, Math.min(totalHeight - top, camera.height + 680));
+  const height = Math.ceil((camera.height + 680)/160)*160;
+  const top = Math.max(0, Math.min(Math.floor((camera.top - 260) / 160) * 160,Math.max(0,totalHeight-height)));
   // Two camera-sized buffers, never a bitmap the height of the shared tree.
   const padding = 120, worldWidth = 720 + padding * 2;
-  const ratio = Math.max(.5, Math.min(2, camera.pixelRatio, Math.sqrt(1_600_000 / (worldWidth * scale * height * scale))));
+  const ratio = Math.max(.25, Math.min(1.5, camera.pixelRatio, Math.sqrt(900_000 / (worldWidth * scale * height * scale))));
   return { top, height, scale, ratio, padding, worldWidth, width: Math.max(1, Math.ceil(worldWidth * scale * ratio)), pixelsHigh: Math.max(1, Math.ceil(height * scale * ratio)) };
 }
 
@@ -107,7 +111,13 @@ function geometrySignature(drawing: BeBravePublicDrawing) {
  * snapshot. It paints spatial motion instead of relying on SVG CSS filters. */
 export class EnchantmentPainter {
   private cache = new Map<string, PreparedDrawing>();
-  constructor(private aura: CanvasRenderingContext2D, private motes: CanvasRenderingContext2D, private makePath: () => Path2D = () => new Path2D()) {}
+  private symbols = new Map<number,Path2D>();
+  private base?:CanvasRenderingContext2D;
+  private ink?:CanvasRenderingContext2D;
+  private staticKey="";
+  constructor(private aura: CanvasRenderingContext2D, private motes: CanvasRenderingContext2D, private makePath: (svg?:string) => Path2D = svg => new Path2D(svg), makeBuffer:()=>CanvasRenderingContext2D|undefined=()=>typeof document==="undefined"?undefined:document.createElement("canvas").getContext("2d")??undefined) {
+    this.base=makeBuffer();this.ink=makeBuffer();
+  }
   get cacheSize() { return this.cache.size; }
 
   private prepare(drawing: BeBravePublicDrawing) {
@@ -132,14 +142,23 @@ export class EnchantmentPainter {
     }
   }
 
+  dispose() {
+    this.clear();this.cache.clear();this.symbols.clear();
+    for(const context of [this.aura,this.motes,this.base,this.ink])if(context){context.canvas.width=1;context.canvas.height=1;}
+  }
+
   paint(drawings: BeBravePublicDrawing[], camera: EnchantmentCamera, totalHeight: number, seconds: number) {
     const surface = enchantmentSurface(camera, totalHeight);
     for (const context of [this.aura, this.motes]) {
       const canvas = context.canvas;
       if (canvas.width !== surface.width) canvas.width = surface.width;
       if (canvas.height !== surface.pixelsHigh) canvas.height = surface.pixelsHigh;
-      canvas.style.top = `${surface.top}px`; canvas.style.height = `${surface.height}px`;
-      canvas.style.left = `${-surface.padding}px`; canvas.style.width = `${surface.worldWidth}px`;
+      const fixed=camera.left!==undefined;
+      canvas.style.position=fixed?"fixed":"absolute";
+      canvas.style.top = `${fixed?(camera.screenTop??0)+(surface.top-camera.top)*surface.scale:surface.top}px`;
+      canvas.style.height = `${surface.height*(fixed?surface.scale:1)}px`;
+      canvas.style.left = `${fixed?camera.left!-surface.padding*surface.scale:-surface.padding}px`;
+      canvas.style.width = `${surface.worldWidth*(fixed?surface.scale:1)}px`;
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, canvas.width, canvas.height);
       const pixelScale = surface.scale * surface.ratio;
@@ -149,13 +168,31 @@ export class EnchantmentPainter {
     }
     const magical = drawings.filter(drawing => enchantedTier(drawing.rarity));
     const crowded = magical.length > 12;
+    const preparedAll=drawings.map(drawing=>({drawing,prepared:this.prepare(drawing)}));
+    const pixelScale=surface.scale*surface.ratio;
+    const key=`${surface.top}:${surface.height}:${surface.width}:${surface.pixelsHigh}:${pixelScale}:${camera.left!==undefined}:${preparedAll.map(({drawing,prepared})=>`${drawing.id}:${prepared.signature}:${drawing.color}:${drawing.effectId}`).join("|")}`;
+    if(this.base&&this.ink&&key!==this.staticKey){
+      this.staticKey=key;
+      for(const context of [this.base,this.ink]){
+        if(context.canvas.width!==surface.width)context.canvas.width=surface.width;
+        if(context.canvas.height!==surface.pixelsHigh)context.canvas.height=surface.pixelsHigh;
+        context.setTransform(1,0,0,1,0,0);context.clearRect(0,0,surface.width,surface.pixelsHigh);
+        context.setTransform(pixelScale,0,0,pixelScale,surface.padding*pixelScale,-surface.top*pixelScale);
+        context.lineCap="round";context.lineJoin="round";
+      }
+      for(const {drawing,prepared} of preparedAll)if(enchantedTier(drawing.rarity))this.paintMantle(this.base,drawing,prepared,pixelScale,crowded);
+      if(camera.left!==undefined)for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);
+    }
+    if(this.base){
+      this.aura.save();this.aura.setTransform(1,0,0,1,0,0);this.aura.globalAlpha=.8+.2*Math.sin(seconds*1.8);this.aura.drawImage(this.base.canvas,0,0);this.aura.restore();
+    }
     let auraCount = 0, particleCount = 0;
     for (const drawing of magical) {
       const prepared = this.prepare(drawing);
       if (prepared.bottom + 260 < camera.top || prepared.top - 260 > camera.top + camera.height) continue;
       auraCount++;
-      this.paintAura(drawing, prepared, seconds, surface.scale * surface.ratio, crowded);
-      const budget = Math.max(2, Math.floor(220 / Math.max(1, magical.length)));
+      this.paintAura(drawing, prepared, seconds, pixelScale, crowded);
+      const budget = Math.max(2, Math.floor(120 / Math.max(1, magical.length)));
       const stride = Math.max(1, Math.ceil(prepared.anchors.length / budget));
       for (let index = 0; index < prepared.anchors.length; index += stride) {
         const particle = enchantmentParticleAt(drawing, prepared.anchors[index], index, seconds);
@@ -163,13 +200,37 @@ export class EnchantmentPainter {
         particleCount++; this.paintParticle(particle, surface.scale * surface.ratio);
       }
     }
-    // Discard unseen geometry first; cap cached paths during long-history QA.
-    if (this.cache.size > 128) {
-      const present = new Set(magical.map(drawing => drawing.id));
-      for (const id of this.cache.keys()) if (!present.has(id)) this.cache.delete(id);
-      while (this.cache.size > 128) this.cache.delete(this.cache.keys().next().value!);
+    if(camera.left!==undefined){
+      if(this.ink){
+        if(drawings.some(d=>d.effectId==="rainbow-v1")){this.ink.setTransform(1,0,0,1,0,0);this.ink.clearRect(0,0,surface.width,surface.pixelsHigh);this.ink.setTransform(pixelScale,0,0,pixelScale,surface.padding*pixelScale,-surface.top*pixelScale);for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);}
+        this.aura.save();this.aura.setTransform(1,0,0,1,0,0);this.aura.drawImage(this.ink.canvas,0,0);this.aura.restore();}
+      else for(const {drawing,prepared} of preparedAll)this.paintInk(this.aura,drawing,prepared,seconds);
     }
+    // Release abandoned paths immediately instead of retaining 128 dense marks.
+    const present=new Set(drawings.map(drawing=>drawing.id));
+    for(const id of this.cache.keys())if(!present.has(id))this.cache.delete(id);
     return { auras: auraCount, particles: particleCount, surface };
+  }
+
+  private paintMantle(context:CanvasRenderingContext2D,drawing:BeBravePublicDrawing,prepared:PreparedDrawing,pixelScale:number,crowded:boolean){
+    const color=drawing.effectId==="blood-v1"?"#030105":drawing.color;
+    context.strokeStyle=color;context.shadowColor=color;context.shadowBlur=crowded?0:12*pixelScale;
+    for(const [width,opacity] of (crowded?[[46,.14],[25,.38]]:[[68,.055],[49,.12],[33,.25],[20,.37]])){
+      context.lineWidth=width;context.globalAlpha=opacity;context.stroke(prepared.path);
+    }
+    context.globalAlpha=1;context.shadowBlur=0;
+  }
+
+  private paintInk(context:CanvasRenderingContext2D,drawing:BeBravePublicDrawing,prepared:PreparedDrawing,seconds:number){
+    const magic=enchantedTier(drawing.rarity),blood=drawing.effectId==="blood-v1";
+    const color=drawing.effectId==="rainbow-v1"?rainbowColor(seconds,360):legendaryColor(drawing.effectId,drawing.color);
+    const mix=(other:string,amount:number)=>`rgb(${rgb(color).map((c,i)=>Math.round(c*(1-amount)+rgb(other)[i]*amount)).join(",")})`;
+    const layers=magic?[[15.4,mix("#121526",.62),1],[13.4,mix("#121526",.42),1],[11.2,blood?"#660D20":highlight(color,.14),1],[9.2,color,1],[2.8,blood?"#FF6475":highlight(color,.36),1]]:[[15.4,"#FFF2C8",.78],[13.8,"#121526",1],[11.2,carvingEdge(color),.85],[9.2,color,1],[1.5,mix("#FFF2C8",.22),.85]];
+    context.shadowBlur=0;
+    const rainbow=drawing.effectId==="rainbow-v1"?context.createLinearGradient(0,0,720,0):null;
+    if(rainbow)for(let i=0;i<=6;i++)rainbow.addColorStop(i/6,rainbowColor(seconds,i*120));
+    for(const [width,ink,opacity] of layers){context.lineWidth=Number(width);context.strokeStyle=Number(width)===9.2&&rainbow?rainbow:String(ink);context.globalAlpha=Number(opacity);context.stroke(prepared.path);}
+    context.globalAlpha=1;
   }
 
   private paintAura(drawing: BeBravePublicDrawing, prepared: PreparedDrawing, seconds: number, pixelScale: number, crowded: boolean) {
@@ -182,7 +243,7 @@ export class EnchantmentPainter {
     context.strokeStyle = color; context.shadowColor = color;
     // Saturated layers form a soft substantial mantle around the crisp SVG core.
     // Source-over union strokes preserve the assigned color at own crossings.
-    for (const [width, opacity] of (crowded ? [[46, .14], [25, .38]] : [[68, .055], [49, .12], [33, .25], [20, .37]])) {
+    for (const [width, opacity] of (this.base&&!rainbow?[]:crowded ? [[46, .14], [25, .38]] : [[68, .055], [49, .12], [33, .25], [20, .37]])) {
       context.lineWidth = width * (1 + .08 * Math.sin(seconds * 1.5 + phase));
       context.globalAlpha = opacity * breathe;
       context.shadowBlur = crowded ? 0 : 12 * pixelScale;
@@ -201,7 +262,7 @@ export class EnchantmentPainter {
         });
         context.lineWidth = 9 + 3 * Math.sin(seconds * 2.1 + phase + side);
         context.globalAlpha = blood ? .46 : .26;
-        context.shadowBlur = 16 * pixelScale;
+        context.shadowBlur = 0;
         context.strokeStyle = rainbow ? rainbowColor(seconds + side, strokeIndex * 150) : color;
         context.stroke();
       }
@@ -213,35 +274,23 @@ export class EnchantmentPainter {
     const context = this.motes, r = particle.radius;
     context.save(); context.globalAlpha = particle.opacity;
     context.shadowColor = particle.color; context.shadowBlur = 12 * pixelScale;
-    if (particle.kind === "trail" || particle.kind === "wisp") {
-      context.strokeStyle = particle.color; context.lineWidth = 2.4;
-      context.beginPath(); context.moveTo(particle.x, particle.y);
-      for (const [x, y] of particle.tail) context.lineTo(x, y);
-      context.stroke();
+    if (particle.kind === "trail" || particle.kind === "wisp" || particle.kind === "blood") {
+      const end=particle.tail[2],middle=particle.tail[0];
+      const dx=particle.x-end[0],dy=particle.y-end[1],length=Math.hypot(dx,dy)||1;
+      const nx=-dy/length*r*.48,ny=dx/length*r*.48;
+      const gradient=context.createLinearGradient(end[0],end[1],particle.x,particle.y);
+      gradient.addColorStop(0,"transparent");gradient.addColorStop(.5,particle.color);gradient.addColorStop(1,particle.highlight);
+      context.fillStyle=gradient;context.globalAlpha=particle.opacity*.36;context.beginPath();
+      context.moveTo(particle.x+nx,particle.y+ny);
+      context.bezierCurveTo(middle[0]+nx,middle[1]+ny,end[0]+nx*.12,end[1]+ny*.12,...end);
+      context.bezierCurveTo(end[0]-nx*.12,end[1]-ny*.12,middle[0]-nx,middle[1]-ny,particle.x-nx,particle.y-ny);
+      context.closePath();context.fill();context.globalAlpha=particle.opacity;
     }
     context.translate(particle.x, particle.y); context.rotate(particle.rotation);
-    context.fillStyle = particle.color;
-    context.beginPath();
-    if (particle.kind === "heart") {
-      context.moveTo(0, r); context.bezierCurveTo(-r * 2, -.15 * r, -r, -1.7 * r, 0, -.5 * r);
-      context.bezierCurveTo(r, -1.7 * r, r * 2, -.15 * r, 0, r);
-    } else if (particle.kind === "blood") {
-      context.shadowColor = "#120106"; context.shadowBlur = 3 * pixelScale;
-      context.moveTo(0, -r * 1.5); context.bezierCurveTo(-r * .3, -r * .2, -r, r * .2, -r * .7, r);
-      context.bezierCurveTo(-r * .3, r * 1.7, r, r * 1.4, r * .7, r * .6);
-      context.bezierCurveTo(r * .5, 0, r * .2, -.6 * r, 0, -r * 1.5);
-    } else if (particle.kind === "spark") {
-      for (let i = 0; i < 8; i++) {
-        const radius = i % 2 ? r * .19 : r;
-        const x = Math.sin(i * Math.PI / 4) * radius, y = Math.cos(i * Math.PI / 4) * radius;
-        if (i === 0) context.moveTo(x, y); else context.lineTo(x, y);
-      }
-    } else context.ellipse(0, 0, r, particle.kind === "wisp" ? r * 1.6 : r, .15, 0, tau);
-    context.closePath(); context.fill();
-    if (particle.kind !== "blood") {
-      context.shadowBlur = 0; context.fillStyle = particle.highlight;
-      context.beginPath(); context.arc(0, 0, Math.max(1.1, r * .34), 0, tau); context.fill();
-    }
+    let glyph=this.symbols.get(particle.symbol);
+    if(!glyph){glyph=this.makePath(SYMBOL_PATHS[particle.symbol]);this.symbols.set(particle.symbol,glyph);}
+    context.scale(r,r);context.fillStyle=particle.color;context.fill(glyph);
+    context.shadowBlur=0;context.globalAlpha=particle.opacity*.72;context.fillStyle=particle.highlight;context.fill(glyph);
     context.restore();
   }
 }

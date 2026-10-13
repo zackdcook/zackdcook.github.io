@@ -37,7 +37,7 @@
   {
     "path": "next-site/components/site-preferences.tsx",
     "text": "Reset Brave discovery",
-    "reason": "Preview-only QA wording exception: the existing Reset \u2026 interaction pattern with the author\u2019s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
+    "reason": "Preview-only QA wording exception: the existing Reset … interaction pattern with the author’s Brave name. Strict server test-mode guard exposes this replay utility only in isolated test infrastructure. It resets only the local discovery flag, then reloads; it does not appear in production or dismiss the normal permanent reveal. Needed to repeat actual moving-shadow and keyboard checks after a prior discovery."
   },
   {
     "path": "next-site/components/calendar-menu.tsx",
@@ -61,12 +61,12 @@
   },
   {
     "path": "next-site/app/rss/page.tsx",
-    "text": "RSS lets you follow new Words of Folly without an account here. Copy this address into the \u201cAdd feed\u201d or \u201cFollow website\u201d box in your feed reader.",
+    "text": "RSS lets you follow new Words of Folly without an account here. Copy this address into the “Add feed” or “Follow website” box in your feed reader.",
     "reason": "Explicit RSS rewrite: Let your feed reader do the checking. Copy this address into it for new Words of Folly."
   },
   {
     "path": "next-site/app/rss/page.tsx",
-    "text": "Your reader will check for new entries automatically. If you open the feed directly in a browser, you may see XML code\u2014that\u2019s the format feed readers use.",
+    "text": "Your reader will check for new entries automatically. If you open the feed directly in a browser, you may see XML code—that’s the format feed readers use.",
     "reason": "Author-requested RSS simplification removes this technical explanation. The server RSS endpoint still emits valid XML."
   },
   {
@@ -76,7 +76,7 @@
   },
   {
     "path": "next-site/components/bebrave-experience.tsx",
-    "text": "Zack Cook \u2014 home",
+    "text": "Zack Cook — home",
     "reason": "User-requested shared public wordmark now provides the home link as Zack Cook, home."
   },
   {
@@ -111,7 +111,7 @@
   },
   {
     "path": "next-site/components/bebrave-tree.tsx",
-    "text": "\u2212",
+    "text": "−",
     "reason": "User explicitly requested removal of Admire zoom controls on 2026-10-12."
   },
   {
@@ -141,7 +141,7 @@
   },
   {
     "path": "next-site/app/privacy/page.tsx",
-    "text": "Your local tree story \u2014 including whether you chopped down your version of the tree \u2014 and your appearance/effects preferences stay in your browser. Resetting the local timeline does not reset or extend the server-side carving cooldown.",
+    "text": "Your local tree story — including whether you chopped down your version of the tree — and your appearance/effects preferences stay in your browser. Resetting the local timeline does not reset or extend the server-side carving cooldown.",
     "reason": "User requested a shorter privacy notice with generic site-interaction language and no Be Brave return link on 2026-10-12. The updated page retains the data purposes, storage, providers, choices, retention and contact disclosures."
   },
   {
@@ -153,5 +153,20 @@
     "path": "next-site/app/privacy/page.tsx",
     "text": "about privacy.",
     "reason": "Zack requested only privacy. in pink on 2026-10-12. Visible wording is unchanged; about and privacy. are now separate JSX text nodes around the emphasis element."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "Nothing",
+    "reason": "Zack explicitly replaced and reordered the living-tree entry choices on 2026-10-13; Leave returns Home."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "Carve",
+    "reason": "Zack explicitly replaced and reordered the living-tree entry choices on 2026-10-13; Leave returns Home."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "Chop down",
+    "reason": "Zack explicitly replaced and reordered the living-tree entry choices on 2026-10-13; Leave returns Home."
   }
 ]

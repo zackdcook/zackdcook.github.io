@@ -12,7 +12,7 @@ import headerStyles from "./site-header.module.css";
 export function choiceKeys(event: KeyboardEvent<HTMLElement>) {
   const direction = ["ArrowRight", "ArrowDown"].includes(event.key) ? 1 : ["ArrowLeft", "ArrowUp"].includes(event.key) ? -1 : 0;
   if (!direction && event.key !== "Home" && event.key !== "End") return;
-  const choices = [...event.currentTarget.querySelectorAll<HTMLButtonElement>("button:not(:disabled)")];
+  const choices = [...event.currentTarget.querySelectorAll<HTMLElement>("button:not(:disabled),a[href]")];
   const index = choices.indexOf(document.activeElement as HTMLButtonElement);
   if (index < 0 || !choices.length) return;
   event.preventDefault();

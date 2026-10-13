@@ -26,3 +26,5 @@
  @keyframes portrait-recede{from{translate:0 30px;rotate:1deg}to{translate:0 -65px;rotate:-1deg}}
  @keyframes paragraph-arrive{from{opacity:.55;translate:0 26px}to{opacity:1;translate:0 0}}
 }
+
+.catSearch{margin-top:20px;max-width:420px}.catSearch p{margin-bottom:14px}

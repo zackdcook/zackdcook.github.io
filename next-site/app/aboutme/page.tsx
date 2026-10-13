@@ -1,7 +1,7 @@
 import { pageMetadata } from "@/lib/page-metadata";
 import type { Metadata } from "next";
 import { ReversiblePortrait } from "@/components/reversible-portrait";
-import { BraveDiscoveryDialogue } from "@/components/brave-discovery-dialogue";
+import { BraveSearchLink } from "@/components/brave-discovery-dialogue";
 import { site } from "@/content/site";
 import styles from "./aboutme.module.css";
 
@@ -86,8 +86,8 @@ export default function AboutMe() {
 
       <p><span className={styles.ink}>And that, my patient friend, is what brings us here to this peculiar intersection of space and time: me, writing this short account of my life, sitting by the window with my three cats, listening to the birds enjoy their lunch during a calm autumnal drizzle; and you, somewhere else, sometime after this moment has passed, reading these very words.</span></p>
       <p><span className={styles.ink}>-Zack</span></p>
+      <div className={styles.catSearch}><p><span className={styles.ink}><i>Wait. Where‘s Brave?</i></span></p><BraveSearchLink/></div>
     </div></div>
   </section>
-  <section className={styles.shadowDiscovery}><div className="shell"><BraveDiscoveryDialogue mossy/></div></section>
   </div>;
 }

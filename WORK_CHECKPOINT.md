@@ -1,5 +1,12 @@
 # Website reimagining checkpoint
 
+## Be Brave performance and symbols v4 — test revision, 2026-10-13
+
+- Continues synchronized `fabc5a8` on the same experimental branch. Standing cores/auras now use fixed viewport canvases; SVG fallback and filtered bark are cropped to the camera band. Cached shading, fixed ~900k-pixel/DPR1.5 buffers and explicit teardown remove major long-tree memory/repaint risks. History preloads from entry, batches viewport reads, renders pages progressively and caps requests at2. Source/archive geometry is preserved.
+- Seeded monochrome vector particles use the requested18-symbol set, with feathered curved tails; Apple emoji substitution cannot occur. Red/black Legendary uses U+273E. Parallax eases smoothly, default Admire is60%/570px and two-touch pinch is0.5–1.5 with an anchored point and no controls. Entry labels/order and the plain About cat invitation match Zack's latest request.
+- Test-only private migration `20261013142618_bebrave_personal_legendary_reuse.sql` is applied. Only existing red identifier07044491-c802-45f6-9160-5503d1b1cb6d is reusable by possession of its unchanged private code;49 others remain single-use. Each use retains a separate reward. Rollback QA passed reuse/history/consumption/ownership/single-use with no persisted fixtures. RLS/grants retained. Original archive45 digest9af9e8a8a39800457ba8b7a81fbea2cd, other49 digest excludingnewflag e185efc7985d3f39d2619b3163406be9, rewards excludingnewID22586bcf9acb150b702dc6c0b27c3da8.
+- PASS141 tests, typecheck, assets/themes, whitespace and optimized build. See `next-site/docs/reimagining/BE_BRAVE_PERFORMANCE_2026-10-13.md`. Finish normal native Git push and one test build, inspect deployed loading/scrolling/copy and keep the stable test alias current; then stop the resumed existing Codespace. No comparison videos requested. Physical Safari/pinch still needs device QA; production release remains unapproved.
+
 ## Be Brave animated aura v3 — READY test and live publication verified, 2026-10-13
 
 - Final application `9d5a434ad3bf27bb872719222ab9b618dbdf08b2`, READY Preview `dpl_AjUk1RKiSeLQfwD1ufyuZznTVjhf`; stable test alias now resolves to it. Experimental Git branch is synchronized normally through the isolated native Codespace mirror; the earlier v2 Git blocker is resolved. Original checkout remains clean on `spring-clean-2026-10`; no force push or production release.

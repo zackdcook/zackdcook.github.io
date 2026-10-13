@@ -20,8 +20,8 @@ export function carvingToPath(strokes: BeBravePublicStroke[]) {
 export type StrokePathRefs = Partial<Record<"edge"|"cut"|"rim"|"halo"|"glow"|"flow"|"line"|"inlay"|"shimmer",RefObject<SVGPathElement|null>>>;
 
 /** The exact same ink stack is used by the fast live path and every saved view. */
-export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string;rarity:BeBraveRarity;refs?:StrokePathRefs}) {
-  const magic=rarity==="superior"||rarity==="epic"||rarity==="legendary";
+export function StrokeLayers({d="",color,rarity,refs={},canvasEffects=false}:{d?:string;color:string;rarity:BeBraveRarity;refs?:StrokePathRefs;canvasEffects?:boolean}) {
+  const magic=!canvasEffects&&(rarity==="superior"||rarity==="epic"||rarity==="legendary");
   return <>
     {magic&&<path ref={refs.halo} className="bebrave-stroke-halo" d={d} stroke={color}/>}
     {magic&&<path ref={refs.glow} className="bebrave-stroke-glow" d={d} stroke={color}/>}
@@ -31,7 +31,7 @@ export function StrokeLayers({d="",color,rarity,refs={}}:{d?:string;color:string
     <path ref={refs.rim} className="bebrave-stroke-rim" d={d} stroke={carvingEdge(color)}/>
     <path ref={refs.line} className="bebrave-stroke-line" d={d} stroke={color}/>
     <path ref={refs.inlay} className="bebrave-stroke-inlay" d={d}/>
-    {(rarity==="epic"||rarity==="legendary")&&<path ref={refs.shimmer} className="bebrave-epic-shimmer" d={d}/>}
+    {!canvasEffects&&(rarity==="epic"||rarity==="legendary")&&<path ref={refs.shimmer} className="bebrave-epic-shimmer" d={d}/>}
   </>;
 }
 
@@ -89,18 +89,18 @@ export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false,effectId}:{x?:nu
   </g>;
 }
 
-export const BeBraveCarving=memo(function BeBraveCarving({strokes,color,rarity,seed,effectId,active=false,pathRefs,children}:{strokes:BeBravePublicStroke[];color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean;pathRefs?:StrokePathRefs;children?:ReactNode}) {
+export const BeBraveCarving=memo(function BeBraveCarving({strokes,color,rarity,seed,effectId,active=false,pathRefs,children,canvasEffects=false}:{strokes:BeBravePublicStroke[];color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean;pathRefs?:StrokePathRefs;children?:ReactNode;canvasEffects?:boolean}) {
   const gradientId=`carving-rainbow-${useId().replace(/[^a-zA-Z0-9_-]/g,"_")}`;
   const d=useMemo(()=>carvingToPath(strokes),[strokes]);
   const epic=rarity==="epic",legendary=rarity==="legendary";
   const effect=legendary?legendaryEffect(effectId):undefined;
   const ink=legendary?legendaryColor(effectId,color):color;
   const rainbow=effect==="rainbow-v1";
-  const sparkles=useMemo(()=>epic||legendary?strokes.map(stroke=>({id:stroke.strokeId,points:stroke.sparkles??sparklePoints(stroke.points,seed,stroke.strokeOrder)})):[],[epic,legendary,strokes,seed]);
+  const sparkles=useMemo(()=>!canvasEffects&&(epic||legendary)?strokes.map(stroke=>({id:stroke.strokeId,points:stroke.sparkles??sparklePoints(stroke.points,seed,stroke.strokeOrder)})):[],[epic,legendary,strokes,seed,canvasEffects]);
   if(!d&&!pathRefs)return null;
   return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`} data-effect={effect} style={{"--stroke-color":ink,"--aura-delay":`${-(seed%67)/10}s`,"--aura-duration":`${3.8+(seed%11)/10}s`,...(rainbow?{"--rainbow-ink":`url(#${gradientId})`}:{})} as CSSProperties}>
     {rainbow&&<defs><linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" x2="720" y1="0" y2="0"><stop offset="0" stopColor="#FF4D6D"/><stop offset=".17" stopColor="#FFB347"/><stop offset=".34" stopColor="#F9F871"/><stop offset=".5" stopColor="#7CF5A2"/><stop offset=".67" stopColor="#50DFFF"/><stop offset=".84" stopColor="#A890FF"/><stop offset="1" stopColor="#FF6ADE"/></linearGradient></defs>}
-    <StrokeLayers d={d} color={ink} rarity={rarity} refs={pathRefs}/>
+    <StrokeLayers d={d} color={ink} rarity={rarity} refs={pathRefs} canvasEffects={canvasEffects}/>
     {sparkles.map(stroke=><g key={stroke.id} data-stroke-id={stroke.id}>{stroke.points.map((s,i)=><CarvingSpark key={i} {...s} legendary={legendary} effectId={effect}/>)}</g>)}
     {children}
   </g>;

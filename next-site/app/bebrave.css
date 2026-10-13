@@ -104,13 +104,13 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 @keyframes bebrave-star{0%,100%{opacity:.4;scale:.75}50%{opacity:1;scale:1.1}}
 
 /* The drawing plane never participates in decorative pose or impact effects. */
-.bebrave-scene{position:relative;isolation:isolate;min-height:100dvh;--bebrave-horizon-y:0px;--bebrave-mid-y:0px;--bebrave-safe-top:24px}
+.bebrave-scene{position:relative;isolation:isolate;min-height:100dvh;overflow-anchor:none;--bebrave-horizon-y:0px;--bebrave-mid-y:0px;--bebrave-safe-top:24px}
 .bebrave-horizon,.bebrave-midground{position:fixed;inset:0;height:100dvh;overflow:clip;pointer-events:none}
 .bebrave-horizon{z-index:-4;background:linear-gradient(180deg,var(--bebrave-sky-top-color,#0a1a39),var(--bebrave-sky-color,#152f58) 62%,var(--bebrave-sky-bottom-color,#23204c))}.bebrave-midground{z-index:-3}
 .bebrave-horizon>*{display:none}
 .bebrave-horizon::before,.bebrave-midground::before{content:"";position:absolute;inset:-8dvh -5vw;background-position:center;background-repeat:no-repeat}
-.bebrave-horizon::before{background-image:var(--asset-tree-sky);background-size:cover;opacity:var(--bebrave-horizon-opacity,1);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translateY(var(--bebrave-horizon-y));mask-image:linear-gradient(180deg,transparent,#000 17%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 17%,#000)}
-.bebrave-midground::before{background-image:var(--asset-tree-foreground);background-size:cover;opacity:calc(var(--bebrave-mid-opacity,1)*.9);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translateY(var(--bebrave-mid-y));mask-image:linear-gradient(180deg,transparent,#000 22%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000)}
+.bebrave-horizon::before{background-image:var(--asset-tree-sky);background-size:cover;opacity:var(--bebrave-horizon-opacity,1);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translate3d(0,var(--bebrave-horizon-y),0);mask-image:linear-gradient(180deg,transparent,#000 17%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 17%,#000)}
+.bebrave-midground::before{background-image:var(--asset-tree-foreground);background-size:cover;opacity:calc(var(--bebrave-mid-opacity,1)*.9);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translate3d(0,var(--bebrave-mid-y),0);mask-image:linear-gradient(180deg,transparent,#000 22%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000)}
 .bebrave-horizon>.bebrave-night-stars{display:block;position:absolute;inset:-12dvh 0;opacity:var(--bebrave-stars,0);transform:translateY(var(--bebrave-star-travel,0px))}
 .bebrave-night-stars i{position:absolute;width:var(--star-size);height:var(--star-size);border-radius:50%;background:#c6ccec;opacity:var(--star-brightness);box-shadow:0 0 2px #c6ccec55}
 .is-admire :is(.bebrave-horizon,.bebrave-midground)::before{will-change:transform,opacity}
@@ -130,6 +130,7 @@ html[data-timeline="felled"] .bebrave-fireflies{opacity:.2}
 .bebrave-drawings{position:absolute;z-index:3;inset:0;width:720px;height:100%;overflow:visible;touch-action:inherit}
 .bebrave-enchantment-canvas{position:absolute;left:0;top:0;width:720px;height:1px;visibility:hidden;pointer-events:none;touch-action:none}
 .bebrave-enchantment-aura{z-index:2}.bebrave-enchantment-motes{z-index:4}
+.bebrave-enchantment-aura.is-viewport{z-index:3}
 .bebrave-scene[data-enchantment-renderer="canvas"] .bebrave-enchantment-canvas{visibility:visible}
 .bebrave-scene[data-enchantment-renderer="canvas"] :is(.bebrave-stroke-halo,.bebrave-stroke-glow,.bebrave-aura-current,.bebrave-epic-shimmer,.bebrave-sparkle){display:none;animation:none!important}
 .bebrave-scene[data-enchantment-renderer="canvas"] .bebrave-sparkle *{animation:none!important}
@@ -416,7 +417,8 @@ html[data-input-mode="pointer"] :is(.bebrave-stage,.bebrave-settings,.bebrave-in
 .bebrave-admire-actions:has(.bebrave-benchmark-label)>.button{width:auto;flex:1;justify-content:center;padding:8px}
 .bebrave-admire-actions .bebrave-benchmark-label{width:100%;margin:0;font-size:11px;line-height:1.3}
 .is-admire .bebrave-standing-scroll{padding-bottom:var(--bebrave-admire-floor,80px)}
-.is-admire:not(.is-recap) .bebrave-world{width:min(68%,640px)}
+.is-admire .bebrave-world{width:calc(min(60%,570px) * var(--bebrave-admire-zoom,1))}
+.is-admire .bebrave-world{touch-action:pan-y}
 .bebrave-image-choice .bebrave-object-label::before{content:">";display:inline-block;min-width:.7em;margin-right:.35em;opacity:.35}
 .bebrave-image-choice:is(.is-highlighted,:focus-visible) .bebrave-object-label::before{opacity:1;animation:bebrave-caret 1.1s steps(2,jump-none) infinite}
 /* Five feet is twice the trunk width. svh keeps the input plane fixed while

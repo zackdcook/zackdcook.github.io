@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { EnchantmentPainter,enchantmentAnchors,enchantmentParticleAt,enchantmentSurface,sampleEnchantmentStroke } from "../lib/bebrave/enchantment-painter";
 import { createEnchantmentLoop } from "../lib/bebrave/enchantment-loop";
 import { packDrawing,unpackDrawing } from "../lib/bebrave/completed-strokes";
+import { PARTICLE_SYMBOLS,SYMBOL_PATHS } from "../lib/bebrave/symbol-paths";
 import type { BeBravePublicDrawing } from "../lib/bebrave-types";
 
 const drawing:BeBravePublicDrawing={id:"saved",publicSequence:4,rarity:"epic",color:"#00F5FF",effectSeed:9134,
@@ -20,7 +21,7 @@ function surface() {
     setTransform:(...args:number[])=>operations.push(["transform",...args]),clearRect:()=>operations.push(["clear"]),
     beginPath:()=>operations.push(["begin"]),moveTo:(...args:number[])=>operations.push(["move",...args]),lineTo:(...args:number[])=>operations.push(["line",...args]),
     stroke(path?:TestPath){operations.push(["stroke",this.strokeStyle,this.globalAlpha,this.lineWidth,path?.points.map(point=>[...point])]);},
-    save:()=>{},restore:()=>{},translate:(...args:number[])=>operations.push(["translate",...args]),rotate:(...args:number[])=>operations.push(["rotate",...args]),
+    save:()=>{},restore:()=>{},scale:(...args:number[])=>operations.push(["scale",...args]),drawImage:()=>operations.push(["copy"]),createLinearGradient:()=>({addColorStop:()=>{}}),translate:(...args:number[])=>operations.push(["translate",...args]),rotate:(...args:number[])=>operations.push(["rotate",...args]),
     bezierCurveTo:(...args:number[])=>operations.push(["curve",...args]),ellipse:(...args:number[])=>operations.push(["ellipse",...args]),arc:(...args:number[])=>operations.push(["arc",...args]),closePath:()=>{},fill(){operations.push(["fill",this.fillStyle,this.globalAlpha]);},
   };
   return {context:context as unknown as CanvasRenderingContext2D,operations,canvas:context.canvas};
@@ -79,9 +80,9 @@ test("appending live pointer samples updates the same painter without waiting fo
 test("camera buffers, aura sampling and cached paths stay bounded across a very tall history",()=>{
   for(const scale of [.1,.36,.89,1.5]){
     const result=enchantmentSurface({...camera,top:14_390_000,height:844/scale,scale},14_400_000);
-    assert.ok(result.width*result.pixelsHigh<1_606_000);
+    assert.ok(result.width*result.pixelsHigh<904_000);
     assert.ok(result.pixelsHigh<5000);
-    assert.ok(result.height<844/scale+681);
+    assert.ok(result.height<844/scale+841);
   }
   assert.ok(sampleEnchantmentStroke([[0,0],[0,1_000_000]]).length<=162);
   const a=surface(),m=surface(),painter=new EnchantmentPainter(a.context,m.context,factory);
@@ -109,4 +110,36 @@ test("empty camera sleeps, then a new live stroke or camera movement restarts em
   loop.wake();frame(20);assert.equal(queue.size,0);
   present=true;loop.wake();frame(40);assert.equal(queue.size,1);assert.equal(paints,2);
   loop.dispose();
+});
+
+
+test("symbols are deterministic text outlines; the personal red effect always emits U+273E",()=>{
+  const seen=new Set<number>(),anchor={x:360,y:1200,r:3.6,delay:.4};
+  for(let i=0;i<300;i++){
+    const p=enchantmentParticleAt(drawing,anchor,i,i*.73);seen.add(p.symbol);
+    assert.ok(SYMBOL_PATHS[p.symbol]);assert.ok(PARTICLE_SYMBOLS.includes(p.symbol as typeof PARTICLE_SYMBOLS[number]));
+    assert.equal(enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"blood-v1"},anchor,i,i*.73).symbol,0x273e);
+  }
+  assert.equal(seen.size,PARTICLE_SYMBOLS.length);
+});
+
+test("camera buffers retain their dimensions throughout scrolling and release their backing stores",()=>{
+  const first=enchantmentSurface(camera,14000);
+  for(const top of [0,900,9000,13000]){const next=enchantmentSurface({...camera,top},14000);assert.equal(next.width,first.width);assert.equal(next.pixelsHigh,first.pixelsHigh);}
+  const a=surface(),m=surface(),painter=new EnchantmentPainter(a.context,m.context,factory);
+  painter.paint([drawing],camera,14000,1);painter.dispose();
+  assert.equal(painter.cacheSize,0);assert.equal(a.canvas.width,1);assert.equal(m.canvas.height,1);
+});
+
+test("static glow and engraving are rasterized once; particle tails are filled curved ribbons",()=>{
+  const a=surface(),m=surface(),base=surface(),ink=surface();let buffers=0;
+  const painter=new EnchantmentPainter(a.context,m.context,factory,()=>buffers++===0?base.context:ink.context);
+  const fixed={...camera,left:40,screenTop:0};
+  painter.paint([drawing],fixed,14000,1);const shaded=base.operations.length,engraved=ink.operations.length;
+  painter.paint([drawing],fixed,14000,1.2);
+  assert.equal(base.operations.length,shaded);assert.equal(ink.operations.length,engraved);
+  assert.ok(a.operations.some(o=>o[0]==="copy"));
+  assert.ok(m.operations.some(o=>o[0]==="curve"));
+  assert.equal(m.operations.some(o=>o[0]==="ellipse"||o[0]==="arc"),false);
+  assert.equal(a.canvas.style.position,"fixed");
 });

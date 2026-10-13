@@ -3,6 +3,7 @@ import { serviceSupabase } from "../supabase";
 import type { BeBravePublicStroke, BeBraveRarity } from "../bebrave-types";
 import { assembleStrokes, readChunkPages, unpackDrawing, type PackedDrawing, type StrokeChunk } from "./completed-strokes";
 import { buildArchive, restoreArchive } from "./archive-codec";
+import { encodePoints } from "./stroke-codec";
 
 /** Safe to retry. The database seals only a completed session whose exact
  * source hash still matches under its row lock, without touching eligibility. */
@@ -21,6 +22,23 @@ export async function archiveCompletedSession(id:string,rarity:BeBraveRarity,see
 }
 
 type ArchiveRow = {session_id:string;render_strokes:PackedDrawing["strokes"];geometry_gzip:string;source_sha256:string;payload_sha256:string};
+
+/** Compact viewport responses reuse sealed projections without decoding and
+ * re-encoding every coordinate on the server for every overlapping section. */
+export async function completedProjections(ids:string[]){
+  const result=new Map<string,PackedDrawing["strokes"]>();
+  if(!ids.length)return result;
+  if(ids.length>24)throw Error("Completed carving window exceeds its budget.");
+  const {data,error}=await serviceSupabase().from("bebrave_completed_archives").select("session_id,render_strokes").in("session_id",ids);
+  if(error)throw error;
+  for(const row of (data??[]) as unknown as ArchiveRow[])result.set(row.session_id,row.render_strokes);
+  const missing=ids.filter(id=>!result.has(id));
+  for(let at=0;at<missing.length;at+=12){
+    const legacy=await completedStrokes(missing.slice(at,at+12),true);
+    for(const [id,strokes] of legacy)result.set(id,strokes.map(({points,...fields})=>({...fields,geometry:encodePoints(points)})));
+  }
+  return result;
+}
 
 /** Viewports request only small render projections. Canonical details are
  * selective, integrity checked and legacy compatible. Never fetch all history. */
