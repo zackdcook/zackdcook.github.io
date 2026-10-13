@@ -1,8 +1,8 @@
 import type { BeBravePublicDrawing } from "../bebrave-types";
 import { sparklePoints } from "./effect-anchors";
 import { legendaryColor, legendaryEffect } from "./effects";
-import { carvingEdge } from "./carving-contrast";
-import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, SYMBOL_PATHS } from "./symbol-paths";
+import { carvingEdge, carvingPigment } from "./carving-contrast";
+import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, SYMBOL_PATHS, validParticleSymbol } from "./symbol-paths";
 import { fullEffectDetail, type EffectDetail } from "./effect-quality";
 
 type Point = [number, number];
@@ -71,6 +71,7 @@ function rainbowColor(time: number, x: number) {
  * Integer mixing makes that choice identical across devices and refreshes. */
 export function carvingParticleSymbol(drawing: BeBravePublicDrawing): number {
   if (drawing.rarity === "legendary" && drawing.effectId === "blood-v1") return PERSONAL_SYMBOL;
+  if (validParticleSymbol(drawing.particleSymbol)) return drawing.particleSymbol;
   if (drawing.rarity === "legendary" && drawing.effectId === "hearts-v1") return 0x2665;
   let seed = (drawing.effectSeed >>> 0) ^ 0x9e3779b9;
   seed = Math.imul(seed ^ (seed >>> 16), 0x85ebca6b);
@@ -267,9 +268,9 @@ export class EnchantmentPainter {
 
   private paintInk(context:CanvasRenderingContext2D,drawing:BeBravePublicDrawing,prepared:PreparedDrawing,seconds:number){
     const magic=enchantedTier(drawing.rarity),blood=drawing.effectId==="blood-v1";
-    const color=drawing.effectId==="rainbow-v1"?rainbowColor(seconds,360):legendaryColor(drawing.effectId,drawing.color);
+    const color=drawing.effectId==="rainbow-v1"?rainbowColor(seconds,360):legendaryColor(drawing.effectId,carvingPigment(drawing.rarity,drawing.color));
     const mix=(other:string,amount:number)=>`rgb(${rgb(color).map((c,i)=>Math.round(c*(1-amount)+rgb(other)[i]*amount)).join(",")})`;
-    const layers=magic?[[15.4,mix("#121526",.62),1],[13.4,mix("#121526",.42),1],[11.2,blood?"#660D20":highlight(color,.14),1],[9.2,color,1],[2.8,blood?"#FF6475":highlight(color,.36),1]]:[[15.4,"#FFF2C8",.78],[13.8,"#121526",1],[11.2,carvingEdge(color),.85],[9.2,color,1],[1.5,mix("#FFF2C8",.22),.85]];
+    const layers=magic?[[15.4,mix("#121526",.62),1],[13.4,mix("#121526",.42),1],[11.2,blood?"#660D20":highlight(color,.14),1],[9.2,color,1],[2.8,blood?"#FF6475":highlight(color,.36),1]]:[[16.8,"#FFF2C8",.78],[14.6,"#121526",1],[11.6,carvingEdge(color),.9],[9.2,color,1],[1.5,mix("#FFF2C8",.22),.85]];
     context.shadowBlur=0;
     const rainbow=drawing.effectId==="rainbow-v1"?context.createLinearGradient(0,0,720,0):null;
     if(rainbow)for(let i=0;i<=6;i++)rainbow.addColorStop(i/6,rainbowColor(seconds,i*120));

@@ -1,0 +1,44 @@
+{
+  "texture": "bark.webp",
+  "sample_pixels": 21600,
+  "bark_median_luminance": 0.1545,
+  "colors": [
+    {
+      "name": "Cyan",
+      "hex": "#41DCE8",
+      "median_bark_contrast": 3.09,
+      "dark_engraved_edge_contrast": 10.88
+    },
+    {
+      "name": "Rose",
+      "hex": "#FFB5D0",
+      "median_bark_contrast": 3.12,
+      "dark_engraved_edge_contrast": 11.0
+    },
+    {
+      "name": "Yellow",
+      "hex": "#FFE46B",
+      "median_bark_contrast": 4.05,
+      "dark_engraved_edge_contrast": 14.27
+    },
+    {
+      "name": "Leaf Green",
+      "hex": "#B3EE86",
+      "median_bark_contrast": 3.79,
+      "dark_engraved_edge_contrast": 13.34
+    },
+    {
+      "name": "Teal",
+      "hex": "#6AEDD0",
+      "median_bark_contrast": 3.58,
+      "dark_engraved_edge_contrast": 12.61
+    },
+    {
+      "name": "Coral",
+      "hex": "#FFC09D",
+      "median_bark_contrast": 3.25,
+      "dark_engraved_edge_contrast": 11.44
+    }
+  ],
+  "note": "Pigment contrast varies across textured bark. Continuous paired light/dark engraved rails separate every non-glowing line from light and shadow patches."
+}

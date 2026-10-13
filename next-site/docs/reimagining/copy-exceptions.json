@@ -168,5 +168,10 @@
     "path": "next-site/components/bebrave-experience.tsx",
     "text": "Chop down",
     "reason": "Zack explicitly replaced and reordered the living-tree entry choices on 2026-10-13; Leave returns Home."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard. The knife flicks open with a satisfying clink.",
+    "reason": "Zack explicitly requested its removal on 2026-10-13, replacing the color screen with Enchant the blade."
   }
 ]

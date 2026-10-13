@@ -1,3 +1,5 @@
+import { SYMBOL_PATHS, PERSONAL_SYMBOL } from "../lib/bebrave/symbol-paths";
+import { BEBRAVE_COMMON_COLOR } from "../lib/bebrave-config";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createElement } from "react";
@@ -19,7 +21,7 @@ test("only enchanted tiers emit glow; only Epic and Legendary emit detached effe
     assert.equal(html.includes('class="bebrave-stroke-halo"'),["superior","epic","legendary"].includes(rarity));
     assert.equal(html.includes('class="bebrave-sparkle"'),rarity==="epic"||rarity==="legendary");
     assert.equal(html.includes('class="bebrave-energy-particle"'),rarity==="epic");
-    assert.ok(html.includes(`stroke="${drawing.color}"`));
+    assert.ok(html.includes(`stroke="${rarity==="common"?BEBRAVE_COMMON_COLOR.value:drawing.color}"`));
   }
 });
 
@@ -69,7 +71,7 @@ test("each Legendary identity survives archive storage and reconstructs its dist
     if(effectId==="hearts-v1")assert.ok(render(saved).includes('bebrave-heart'));
     if(effectId==="rainbow-v1")assert.ok(render(saved).includes('linearGradient'));
     if(effectId==="blood-v1"){
-      assert.ok(render(saved).includes('bebrave-blood-drop'));
+      assert.ok(render(saved).includes(SYMBOL_PATHS[PERSONAL_SYMBOL]));
       assert.ok(render(saved).includes('stroke="#C51D36"'));
       assert.ok(Number.parseFloat(String(enchantmentParticleStyle(3.5,2,effectId)["--particle-y" as keyof ReturnType<typeof enchantmentParticleStyle>]))>0);
     }

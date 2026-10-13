@@ -97,10 +97,10 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-reveal-tool.rarity-uncommon>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-uncommon)) drop-shadow(-2px 0 var(--effect-uncommon))}
 .bebrave-reveal-tool.rarity-superior>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-superior)) drop-shadow(-2px 0 var(--effect-superior)) drop-shadow(0 0 5px var(--effect-superior))}
 .bebrave-reveal-tool.rarity-epic>.bebrave-tool-image{filter:drop-shadow(3px 0 var(--effect-epic)) drop-shadow(-3px 0 var(--effect-epic)) drop-shadow(0 0 5px var(--effect-epic))}
-.bebrave-reveal-tool.rarity-legendary>.bebrave-tool-image{filter:drop-shadow(3px 0 var(--effect-wisp-halo)) drop-shadow(-3px 0 var(--effect-wisp-halo)) drop-shadow(0 0 6px var(--effect-wisp-core))}
+.bebrave-reveal-tool.rarity-legendary>.bebrave-tool-image{filter:drop-shadow(3px 0 #ff941f) drop-shadow(-3px 0 #ff941f) drop-shadow(0 0 7px #ffb65b) drop-shadow(0 0 15px #ff7a0066)}
 .bebrave-rarity-fx{position:absolute;inset:-6%;z-index:3;pointer-events:none}.bebrave-rarity-fx i{display:none}
 :is(.fx-epic,.fx-legendary) i{display:block;position:absolute;width:9px;height:9px;animation:bebrave-star 3.8s ease-in-out infinite;background:var(--effect-silver);clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%)}
-.fx-legendary i{background:var(--effect-wisp-core)}
+.fx-legendary i{background:#ffd48a;animation-duration:2.1s}
 .bebrave-rarity-fx i:nth-child(1){left:10%;top:12%}.bebrave-rarity-fx i:nth-child(2){right:5%;top:29%;animation-delay:-.35s}.bebrave-rarity-fx i:nth-child(3){left:16%;bottom:8%;animation-delay:-.8s}.bebrave-rarity-fx i:nth-child(4){right:19%;bottom:3%;animation-delay:-1.15s}.bebrave-rarity-fx i:nth-child(5){left:45%;top:0;animation-delay:-1.45s}
 @keyframes bebrave-star{0%,100%{opacity:.4;scale:.75}50%{opacity:1;scale:1.1}}
 
@@ -433,3 +433,41 @@ html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-image-choice 
 html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-sparkle-star,.bebrave-energy-glint){filter:none}
 html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-stroke[data-effect="rainbow-v1"]{filter:none}
 @media(prefers-reduced-motion:reduce){.bebrave-stroke-glow,.bebrave-sparkle-star,.bebrave-energy-glint,.bebrave-stroke[data-effect="rainbow-v1"]{filter:none}.bebrave-stroke-halo,.bebrave-aura-current,.bebrave-energy-particle,.bebrave-energy-satellite{display:none}.bebrave-image-choice .bebrave-object-label::before{animation:none}}
+
+/* Blade workshop: one live carving, then color and a monochrome sigil. */
+.bebrave-enchanter{width:min(100%,760px);max-height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto auto;gap:16px;padding:22px;overflow:hidden;animation:bebrave-dialogue-open .28s var(--ease-settle) both}
+.bebrave-enchanter h2{margin:0;outline:none;font:650 clamp(18px,2.5vw,25px)/1.3 var(--game-type);letter-spacing:-.035em;color:var(--discovery-dialog-ink)}
+.bebrave-enchanter-body{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:22px;overflow:auto;min-height:0;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:var(--discovery-dialog-edge) transparent}
+.bebrave-enchanter-example{margin:0;min-width:0;align-self:start}
+.bebrave-blade-preview{position:relative;isolation:isolate;height:clamp(150px,25dvh,260px);overflow:clip;border:1px solid var(--discovery-dialog-edge);border-radius:3px;background:var(--bebrave-bark) var(--asset-tree-bark) center/100% auto;box-shadow:inset 0 0 0 5px var(--discovery-dialog-depth)}
+.bebrave-blade-preview>svg{display:block;width:100%;height:100%;overflow:visible}
+.bebrave-blade-preview[data-enchantment-renderer="canvas"]>.bebrave-enchantment-canvas{visibility:visible}
+.bebrave-enchanter-example figcaption{min-height:22px;margin-top:8px;text-align:center;color:var(--discovery-dialog-choice);font:500 11px/1.5 var(--game-type);letter-spacing:.025em}
+.bebrave-enchanter-pickers{display:grid;align-content:start;gap:16px;min-width:0}
+.bebrave-enchanter fieldset{padding:0;margin:0;min-width:0;border:0}
+.bebrave-enchanter legend{margin-bottom:8px;color:var(--discovery-dialog-ink);font:600 11px/1.5 var(--game-type);letter-spacing:.13em;text-transform:uppercase}
+.bebrave-enchanter-colors,.bebrave-enchanter-symbols>div{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}
+.bebrave-enchanter-pickers button{display:grid;place-items:center;position:relative;min-width:0;min-height:44px;padding:7px;border:1px solid color-mix(in srgb,var(--discovery-dialog-edge) 45%,transparent);border-radius:3px;background:var(--discovery-dialog-depth);cursor:pointer;touch-action:manipulation;transition:background .16s,border-color .16s,translate .16s}
+.bebrave-enchanter-pickers button:hover{translate:0 -1px;border-color:var(--discovery-dialog-edge)}
+.bebrave-enchanter-pickers button[aria-pressed="true"]{border-color:var(--discovery-dialog-choice);background:var(--discovery-dialog-selected);box-shadow:inset 0 0 0 1px var(--discovery-dialog-choice)}
+.bebrave-enchanter-pickers button:focus-visible{outline:2px solid var(--discovery-dialog-choice);outline-offset:2px}
+.bebrave-enchanter-colors button>span{width:24px;height:24px;border-radius:50%;background:var(--enchant-color);box-shadow:inset 0 0 0 1px #fff7,0 2px 0 #080d2290}
+.bebrave-enchanter-symbols svg{width:25px;height:25px;pointer-events:none}
+.bebrave-enchanter-symbols{visibility:hidden;opacity:0;transition:opacity .24s}
+.bebrave-enchanter-symbols.is-ready{visibility:visible;opacity:1}
+.bebrave-enchanter-actions{display:flex;gap:8px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--discovery-dialog-edge) 38%,transparent)}
+.bebrave-enchanter-actions .button{flex:1;justify-content:flex-start}
+.bebrave-enchanter-actions .button:last-child:not(:disabled){background:var(--discovery-dialog-selected);border-color:color-mix(in srgb,var(--discovery-dialog-choice) 50%,transparent)}
+.bebrave-enchanter-problem{margin:0;font:500 12px/1.5 var(--game-type);color:var(--discovery-dialog-ink)}
+.bebrave-overlay>.bebrave-rpg-actions{position:static;transform:none;width:min(100%,500px);justify-self:center;padding:7px;border:2px solid var(--discovery-dialog-edge);border-radius:5px;background:var(--discovery-dialog-depth)}
+html[data-bebrave-drawing="true"] body,html[data-bebrave-drawing="true"] body *{user-select:none!important;-webkit-user-select:none!important;-webkit-touch-callout:none!important}
+html[data-bebrave-drawing="true"] ::selection{background:transparent}
+.bebrave-common .bebrave-stroke-contrast,.bebrave-uncommon .bebrave-stroke-contrast{stroke-width:16.8}
+.bebrave-common .bebrave-stroke-cut,.bebrave-uncommon .bebrave-stroke-cut{stroke-width:14.6}
+.bebrave-common .bebrave-stroke-rim,.bebrave-uncommon .bebrave-stroke-rim{stroke-width:11.6;opacity:.9}
+@media(max-width:740px){.bebrave-enchanter{padding:16px;gap:12px}.bebrave-enchanter-body{grid-template-columns:minmax(0,1fr);gap:10px}.bebrave-blade-preview{height:clamp(150px,22dvh,220px)}.bebrave-enchanter-pickers{gap:10px}.bebrave-enchanter-actions{padding-top:10px}}
+@media(max-width:360px){.bebrave-enchanter-colors,.bebrave-enchanter-symbols>div{grid-template-columns:repeat(5,minmax(0,1fr))}.bebrave-blade-preview{height:150px}}
+html[data-effects="reduced"] .bebrave-enchanter{animation:none}
+@media(prefers-reduced-motion:reduce){.bebrave-enchanter{animation:none}.bebrave-enchanter-symbols{transition:none}}
+
+.bebrave-legendary[data-effect="blood-v1"] .bebrave-particle-mark{fill:#760b20;stroke:#d82b45;stroke-width:.08}

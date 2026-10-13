@@ -13,11 +13,11 @@ export function resumedScene(session: BeBraveSessionView | null) {
   if (!session) return "human" as const;
   if (session.status === "tool_select") return "tools" as const;
   if (session.status === "epic_color") return "epic-color" as const;
-  if (session.status === "ready") return "reveal" as const;
+  if (session.status === "ready") return session.chosenTool==="cache"?"epic-color" as const:"reveal" as const;
   if (session.status === "drawing") return "draw" as const;
   return "admire" as const;
 }
 
 export function afterReveal(session: BeBraveSessionView) {
-  return session.status === "epic_color" ? "epic-color" as const : "warning" as const;
+  return session.status === "epic_color" || session.chosenTool==="cache" ? "epic-color" as const : "warning" as const;
 }

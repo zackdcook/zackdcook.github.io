@@ -12,6 +12,7 @@ import { BeBraveCarving,CarvingSpark,carvingToPath,pointsToPath,sparkGeometry,pa
 import { legendaryEffect } from "@/lib/bebrave/effects";
 import { admireAtmosphere } from "@/lib/bebrave/admire-atmosphere";
 import { TreeAtmosphere,TreeNightStars } from "@/components/tree-atmosphere";
+import { lockCarvingSelection } from "@/lib/bebrave/carving-selection";
 import { useCarvingEnchantments } from "@/components/use-carving-enchantments";
 import type { EnchantmentCamera } from "@/lib/bebrave/enchantment-painter";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
@@ -53,9 +54,13 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       if(!showLocal||!session?.chosenRarity||!session.chosenColor)return undefined;
       const current=active.current;
       const strokes=current?[...strokesRef.current,{strokeId:current.strokeId,strokeOrder:current.strokeOrder,points:current.points}]:strokesRef.current;
-      return {id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,strokes};
+      return {id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,particleSymbol:session.chosenSymbol??undefined,strokes};
     },
   });
+
+  useLayoutEffect(()=>{
+    if(mode==="draw"&&scene.current)return lockCarvingSelection(scene.current);
+  },[mode]);
 
   useEffect(()=>{if(serverNow)serverOffset.current=Date.parse(serverNow)-Date.now();},[serverNow]);
   useEffect(()=>{strokesRef.current=draftStrokes;settledPath.current=carvingToPath(draftStrokes);setLocalStrokes(draftStrokes);strokeCounter.current=draftStrokes.reduce((m,s)=>Math.max(m,s.strokeOrder+1),0);},[draftStrokes]);
@@ -330,7 +335,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
 
   useEffect(()=>{if(mode!=="draw"||!session?.drawingDeadline)return;let ended=false;const tick=()=>{const ms=Date.parse(session.drawingDeadline!)-(Date.now()+serverOffset.current);setRemaining(Math.max(0,Math.ceil(ms/1000)));if(ms<=0&&!ended){ended=true;void finish();}};tick();const id=setInterval(tick,100);return()=>clearInterval(id);},[mode,session?.drawingDeadline,finish]);
 
-  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,strokes:localStrokes}:undefined;
+  const localDrawing:BeBravePublicDrawing|undefined=showLocal&&session?.chosenRarity&&session.chosenColor?{id:"local",publicSequence:Number.MAX_SAFE_INTEGER,rarity:session.chosenRarity,color:session.chosenColor,effectSeed:session.effectSeed||0,effectId:session.chosenEffect||undefined,particleSymbol:session.chosenSymbol??undefined,strokes:localStrokes}:undefined;
   const widthStyle=mode==="fallen"?{width:state.height*scale,height:BEBRAVE_TREE_WIDTH*scale}:{height:state.height*scale,...(mode==="admire"?{"--bebrave-admire-zoom":zoom}:{})};
   const treeTransform=mode==="fallen"?`translateX(${state.height*scale}px) rotate(90deg) scale(${scale})`:`scale(${scale})`;
   const minutes=Math.floor(remaining/60),seconds=String(remaining%60).padStart(2,"0");

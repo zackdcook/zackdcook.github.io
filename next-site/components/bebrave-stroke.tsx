@@ -4,7 +4,8 @@ import { memo,useId,useMemo,type CSSProperties,type ReactNode,type RefObject } f
 import type { BeBravePublicStroke, BeBraveRarity } from "@/lib/bebrave-types";
 import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryColor, legendaryEffect } from "@/lib/bebrave/effects";
-import { carvingEdge } from "@/lib/bebrave/carving-contrast";
+import { SYMBOL_PATHS, validParticleSymbol, PERSONAL_SYMBOL } from "@/lib/bebrave/symbol-paths";
+import { carvingEdge, carvingPigment } from "@/lib/bebrave/carving-contrast";
 
 export function pointsToPath(points: Array<[number, number]>) {
   if (!points.length) return "";
@@ -21,6 +22,7 @@ export type StrokePathRefs = Partial<Record<"edge"|"cut"|"rim"|"halo"|"glow"|"fl
 
 /** The exact same ink stack is used by the fast live path and every saved view. */
 export function StrokeLayers({d="",color,rarity,refs={},canvasEffects=false}:{d?:string;color:string;rarity:BeBraveRarity;refs?:StrokePathRefs;canvasEffects?:boolean}) {
+  color=carvingPigment(rarity,color);
   const magic=!canvasEffects&&(rarity==="superior"||rarity==="epic"||rarity==="legendary");
   return <>
     {magic&&<path ref={refs.halo} className="bebrave-stroke-halo" d={d} stroke={color}/>}
@@ -66,7 +68,10 @@ export function particleMark(radius:number,effectId?:string) {
   return sparkGeometry(radius,false).star;
 }
 
-export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false,effectId}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean;effectId?:string}) {
+export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false,effectId,symbol}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean;effectId?:string;symbol?:number}) {
+  if(symbol!==undefined&&SYMBOL_PATHS[symbol])return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
+    <g className="bebrave-energy-particle" style={enchantmentParticleStyle(r,delay,effectId)}><g transform={`scale(${r*2.5})`}><path className="bebrave-sparkle-star bebrave-particle-mark" d={SYMBOL_PATHS[symbol]}/></g></g>
+  </g>;
   const shape = sparkGeometry(r, legendary);
   const special=legendary&&legendaryEffect(effectId)!=="will-o-wisp-v1";
   const mark=particleMark(r,special?effectId:undefined);
@@ -89,23 +94,24 @@ export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false,effectId}:{x?:nu
   </g>;
 }
 
-export const BeBraveCarving=memo(function BeBraveCarving({strokes,color,rarity,seed,effectId,active=false,pathRefs,children,canvasEffects=false}:{strokes:BeBravePublicStroke[];color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean;pathRefs?:StrokePathRefs;children?:ReactNode;canvasEffects?:boolean}) {
+export const BeBraveCarving=memo(function BeBraveCarving({strokes,color,rarity,seed,effectId,particleSymbol,active=false,pathRefs,children,canvasEffects=false}:{strokes:BeBravePublicStroke[];color:string;rarity:BeBraveRarity;seed:number;effectId?:string;particleSymbol?:number;active?:boolean;pathRefs?:StrokePathRefs;children?:ReactNode;canvasEffects?:boolean}) {
   const gradientId=`carving-rainbow-${useId().replace(/[^a-zA-Z0-9_-]/g,"_")}`;
   const d=useMemo(()=>carvingToPath(strokes),[strokes]);
   const epic=rarity==="epic",legendary=rarity==="legendary";
   const effect=legendary?legendaryEffect(effectId):undefined;
-  const ink=legendary?legendaryColor(effectId,color):color;
+  const pigment=carvingPigment(rarity,color);
+  const ink=legendary?legendaryColor(effectId,pigment):pigment;
   const rainbow=effect==="rainbow-v1";
   const sparkles=useMemo(()=>!canvasEffects&&(epic||legendary)?strokes.map(stroke=>({id:stroke.strokeId,points:stroke.sparkles??sparklePoints(stroke.points,seed,stroke.strokeOrder)})):[],[epic,legendary,strokes,seed,canvasEffects]);
   if(!d&&!pathRefs)return null;
   return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`} data-effect={effect} style={{"--stroke-color":ink,"--aura-delay":`${-(seed%67)/10}s`,"--aura-duration":`${3.8+(seed%11)/10}s`,...(rainbow?{"--rainbow-ink":`url(#${gradientId})`}:{})} as CSSProperties}>
     {rainbow&&<defs><linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" x2="720" y1="0" y2="0"><stop offset="0" stopColor="#FF4D6D"/><stop offset=".17" stopColor="#FFB347"/><stop offset=".34" stopColor="#F9F871"/><stop offset=".5" stopColor="#7CF5A2"/><stop offset=".67" stopColor="#50DFFF"/><stop offset=".84" stopColor="#A890FF"/><stop offset="1" stopColor="#FF6ADE"/></linearGradient></defs>}
     <StrokeLayers d={d} color={ink} rarity={rarity} refs={pathRefs} canvasEffects={canvasEffects}/>
-    {sparkles.map(stroke=><g key={stroke.id} data-stroke-id={stroke.id}>{stroke.points.map((s,i)=><CarvingSpark key={i} {...s} legendary={legendary} effectId={effect}/>)}</g>)}
+    {sparkles.map(stroke=><g key={stroke.id} data-stroke-id={stroke.id}>{stroke.points.map((s,i)=><CarvingSpark key={i} {...s} legendary={legendary} effectId={effect} symbol={effect==="blood-v1"?PERSONAL_SYMBOL:validParticleSymbol(particleSymbol)?particleSymbol:undefined}/>)}</g>)}
     {children}
   </g>;
 });
 
-export const BeBraveStroke=memo(function BeBraveStroke({stroke,...props}:{stroke:BeBravePublicStroke;color:string;rarity:BeBraveRarity;seed:number;effectId?:string;active?:boolean}) {
+export const BeBraveStroke=memo(function BeBraveStroke({stroke,...props}:{stroke:BeBravePublicStroke;color:string;rarity:BeBraveRarity;seed:number;effectId?:string;particleSymbol?:number;active?:boolean}) {
   return <BeBraveCarving strokes={[stroke]} {...props}/>;
 });

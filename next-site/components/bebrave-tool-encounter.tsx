@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import type { BeBraveNormalTool, BeBraveRarity, BeBraveSessionView } from "@/lib/bebrave-types";
 import { groundTools, toolCopy } from "@/lib/bebrave/presentation";
 import { choiceKeys } from "./bebrave-menu";
@@ -10,7 +11,9 @@ export function ToolImage({ tool }: { tool: GroundTool | "knife" | "cache-open" 
   return <span className={`bebrave-tool-image tool-${tool}`} aria-hidden="true"/>;
 }
 function RarityEffect({ rarity }: { rarity: BeBraveRarity }) {
-  return <span className={`bebrave-rarity-fx fx-${rarity}`} aria-hidden="true"><i/><i/><i/><i/><i/></span>;
+  return <span className={`bebrave-rarity-fx fx-${rarity}`} aria-hidden="true">{Array.from({length:rarity==="legendary"?23:5},(_,index)=><i key={index} style={rarity==="legendary"?{
+    left:`${(index*37+9)%96}%`,top:`${(index*59+5)%94}%`,right:"auto",bottom:"auto",animationDelay:`${-index*.27}s`,width:`${5+(index%4)*2}px`,height:`${5+(index%4)*2}px`,
+  } as CSSProperties:undefined}/>)}</span>;
 }
 
 /** Object positions are presentation only. The result is always a server snapshot. */

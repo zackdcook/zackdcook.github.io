@@ -1,3 +1,4 @@
+import { BEBRAVE_COMMON_COLOR } from "../lib/bebrave-config";
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {renderToStaticMarkup} from 'react-dom/server';
@@ -59,7 +60,7 @@ test('every live ink stack is embedded unchanged in its released and published r
  for(const rarity of ['common','uncommon','superior','epic','legendary'] as const){
   const layers=renderToStaticMarkup(createElement(StrokeLayers,{d,color:'#00F5FF',rarity}));
   const released=renderToStaticMarkup(createElement(BeBraveStroke,{stroke:{strokeId:'same',strokeOrder:2,points},color:'#00F5FF',rarity,seed:73121,effectId:'will-o-wisp-v1'}));
-  assert.ok(released.includes(layers));assert.ok(released.includes('--stroke-color:#00F5FF'));
+  assert.ok(released.includes(layers));assert.ok(released.includes(`--stroke-color:${rarity==='common'?BEBRAVE_COMMON_COLOR.value:'#00F5FF'}`));
   assert.ok(layers.includes('M19.2 1600.1 L190.3 1760.7 L205.4 1700.2'));
   assert.equal(released,renderToStaticMarkup(createElement(BeBraveStroke,{stroke:{strokeId:'same',strokeOrder:2,points},color:'#00F5FF',rarity,seed:73121,effectId:'will-o-wisp-v1'})));
  }

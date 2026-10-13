@@ -32,7 +32,7 @@ export function Dialogue({ children, actions, className = "", label }: { childre
 }
 
 export function OverlayScene({ visual, children, actions }: { visual: ReactNode; children?: ReactNode; actions?: ReactNode }) {
-  return <div className="bebrave-overlay"><div className="bebrave-overlay-main">{visual}</div>{children && <Dialogue actions={actions}>{children}</Dialogue>}</div>;
+  return <div className="bebrave-overlay"><div className="bebrave-overlay-main">{visual}</div>{children ? <Dialogue actions={actions}>{children}</Dialogue> : actions&&<ActionBar>{actions}</ActionBar>}</div>;
 }
 
 export function HomeControls({ testMode = false, busy = false, drawing = false, onReset, onResetTimeline }: { testMode?: boolean; busy?: boolean; drawing?: boolean; onReset?: () => void; onResetTimeline?: () => void }) {

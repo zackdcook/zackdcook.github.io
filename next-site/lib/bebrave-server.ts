@@ -203,6 +203,7 @@ export function sessionView(row: Record<string, any> | null): BeBraveSessionView
     chosenColor: row.chosen_color,
     effectSeed: row.effect_seed == null ? null : Number(row.effect_seed),
     chosenEffect: row.chosen_effect || null,
+    chosenSymbol: row.chosen_symbol == null ? null : Number(row.chosen_symbol),
     toolResults: revealed,
     drawingStartedAt: row.drawing_started_at,
     drawingDeadline: row.drawing_deadline,

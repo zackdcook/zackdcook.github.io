@@ -3,7 +3,7 @@ export const LEGENDARY_EFFECTS = {
   "will-o-wisp-v1": "Luminous carving with orbiting will-o-wisp lights and faceted glints.",
   "hearts-v1": "Enchanted aura with glowing heart particles that lift, flutter, and softly fade.",
   "rainbow-v1": "A flowing rainbow carving and aura with prismatic motes and sparkling energy trails.",
-  "blood-v1": "Crimson red strokes with a pulsing black aura and falling dark red blood droplets.",
+  "blood-v1": "Crimson red strokes with a pulsing black aura, monochrome U+1F5E1 daggers and falling dark-red energy trails.",
 } as const;
 export type LegendaryEffectId = keyof typeof LEGENDARY_EFFECTS;
 export const DEFAULT_LEGENDARY_EFFECT:LegendaryEffectId="will-o-wisp-v1";

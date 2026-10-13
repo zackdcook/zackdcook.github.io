@@ -10,8 +10,8 @@ export const BEBRAVE_RARITY_WEIGHTS = {
 export const BEBRAVE_EPIC_ROLL_START = 10_000 - 100 * BEBRAVE_RARITY_WEIGHTS.epic;
 
 export const BEBRAVE_COMMON_COLOR = {
-  name: "Warm Bark Brown",
-  value: "#5A321F",
+  name: "Ivory",
+  value: "#F3E7CB",
 };
 
 export const BEBRAVE_EPIC_PITY_PERCENT = [5, 8, 13, 21, 34, 50, 70, 90, 100] as const;
@@ -22,12 +22,12 @@ export function epicChanceForPity(pity: number) {
 }
 
 export const BEBRAVE_UNCOMMON_COLORS = [
-  { name: "Cyan", value: "#00A9C7" },
-  { name: "Magenta", value: "#C92C8C" },
-  { name: "Yellow", value: "#D8B414" },
-  { name: "Violet", value: "#6D4FD1" },
-  { name: "Teal", value: "#008C86" },
-  { name: "Coral", value: "#D94F4F" },
+  { name: "Cyan", value: "#41DCE8" },
+  { name: "Rose", value: "#FFB5D0" },
+  { name: "Yellow", value: "#FFE46B" },
+  { name: "Leaf Green", value: "#B3EE86" },
+  { name: "Teal", value: "#6AEDD0" },
+  { name: "Coral", value: "#FFC09D" },
 ] as const;
 
 export const BEBRAVE_SUPERIOR_COLORS = [
@@ -36,7 +36,6 @@ export const BEBRAVE_SUPERIOR_COLORS = [
   { name: "Neon Yellow", value: "#FFF44F" },
   { name: "Neon Green", value: "#39FF14" },
   { name: "Neon Orange", value: "#FF7A00" },
-  { name: "Neon Violet", value: "#B026FF" },
   { name: "Electric Blue", value: "#3D7BFF" },
 ] as const;
 

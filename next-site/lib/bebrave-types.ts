@@ -45,6 +45,7 @@ export type BeBraveSessionView = {
   chosenColor: string | null;
   effectSeed: number | null;
   chosenEffect?: string | null;
+  chosenSymbol?: number | null;
   toolResults: ToolReveal | null;
   drawingStartedAt: string | null;
   drawingDeadline: string | null;
@@ -70,6 +71,7 @@ export type BeBravePublicDrawing = {
   color: string;
   effectSeed: number;
   effectId?: string;
+  particleSymbol?: number;
   strokes: BeBravePublicStroke[];
 };
 

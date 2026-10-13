@@ -114,7 +114,7 @@ test("empty camera sleeps, then a new live stroke or camera movement restarts em
 });
 
 
-test("symbols are deterministic text outlines; the personal red effect always emits U+273E",()=>{
+test("symbols are deterministic text outlines; the personal red effect always emits U+1F5E1",()=>{
   const seen=new Set<number>(),anchor={x:360,y:1200,r:3.6,delay:.4};
   for(let i=0;i<300;i++){
     const rolled={...drawing,effectSeed:i};
@@ -123,7 +123,7 @@ test("symbols are deterministic text outlines; the personal red effect always em
     assert.equal(enchantmentParticleAt(unpackDrawing(packDrawing(rolled)),anchor,3,28).symbol,p.symbol);
     assert.equal(carvingParticleSymbol(rolled),p.symbol);
     assert.ok(SYMBOL_PATHS[p.symbol]);assert.ok(PARTICLE_SYMBOLS.includes(p.symbol as typeof PARTICLE_SYMBOLS[number]));
-    assert.equal(enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"blood-v1"},anchor,i,i*.73).symbol,0x273e);
+    assert.equal(enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"blood-v1"},anchor,i,i*.73).symbol,0x1f5e1);
   }
   assert.equal(seen.size,PARTICLE_SYMBOLS.length);
 });

@@ -1,3 +1,6 @@
+import { BEBRAVE_COMMON_COLOR } from "../bebrave-config";
+import type { BeBraveRarity } from "../bebrave-types";
+
 export const carvingLightEdge = "#FFF2C8";
 export const carvingDarkEdge = "#121526";
 
@@ -16,4 +19,10 @@ export function contrastRatio(a: string, b: string) {
  * The outer light/dark pair also separates the mark from bark of any shade. */
 export function carvingEdge(color: string) {
   return contrastRatio(color, carvingLightEdge) > contrastRatio(color, carvingDarkEdge) ? carvingLightEdge : carvingDarkEdge;
+}
+
+/** Common's shared ivory treatment also improves earlier brown marks without
+ * rewriting their canonical archive or changing other assigned pigments. */
+export function carvingPigment(rarity: BeBraveRarity, color: string) {
+  return rarity === "common" ? BEBRAVE_COMMON_COLOR.value : color;
 }

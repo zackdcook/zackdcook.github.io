@@ -27,7 +27,7 @@ export function BeBraveInspector({drawing,opener,onClose}:{drawing:BeBravePublic
     <div className="bebrave-inspector-art" data-detail={canonical?'canonical':'projection'} aria-busy={!canonical&&!problem}>
       <span aria-hidden="true"/>
       <svg viewBox={`${bounds.left} ${bounds.top} ${bounds.width} ${bounds.height}`} role="img" aria-label="Drawings carved into the shared cypress tree">
-        <BeBraveCarving strokes={detail.strokes} color={detail.color} rarity={detail.rarity} seed={detail.effectSeed} effectId={detail.effectId}/>
+        <BeBraveCarving strokes={detail.strokes} color={detail.color} rarity={detail.rarity} seed={detail.effectSeed} effectId={detail.effectId} particleSymbol={detail.particleSymbol}/>
       </svg>
     </div>
     {problem&&<p role="alert">{problem}</p>}
