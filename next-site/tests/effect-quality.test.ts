@@ -29,3 +29,12 @@ test("conservative device start, hidden gaps and the minimum retain magical iden
   const low=new AdaptiveEffectQuality(2,2).detail(0);
   assert.ok(low.particles>0);assert.equal(low.ribbons,false);assert.ok(low.pixelBudget>0);
 });
+
+test("smooth 30 Hz devices recover detail; dropped frames independently trigger backoff",()=>{
+  const adaptive=new AdaptiveEffectQuality(4,4);
+  for(let frame=0;frame<90;frame++){adaptive.frame(33.3);adaptive.painted(2,frame*33.3);}
+  assert.equal(adaptive.detail(3000).quality,"high");
+  for(let frame=0;frame<30;frame++){adaptive.frame(65);adaptive.painted(2,3100+frame*65);}
+  assert.equal(adaptive.detail(5200).quality,"low");
+  assert.ok(adaptive.timing.paintMs<7,"frame delivery alone detects pressure");
+});

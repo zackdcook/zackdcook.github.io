@@ -31,6 +31,7 @@ export class AdaptiveEffectQuality {
   }
 
   interact(time: number) { this.interaction = time; }
+  get timing() { return {paintMs:this.cost,frameMs:this.gap}; }
 
   frame(gap: number) {
     // A hidden tab, a sleeping renderer or OS suspension is not overload.
@@ -40,10 +41,10 @@ export class AdaptiveEffectQuality {
   painted(milliseconds: number, time: number) {
     this.cost += (milliseconds - this.cost) * .2;
     this.samples++;
-    this.badFrames = this.cost > 11 || this.gap > 25 ? this.badFrames + 1 : Math.max(0, this.badFrames - 1);
+    this.badFrames = this.cost > 11 || this.gap > 40 ? this.badFrames + 1 : Math.max(0, this.badFrames - 1);
     if (this.badFrames >= 4 && this.ceiling > 0) {
       this.ceiling--; this.changed = time; this.badFrames = 0;
-    } else if (this.samples >= 24 && time - this.interaction > 600 && time - this.changed > 2500 && this.cost < 7 && this.gap < 20 && this.ceiling < 2) {
+    } else if (this.samples >= 24 && time - this.interaction > 600 && time - this.changed > 2500 && this.cost < 7 && this.gap < 36 && this.ceiling < 2) {
       this.ceiling++; this.changed = time;
     }
   }

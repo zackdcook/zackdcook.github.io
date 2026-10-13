@@ -37,7 +37,7 @@ export function useCarvingEnchantments({ scene, camera, drawings, liveDrawing, t
     const adaptive = new AdaptiveEffectQuality(device.hardwareConcurrency || 4,device.deviceMemory ?? 4);
     quality.current = adaptive;
     const reduced = () => document.documentElement.dataset.effects === "reduced" || document.documentElement.dataset.motion === "reduced";
-    let frames = 0;
+    let frames = 0,reported = -Infinity;
     const loop = createEnchantmentLoop({
       request:frame=>requestAnimationFrame(frame), cancel:id=>cancelAnimationFrame(id),
       allowed:()=>document.visibilityState === "visible" && !reduced(),
@@ -55,6 +55,11 @@ export function useCarvingEnchantments({ scene, camera, drawings, liveDrawing, t
         root.dataset.enchantmentAuras = String(result.auras);
         root.dataset.enchantmentParticles = String(result.particles);
         root.dataset.enchantmentQuality = detail.quality;
+        if(time-reported>1000){
+          reported=time;
+          root.dataset.enchantmentPaintMs=adaptive.timing.paintMs.toFixed(2);
+          root.dataset.enchantmentFrameMs=adaptive.timing.frameMs.toFixed(2);
+        }
         return result.auras > 0;
       },
     });
@@ -73,6 +78,7 @@ export function useCarvingEnchantments({ scene, camera, drawings, liveDrawing, t
       document.removeEventListener("visibilitychange",sync); painter.dispose();
       delete root.dataset.enchantmentRenderer;
       delete root.dataset.enchantmentQuality;
+      delete root.dataset.enchantmentPaintMs;delete root.dataset.enchantmentFrameMs;
     };
   },[enabled,scene,camera]);
   useEffect(()=>wake(),[drawings,totalHeight,wake]);

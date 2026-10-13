@@ -14,7 +14,7 @@ One integer-mixed symbol is selected from the server's already stored random eff
 
 About now uses the actual Home dark-blue/white-border discovery frame, with a specificity-correct yellow choice label, and two additional line-heights of space before the italic Wait invitation. The Carve label and optional growth note share one flex item beside the caret, so the label cannot wrap below it.
 
-147 tests (137 standard and 10 module mocks), TypeScript, optimized build, generated art/themes and whitespace checks pass. Tests exercise archival symbol identity, all zoom buffer sizes, compositor anchoring, hard particle limits, low-detail magical identity, overload backoff and idle recovery. Actual final Preview acceptance follows publication. Physical Safari's new pinch behavior and low-end hardware frame rate require device confirmation; no comparison videos are produced.
+148 tests (138 standard and 10 module mocks), TypeScript, optimized build, generated art/themes and whitespace checks pass. Tests exercise archival symbol identity, all zoom buffer sizes, compositor anchoring, hard particle limits, low-detail magical identity, overload backoff and idle recovery. Actual final Preview acceptance follows publication. Physical Safari's new pinch behavior and low-end hardware frame rate require device confirmation; no comparison videos are produced.
 
 ## Retained v4 loading and data behavior
 
