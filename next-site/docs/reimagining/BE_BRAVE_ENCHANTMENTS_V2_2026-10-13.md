@@ -1,5 +1,7 @@
 # Be Brave refinement v2 — deployed test, visual QA limited
 
+Historical v2 record. The later [animated aura v3 revision](BE_BRAVE_ANIMATED_AURAS_2026-10-13.md) replaces this test deployment, resolves Git synchronization and contains actual animated browser proof plus successful live publication/refresh QA. The access blockers below describe the state at v2 delivery, not the current state.
+
 Application `77e339d75dd101534833d99ad588faba75663897` is READY on Vercel Preview `dpl_5SJpuCJhxuWBaHQpRqBJU3Shzqhx`.
 
 - Stable test: https://zack-cook-git-experiment-be-brave-encha-6d0cb7-dove-mack0o-3684.vercel.app/bebrave
