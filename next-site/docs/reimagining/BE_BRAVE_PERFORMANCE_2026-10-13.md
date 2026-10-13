@@ -14,7 +14,7 @@ One integer-mixed symbol is selected from the server's already stored random eff
 
 About now uses the actual Home dark-blue/white-border discovery frame, with a specificity-correct yellow choice label, and two additional line-heights of space before the italic Wait invitation. The Carve label and optional growth note share one flex item beside the caret, so the label cannot wrap below it.
 
-148 tests (138 standard and 10 module mocks), TypeScript, optimized build, generated art/themes and whitespace checks pass. Tests exercise archival symbol identity, all zoom buffer sizes, compositor anchoring, hard particle limits, low-detail magical identity, overload backoff and idle recovery. Actual final Preview acceptance follows publication. Physical Safari's new pinch behavior and low-end hardware frame rate require device confirmation; no comparison videos are produced.
+148 tests (138 standard and 10 module mocks), TypeScript, optimized build, generated art/themes and whitespace checks pass. Tests exercise archival symbol identity, all zoom buffer sizes, compositor anchoring, hard particle limits, low-detail magical identity, overload backoff and idle recovery. Final Preview acceptance is recorded below. Physical Safari's new pinch behavior and low-end hardware frame rate require device confirmation; no comparison videos are produced.
 
 ## Retained v4 loading and data behavior
 
@@ -43,3 +43,14 @@ A rolled-back database test passed first/repeated personal redemption, distinct 
 The v4 baseline passed 141 tests (131 standard, 10 module mocks), including progressive loading, request/memory bounds, glyph identity, fixed buffer sizes, cached shading, curved tails, viewport API bounds, pinch limits/anchoring and smooth convergence. TypeScript, art/theme validation, whitespace and optimized build pass. Deployed browser checks follow publication; physical iPhone/Safari and pinch behavior need device QA. No new comparison video is produced.
 
 Production remains main `75de96b` and `dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ`. Production cutover must apply the reviewed personal-code migration and transfer the existing code assignment into production, then build with production configuration; do not promote the test-storage Preview.
+
+
+## Final v5 test deployment and acceptance
+
+Final application commit `a9ece844e16066a9f4d534324a1714ab6b51b336` is synchronized normally to the experimental Git branch. READY Preview `dpl_7MBun1XAk9t4HqkdwcSWUhnYydsA` contains that exact source, target Preview. Immutable build: https://zack-cook-apzydtk8e-dove-mack0o-3684.vercel.app/bebrave . The stable test alias is assigned and verified: https://zack-cook-git-experiment-be-brave-encha-6d0cb7-dove-mack0o-3684.vercel.app/bebrave .
+
+Actual browser QA verified the About link, yellow RGB244/213/140 choice, exact Home blue/bordered frame, italic invitation and 80.8px phone spacing. The 390px viewport keeps the Carve caret and its wrapped label in one row. Standing Canvas layers are absolute, SVG count is zero, and published carvings emit after entering from the new page. Repeated whole-tree traversal returned to the newest marks without app errors; extension metadata errors are outside the app. The synthetic 50,000-foot case retained viewport-sized buffers. No code redemption, tree felling or archive mutation was used in v5 QA.
+
+Local benchmark observations in cloud Chrome: median33.3ms frame interval, p95 50ms. This exposed and corrected a recovery threshold that assumed a 60Hz display. Final high quality recovered at ~30Hz: ordinary workload paint EMA1.27ms; the five-effect workload showed five auras,63 particles and paint EMA4.82ms. These measurements apply to this session, not physical iPhone or every device. Two-touch pinch behavior and low-end device acceptance still require actual-device confirmation. Automated zoom anchoring, static buffer dimensions and adaptive backoff/recovery pass.
+
+Final dark phone screenshot: `qa/enchantments-v5-about-final.jpg`. No comparison videos. All148 tests (138 standard,10 mocks), typecheck, assets/themes, whitespace and optimized build pass. Existing Codespace mirror pushes were guarded against concurrent branch changes and preserved the clean original spring-clean checkout; stop the existing Codespace after this documentation push. Production main and domain remain unchanged.

@@ -1,10 +1,10 @@
 # Website reimagining checkpoint
 
-## Be Brave adaptive performance v5 — test refinement, 2026-10-13
+## Be Brave adaptive performance v5 — READY test revision, 2026-10-13
 
 - Continues deployed/pushed v4 `2fc24be73101417b8d023ae9b6aad93d52fd98e8`; same experimental branch and test configuration. Native absolute scene bands synchronize bark/engraving during scroll; stable screen buffers do not resize during pinch. Atomic transient zoom and immediate cached-layer compositor transforms replace the prior two-render zoom. React commits gesture values at the end. Stable large-viewport scenery avoids toolbar rescale jitter.
 - Adaptive local frame/paint-cost monitoring backs off detail under load and recovers during healthy idle. Hard particle budgets28/64/120, pixel budgets450k/700k/900k per buffer. Superior retains animated glow and Epic colored glyphs at minimum quality. Each whole carving now derives one stable symbol from its saved random seed; red remains U+273E, hearts remain hearts. About shares the Home blue/white frame/yellow text and adds two blank-line equivalents before Wait. Carve text stays beside its caret.
-- 148 tests, TypeScript, optimized build, art/themes and whitespace pass; details in `next-site/docs/reimagining/BE_BRAVE_PERFORMANCE_2026-10-13.md`. Final test Preview/browser acceptance and stable test alias update remain in progress. No comparison videos. No v5 database/code/archive/production changes. Physical Safari/pinch and very slow hardware still require actual-device confirmation.
+- 148 tests, TypeScript, optimized build, art/themes and whitespace pass; details in `next-site/docs/reimagining/BE_BRAVE_PERFORMANCE_2026-10-13.md`. Final app `a9ece844e16066a9f4d534324a1714ab6b51b336`, READY Preview `dpl_7MBun1XAk9t4HqkdwcSWUhnYydsA`; stable test alias assigned and opened. About/390px menu and real published tree pass; high detail recovered at ~30Hz, five-effect paint EMA4.82ms. Repeated traversal and 50,000-foot bounded fixture passed without app errors. Final screenshot committed with QA notes. Finish this documentation push and stop the existing Codespace. No comparison videos. No v5 database/code/archive/production changes. Physical Safari/pinch and very slow hardware still require actual-device confirmation.
 
 ## Be Brave performance and symbols v4 — test revision, 2026-10-13
 
