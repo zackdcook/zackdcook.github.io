@@ -6,7 +6,7 @@ import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { carvingBounds } from "@/lib/bebrave/carving-inspection";
 import { SectionCache } from "@/lib/bebrave/section-cache";
 import { treeHistory,initialHistoryWindow } from "@/lib/bebrave/history-cache";
-import { anchoredScroll,clampAdmireZoom,pinchAdmireZoom,smoothParallaxRise } from "@/lib/bebrave/admire-zoom";
+import { anchoredScroll,anchoredFallenScroll,fallenWorldPoint,clampAdmireZoom,pinchAdmireZoom,smoothParallaxRise } from "@/lib/bebrave/admire-zoom";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
 import { BeBraveCarving,CarvingSpark,carvingToPath,pointsToPath,sparkGeometry,particleMark,enchantmentParticleStyle } from "@/components/bebrave-stroke";
 import { legendaryEffect } from "@/lib/bebrave/effects";
@@ -109,10 +109,16 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
 
   useEffect(()=>{
     const root=scene.current, el=world.current;
-    if(mode!=="admire"||!root||!el)return;
+    if((mode!=="admire"&&mode!=="fallen")||!root||!el)return;
+    const fallen=mode==="fallen",scroller=horizontal.current;
+    if(fallen&&!scroller)return;
     const space=el.querySelector<HTMLElement>(".bebrave-tree-space");
-    let gesture:{distance:number;zoom:number;worldY:number}|null=null;
+    const target=fallen?scroller!:root;
+    const screenPoint=(x:number,y:number)=>fallen?x-scroller!.getBoundingClientRect().left:y;
+    const worldPointAt=(point:number)=>fallen?fallenWorldPoint(stateRef.current.height,scroller!.scrollLeft,scaleRef.current,point):(window.scrollY+point-worldTop.current)/scaleRef.current;
+    let gesture:{distance:number;zoom:number;worldY:number;crossY:number}|null=null;
     let pending=0,nextZoom=zoomRef.current,anchor:{worldY:number;screenY:number}|null=null;
+    let crossAnchor:{worldY:number;screenY:number}|null=null;
     let wheelTimer:ReturnType<typeof setTimeout>|undefined;
     const distance=(touches:TouchList)=>Math.hypot(touches[0].clientX-touches[1].clientX,touches[0].clientY-touches[1].clientY);
     const apply=()=>{
@@ -122,49 +128,63 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       zoomRef.current=nextZoom;scaleRef.current=nextScale;
       // Width, bark scale, spacer and anchored scroll change in the same frame.
       // React only commits the finished gesture, avoiding a two-render resize.
-      el.style.setProperty("--bebrave-admire-zoom",String(nextZoom));
-      el.style.height=`${stateRef.current.height*nextScale}px`;
-      space.style.transform=`scale(${nextScale})`;
+      if(fallen){
+        el.style.width=`${stateRef.current.height*nextScale}px`;
+        el.style.height=`${BEBRAVE_TREE_WIDTH*nextScale}px`;
+        space.style.transform=`translateX(${stateRef.current.height*nextScale}px) rotate(90deg) scale(${nextScale})`;
+      }else{
+        el.style.setProperty("--bebrave-admire-zoom",String(nextZoom));
+        el.style.height=`${stateRef.current.height*nextScale}px`;
+        space.style.transform=`scale(${nextScale})`;
+      }
       root.style.setProperty("--bebrave-tree-scale",String(nextScale));
       root.style.setProperty("--bebrave-bark-bottom",`${stateRef.current.height*nextScale}px`);
       root.dataset.admireZoom=String(nextZoom);
-      window.scrollTo({top:anchoredScroll(worldTop.current,anchor.worldY,nextScale,anchor.screenY),behavior:"instant"});
+      if(fallen){
+        scroller!.scrollTo({left:anchoredFallenScroll(stateRef.current.height,anchor.worldY,nextScale,anchor.screenY),top:crossAnchor?anchoredScroll(0,crossAnchor.worldY,nextScale,crossAnchor.screenY):scroller!.scrollTop,behavior:"instant"});
+      }else window.scrollTo({top:anchoredScroll(worldTop.current,anchor.worldY,nextScale,anchor.screenY),behavior:"instant"});
       syncCamera.current?.();
       wakeEnchantments(true);
     };
     const schedule=()=>{if(!pending)pending=requestAnimationFrame(apply);};
     const finish=()=>{
       if(pending){cancelAnimationFrame(pending);apply();}
-      zoomActive.current=false;gesture=null;anchor=null;
+      zoomActive.current=false;gesture=null;anchor=null;crossAnchor=null;
       setZoom(zoomRef.current);setScale(scaleRef.current);
     };
     const start=(event:TouchEvent)=>{
       if(event.touches.length!==2)return;
       event.preventDefault();clearTimeout(wheelTimer);zoomActive.current=true;
-      const screenY=(event.touches[0].clientY+event.touches[1].clientY)/2;
-      const worldY=(window.scrollY+screenY-worldTop.current)/scaleRef.current;
-      gesture={distance:distance(event.touches),zoom:zoomRef.current,worldY};anchor={worldY,screenY};
+      const x=(event.touches[0].clientX+event.touches[1].clientX)/2,y=(event.touches[0].clientY+event.touches[1].clientY)/2;
+      const screenY=screenPoint(x,y),worldY=worldPointAt(screenY);
+      const crossY=fallen?(scroller!.scrollTop+y-scroller!.getBoundingClientRect().top)/scaleRef.current:0;
+      gesture={distance:distance(event.touches),zoom:zoomRef.current,worldY,crossY};anchor={worldY,screenY};
+      crossAnchor=fallen?{worldY:crossY,screenY:y-scroller!.getBoundingClientRect().top}:null;
       wakeEnchantments(true);
     };
     const move=(event:TouchEvent)=>{
       if(!gesture||event.touches.length!==2)return;
       event.preventDefault();nextZoom=pinchAdmireZoom(gesture.zoom,gesture.distance,distance(event.touches));
-      anchor={worldY:gesture.worldY,screenY:(event.touches[0].clientY+event.touches[1].clientY)/2};schedule();
+      const x=(event.touches[0].clientX+event.touches[1].clientX)/2,y=(event.touches[0].clientY+event.touches[1].clientY)/2;
+      anchor={worldY:gesture.worldY,screenY:screenPoint(x,y)};
+      crossAnchor=fallen?{worldY:gesture.crossY,screenY:y-scroller!.getBoundingClientRect().top}:null;schedule();
     };
     const end=(event:TouchEvent)=>{if(event.touches.length<2&&gesture)finish();};
     const wheel=(event:WheelEvent)=>{
       if(!event.ctrlKey||gesture)return;
       event.preventDefault();zoomActive.current=true;
-      anchor={worldY:(window.scrollY+event.clientY-worldTop.current)/scaleRef.current,screenY:event.clientY};
+      const screenY=screenPoint(event.clientX,event.clientY);
+      anchor={worldY:worldPointAt(screenY),screenY};
+      if(fallen){const screenY=event.clientY-scroller!.getBoundingClientRect().top;crossAnchor={worldY:(scroller!.scrollTop+screenY)/scaleRef.current,screenY};}
       const delta=event.deltaY*(event.deltaMode===1?16:event.deltaMode===2?window.innerHeight:1);
       nextZoom=clampAdmireZoom(nextZoom*Math.exp(-delta*.003));schedule();
       clearTimeout(wheelTimer);wheelTimer=setTimeout(finish,160);
     };
-    root.addEventListener("touchstart",start,{passive:false});root.addEventListener("touchmove",move,{passive:false});root.addEventListener("touchend",end);root.addEventListener("touchcancel",end);
-    root.addEventListener("wheel",wheel,{passive:false});
+    target.addEventListener("touchstart",start,{passive:false});target.addEventListener("touchmove",move,{passive:false});target.addEventListener("touchend",end);target.addEventListener("touchcancel",end);
+    target.addEventListener("wheel",wheel,{passive:false});
     return()=>{
       cancelAnimationFrame(pending);clearTimeout(wheelTimer);zoomActive.current=false;
-      root.removeEventListener("touchstart",start);root.removeEventListener("touchmove",move);root.removeEventListener("touchend",end);root.removeEventListener("touchcancel",end);root.removeEventListener("wheel",wheel);
+      target.removeEventListener("touchstart",start);target.removeEventListener("touchmove",move);target.removeEventListener("touchend",end);target.removeEventListener("touchcancel",end);target.removeEventListener("wheel",wheel);
     };
   },[mode,wakeEnchantments]);
 
@@ -185,7 +205,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       const horizon=root?.querySelector<HTMLElement>(".bebrave-horizon");
       rasterViewport.current={width:root?.clientWidth??window.innerWidth,height:horizon?.clientHeight||window.innerHeight};
       if(!zoomActive.current){
-        const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH:rect.width/BEBRAVE_TREE_WIDTH;
+        const next=mode==="fallen"&&horizontal.current?horizontal.current.clientHeight/BEBRAVE_TREE_WIDTH*zoomRef.current:rect.width/BEBRAVE_TREE_WIDTH;
         scaleRef.current=next;setScale(next);
       }
       if(!scrollFrame.current)scrollFrame.current=requestAnimationFrame(()=>tick());};
@@ -339,7 +359,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
   const widthStyle=mode==="fallen"?{width:state.height*scale,height:BEBRAVE_TREE_WIDTH*scale}:{height:state.height*scale,...(mode==="admire"?{"--bebrave-admire-zoom":zoom}:{})};
   const treeTransform=mode==="fallen"?`translateX(${state.height*scale}px) rotate(90deg) scale(${scale})`:`scale(${scale})`;
   const minutes=Math.floor(remaining/60),seconds=String(remaining%60).padStart(2,"0");
-  return <section ref={scene} className={`bebrave-scene is-${mode} ${fitRecap?"is-recap":""}`} data-admire-zoom={mode==="admire"?zoom:undefined} style={{"--bebrave-tree-scale":scale,"--bebrave-bark-bottom":`${state.height*scale}px`} as CSSProperties}>
+  return <section ref={scene} className={`bebrave-scene is-${mode} ${fitRecap?"is-recap":""}`} data-admire-zoom={mode==="admire"||mode==="fallen"?zoom:undefined} style={{"--bebrave-tree-scale":scale,"--bebrave-bark-bottom":`${state.height*scale}px`} as CSSProperties}>
     <div className="bebrave-horizon" data-light-source aria-hidden="true"><TreeNightStars/></div>
     <div className="bebrave-midground" aria-hidden="true"/>
     <TreeAtmosphere/>
@@ -396,7 +416,6 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
             {visibleDrawings.map(d=><g key={d.id} className="bebrave-published-drawing" data-sequence={d.publicSequence} data-drawing-id={d.id}><BeBraveCarving strokes={d.strokes} color={d.color} rarity={d.rarity} seed={d.effectSeed} effectId={d.effectId} canvasEffects/></g>)}
           </svg>}
           {mode==="fallen"&&<canvas ref={motesRef} className="bebrave-enchantment-canvas bebrave-enchantment-motes" aria-hidden="true"/>}
-          {mode==="fallen"&&<div className="bebrave-fallen-cut" aria-hidden="true"/>}
         </div>
       </div>
     </div>

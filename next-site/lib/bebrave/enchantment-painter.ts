@@ -2,7 +2,7 @@ import type { BeBravePublicDrawing } from "../bebrave-types";
 import { sparklePoints } from "./effect-anchors";
 import { legendaryColor, legendaryEffect } from "./effects";
 import { carvingEdge, carvingPigment } from "./carving-contrast";
-import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, SYMBOL_PATHS, validParticleSymbol } from "./symbol-paths";
+import { PARTICLE_SYMBOLS, PERSONAL_SYMBOLS, SYMBOL_PATHS, validParticleSymbol } from "./symbol-paths";
 import { fullEffectDetail, type EffectDetail } from "./effect-quality";
 
 type Point = [number, number];
@@ -69,8 +69,8 @@ function rainbowColor(time: number, x: number) {
 
 /** The server's saved random roll also chooses one symbol for the whole mark.
  * Integer mixing makes that choice identical across devices and refreshes. */
-export function carvingParticleSymbol(drawing: BeBravePublicDrawing): number {
-  if (drawing.rarity === "legendary" && drawing.effectId === "blood-v1") return PERSONAL_SYMBOL;
+export function carvingParticleSymbol(drawing: BeBravePublicDrawing, index = 0): number {
+  if (drawing.rarity === "legendary" && drawing.effectId === "blood-v1") return PERSONAL_SYMBOLS[index % PERSONAL_SYMBOLS.length];
   if (validParticleSymbol(drawing.particleSymbol)) return drawing.particleSymbol;
   if (drawing.rarity === "legendary" && drawing.effectId === "hearts-v1") return 0x2665;
   let seed = (drawing.effectSeed >>> 0) ^ 0x9e3779b9;
@@ -101,7 +101,7 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   const twinkle = kind === "spark" ? .72 + .28 * Math.sin(seconds * (7 + noise(seed) * 7) + seed) ** 8 : 1;
   return {
     x, y, kind, color: blood ? "#760B20" : base, highlight: blood?"#D82B45":highlight(base, .45),
-    symbol: carvingParticleSymbol(drawing),
+    symbol: carvingParticleSymbol(drawing, index),
     radius: anchor.r * (kind === "spark" ? 3 : 2.5) * (.55 + .65 * Math.sin(age * Math.PI)),
     opacity: clamp(age / .12) * clamp((1 - age) / .3) * twinkle,
     rotation: blood ? 0 : Math.sin(seconds * 1.5 + seed) * .3,

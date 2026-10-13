@@ -1,16 +1,19 @@
 // Monochrome outlines: DejaVu Sans (Bitstream Vera license in licenses/DejaVu-symbols.txt).
-// U+1F5E1 and U+2728 are authored three-spark outline. No font or emoji substitution at runtime.
+// The dagger, feather and three-spark outlines are authored vectors. No emoji substitution.
 export const PARTICLE_SYMBOLS = [9733,9824,9827,9829,9830,9728,9760,9834,9880,9883,10022,10087,9752,9753,9835,9889,10024,10048] as const;
 export const PERSONAL_SYMBOL = 0x1f5e1;
+export const FEATHER_SYMBOL = 0x1fab6;
+export const PERSONAL_SYMBOLS = [PERSONAL_SYMBOL, FEATHER_SYMBOL] as const;
 export const SYMBOL_NAMES: Record<number,string> = {
   0x2605:"Star",0x2660:"Spade",0x2663:"Club",0x2665:"Heart",0x2666:"Diamond",
   0x2600:"Sun",0x2620:"Skull",0x266a:"Music note",0x2698:"Flower",0x269b:"Atom",
   0x2726:"Spark",0x2767:"Floral heart",0x2618:"Clover",0x2619:"Leaf",0x266b:"Music notes",
-  0x26a1:"Lightning",0x2728:"Magic stars",0x2740:"Blossom",0x1f5e1:"Dagger",
+  0x26a1:"Lightning",0x2728:"Magic stars",0x2740:"Blossom",0x1f5e1:"Dagger",0x1fab6:"Feather",
 };
 export const validParticleSymbol=(value:unknown):value is number=>typeof value==="number"&&Number.isInteger(value)&&PARTICLE_SYMBOLS.includes(value as typeof PARTICLE_SYMBOLS[number]);
 
 export const SYMBOL_PATHS: Readonly<Record<number,string>> = {
+  0x1fab6: "M-.84 .96L-.9 .9 .61-.74 .7-.73Z M-.54 .43C-.94 .03-.68-.46-.31-.69L-.16-.76-.26-.43 .02-.84C.26-.95 .58-1 .85-.94L.78-.59 .42-.3 .75-.38C.61-.05 .27 .2-.1 .3L.06 .08-.21 .34Z",
   0x1f5e1: "M-.88 .92 L-.48 .19 L.19 -.48 L.39 -.29 L-.28 .38 Z M.12 -.62 L.62 -.12 L.76 -.26 L.26 -.76 Z M.45 -.62 L.76 -.93 L.94 -.76 L.62 -.44 Z M.7 -.98 Q.88 -1.11 1.02 -.95 Q1.13 -.8 .99 -.68 Z",
   0x2605: "M-1 -0.2242H-0.2369L0 -0.949L0.2382 -0.2242H1L0.3834 0.2255L0.6204 0.949L0 0.5006L-0.6191 0.949L-0.3834 0.2255Z",
   0x2660: "M0.0034 -1Q0.1294 -0.7761 0.4189 -0.4062Q0.7366 -0.0335 0.7446 0.0429Q0.7969 0.1568 0.7969 0.2641V0.3177Q0.7969 0.5416 0.5798 0.6702Q0.5087 0.6997 0.4229 0.6997Q0.2165 0.6997 0.0891 0.4035H0.0328V0.4196Q0.0328 0.7989 0.1441 1H-0.1441V0.992Q-0.0302 0.7895 -0.0302 0.4075L-0.0342 0.4035H-0.0851L-0.1481 0.5214Q-0.2621 0.6997 -0.4323 0.6997Q-0.683 0.6997 -0.7849 0.4196L-0.7969 0.3217V0.2601Q-0.7969 0.0147 -0.5462 -0.2574Q-0.124 -0.7748 -0.0047 -0.996L-0.0007 -1Z",

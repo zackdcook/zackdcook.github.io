@@ -21,15 +21,6 @@ export function epicChanceForPity(pity: number) {
   return BEBRAVE_EPIC_PITY_PERCENT[index];
 }
 
-export const BEBRAVE_UNCOMMON_COLORS = [
-  { name: "Cyan", value: "#41DCE8" },
-  { name: "Rose", value: "#FFB5D0" },
-  { name: "Yellow", value: "#FFE46B" },
-  { name: "Leaf Green", value: "#B3EE86" },
-  { name: "Teal", value: "#6AEDD0" },
-  { name: "Coral", value: "#FFC09D" },
-] as const;
-
 export const BEBRAVE_SUPERIOR_COLORS = [
   { name: "Neon Cyan", value: "#00F5FF" },
   { name: "Neon Magenta", value: "#FF2BD6" },
@@ -39,11 +30,9 @@ export const BEBRAVE_SUPERIOR_COLORS = [
   { name: "Electric Blue", value: "#3D7BFF" },
 ] as const;
 
-export const BEBRAVE_EPIC_COLORS = [
-  BEBRAVE_COMMON_COLOR,
-  ...BEBRAVE_UNCOMMON_COLORS,
-  ...BEBRAVE_SUPERIOR_COLORS,
-] as const;
+// Rarity changes the treatment, while every colored tier shares these pigments.
+export const BEBRAVE_UNCOMMON_COLORS = BEBRAVE_SUPERIOR_COLORS;
+export const BEBRAVE_EPIC_COLORS = BEBRAVE_SUPERIOR_COLORS;
 
 export function tierFromRoll(roll: number): BeBraveRandomRarity {
   const bounded = Math.max(0, Math.min(9_999, Math.floor(roll)));

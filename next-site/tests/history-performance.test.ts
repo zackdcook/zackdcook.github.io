@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { TreeHistoryCache,initialHistoryWindow } from "../lib/bebrave/history-cache";
-import { anchoredScroll,pinchAdmireZoom,smoothParallaxRise } from "../lib/bebrave/admire-zoom";
+import { anchoredScroll,anchoredFallenScroll,fallenWorldPoint,pinchAdmireZoom,smoothParallaxRise } from "../lib/bebrave/admire-zoom";
 import { packDrawing } from "../lib/bebrave/completed-strokes";
 import type { BeBravePublicDrawing } from "../lib/bebrave-types";
 const drawing=(n:number):BeBravePublicDrawing=>({id:`drawing-${n}`,publicSequence:n,rarity:"epic",color:"#00F5FF",effectSeed:n,strokes:[{strokeId:`stroke-${n}`,strokeOrder:0,points:[[100,n*864+20],[500,n*864+100]]}]});
@@ -38,4 +38,14 @@ test("parallax converges smoothly without overshoot or frame-rate dependent jump
   for(let n=0;n<60;n++){const next=smoothParallaxRise(rise,1000,16);assert.ok(next>=rise&&next<=1000);rise=next;}
   assert.ok(1000-rise<.01);
   assert.ok(smoothParallaxRise(0,1000,1000)<600,"a delayed frame does not snap scenery to the target");
+});
+
+test("fallen zoom keeps the same carving under the fingers while horizontal panning stays bounded",()=>{
+  const height=36_000,screenX=195;
+  const worldY=fallenWorldPoint(height,2800,.7,screenX);
+  for(const scale of [.35,.7,1.05]){
+    const scroll=anchoredFallenScroll(height,worldY,scale,screenX);
+    assert.ok(Math.abs(fallenWorldPoint(height,scroll,scale,screenX)-worldY)<1e-8);
+  }
+  assert.equal(anchoredFallenScroll(height,height,.7,screenX),0);
 });

@@ -3,7 +3,7 @@
 import {useCallback,useEffect,useState} from "react";
 import {BladeEnchanter} from "./bebrave-blade-enchanter";
 import {BeBraveTree} from "./bebrave-tree";
-import {HomeControls,OverlayScene} from "./bebrave-menu";
+import {HomeControls,OverlayScene,ActionBar} from "./bebrave-menu";
 import {ToolEncounter} from "./bebrave-tool-encounter";
 import {observeBeBraveBrowser} from "@/lib/bebrave/browser-metrics";
 import {toolCopy} from "@/lib/bebrave/presentation";
@@ -12,7 +12,8 @@ import type {BeBraveNormalTool,BeBravePublicDrawing,BeBraveSessionView,BeBraveTr
 /** A guarded, synthetic browser workload. Never writes or requests shared art. */
 export function BeBraveBenchmark(){
   const [scenario,setScenario]=useState<"ordinary"|"crowded"|"tall"|"crossing"|"enchantments">("ordinary");
-  const [workshop,setWorkshop]=useState(false);
+  const [workshop,setWorkshop]=useState<"ordinary"|"personal"|null>(null);
+  const [fallen,setFallen]=useState(false);
   const [tools,setTools]=useState(false),[chosen,setChosen]=useState<BeBraveNormalTool|"cache">("arrowhead"),[reveal,setReveal]=useState(false);
   const fixture:BeBraveSessionView={id:"visual-fixture",status:"ready",chosenTool:chosen,chosenRarity:chosen==="cache"?"legendary":"epic",chosenColor:"#00F5FF",effectSeed:12,chosenEffect:"will-o-wisp-v1",toolResults:{arrowhead:"epic",nail:"common",key:"superior"},drawingStartedAt:null,drawingDeadline:null,drawingFinishedAt:null,zoneTop:null,zoneBottom:null,treeRevision:null,publicSequence:null};
   const feet=scenario==="tall"?50_000:104;
@@ -43,7 +44,7 @@ export function BeBraveBenchmark(){
   useEffect(()=>observeBeBraveBrowser(),[scenario]);
   if(workshop)return <div className="bebrave-stage">
     <HomeControls/><div className="bebrave-stage-art" aria-hidden="true"><div className="bebrave-stage-bg"/><div className="bebrave-stage-mid"/></div>
-    <OverlayScene visual={<BladeEnchanter session={{...fixture,chosenTool:"cache",chosenRarity:"legendary",chosenColor:null,chosenEffect:"will-o-wisp-v1"}} onBack={()=>setWorkshop(false)} onEnchant={()=>setWorkshop(false)}/>}/>
+    <OverlayScene visual={<BladeEnchanter session={{...fixture,chosenTool:"cache",chosenRarity:"legendary",chosenColor:null,chosenEffect:workshop==="personal"?"blood-v1":"will-o-wisp-v1"}} onBack={()=>setWorkshop(null)} onEnchant={()=>setWorkshop(null)}/>}/>
   </div>;
   if(tools)return <div className="bebrave-stage">
     <HomeControls/>
@@ -54,7 +55,8 @@ export function BeBraveBenchmark(){
     </OverlayScene>
   </div>;
   return <div className="bebrave-stage bebrave-world-stage">
-    <BeBraveTree key={scenario} state={state} mode="admire" sectionSource={source} homeControls={<HomeControls/>}
-      admireActions={<><p className="bebrave-benchmark-label">Synthetic QA · {scenario}<br/>{feet.toLocaleString()} feet</p>{(["ordinary","crowded","tall","crossing","enchantments"] as const).map(value=><button className="button" key={value} aria-pressed={scenario===value} onClick={()=>setScenario(value)}>{value[0].toUpperCase()+value.slice(1)}</button>)}<button className="button" onClick={()=>setTools(true)}>Tools</button><button className="button" onClick={()=>setWorkshop(true)}>Workshop</button><a className="button" href="/bebrave">Back</a></>}/>
+    {fallen&&<><HomeControls/><ActionBar><button className="button" onClick={()=>setFallen(false)}>Back</button></ActionBar></>}
+    <BeBraveTree key={scenario+(fallen?"-fallen":"")} state={state} mode={fallen?"fallen":"admire"} sectionSource={source} homeControls={<HomeControls/>}
+      admireActions={<><p className="bebrave-benchmark-label">Synthetic QA · {scenario}<br/>{feet.toLocaleString()} feet</p>{(["ordinary","crowded","tall","crossing","enchantments"] as const).map(value=><button className="button" key={value} aria-pressed={scenario===value} onClick={()=>setScenario(value)}>{value[0].toUpperCase()+value.slice(1)}</button>)}<button className="button" onClick={()=>setTools(true)}>Tools</button><button className="button" onClick={()=>setWorkshop("ordinary")}>Workshop</button><button className="button" onClick={()=>setWorkshop("personal")}>Personal workshop</button><button className="button" onClick={()=>setFallen(true)}>Fallen</button><a className="button" href="/bebrave">Back</a></>}/>
   </div>;
 }

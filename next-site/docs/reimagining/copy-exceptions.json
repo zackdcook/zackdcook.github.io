@@ -173,5 +173,20 @@
     "path": "next-site/components/bebrave-experience.tsx",
     "text": "The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard. The knife flicks open with a satisfying clink.",
     "reason": "Zack explicitly requested its removal on 2026-10-13, replacing the color screen with Enchant the blade."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "0",
+    "reason": "Zack explicitly requested removal of the on-screen code keypad on 2026-10-13; the native text input and Enter action remain."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "C",
+    "reason": "Zack explicitly requested removal of the on-screen code keypad on 2026-10-13; the native text input and Enter action remain."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "⌫",
+    "reason": "Zack explicitly requested removal of the on-screen code keypad on 2026-10-13; the native text input and Enter action remain."
   }
 ]

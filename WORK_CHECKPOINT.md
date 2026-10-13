@@ -1,5 +1,11 @@
 # Website reimagining checkpoint
 
+## Be Brave final cleanup v7 — implementation and tests ready, 2026-10-13
+
+Continues latest v6 `92db7be` in an isolated worktree. Implements the ten requested cleanup items: keypad removal, scattered knife stars, compact six-color workshop, cap removal, Mourn the fallen/Leave, same Uncommon/Superior pigments without Uncommon glow, fallen pinch zoom, feather plus dagger personal effect, document-wide Safari selection lock. Test-only whitelist/catalog migration applied. All154 tests, typecheck, assets/themes, optimized build and SQL rollback checks pass;49 archive and62 code-row digests are unchanged. Deployed visual acceptance and final source synchronization follow in `next-site/docs/reimagining/BE_BRAVE_FINAL_CLEANUP_2026-10-13.md`.
+
+Automatic approval review blocked Codespace workspace trust; do not bypass it with indirect execution. Supported repository/preview APIs are the safer publication option. No production cutover/main merge is authorized.
+
 ## Be Brave adaptive performance v5 — READY test revision, 2026-10-13
 
 - Continues deployed/pushed v4 `2fc24be73101417b8d023ae9b6aad93d52fd98e8`; same experimental branch and test configuration. Native absolute scene bands synchronize bark/engraving during scroll; stable screen buffers do not resize during pinch. Atomic transient zoom and immediate cached-layer compositor transforms replace the prior two-render zoom. React commits gesture values at the end. Stable large-viewport scenery avoids toolbar rescale jitter.

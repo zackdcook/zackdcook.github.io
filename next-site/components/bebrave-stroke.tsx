@@ -4,7 +4,7 @@ import { memo,useId,useMemo,type CSSProperties,type ReactNode,type RefObject } f
 import type { BeBravePublicStroke, BeBraveRarity } from "@/lib/bebrave-types";
 import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryColor, legendaryEffect } from "@/lib/bebrave/effects";
-import { SYMBOL_PATHS, validParticleSymbol, PERSONAL_SYMBOL } from "@/lib/bebrave/symbol-paths";
+import { SYMBOL_PATHS, validParticleSymbol, PERSONAL_SYMBOLS } from "@/lib/bebrave/symbol-paths";
 import { carvingEdge, carvingPigment } from "@/lib/bebrave/carving-contrast";
 
 export function pointsToPath(points: Array<[number, number]>) {
@@ -107,7 +107,7 @@ export const BeBraveCarving=memo(function BeBraveCarving({strokes,color,rarity,s
   return <g className={`bebrave-stroke bebrave-${rarity}${active?" is-active":""}`} data-effect={effect} style={{"--stroke-color":ink,"--aura-delay":`${-(seed%67)/10}s`,"--aura-duration":`${3.8+(seed%11)/10}s`,...(rainbow?{"--rainbow-ink":`url(#${gradientId})`}:{})} as CSSProperties}>
     {rainbow&&<defs><linearGradient id={gradientId} gradientUnits="userSpaceOnUse" x1="0" x2="720" y1="0" y2="0"><stop offset="0" stopColor="#FF4D6D"/><stop offset=".17" stopColor="#FFB347"/><stop offset=".34" stopColor="#F9F871"/><stop offset=".5" stopColor="#7CF5A2"/><stop offset=".67" stopColor="#50DFFF"/><stop offset=".84" stopColor="#A890FF"/><stop offset="1" stopColor="#FF6ADE"/></linearGradient></defs>}
     <StrokeLayers d={d} color={ink} rarity={rarity} refs={pathRefs} canvasEffects={canvasEffects}/>
-    {sparkles.map(stroke=><g key={stroke.id} data-stroke-id={stroke.id}>{stroke.points.map((s,i)=><CarvingSpark key={i} {...s} legendary={legendary} effectId={effect} symbol={effect==="blood-v1"?PERSONAL_SYMBOL:validParticleSymbol(particleSymbol)?particleSymbol:undefined}/>)}</g>)}
+    {sparkles.map((stroke,strokeIndex)=><g key={stroke.id} data-stroke-id={stroke.id}>{stroke.points.map((s,i)=><CarvingSpark key={i} {...s} legendary={legendary} effectId={effect} symbol={effect==="blood-v1"?PERSONAL_SYMBOLS[(i+strokeIndex)%PERSONAL_SYMBOLS.length]:validParticleSymbol(particleSymbol)?particleSymbol:undefined}/>)}</g>)}
     {children}
   </g>;
 });
