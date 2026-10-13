@@ -59,6 +59,7 @@ export function enchantmentParticleStyle(radius: number, delay: number): CSSProp
 export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean}) {
   const shape = sparkGeometry(r, legendary);
   if(!legendary)return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
+    <path className="bebrave-energy-glint" d={shape.star} style={{animationDelay:`-${delay}s`}}/>
     <g className="bebrave-energy-particle" style={enchantmentParticleStyle(r,delay)}>
       <circle className="bebrave-energy-mote" r={r*1.65}/>
       <path className="bebrave-sparkle-star" d={shape.star}/>

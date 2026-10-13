@@ -187,6 +187,8 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
         const shape=sparkGeometry(p.r,visual.rarity==="legendary");
         const star=slot.querySelector<SVGPathElement>(".bebrave-sparkle-star");
         if(star){star.setAttribute("d",shape.star);star.style.animationDelay=`-${p.delay}s`;}
+        const glint=slot.querySelector<SVGPathElement>(".bebrave-energy-glint");
+        if(glint){glint.setAttribute("d",shape.star);glint.style.animationDelay=`-${p.delay}s`;}
         slot.querySelector(".bebrave-sparkle-facets")?.setAttribute("d",shape.facets);
         slot.querySelector(".bebrave-sparkle-core")?.setAttribute("r",String(shape.core*(visual.rarity==="legendary"?1:.72)));
         slot.querySelector(".bebrave-energy-mote")?.setAttribute("r",String(p.r*1.65));

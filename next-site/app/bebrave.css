@@ -164,7 +164,8 @@ html:has(.is-draw),body:has(.is-draw){overflow:hidden}
 .bebrave-sparkle-core{fill:color-mix(in srgb,var(--stroke-color) 42%,white);opacity:1}
 .bebrave-energy-particle,.bebrave-energy-satellite{opacity:0;transform-box:view-box;transform-origin:0 0;animation:bebrave-energy-escape var(--particle-duration,4.2s) ease-out infinite}
 .bebrave-energy-mote{fill:var(--stroke-color);opacity:.48;filter:blur(2.4px)}
-.bebrave-energy-particle .bebrave-sparkle-star{animation:bebrave-energy-twinkle 1.4s ease-in-out infinite;animation-delay:inherit;stroke:none}
+.bebrave-energy-particle .bebrave-sparkle-star{animation:bebrave-energy-twinkle 1.4s ease-in-out infinite;animation-delay:inherit;stroke:#1b2438;stroke-width:1.1}
+.bebrave-stroke .bebrave-energy-glint{fill:color-mix(in srgb,var(--stroke-color) 32%,white);stroke:#1b2438;stroke-width:1;opacity:.65;filter:drop-shadow(0 0 3px var(--stroke-color));transform-box:fill-box;transform-origin:center;animation:bebrave-enchanted-glint 4.7s ease-in-out infinite}
 .bebrave-energy-trail{stroke:var(--stroke-color);stroke-width:1.6;opacity:var(--trail-opacity,0);stroke-dasharray:22 38;filter:drop-shadow(0 0 2px var(--stroke-color))}
 .bebrave-energy-satellite{fill:color-mix(in srgb,var(--stroke-color) 68%,white)}
 .bebrave-legendary .bebrave-stroke-glow{stroke:var(--stroke-color);stroke-width:36;opacity:.82;filter:drop-shadow(0 0 7px var(--stroke-color))}
@@ -176,12 +177,13 @@ html:has(.is-draw),body:has(.is-draw){overflow:hidden}
 .bebrave-contact-ring{fill:none;stroke:var(--stroke-color);stroke-width:2.2;stroke-dasharray:8 9;opacity:.9}
 .bebrave-contact-ticks{stroke:var(--stroke-color);stroke-width:2.2;opacity:.9}
 .bebrave-contact-core{fill:white;stroke:none;opacity:1}
-.bebrave-published-drawing :is(.bebrave-stroke-halo,.bebrave-energy-particle,.bebrave-energy-satellite,.bebrave-sparkle-star,.bebrave-epic-shimmer,.bebrave-wisp-orbit){animation-play-state:var(--effect-play,paused)}
+.bebrave-published-drawing :is(.bebrave-stroke-halo,.bebrave-energy-glint,.bebrave-energy-particle,.bebrave-energy-satellite,.bebrave-sparkle-star,.bebrave-epic-shimmer,.bebrave-wisp-orbit){animation-play-state:var(--effect-play,paused)}
 .bebrave-scene[data-crowded-effects="true"] .bebrave-published-drawing .bebrave-epic .bebrave-sparkle:nth-child(n+4){display:none}
 .bebrave-scene[data-crowded-effects="true"] .bebrave-published-drawing .bebrave-energy-satellite{display:none}
 @keyframes bebrave-enchantment-breathe{0%,100%{opacity:.58}50%{opacity:.72}}
 @keyframes bebrave-energy-escape{0%,5%{opacity:0;transform:translate(0,0) scale(.5)}16%{opacity:1;transform:translate(calc(var(--particle-x)*.08),calc(var(--particle-y)*.12)) scale(1.1)}46%{opacity:.95}76%{opacity:.55}100%{opacity:0;transform:translate(var(--particle-x),var(--particle-y)) rotate(var(--particle-curl)) scale(.65)}}
 @keyframes bebrave-energy-twinkle{0%,100%{opacity:.7;scale:.8}22%{opacity:1;scale:1.3}34%{opacity:.65;scale:.9}53%{opacity:1;scale:1.08}}
+@keyframes bebrave-enchanted-glint{0%,100%{opacity:.45;scale:.42}36%{opacity:.65;scale:.6}43%{opacity:1;scale:1.12}51%{opacity:.58;scale:.55}72%{opacity:.7;scale:.7}}
 @keyframes bebrave-shimmer{to{stroke-dashoffset:-174}}
 @keyframes bebrave-sparkle{0%,100%{opacity:.55;transform:scale(.9)}45%{opacity:1;transform:scale(1.18)}65%{opacity:.8;transform:scale(1)}}
 @keyframes bebrave-wisp-orbit{to{transform:rotate(360deg)}}
@@ -400,5 +402,5 @@ html[data-input-mode="pointer"] :is(.bebrave-stage,.bebrave-settings,.bebrave-in
 html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-stroke-glow{filter:none;opacity:.16;stroke-width:15}
 html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-stroke-halo,.bebrave-energy-particle,.bebrave-energy-satellite){display:none}
 html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-image-choice .bebrave-object-label::before{animation:none}
-html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-sparkle-star{filter:none}
-@media(prefers-reduced-motion:reduce){.bebrave-stroke-glow,.bebrave-sparkle-star{filter:none}.bebrave-stroke-halo,.bebrave-energy-particle,.bebrave-energy-satellite{display:none}.bebrave-image-choice .bebrave-object-label::before{animation:none}}
+html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-sparkle-star,.bebrave-energy-glint){filter:none}
+@media(prefers-reduced-motion:reduce){.bebrave-stroke-glow,.bebrave-sparkle-star,.bebrave-energy-glint{filter:none}.bebrave-stroke-halo,.bebrave-energy-particle,.bebrave-energy-satellite{display:none}.bebrave-image-choice .bebrave-object-label::before{animation:none}}
