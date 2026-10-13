@@ -35,8 +35,9 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-rpg-hud .bebrave-rpg-actions{position:static;transform:none;width:100%;padding:0}
 .bebrave-rpg-actions .button{flex:1 1 0;min-width:0;white-space:normal;justify-content:flex-start;padding:12px 14px}
 .bebrave-rpg-actions .button:only-child{flex:1}
-.bebrave-carve-button{flex-wrap:wrap;gap:4px!important}
-.bebrave-growth-wait{width:100%;font:500 10px/1.3 var(--game-type);font-variant-numeric:tabular-nums}
+.bebrave-carve-button{flex-wrap:nowrap}
+.bebrave-carve-label{min-width:0;display:grid;gap:4px}
+.bebrave-growth-wait{font:500 10px/1.3 var(--game-type);font-variant-numeric:tabular-nums}
 .bebrave-overlay{position:absolute;inset:0;z-index:90;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:18px;padding:90px max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));pointer-events:none}
 .bebrave-overlay-main{min-width:0;min-height:0;max-width:100%;display:grid;place-items:center;pointer-events:auto}
 .bebrave-overlay .bebrave-rpg-hud{position:static;transform:none;width:min(100%,780px);justify-self:center;max-height:44dvh}
@@ -104,14 +105,14 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 @keyframes bebrave-star{0%,100%{opacity:.4;scale:.75}50%{opacity:1;scale:1.1}}
 
 /* The drawing plane never participates in decorative pose or impact effects. */
-.bebrave-scene{position:relative;isolation:isolate;min-height:100dvh;overflow-anchor:none;--bebrave-horizon-y:0px;--bebrave-mid-y:0px;--bebrave-safe-top:24px}
-.bebrave-horizon,.bebrave-midground{position:fixed;inset:0;height:100dvh;overflow:clip;pointer-events:none}
+.bebrave-scene{position:relative;isolation:isolate;min-height:100dvh;overflow:clip;overflow-anchor:none;--bebrave-horizon-y:0px;--bebrave-mid-y:0px;--bebrave-safe-top:24px}
+.bebrave-horizon,.bebrave-midground{position:fixed;inset:0;height:100lvh;overflow:clip;pointer-events:none}
 .bebrave-horizon{z-index:-4;background:linear-gradient(180deg,var(--bebrave-sky-top-color,#0a1a39),var(--bebrave-sky-color,#152f58) 62%,var(--bebrave-sky-bottom-color,#23204c))}.bebrave-midground{z-index:-3}
 .bebrave-horizon>*{display:none}
-.bebrave-horizon::before,.bebrave-midground::before{content:"";position:absolute;inset:-8dvh -5vw;background-position:center;background-repeat:no-repeat}
+.bebrave-horizon::before,.bebrave-midground::before{content:"";position:absolute;inset:-8lvh -5vw;background-position:center;background-repeat:no-repeat}
 .bebrave-horizon::before{background-image:var(--asset-tree-sky);background-size:cover;opacity:var(--bebrave-horizon-opacity,1);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation)) sepia(var(--world-art-sepia)) hue-rotate(var(--world-art-hue));transform:translate3d(0,var(--bebrave-horizon-y),0);mask-image:linear-gradient(180deg,transparent,#000 17%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 17%,#000)}
 .bebrave-midground::before{background-image:var(--asset-tree-foreground);background-size:cover;opacity:calc(var(--bebrave-mid-opacity,1)*.9);filter:brightness(var(--world-art-light)) saturate(var(--world-art-saturation));transform:translate3d(0,var(--bebrave-mid-y),0);mask-image:linear-gradient(180deg,transparent,#000 22%,#000);-webkit-mask-image:linear-gradient(180deg,transparent,#000 22%,#000)}
-.bebrave-horizon>.bebrave-night-stars{display:block;position:absolute;inset:-12dvh 0;opacity:var(--bebrave-stars,0);transform:translateY(var(--bebrave-star-travel,0px))}
+.bebrave-horizon>.bebrave-night-stars{display:block;position:absolute;inset:-12lvh 0;opacity:var(--bebrave-stars,0);transform:translateY(var(--bebrave-star-travel,0px))}
 .bebrave-night-stars i{position:absolute;width:var(--star-size);height:var(--star-size);border-radius:50%;background:#c6ccec;opacity:var(--star-brightness);box-shadow:0 0 2px #c6ccec55}
 .is-admire :is(.bebrave-horizon,.bebrave-midground)::before{will-change:transform,opacity}
 .is-admire .bebrave-atmosphere{opacity:var(--bebrave-ground-atmosphere,1)}

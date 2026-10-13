@@ -3,11 +3,16 @@ import { sparklePoints } from "./effect-anchors";
 import { legendaryColor, legendaryEffect } from "./effects";
 import { carvingEdge } from "./carving-contrast";
 import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, SYMBOL_PATHS } from "./symbol-paths";
+import { fullEffectDetail, type EffectDetail } from "./effect-quality";
 
 type Point = [number, number];
 type Anchor = { x: number; y: number; r: number; delay: number };
 type Sample = { x: number; y: number; nx: number; ny: number; distance: number };
-export type EnchantmentCamera = { top: number; height: number; scale: number; pixelRatio: number; left?:number; screenTop?:number };
+export type EnchantmentCamera = {
+  top: number; height: number; scale: number; pixelRatio: number;
+  /** Standing canvases live in scene coordinates and scroll with the bark. */
+  left?: number; offsetTop?: number; viewportWidth?: number; viewportHeight?: number;
+};
 export type EnchantmentParticle = {
   x: number; y: number; radius: number; opacity: number; rotation: number;
   kind: "mote" | "spark" | "trail" | "heart" | "blood" | "wisp";
@@ -62,6 +67,17 @@ function rainbowColor(time: number, x: number) {
   return `#${channels.map(channel => Math.round(65 + channel * 190).toString(16).padStart(2, "0")).join("")}`;
 }
 
+/** The server's saved random roll also chooses one symbol for the whole mark.
+ * Integer mixing makes that choice identical across devices and refreshes. */
+export function carvingParticleSymbol(drawing: BeBravePublicDrawing): number {
+  if (drawing.rarity === "legendary" && drawing.effectId === "blood-v1") return PERSONAL_SYMBOL;
+  if (drawing.rarity === "legendary" && drawing.effectId === "hearts-v1") return 0x2665;
+  let seed = (drawing.effectSeed >>> 0) ^ 0x9e3779b9;
+  seed = Math.imul(seed ^ (seed >>> 16), 0x85ebca6b);
+  seed = Math.imul(seed ^ (seed >>> 13), 0xc2b2ae35);
+  return PARTICLE_SYMBOLS[((seed ^ (seed >>> 16)) >>> 0) % PARTICLE_SYMBOLS.length];
+}
+
 /** Each stored anchor continuously emits. A new cycle has a different seeded
  * trajectory; restoring an archive needs no particle positions or new rolls. */
 export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anchor, index: number, seconds: number): EnchantmentParticle {
@@ -84,7 +100,7 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   const twinkle = kind === "spark" ? .72 + .28 * Math.sin(seconds * (7 + noise(seed) * 7) + seed) ** 8 : 1;
   return {
     x, y, kind, color: blood ? "#760B20" : base, highlight: blood?"#D82B45":highlight(base, .45),
-    symbol:blood?PERSONAL_SYMBOL:effect==="hearts-v1"?0x2665:PARTICLE_SYMBOLS[Math.floor(noise(seed+cycle*23)*PARTICLE_SYMBOLS.length)],
+    symbol: carvingParticleSymbol(drawing),
     radius: anchor.r * (kind === "spark" ? 3 : 2.5) * (.55 + .65 * Math.sin(age * Math.PI)),
     opacity: clamp(age / .12) * clamp((1 - age) / .3) * twinkle,
     rotation: blood ? 0 : Math.sin(seconds * 1.5 + seed) * .3,
@@ -92,14 +108,25 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   };
 }
 
-export function enchantmentSurface(camera: EnchantmentCamera, totalHeight: number) {
+export function enchantmentSurface(camera: EnchantmentCamera, totalHeight: number, pixelBudget = 900_000) {
   const scale = Math.max(.01, camera.scale);
-  const height = Math.ceil((camera.height + 680)/160)*160;
-  const top = Math.max(0, Math.min(Math.floor((camera.top - 260) / 160) * 160,Math.max(0,totalHeight-height)));
-  // Two camera-sized buffers, never a bitmap the height of the shared tree.
-  const padding = 120, worldWidth = 720 + padding * 2;
-  const ratio = Math.max(.25, Math.min(1.5, camera.pixelRatio, Math.sqrt(900_000 / (worldWidth * scale * height * scale))));
-  return { top, height, scale, ratio, padding, worldWidth, width: Math.max(1, Math.ceil(worldWidth * scale * ratio)), pixelsHigh: Math.max(1, Math.ceil(height * scale * ratio)) };
+  const portrait = camera.viewportWidth !== undefined;
+  // Stable screen-sized buffers never change dimensions during pinch zoom or
+  // Safari toolbar movement. Only their world-to-pixel transform changes.
+  const cssWidth = portrait ? Math.max(1, camera.viewportWidth!) : 960 * scale;
+  const cssHeight = portrait ? Math.max(1, camera.viewportHeight ?? camera.height * scale) + 480 : Math.ceil((camera.height + 680) / 160) * 160 * scale;
+  const bandTop = portrait ? Math.max(0, Math.floor((camera.top * scale - 240) / 96) * 96) : Math.max(0, Math.min(Math.floor((camera.top - 260) / 160) * 160, Math.max(0, totalHeight - cssHeight / scale))) * scale;
+  const top = bandTop / scale, height = cssHeight / scale;
+  const ratio = Math.min(1.5, Math.max(.1, camera.pixelRatio), Math.sqrt(pixelBudget / (cssWidth * cssHeight)));
+  return {
+    top, height, scale, ratio, portrait, padding: 120, worldWidth: cssWidth / scale,
+    cssTop: portrait ? (camera.offsetTop ?? 0) + bandTop : top,
+    cssLeft: portrait ? 0 : -120,
+    cssWidth: portrait ? cssWidth : 960, cssHeight: portrait ? cssHeight : height,
+    translateX: portrait ? (camera.left ?? 0) * ratio : 120 * scale * ratio,
+    translateY: -bandTop * ratio,
+    width: Math.max(1, Math.ceil(cssWidth * ratio)), pixelsHigh: Math.max(1, Math.ceil(cssHeight * ratio)),
+  };
 }
 
 type PreparedDrawing = { signature: string; path: Path2D; strokes: Sample[][]; anchors: Anchor[]; top: number; bottom: number };
@@ -115,6 +142,20 @@ export class EnchantmentPainter {
   private base?:CanvasRenderingContext2D;
   private ink?:CanvasRenderingContext2D;
   private staticKey="";
+  private lastCamera?: EnchantmentCamera;
+  private lastSurface?: ReturnType<typeof enchantmentSurface>;
+
+  /** Compositor-scale the previous raster immediately during a gesture. The
+   * next effect frame replaces it at the new scale without moving the core. */
+  followCamera(camera: EnchantmentCamera) {
+    const old = this.lastCamera, band = this.lastSurface;
+    if (!old || !band?.portrait || camera.viewportWidth === undefined) return;
+    const ratio = camera.scale / old.scale;
+    const x = (camera.left ?? 0) - ratio * (old.left ?? 0);
+    const y = (camera.offsetTop ?? 0) - (old.offsetTop ?? 0) + (ratio - 1) * band.top * old.scale;
+    const transform = ratio === 1 && x === 0 && y === 0 ? "none" : `matrix(${ratio},0,0,${ratio},${x},${y})`;
+    for (const context of [this.aura, this.motes]) if (context.canvas.style.transform !== transform) context.canvas.style.transform = transform;
+  }
   constructor(private aura: CanvasRenderingContext2D, private motes: CanvasRenderingContext2D, private makePath: (svg?:string) => Path2D = svg => new Path2D(svg), makeBuffer:()=>CanvasRenderingContext2D|undefined=()=>typeof document==="undefined"?undefined:document.createElement("canvas").getContext("2d")??undefined) {
     this.base=makeBuffer();this.ink=makeBuffer();
   }
@@ -147,41 +188,43 @@ export class EnchantmentPainter {
     for(const context of [this.aura,this.motes,this.base,this.ink])if(context){context.canvas.width=1;context.canvas.height=1;}
   }
 
-  paint(drawings: BeBravePublicDrawing[], camera: EnchantmentCamera, totalHeight: number, seconds: number) {
-    const surface = enchantmentSurface(camera, totalHeight);
+  paint(drawings: BeBravePublicDrawing[], camera: EnchantmentCamera, totalHeight: number, seconds: number, detail: EffectDetail = fullEffectDetail) {
+    const surface = enchantmentSurface(camera, totalHeight, detail.pixelBudget);
     for (const context of [this.aura, this.motes]) {
       const canvas = context.canvas;
       if (canvas.width !== surface.width) canvas.width = surface.width;
       if (canvas.height !== surface.pixelsHigh) canvas.height = surface.pixelsHigh;
-      const fixed=camera.left!==undefined;
-      canvas.style.position=fixed?"fixed":"absolute";
-      canvas.style.top = `${fixed?(camera.screenTop??0)+(surface.top-camera.top)*surface.scale:surface.top}px`;
-      canvas.style.height = `${surface.height*(fixed?surface.scale:1)}px`;
-      canvas.style.left = `${fixed?camera.left!-surface.padding*surface.scale:-surface.padding}px`;
-      canvas.style.width = `${surface.worldWidth*(fixed?surface.scale:1)}px`;
+      canvas.style.position = "absolute";
+      canvas.style.top = `${surface.cssTop}px`;
+      canvas.style.height = `${surface.cssHeight}px`;
+      canvas.style.left = `${surface.cssLeft}px`;
+      canvas.style.width = `${surface.cssWidth}px`;
+      canvas.style.transformOrigin = "0 0";
+      canvas.style.transform = "none";
       context.setTransform(1, 0, 0, 1, 0, 0);
       context.clearRect(0, 0, canvas.width, canvas.height);
       const pixelScale = surface.scale * surface.ratio;
-      context.setTransform(pixelScale, 0, 0, pixelScale, surface.padding * pixelScale, -surface.top * pixelScale);
+      context.setTransform(pixelScale, 0, 0, pixelScale, surface.translateX, surface.translateY);
       context.lineCap = "round"; context.lineJoin = "round";
       context.globalCompositeOperation = "source-over";
     }
+    this.lastCamera = { ...camera }; this.lastSurface = surface;
     const magical = drawings.filter(drawing => enchantedTier(drawing.rarity));
     const crowded = magical.length > 12;
     const preparedAll=drawings.map(drawing=>({drawing,prepared:this.prepare(drawing)}));
     const pixelScale=surface.scale*surface.ratio;
-    const key=`${surface.top}:${surface.height}:${surface.width}:${surface.pixelsHigh}:${pixelScale}:${camera.left!==undefined}:${preparedAll.map(({drawing,prepared})=>`${drawing.id}:${prepared.signature}:${drawing.color}:${drawing.effectId}`).join("|")}`;
+    const key=`${surface.top}:${surface.height}:${surface.width}:${surface.pixelsHigh}:${pixelScale}:${surface.translateX}:${surface.translateY}:${surface.portrait}:${preparedAll.map(({drawing,prepared})=>`${drawing.id}:${prepared.signature}:${drawing.color}:${drawing.effectId}`).join("|")}`;
     if(this.base&&this.ink&&key!==this.staticKey){
       this.staticKey=key;
       for(const context of [this.base,this.ink]){
         if(context.canvas.width!==surface.width)context.canvas.width=surface.width;
         if(context.canvas.height!==surface.pixelsHigh)context.canvas.height=surface.pixelsHigh;
         context.setTransform(1,0,0,1,0,0);context.clearRect(0,0,surface.width,surface.pixelsHigh);
-        context.setTransform(pixelScale,0,0,pixelScale,surface.padding*pixelScale,-surface.top*pixelScale);
+        context.setTransform(pixelScale,0,0,pixelScale,surface.translateX,surface.translateY);
         context.lineCap="round";context.lineJoin="round";
       }
       for(const {drawing,prepared} of preparedAll)if(enchantedTier(drawing.rarity))this.paintMantle(this.base,drawing,prepared,pixelScale,crowded);
-      if(camera.left!==undefined)for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);
+      if(surface.portrait)for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);
     }
     if(this.base){
       this.aura.save();this.aura.setTransform(1,0,0,1,0,0);this.aura.globalAlpha=.8+.2*Math.sin(seconds*1.8);this.aura.drawImage(this.base.canvas,0,0);this.aura.restore();
@@ -191,18 +234,19 @@ export class EnchantmentPainter {
       const prepared = this.prepare(drawing);
       if (prepared.bottom + 260 < camera.top || prepared.top - 260 > camera.top + camera.height) continue;
       auraCount++;
-      this.paintAura(drawing, prepared, seconds, pixelScale, crowded);
-      const budget = Math.max(2, Math.floor(120 / Math.max(1, magical.length)));
+      this.paintAura(drawing, prepared, seconds, pixelScale, crowded, detail);
+      const budget = Math.max(2, Math.floor(detail.particles / Math.max(1, magical.length)));
       const stride = Math.max(1, Math.ceil(prepared.anchors.length / budget));
       for (let index = 0; index < prepared.anchors.length; index += stride) {
+        if (particleCount >= detail.particles) break;
         const particle = enchantmentParticleAt(drawing, prepared.anchors[index], index, seconds);
         if (particle.opacity < .02) continue;
-        particleCount++; this.paintParticle(particle, surface.scale * surface.ratio);
+        particleCount++; this.paintParticle(particle, surface.scale * surface.ratio, detail);
       }
     }
-    if(camera.left!==undefined){
+    if(surface.portrait){
       if(this.ink){
-        if(drawings.some(d=>d.effectId==="rainbow-v1")){this.ink.setTransform(1,0,0,1,0,0);this.ink.clearRect(0,0,surface.width,surface.pixelsHigh);this.ink.setTransform(pixelScale,0,0,pixelScale,surface.padding*pixelScale,-surface.top*pixelScale);for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);}
+        if(drawings.some(d=>d.effectId==="rainbow-v1")){this.ink.setTransform(1,0,0,1,0,0);this.ink.clearRect(0,0,surface.width,surface.pixelsHigh);this.ink.setTransform(pixelScale,0,0,pixelScale,surface.translateX,surface.translateY);for(const {drawing,prepared} of preparedAll)this.paintInk(this.ink,drawing,prepared,seconds);}
         this.aura.save();this.aura.setTransform(1,0,0,1,0,0);this.aura.drawImage(this.ink.canvas,0,0);this.aura.restore();}
       else for(const {drawing,prepared} of preparedAll)this.paintInk(this.aura,drawing,prepared,seconds);
     }
@@ -233,7 +277,7 @@ export class EnchantmentPainter {
     context.globalAlpha=1;
   }
 
-  private paintAura(drawing: BeBravePublicDrawing, prepared: PreparedDrawing, seconds: number, pixelScale: number, crowded: boolean) {
+  private paintAura(drawing: BeBravePublicDrawing, prepared: PreparedDrawing, seconds: number, pixelScale: number, crowded: boolean, detail: EffectDetail) {
     const context = this.aura;
     const effect = drawing.rarity === "legendary" ? legendaryEffect(drawing.effectId) : undefined;
     const blood = effect === "blood-v1", rainbow = effect === "rainbow-v1";
@@ -249,11 +293,12 @@ export class EnchantmentPainter {
       context.shadowBlur = crowded ? 0 : 12 * pixelScale;
       context.stroke(prepared.path);
     }
-    if (!crowded) prepared.strokes.forEach((samples, strokeIndex) => {
+    if (!crowded && detail.ribbons) prepared.strokes.forEach((samples, strokeIndex) => {
       if (samples.length < 3) return;
       for (const side of [-1, 1]) {
         context.beginPath();
         samples.forEach((point, index) => {
+          if (index % detail.sampleStride !== 0 && index !== samples.length - 1) return;
           const wave = Math.sin(point.distance * .034 - seconds * 3 + phase + strokeIndex);
           const curl = Math.sin(point.distance * .017 + seconds * 2.2 + phase);
           const offset = side * (17 + 7 * wave + 5 * curl);
@@ -270,10 +315,10 @@ export class EnchantmentPainter {
     context.globalAlpha = 1; context.shadowBlur = 0;
   }
 
-  private paintParticle(particle: EnchantmentParticle, pixelScale: number) {
+  private paintParticle(particle: EnchantmentParticle, pixelScale: number, detail: EffectDetail) {
     const context = this.motes, r = particle.radius;
     context.save(); context.globalAlpha = particle.opacity;
-    context.shadowColor = particle.color; context.shadowBlur = 12 * pixelScale;
+    context.shadowColor = particle.color; context.shadowBlur = detail.particleGlow ? 12 * pixelScale : 0;
     if (particle.kind === "trail" || particle.kind === "wisp" || particle.kind === "blood") {
       const end=particle.tail[2],middle=particle.tail[0];
       const dx=particle.x-end[0],dy=particle.y-end[1],length=Math.hypot(dx,dy)||1;

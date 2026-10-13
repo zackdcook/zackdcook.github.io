@@ -17,6 +17,8 @@
 .destination{position:relative;display:flex;align-items:center;gap:14px;min-height:48px;padding:12px 16px;border:1px solid transparent;border-radius:3px;background:var(--discovery-dialog-selected);color:var(--discovery-dialog-choice);font:650 14px/1.5 ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;text-decoration:none;transition:border-color .15s,background-color .15s}
 .destination::before{content:"";width:8px;height:10px;flex-shrink:0;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);animation:choice-caret 1.1s steps(2,jump-none) infinite}
 .destination:hover{border-color:var(--discovery-dialog-edge)}
+.reveal a.destination{color:var(--discovery-dialog-choice);text-decoration:none}
+.searchPanel{margin-top:0}
 .destination:focus-visible{outline:2px solid var(--discovery-dialog-choice);outline-offset:3px}
 @keyframes dialogue-open{from{opacity:0;translate:0 10px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
 @keyframes dialogue-line{from{opacity:.25;translate:0 4px}to{opacity:1;translate:0 0}}

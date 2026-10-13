@@ -1,10 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { EnchantmentPainter,enchantmentAnchors,enchantmentParticleAt,enchantmentSurface,sampleEnchantmentStroke } from "../lib/bebrave/enchantment-painter";
+import { EnchantmentPainter,carvingParticleSymbol,enchantmentAnchors,enchantmentParticleAt,enchantmentSurface,sampleEnchantmentStroke } from "../lib/bebrave/enchantment-painter";
 import { createEnchantmentLoop } from "../lib/bebrave/enchantment-loop";
 import { packDrawing,unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { PARTICLE_SYMBOLS,SYMBOL_PATHS } from "../lib/bebrave/symbol-paths";
 import type { BeBravePublicDrawing } from "../lib/bebrave-types";
+import { AdaptiveEffectQuality } from "../lib/bebrave/effect-quality";
 
 const drawing:BeBravePublicDrawing={id:"saved",publicSequence:4,rarity:"epic",color:"#00F5FF",effectSeed:9134,
   strokes:[{strokeId:"one",strokeOrder:0,points:[[80,1000],[300,1140],[560,1000]]},{strokeId:"two",strokeOrder:1,points:[[110,1120],[540,1080]]}]};
@@ -21,7 +22,7 @@ function surface() {
     setTransform:(...args:number[])=>operations.push(["transform",...args]),clearRect:()=>operations.push(["clear"]),
     beginPath:()=>operations.push(["begin"]),moveTo:(...args:number[])=>operations.push(["move",...args]),lineTo:(...args:number[])=>operations.push(["line",...args]),
     stroke(path?:TestPath){operations.push(["stroke",this.strokeStyle,this.globalAlpha,this.lineWidth,path?.points.map(point=>[...point])]);},
-    save:()=>{},restore:()=>{},scale:(...args:number[])=>operations.push(["scale",...args]),drawImage:()=>operations.push(["copy"]),createLinearGradient:()=>({addColorStop:()=>{}}),translate:(...args:number[])=>operations.push(["translate",...args]),rotate:(...args:number[])=>operations.push(["rotate",...args]),
+    save:()=>{},restore:()=>{},scale:(...args:number[])=>operations.push(["scale",...args]),drawImage(){operations.push(["copy",this.globalAlpha]);},createLinearGradient:()=>({addColorStop:()=>{}}),translate:(...args:number[])=>operations.push(["translate",...args]),rotate:(...args:number[])=>operations.push(["rotate",...args]),
     bezierCurveTo:(...args:number[])=>operations.push(["curve",...args]),ellipse:(...args:number[])=>operations.push(["ellipse",...args]),arc:(...args:number[])=>operations.push(["arc",...args]),closePath:()=>{},fill(){operations.push(["fill",this.fillStyle,this.globalAlpha]);},
   };
   return {context:context as unknown as CanvasRenderingContext2D,operations,canvas:context.canvas};
@@ -116,7 +117,11 @@ test("empty camera sleeps, then a new live stroke or camera movement restarts em
 test("symbols are deterministic text outlines; the personal red effect always emits U+273E",()=>{
   const seen=new Set<number>(),anchor={x:360,y:1200,r:3.6,delay:.4};
   for(let i=0;i<300;i++){
-    const p=enchantmentParticleAt(drawing,anchor,i,i*.73);seen.add(p.symbol);
+    const rolled={...drawing,effectSeed:i};
+    const p=enchantmentParticleAt(rolled,anchor,i,i*.73);seen.add(p.symbol);
+    assert.equal(enchantmentParticleAt(rolled,anchor,0,1000).symbol,p.symbol);
+    assert.equal(enchantmentParticleAt(unpackDrawing(packDrawing(rolled)),anchor,3,28).symbol,p.symbol);
+    assert.equal(carvingParticleSymbol(rolled),p.symbol);
     assert.ok(SYMBOL_PATHS[p.symbol]);assert.ok(PARTICLE_SYMBOLS.includes(p.symbol as typeof PARTICLE_SYMBOLS[number]));
     assert.equal(enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"blood-v1"},anchor,i,i*.73).symbol,0x273e);
   }
@@ -134,12 +139,53 @@ test("camera buffers retain their dimensions throughout scrolling and release th
 test("static glow and engraving are rasterized once; particle tails are filled curved ribbons",()=>{
   const a=surface(),m=surface(),base=surface(),ink=surface();let buffers=0;
   const painter=new EnchantmentPainter(a.context,m.context,factory,()=>buffers++===0?base.context:ink.context);
-  const fixed={...camera,left:40,screenTop:0};
+  const fixed={...camera,left:40,offsetTop:0,viewportWidth:390,viewportHeight:844};
   painter.paint([drawing],fixed,14000,1);const shaded=base.operations.length,engraved=ink.operations.length;
   painter.paint([drawing],fixed,14000,1.2);
   assert.equal(base.operations.length,shaded);assert.equal(ink.operations.length,engraved);
   assert.ok(a.operations.some(o=>o[0]==="copy"));
   assert.ok(m.operations.some(o=>o[0]==="curve"));
   assert.equal(m.operations.some(o=>o[0]==="ellipse"||o[0]==="arc"),false);
-  assert.equal(a.canvas.style.position,"fixed");
+  assert.equal(a.canvas.style.position,"absolute");
+});
+
+
+test("standing pixels remain bounded and allocation dimensions are identical at every zoom",()=>{
+  const base={...camera,left:80,offsetTop:12,viewportWidth:390,viewportHeight:844};
+  const first=enchantmentSurface(base,14_400_000);
+  for(const zoom of [.5,.8,1,1.2,1.5]){
+    const scale=base.scale*zoom,next=enchantmentSurface({...base,scale,height:844/scale,top:13_900_000},14_400_000);
+    assert.equal(next.width,first.width);assert.equal(next.pixelsHigh,first.pixelsHigh);
+    assert.ok(next.width*next.pixelsHigh<904_000);
+    assert.ok(Math.abs(next.cssTop-next.top*scale-base.offsetTop)<.001);
+  }
+});
+
+test("cached carving and bark share document coordinates, with immediate compositor zoom",()=>{
+  const a=surface(),m=surface(),painter=new EnchantmentPainter(a.context,m.context,factory);
+  const base={...camera,left:80,offsetTop:12,viewportWidth:390,viewportHeight:844};
+  painter.paint([drawing],base,14000,1);
+  const top=a.canvas.style.top;
+  painter.followCamera({...base,top:base.top+40});
+  assert.equal(a.canvas.style.top,top,"native scrolling moves the layer without repaint or style repositioning");
+  assert.equal(a.canvas.style.transform,"none");
+  const zoomed={...base,scale:base.scale*1.5,left:21};
+  painter.followCamera(zoomed);assert.ok(Math.abs(Number(a.canvas.style.transform.slice(7).split(",")[0])-1.5)<1e-12);
+  assert.equal(a.canvas.style.transform,m.canvas.style.transform);
+  painter.paint([drawing],zoomed,14000,1.1);assert.equal(a.canvas.style.transform,"none");
+});
+
+test("lowest quality still animates Superior radiance and Epic glyphs within a hard particle limit",()=>{
+  const a=surface(),m=surface(),base=surface(),ink=surface();let buffers=0;
+  const painter=new EnchantmentPainter(a.context,m.context,factory,()=>buffers++===0?base.context:ink.context);
+  const portrait={...camera,left:40,viewportWidth:390,viewportHeight:844};
+  const low=new AdaptiveEffectQuality(2,2).detail(0);
+  const crowded=Array.from({length:50},(_,n)=>({...drawing,id:`epic-${n}`,effectSeed:n}));
+  const frame=painter.paint(crowded,portrait,14000,1,low);
+  assert.ok(frame.particles>0&&frame.particles<=low.particles);
+  assert.ok(m.operations.some(o=>o[0]==="fill"));
+  const superior={...drawing,rarity:"superior" as const};
+  a.operations.length=0;painter.paint([superior],portrait,14000,1,low);const alpha=a.operations.find(o=>o[0]==="copy")?.[1];a.operations.length=0;
+  const result=painter.paint([superior],portrait,14000,1.6,low);
+  assert.notEqual(a.operations.find(o=>o[0]==="copy")?.[1],alpha);assert.equal(result.auras,1);assert.equal(result.particles,0);
 });

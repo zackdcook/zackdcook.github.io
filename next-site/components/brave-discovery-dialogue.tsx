@@ -10,4 +10,4 @@ export function BraveDiscoveryDialogue({ destinationRef }: { destinationRef?: Re
   return <div className={styles.reveal} data-brave-dialogue><p role="status">{invitation}</p><Link ref={destinationRef} href="/bebrave" className={styles.destination}>{follow}</Link></div>;
 }
 
-export function BraveSearchLink(){return <Link href="/bebrave" className={styles.destination}>Look for the cat.</Link>;}
+export function BraveSearchLink(){return <div className={`${styles.reveal} ${styles.searchPanel}`} data-brave-dialogue><Link href="/bebrave" className={styles.destination}>Look for the cat.</Link></div>;}
