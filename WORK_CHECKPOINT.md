@@ -1,10 +1,14 @@
 # Website reimagining checkpoint
 
-## Be Brave final cleanup v7 — implementation and tests ready, 2026-10-13
+## Be Brave final cleanup v7 — READY test preview, 2026-10-13
 
-Continues latest v6 `92db7be` in an isolated worktree. Implements the ten requested cleanup items: keypad removal, scattered knife stars, compact six-color workshop, cap removal, Mourn the fallen/Leave, same Uncommon/Superior pigments without Uncommon glow, fallen pinch zoom, feather plus dagger personal effect, document-wide Safari selection lock. Test-only whitelist/catalog migration applied. All154 tests, typecheck, assets/themes, optimized build and SQL rollback checks pass;49 archive and62 code-row digests are unchanged. Deployed visual acceptance and final source synchronization follow in `next-site/docs/reimagining/BE_BRAVE_FINAL_CLEANUP_2026-10-13.md`.
+Continues latest v6 `92db7be` in an isolated worktree. Implements the ten requested cleanup items: keypad removal, scattered knife stars, compact six-color workshop, cap removal, Mourn the fallen/Leave, same Uncommon/Superior pigments without Uncommon glow, fallen pinch zoom, feather plus dagger personal effect, document-wide Safari selection lock. Test-only whitelist/catalog migration applied. All 154 tests, typecheck, assets/themes, optimized build and SQL rollback checks pass; 49 archive and 62 code-row digests are unchanged, including after live browser QA.
 
-Automatic approval review blocked Codespace workspace trust; do not bypass it with indirect execution. Supported repository/preview APIs are the safer publication option. No production cutover/main merge is authorized.
+Zack explicitly authorized the existing repository's workspace trust after the earlier automatic-review block. Exact application `7fd7677` and documentation descendants were fast-forwarded normally to `experiment/be-brave-enchantments-2026-10-12`; READY Preview `dpl_EkoJxUTA5552LsDM88gxZq8x9wep` builds `2e3c7791c3243c8d6adc09a803d6468afc27869b`. Vercel's existing user scope worked. Stable test alias `zack-cook-git-experiment-be-brave-encha-6d0cb7-dove-mack0o-3684.vercel.app` now points to it. Original Codespace checkout remains clean on `spring-clean-2026-10`; main `75de96b` / production `dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ` are unchanged.
+
+Actual 390 × 844 and 320 × 568 workshops have six colors/all 18 symbols/actions visible with zero body/document overflow. Personal Crimson shows Feather & dagger. Legendary knife stars are independently scattered. Fallen tree cap removal and native horizontal panning pass; live Mourn/Leave and typed native code-entry flow pass. Empty timed attempt finished without a mark, and drawing selection guard activated/cleaned up correctly. Browser-local timeline was restored. Report and screenshot: `next-site/docs/reimagining/BE_BRAVE_FINAL_CLEANUP_2026-10-13.md`.
+
+Current next action: normal-push this documentation-only checkpoint, stop the existing cautious-trout Codespace and immediately close its editor, then pause for Zack's feedback. No new app build is needed for docs. Physical iPhone selection and two-finger pinch remain actual-device checks; no production cutover/main merge is authorized. This current entry supersedes older pending publication steps below.
 
 ## Be Brave adaptive performance v5 — READY test revision, 2026-10-13
 
