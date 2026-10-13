@@ -22,4 +22,13 @@ Test project `qkkgcoejkqvthbjcldcw` still has 49 archives, full-row digest `3212
 
 ## Publication and browser review
 
-Pending the exact v7 test build. Automatic approval review rejected enabling VS Code workspace trust in the existing Codespace, because the recovered authorization does not specifically cover that change. The dialog is left unaccepted. Use supported repository/preview APIs where sufficient; do not run indirect terminal execution to bypass the rejection. The existing test audience/security/configuration must remain intact. Production remains separately protected.
+Pending the exact v7 test build. Automatic approval review rejected enabling VS Code workspace trust in the existing Codespace, because the recovered authorization does not specifically cover that change. The dialog was cancelled without enabling trust. Use supported repository/preview APIs where sufficient; do not run indirect terminal execution to bypass the rejection. The existing test audience/security/configuration must remain intact. Production remains separately protected.
+
+
+## Final access state
+
+Source application is committed locally as `7fd7677118523946f67260e12aadbd9f1f83fe06`; the continuation checkpoint records the final documentation descendant. The supported GitHub tree API also returns `403 Resource not accessible by integration`. The supported Vercel source-preview API returns a scope-specific `403 forbidden`. Neither denial was retried unchanged. Remote experimental source is still v6 `92db7be`; the new live preview and its visual/touch acceptance are pending. Do not describe the existing preview as v7.
+
+The allowed Vercel CLI fallback is being checked using only its own standard authentication; no connector or browser credentials are extracted. A local test server was started only in the isolated process sandbox, without secret keys or database writes; its loopback namespace is not shared with other tool commands. A disposable Playwright browser installation failed, so no local rendered acceptance is claimed. Codespaces workspace trust is the specific remaining authorization needed for the established native Git publishing route. Automatic review rejected it for enabling code execution without that explicit permission.
+
+The saved source, exact patch, incremental Git bundle and check results will be retained in a recovery package. No distribution CSV or secrets are included. Production remains unchanged. On permission, restore this bundle into the established isolated mirror, verify the current branch before normal fast-forward push, update only the test preview, review actual mobile layout/fallen zoom/code entry and Safari selection, then stop the existing Codespace. Do not force-push, promote test storage into production, or trust any broader folder.
