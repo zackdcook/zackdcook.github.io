@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { Artwork } from "./artwork";
+import { BRAND_MARK_PATH } from "@/lib/brand-mark";
 import { usePreferences } from "./site-preferences";
 import { defaultPreferences } from "@/lib/preferences";
 import { livingTimeline } from "@/lib/local-timeline";
@@ -40,7 +41,7 @@ export function HomeControls({ testMode = false, busy = false, drawing = false, 
   return <>
     <nav className="bebrave-game-nav" aria-label="Game navigation">
     <a className={`${headerStyles.wordmark} bebrave-home-button`} href="/" aria-label="Zack Cook, home">
-      <Artwork slot="brand-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false"><path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="currentColor" /></svg></Artwork><span><span>Zack</span> <span>Cook</span></span>
+      <Artwork slot="brand-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false"><path d={BRAND_MARK_PATH} fill="currentColor" /></svg></Artwork><span><span>Zack</span> <span>Cook</span></span>
     </a>
     {testMode && !drawing && <button className="button bebrave-test-reset-button" aria-label="Reset my carve limit" title="Reset my carve limit" disabled={busy} onClick={onReset}><span className="bebrave-reset-full">Reset my carve limit</span><span className="bebrave-reset-short">Reset limit</span></button>}
     {!drawing && <button className="button bebrave-preferences" aria-label="Settings" aria-haspopup="dialog" disabled={busy} onClick={event => { opener.current = event.currentTarget; setSettings(true); }}>

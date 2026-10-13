@@ -204,5 +204,11 @@
   "icon-spotify": {
     "kind": "native",
     "tint": "ink"
+  },
+  "about-moss": {
+    "kind": "image",
+    "src": "/images/about-moss-real-v2.webp",
+    "fit": "cover",
+    "material": "none"
   }
 }

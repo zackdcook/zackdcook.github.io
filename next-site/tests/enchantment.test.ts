@@ -7,6 +7,7 @@ import { packDrawing, unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { admireAtmosphere } from "../lib/bebrave/admire-atmosphere";
 import { canonicalRedirects, canonicalPath } from "../lib/canonical-routes";
 import { pageMetadata, shareRecords } from "../lib/page-metadata";
+import { legendaryEffect,legendaryColor } from "../lib/bebrave/effects";
 
 const drawing={id:"published-epic",publicSequence:12,rarity:"epic" as const,color:"#FF2BD6",effectSeed:8123,
   strokes:[{strokeId:"first",strokeOrder:0,points:[[100,1400],[500,1600],[100,1800]] as Array<[number,number]>},
@@ -31,17 +32,45 @@ test("published Epic reconstructs identical colored emitters after storage round
   assert.deepEqual(enchantmentParticleStyle(3.2,2.8),enchantmentParticleStyle(3.2,2.8));
 });
 
-test("Admire changes across the whole history, fades scenery, and reaches black at the oldest mark",()=>{
+test("Admire starts its long night transition only after the scenery has left the camera",()=>{
   const total=24_000,viewport=844;
   assert.equal(admireAtmosphere(0,total,viewport).horizonOpacity,1);
-  assert.equal(admireAtmosphere(total*.46,total,viewport).color,"#261942");
+  assert.equal(admireAtmosphere(viewport*4,total,viewport).progress,0);
+  assert.equal(admireAtmosphere(viewport*4,total,viewport).color,"#152f58");
+  for(const length of [3000,total,100000]){
+    const exit=Math.min(viewport*6,length*.45);
+    const after=admireAtmosphere(exit+1,length,viewport);
+    assert.equal(after.horizonOpacity,0);assert.equal(after.midgroundOpacity,0);
+    assert.ok(after.horizonY>=viewport*1.08);
+    assert.equal(after.progress,0);
+  }
   assert.equal(admireAtmosphere(total,total,viewport).color,"#020308");
   const middle=admireAtmosphere(total/2,total,viewport);
   assert.equal(middle.midgroundOpacity,0);assert.equal(middle.horizonOpacity,0);
   assert.ok(middle.horizonY>viewport,"parallax does not stop at seven vh");
-  for(let rise=0;rise<total;rise+=500)assert.ok(admireAtmosphere(rise,total,viewport).progress<admireAtmosphere(rise+1,total,viewport).progress);
+  for(let rise=0;rise<total;rise+=500)assert.ok(admireAtmosphere(rise,total,viewport).progress<=admireAtmosphere(rise+1,total,viewport).progress);
   assert.equal(admireAtmosphere(total*2,total,viewport).color,"#020308");
   assert.ok(Number.isFinite(admireAtmosphere(0,0,0).progress));
+});
+
+test("each Legendary identity survives archive storage and reconstructs its distinct particle design",()=>{
+  for(const effectId of ["hearts-v1","rainbow-v1","blood-v1"]){
+    const saved={...drawing,rarity:"legendary" as const,effectId};
+    const render=(d:typeof saved)=>renderToStaticMarkup(createElement(BeBraveCarving,{strokes:d.strokes,color:d.color,rarity:d.rarity,seed:d.effectSeed,effectId:d.effectId}));
+    assert.equal(render(saved),render(unpackDrawing(packDrawing(saved)) as typeof saved));
+    assert.ok(render(saved).includes(`data-effect="${effectId}"`));
+    assert.ok(render(saved).includes('class="bebrave-energy-particle"'));
+    if(effectId==="hearts-v1")assert.ok(render(saved).includes('bebrave-heart'));
+    if(effectId==="rainbow-v1")assert.ok(render(saved).includes('linearGradient'));
+    if(effectId==="blood-v1"){
+      assert.ok(render(saved).includes('bebrave-blood-drop'));
+      assert.ok(render(saved).includes('stroke="#C51D36"'));
+      assert.ok(Number.parseFloat(String(enchantmentParticleStyle(3.5,2,effectId)["--particle-y" as keyof ReturnType<typeof enchantmentParticleStyle>]))>0);
+    }
+  }
+  assert.equal(legendaryEffect("future-unknown-id"),"will-o-wisp-v1");
+  assert.equal(legendaryColor("blood-v1","#00F5FF"),"#C51D36");
+  assert.equal(legendaryColor("hearts-v1","#00F5FF"),"#00F5FF");
 });
 
 test("legacy and hyphenated URLs redirect directly to the canonical content URLs",()=>{

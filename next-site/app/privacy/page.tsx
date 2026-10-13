@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function Privacy() {
   return <div className="shell page-wrap prose-page">
-    <div className="page-intro"><h1>A note<br/><em>about privacy.</em></h1></div>
+    <div className="page-intro"><h1>A note<br/>about <em>privacy.</em></h1></div>
     <div className="prose">
       <p>Book alerts store your email, signup consent and time, signup placement, and coarse referral/country information to send exactly one announcement when the first edition of my debut novel is released. Your email is not sent to analytics or linked to your browsing history. Signup records are kept until that announcement is sent or you request removal.</p>
       <p>Site interactions and games may publish anonymous contributions, which remain until removed. An essential, random browser cookie, short-lived security hashes, and rate limits protect these interactions. Raw IP addresses are not stored in the site database. Appearance, game progress, and signup/analytics choices are remembered in your browser; your email is not stored there.</p>

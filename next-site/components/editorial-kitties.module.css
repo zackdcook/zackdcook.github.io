@@ -36,4 +36,4 @@
 .mossyReveal:focus-visible{outline:2px solid var(--discovery-dialog-choice);outline-offset:5px}
 .mossyReveal:hover .destination{border-color:var(--discovery-dialog-edge)}
 .mossyReveal>p{opacity:.72;animation:none}
-.mossGrowth{position:absolute;inset:-7px;z-index:3;width:calc(100% + 14px);height:calc(100% + 14px);overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 1px #10241dc4)}
+.mossGrowth{position:absolute;inset:-7px;z-index:3;width:calc(100% + 14px);height:calc(100% + 14px);overflow:visible;pointer-events:none;background-image:var(--asset-about-moss);background-size:100% 100%;background-position:center;background-repeat:no-repeat;filter:drop-shadow(0 3px 2px #0b1b15b0)}

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { approachLight, followLight, materialLight, panelLight, materialPose, glassReflection, materialGeometryEvent } from "@/lib/material-light";
-import { enrollTiltOnTap, orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
+import { consumeEarlyTilt, enrollTiltOnTap, orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 import { publicMoteY } from "@/lib/public-atmosphere";
 
 const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.icon-button,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
@@ -102,7 +102,7 @@ export function PointerLight() {
       if (reduced() || document.hidden) { reset(); return; }
       const target = hasLight && !released ? 1 : 0;
       const elapsed = previousTime ? Math.min(64, now - previousTime) : 0;
-      intensity = approachLight(intensity, target, elapsed, source === "tilt" ? 240 : 1100);
+      intensity = approachLight(intensity, target, elapsed, source === "tilt" ? 100 : 1100);
       if (target) { const point = followLight({x,y}, {x:targetX,y:targetY}, elapsed, source === "tilt" ? 70 : 130); x = point.x; y = point.y; }
       previousTime = now;
       const dialog = document.querySelector<HTMLDialogElement>("dialog[open]");
@@ -147,7 +147,7 @@ export function PointerLight() {
       }
     };
     const screenAngle = () => window.screen.orientation?.angle ?? (window as Window & {orientation?:number}).orientation ?? 0;
-    const orientation = (event: DeviceOrientationEvent) => {
+    const orientation = (event: Pick<DeviceOrientationEvent,"beta"|"gamma">) => {
       if (event.beta === null || event.gamma === null || !Number.isFinite(event.beta) || !Number.isFinite(event.gamma) || document.hidden || reduced()) return;
       const reading = {beta:event.beta,gamma:event.gamma}, angle = screenAngle();
       if (angle !== orientationAngle) { reference = null; orientationAngle = angle; }
@@ -156,7 +156,7 @@ export function PointerLight() {
       const point = tiltLight(reading, reference!, angle, innerWidth, innerHeight);
       if (!point) return;
       if (first) {
-        source = "tilt"; x = point.x; y = point.y; root.dataset.tiltStatus = "active";
+        source = "tilt"; x = point.x; y = point.y; intensity=1; dirty=true; root.dataset.tiltStatus = "active";
         window.dispatchEvent(new Event(tiltStatusEvent));
       }
       targetX = point.x; targetY = point.y;
@@ -189,6 +189,8 @@ export function PointerLight() {
     changes.observe(document.body, {subtree:true,childList:true,attributes:true,attributeFilter:["open"]});
     settings.observe(root, {attributes:true,attributeFilter:["data-effects","data-theme","data-timeline","data-tilt"]});
     syncTilt(); coarse.addEventListener("change", syncTilt);
+    const earlyReading=consumeEarlyTilt();
+    if(earlyReading&&listening)orientation(earlyReading);
     const stopEnrollment = enrollTiltOnTap(window, () => coarse.matches && root.dataset.tilt !== "false" && !reduced() && Boolean(orientationAPI()?.requestPermission) && root.dataset.tiltStatus !== "active");
     window.addEventListener(recenterTiltEvent, recenter);
     window.addEventListener("pointermove", move, {passive:true});

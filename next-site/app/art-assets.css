@@ -54,6 +54,7 @@
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
   --asset-icon-goodreads: none;
   --asset-icon-spotify: none;
+  --asset-about-moss: url("/images/about-moss-real-v2.webp");
 }
 
 html[data-theme="dark"] {
@@ -111,6 +112,7 @@ html[data-theme="dark"] {
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
   --asset-icon-goodreads: none;
   --asset-icon-spotify: none;
+  --asset-about-moss: url("/images/about-moss-real-v2.webp");
 }
 
 html[data-timeline="felled"] {
@@ -168,6 +170,7 @@ html[data-timeline="felled"] {
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
   --asset-icon-goodreads: none;
   --asset-icon-spotify: none;
+  --asset-about-moss: url("/images/about-moss-real-v2.webp");
 }
 
 html[data-timeline="felled"][data-theme="dark"] {
@@ -225,4 +228,5 @@ html[data-timeline="felled"][data-theme="dark"] {
   --asset-tool-cache-open: url("/images/be-brave-ink/cache-open.webp");
   --asset-icon-goodreads: none;
   --asset-icon-spotify: none;
+  --asset-about-moss: url("/images/about-moss-real-v2.webp");
 }

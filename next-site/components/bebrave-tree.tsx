@@ -6,7 +6,8 @@ import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { carvingBounds } from "@/lib/bebrave/carving-inspection";
 import { SectionCache } from "@/lib/bebrave/section-cache";
 import { unpackDrawing } from "@/lib/bebrave/completed-strokes";
-import { BeBraveCarving,CarvingSpark,carvingToPath,pointsToPath,sparkGeometry,enchantmentParticleStyle } from "@/components/bebrave-stroke";
+import { BeBraveCarving,CarvingSpark,carvingToPath,pointsToPath,sparkGeometry,particleMark,enchantmentParticleStyle } from "@/components/bebrave-stroke";
+import { legendaryEffect } from "@/lib/bebrave/effects";
 import { admireAtmosphere } from "@/lib/bebrave/admire-atmosphere";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { BEBRAVE_SECTION_HEIGHT,BEBRAVE_TREE_WIDTH,type BeBravePublicDrawing,type BeBravePublicStroke,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
@@ -19,7 +20,7 @@ const emptyDraftStrokes:DraftStroke[]=[];
 export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraftStrokes,cutoff,onFinished,homeControls,admireActions,sectionSource}:{state:BeBraveTreeState;mode:Mode;session?:BeBraveSessionView|null;serverNow?:string;draftStrokes?:DraftStroke[];cutoff?:number;onFinished?:(payload:any,strokes:DraftStroke[])=>void;homeControls?:ReactNode;admireActions?:ReactNode;sectionSource?:(section:number,signal:AbortSignal)=>Promise<BeBravePublicDrawing[]>}) {
   const scene=useRef<HTMLDivElement>(null),world=useRef<HTMLDivElement>(null),horizontal=useRef<HTMLDivElement>(null);
   const activeEdge=useRef<SVGPathElement>(null),activeCut=useRef<SVGPathElement>(null),activeRim=useRef<SVGPathElement>(null),activeInlay=useRef<SVGPathElement>(null),activeAnchors=useRef<SVGGElement>(null),
-    activeLine=useRef<SVGPathElement>(null),activeHalo=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
+    activeLine=useRef<SVGPathElement>(null),activeHalo=useRef<SVGPathElement>(null),activeGlow=useRef<SVGPathElement>(null),activeFlow=useRef<SVGPathElement>(null),activeShimmer=useRef<SVGPathElement>(null),activeGleam=useRef<SVGGElement>(null);
   const [scale,setScale]=useState(1),[range,setRange]=useState<[number,number]>([Math.max(0,Math.floor((state.height-1800)/BEBRAVE_SECTION_HEIGHT)),Math.floor(state.height/BEBRAVE_SECTION_HEIGHT)]);
   const rangeRef=useRef(range),stateRef=useRef(state);stateRef.current=state;
   const [drawings,setDrawings]=useState<BeBravePublicDrawing[]>([]),[saveError,setSaveError]=useState("");
@@ -71,7 +72,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
       root.dataset.crowdedEffects=String(visible.size>12);
       const fresh=new Set([...visible].sort((a,b)=>Number(b.dataset.sequence)-Number(a.dataset.sequence)).slice(0,visible.size>12?2:8));
       for(const target of visible){
-        const animated=target.querySelector(".bebrave-epic,.bebrave-superior")||fresh.has(target);
+        const animated=target.querySelector('.bebrave-epic,.bebrave-superior,.bebrave-legendary[data-effect]:not([data-effect="will-o-wisp-v1"])')||fresh.has(target);
         target.style.setProperty("--effect-play",document.visibilityState==="visible"&&animated?"running":"paused");
       }
     };
@@ -177,7 +178,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
   const visual=useMemo(()=>({rarity:session?.chosenRarity||"common",color:session?.chosenColor||"#3B2418",seed:session?.effectSeed||0}),[session]);
   function worldPoint(clientX:number,clientY:number):[number,number]|null{const rect=world.current?.getBoundingClientRect();if(!rect||mode!=="draw"||session?.zoneTop==null||session.zoneBottom==null)return null;const x=(clientX-rect.left)/scaleRef.current,y=(clientY-rect.top)/scaleRef.current;if(x<0||x>BEBRAVE_TREE_WIDTH||y<session.zoneTop||y>session.zoneBottom)return null;return [Math.round(x*10)/10,Math.round(y*10)/10];}
   function inputOpen(){return drawingInputOpen(session?.drawingDeadline,Date.now(),serverOffset.current,finishing.current);}
-  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=[settledPath.current,pointsToPath(a.points)].filter(Boolean).join(" ");for(const ref of [activeEdge,activeCut,activeRim,activeInlay,activeLine,activeHalo,activeGlow,activeShimmer])ref.current?.setAttribute("d",d);
+  function paint(){paintFrame.current=0;const a=active.current;if(!a)return;const d=[settledPath.current,pointsToPath(a.points)].filter(Boolean).join(" ");for(const ref of [activeEdge,activeCut,activeRim,activeInlay,activeLine,activeHalo,activeGlow,activeFlow,activeShimmer])ref.current?.setAttribute("d",d);
     if(activeAnchors.current){
       const anchors=sparklePoints(a.points,visual.seed,a.strokeOrder);
       for(const [i,slot] of [...activeAnchors.current.children].entries()){
@@ -185,26 +186,28 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
         if(!p)continue;
         slot.setAttribute("transform",`translate(${p.x} ${p.y})`);
         const shape=sparkGeometry(p.r,visual.rarity==="legendary");
+        const special=visual.rarity==="legendary"&&legendaryEffect(session?.chosenEffect)!=="will-o-wisp-v1";
+        const mark=special?particleMark(p.r,session?.chosenEffect??undefined):visual.rarity==="legendary"?shape.star:particleMark(p.r);
         const star=slot.querySelector<SVGPathElement>(".bebrave-sparkle-star");
-        if(star){star.setAttribute("d",shape.star);star.style.animationDelay=`-${p.delay}s`;}
+        if(star){star.setAttribute("d",mark);star.style.animationDelay=`-${p.delay}s`;}
         const glint=slot.querySelector<SVGPathElement>(".bebrave-energy-glint");
-        if(glint){glint.setAttribute("d",shape.star);glint.style.animationDelay=`-${p.delay}s`;}
+        if(glint){glint.setAttribute("d",session?.chosenEffect==="hearts-v1"?mark:particleMark(p.r));glint.style.animationDelay=`-${p.delay}s`;}
         slot.querySelector(".bebrave-sparkle-facets")?.setAttribute("d",shape.facets);
-        slot.querySelector(".bebrave-sparkle-core")?.setAttribute("r",String(shape.core*(visual.rarity==="legendary"?1:.72)));
-        slot.querySelector(".bebrave-energy-mote")?.setAttribute("r",String(p.r*1.65));
+        slot.querySelector(".bebrave-sparkle-core")?.setAttribute("r",String(visual.rarity==="legendary"&&!special?shape.core:Math.max(2.4,p.r*.85)));
+        slot.querySelector(".bebrave-energy-mote")?.setAttribute("r",String(p.r*2.8));
         const orbit=slot.querySelector<SVGCircleElement>(".bebrave-wisp-orbit");
         if(orbit){orbit.setAttribute("r",String(shape.orbit));orbit.style.animationDelay=`-${p.delay}s`;}
         const particle=slot.querySelector<SVGGElement>(".bebrave-energy-particle");
         if(particle){
-          const style=enchantmentParticleStyle(p.r,p.delay) as Record<string,string>;
-          for(const key of ["--particle-x","--particle-y","--particle-curl","--particle-duration","--trail-opacity"])particle.style.setProperty(key,style[key]);
+          const style=enchantmentParticleStyle(p.r,p.delay,session?.chosenEffect??undefined) as Record<string,string>;
+          for(const key of ["--particle-x","--particle-y","--particle-curl","--particle-duration","--trail-opacity","--star-opacity"])particle.style.setProperty(key,style[key]);
           particle.style.animationDelay=style.animationDelay;
         }
         const satellite=slot.querySelector<SVGCircleElement>(".bebrave-energy-satellite");
         if(satellite){
           const style=enchantmentParticleStyle(p.r+1,p.delay+1.8) as Record<string,string>;
           for(const key of ["--particle-x","--particle-y","--particle-curl","--particle-duration"])satellite.style.setProperty(key,style[key]);
-          satellite.style.animationDelay=style.animationDelay;satellite.setAttribute("r",String(p.r*.55));
+          satellite.style.animationDelay=style.animationDelay;satellite.setAttribute("r",String(p.r*.85));
         }
       }
     }
@@ -230,7 +233,7 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
     setLocalStrokes(strokesRef.current);
     active.current=null;
     cancelAnimationFrame(paintFrame.current);paintFrame.current=0;
-    for(const ref of [activeEdge,activeCut,activeRim,activeInlay,activeLine,activeHalo,activeGlow,activeShimmer])ref.current?.setAttribute("d",settledPath.current);
+    for(const ref of [activeEdge,activeCut,activeRim,activeInlay,activeLine,activeHalo,activeGlow,activeFlow,activeShimmer])ref.current?.setAttribute("d",settledPath.current);
     if(activeAnchors.current)for(const slot of activeAnchors.current.children)slot.setAttribute("visibility","hidden");
     activeGleam.current?.setAttribute("visibility","hidden");
   }
@@ -292,9 +295,9 @@ export function BeBraveTree({state,mode,session,serverNow,draftStrokes=emptyDraf
           {mode==="draw"&&session?.zoneTop!=null&&session.zoneBottom!=null&&<div className="bebrave-active-zone" style={{top:session.zoneTop,height:session.zoneBottom-session.zoneTop}} aria-hidden="true"/>}
           <svg className="bebrave-drawings" role="img" viewBox={`0 0 ${BEBRAVE_TREE_WIDTH} ${state.height}`} aria-label="Drawings carved into the shared cypress tree">
             {/* New work is painted first. Older public sessions are appended later, so the first person to mark a spot always stays visually on top. */}
-            {localDrawing&&<g className="bebrave-local-drawing"><BeBraveCarving strokes={localDrawing.strokes} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed} effectId={localDrawing.effectId} active={mode==="draw"} pathRefs={mode==="draw"?{edge:activeEdge,cut:activeCut,rim:activeRim,inlay:activeInlay,line:activeLine,halo:activeHalo,glow:activeGlow,shimmer:activeShimmer}:undefined}>
+            {localDrawing&&<g className="bebrave-local-drawing"><BeBraveCarving strokes={localDrawing.strokes} color={localDrawing.color} rarity={localDrawing.rarity} seed={localDrawing.effectSeed} effectId={localDrawing.effectId} active={mode==="draw"} pathRefs={mode==="draw"?{edge:activeEdge,cut:activeCut,rim:activeRim,inlay:activeInlay,line:activeLine,halo:activeHalo,glow:activeGlow,flow:activeFlow,shimmer:activeShimmer}:undefined}>
               {mode==="draw"&&<>
-              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<g ref={activeAnchors}>{Array.from({length:10},(_,i)=><g key={i} visibility="hidden"><CarvingSpark r={3.5} legendary={visual.rarity==="legendary"}/></g>)}</g>}
+              {(visual.rarity==="epic"||visual.rarity==="legendary")&&<g ref={activeAnchors}>{Array.from({length:10},(_,i)=><g key={i} visibility="hidden"><CarvingSpark r={3.5} legendary={visual.rarity==="legendary"} effectId={session?.chosenEffect??undefined}/></g>)}</g>}
               <g ref={activeGleam} visibility="hidden" className="bebrave-contact"><circle className="bebrave-contact-ring" r="11"/><path className="bebrave-contact-ticks" d="M-17 0h5M12 0h5M0 -17v5M0 12v5"/><circle className="bebrave-contact-core" r="2.2"/></g>
               </>}
             </BeBraveCarving></g>}

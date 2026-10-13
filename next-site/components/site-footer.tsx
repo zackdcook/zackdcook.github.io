@@ -11,7 +11,7 @@ export function SiteFooter() {
           <a className="text-link button-small" href={`mailto:${site.email}`}>
             <MailIcon /> Say hello
           </a>
-          {site.instagram && <a className="text-link button-small" href={site.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /> Insta</a>}
+          {site.instagram && <a className="text-link button-small" href={site.instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramIcon /> Instagram</a>}
           <a className="text-link button-small" href="https://www.goodreads.com/user/show/27092266" target="_blank" rel="noopener noreferrer"><GoodreadsIcon /> Goodreads</a>
           <a className="text-link button-small" href="https://open.spotify.com/user/1268979610" target="_blank" rel="noopener noreferrer"><SpotifyIcon /> Spotify</a>
           {site.linkedin && <a className="text-link button-small" href={site.linkedin} target="_blank" rel="noopener noreferrer"><LinkedInIcon /> LinkedIn</a>}

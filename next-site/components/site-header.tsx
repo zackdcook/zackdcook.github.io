@@ -8,6 +8,7 @@ import { canonicalPath } from "@/lib/canonical-routes";
 import { usePreferences } from "@/components/site-preferences";
 import { PreferencesButton } from "./preferences-button";
 import { Artwork } from "./artwork";
+import { BRAND_MARK_PATH } from "@/lib/brand-mark";
 import { BookMenuItem } from "./book-launch/provider";
 import styles from "./site-header.module.css";
 
@@ -58,7 +59,7 @@ export function SiteHeader() {
     <div className={styles.inner}>
       <Link href="/" scroll={false} onNavigate={goHome} className={styles.wordmark} aria-label="Zack Cook, home" aria-current={current("/")}>
         <Artwork slot="brand-mark"><svg viewBox="0 0 1280 1280" aria-hidden="true" focusable="false">
-          <path d="M395 200 C560 230 800 198 980 150 L1015 190 L205 875 L176 800 L800 294 C620 330 460 305 395 263 Z M220 1035 L180 993 L1034 380 L1018 445 L503 951 C665 910 800 934 938 968 L969 1040 C744 971 480 1014 268 1098 Z" fill="currentColor" />
+          <path d={BRAND_MARK_PATH} fill="currentColor" />
         </svg></Artwork>
         <span><span>Zack</span> <span>Cook</span></span>
       </Link>

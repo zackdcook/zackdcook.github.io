@@ -21,6 +21,7 @@ import { PublicAtmosphere } from "@/components/public-atmosphere";
 import { SiteIcons } from "@/components/site-icons";
 import { OrganicTransition } from "@/components/organic-transition";
 import { preferenceBootstrap } from "@/lib/preferences";
+import { tiltStartupBootstrap } from "@/lib/phone-tilt";
 import { testModeEnabled } from "@/lib/experimental-environment";
 
 const displayFont = localFont({
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s · ${site.title}` },
   description: site.description,
-  icons: { icon: { url: site.icon, type: "image/svg+xml", sizes: "any" }, apple: { url: site.appleIcon, sizes: "180x180", type: "image/png" } },
+  icons: { icon: { url: "/images/brand/tab-mark-v2.svg", type: "image/svg+xml", sizes: "any" }, apple: { url: "/images/brand/apple-gradient-v2.png", sizes: "180x180", type: "image/png" } },
   authors: [{ name: site.name }],
   openGraph: { type: "website", siteName: site.name, title: site.title, description: site.description, images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.title }] },
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.shareImage] },
@@ -43,7 +44,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={displayFont.variable} data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap }} />
+        <script dangerouslySetInnerHTML={{ __html: preferenceBootstrap+tiltStartupBootstrap }} />
         <link rel="alternate" type="application/rss+xml" title="Zack Cook — Words of Folly" href={`${site.url}/words-of-folly/feed.xml`} />
       </head>
       <body>
