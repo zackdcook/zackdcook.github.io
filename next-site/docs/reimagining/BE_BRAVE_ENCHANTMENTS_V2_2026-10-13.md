@@ -55,6 +55,19 @@ GitHub synchronization is **unfinished**: the integration rejects Git-object wri
 
 The resumed cautious-trout Codespace's final stopped state could not be verified through the failed browser service. No local preview server was started. Before resuming native Git work, inspect `/workspaces/zackdcook.github.io/next-site/enchantments-v2.bundle`: the stalled upload may have left this one untracked bundle. Move only that verified bundle outside the original checkout, preserving all other work.
 
+## Continuation checks — 2026-10-13 10:13 UTC
+
+The requested continuation rechecked the existing artifacts without changing application code, deployments, database rows, or production configuration.
+
+- Vercel reports `dpl_5SJpuCJhxuWBaHQpRqBJU3Shzqhx` READY. The stable experimental alias still resolves to this exact deployment and its application snapshot `77e339d`.
+- Remote main is still `75de96bb3ef7a4edf138d07ee313519bb3bb212e`; the latest production deployment remains READY `dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ`. Remote experimental Git remains `b74c0d5`.
+- All three assigned Legendary codes are available, with the expected versioned IDs and stored descriptions. All 50 distribution codes are still unused.
+- The test archive now contains 44 completed carvings. Sequence 44 is a cyan (`#00F5FF`) Superior, archived at `2026-10-13T10:02:52.414954Z`, with 444 points in 12 chunks and a retained effect seed. It was already present when this continuation inspected the database; no carving or test fixture was created by these checks. The previous 43 archived sessions are still present. Every one of the 44 compressed payloads matches its stored SHA-256 checksum. These database checks establish saved geometry and publication, not visual animation or refresh behavior.
+- The existing logs confirm 117 standard and 8 module-mock tests passed for the unchanged application. They were not rerun because no application source changed.
+- Browser documentation recovery again timed out after 300 seconds. No fresh screenshots, live browser assertions, or Codespace state could be obtained; the visual acceptance and shutdown items remain open.
+- The connected GitHub plugin reports no installed app accounts or installations. Repository metadata reports the owner's push permission, but that does not establish the connector's write scope. The earlier Git-object writes returned 403; no denied mutation was retried through another endpoint, and no credential was extracted. Local Git has no configured credential helper.
+- The incremental recovery bundle was verified against its prerequisite `b74c0d5`. It is refreshed after this documentation commit and includes the complete local descendant history. Import and push it normally through the existing authenticated mirror when native browser access returns. Do not reset or overwrite the original Codespace checkout or concurrent remote work.
+
 ## Next steps
 
 1. Review the READY test on the actual iPhone, including animated Superior/Epic and the Enchantments fixture. Check reduced-effects/device-motion settings if motion is intentionally resting.

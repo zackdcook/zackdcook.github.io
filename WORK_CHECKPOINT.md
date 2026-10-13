@@ -1,5 +1,11 @@
 # Website reimagining checkpoint
 
+## Be Brave v2 continuation — access blockers persist, 2026-10-13 10:13 UTC
+
+- Application remains `77e339d`; stable test alias rechecked against READY `dpl_5SJpuCJhxuWBaHQpRqBJU3Shzqhx`. Main `75de96b` and production `dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ` remain unchanged. Remote experimental branch still `b74c0d5`; no application rebuild or release was performed.
+- Fresh read-only test checks: all 50 distribution codes unused and all 3 assignments/descriptions correct; 44 archives now present, including a new cyan Superior sequence 44 with 444 points/12 chunks, published 10:02:52 UTC. Earlier 43 sessions remain present and all 44 compressed payloads match their stored SHA-256. This is data verification, not new visual or refresh certification.
+- Browser recovery timed out again after 300 seconds. No installed GitHub app accounts/installations are reported; prior writes returned 403, local credential helper absent. Do not repeat denied writes or extract credentials. Browser QA, exact Git synchronization, original Codespace checkout inspection, and stopped-state verification remain unfinished. All code/history is preserved in the refreshed incremental recovery bundle. Read the v2 QA document's Continuation checks before resuming; do not redeploy old remote source or treat v1 screenshots as v2 proof.
+
 ## Be Brave enchantment v2 — READY test via source snapshot, 2026-10-13
 
 - Current application `77e339d75dd101534833d99ad588faba75663897`, READY Preview `dpl_5SJpuCJhxuWBaHQpRqBJU3Shzqhx`. Stable experimental alias now resolves to it: https://zack-cook-git-experiment-be-brave-encha-6d0cb7-dove-mack0o-3684.vercel.app/bebrave . Production remains `75de96b` / `dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ`.
