@@ -1,14 +1,17 @@
 // Monochrome outlines: DejaVu Sans (Bitstream Vera license in licenses/DejaVu-symbols.txt).
 // The dagger, feather and three-spark outlines are authored vectors. No emoji substitution.
 export const PARTICLE_SYMBOLS = [9733,9824,9827,9829,9830,9728,9760,9834,9880,9883,10022,10087,9752,9753,9835,9889,10024,10048] as const;
+// Keep the seeded archive order above stable; this order is for the picker.
+export const INFUSION_SYMBOLS = [9827,9830,9829,9824,9834,9835,9753,9728,10048,9880,9752,10087,9889,10022,10024,9883,9760,9733] as const;
+export const SKULL_SYMBOL = 0x2620;
 export const PERSONAL_SYMBOL = 0x1f5e1;
 export const FEATHER_SYMBOL = 0x1fab6;
 export const PERSONAL_SYMBOLS = [PERSONAL_SYMBOL, FEATHER_SYMBOL] as const;
 export const SYMBOL_NAMES: Record<number,string> = {
   0x2605:"Star",0x2660:"Spade",0x2663:"Club",0x2665:"Heart",0x2666:"Diamond",
-  0x2600:"Sun",0x2620:"Skull",0x266a:"Music note",0x2698:"Flower",0x269b:"Atom",
-  0x2726:"Spark",0x2767:"Floral heart",0x2618:"Clover",0x2619:"Leaf",0x266b:"Music notes",
-  0x26a1:"Lightning",0x2728:"Magic stars",0x2740:"Blossom",0x1f5e1:"Dagger",0x1fab6:"Feather",
+  0x2600:"Sun",0x2620:"Death",0x266a:"Music note",0x2698:"Sprout",0x269b:"Hydrogendianion",
+  0x2726:"Sparkle",0x2767:"Starboardleaf",0x2618:"Clover",0x2619:"Portleaf",0x266b:"Music notes",
+  0x26a1:"Lightning",0x2728:"Sparkles",0x2740:"Flower",0x1f5e1:"Dagger",0x1fab6:"Feather",
 };
 export const validParticleSymbol=(value:unknown):value is number=>typeof value==="number"&&Number.isInteger(value)&&PARTICLE_SYMBOLS.includes(value as typeof PARTICLE_SYMBOLS[number]);
 

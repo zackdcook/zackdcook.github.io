@@ -6,6 +6,7 @@ import { sparklePoints } from "@/lib/bebrave/effect-anchors";
 import { legendaryColor, legendaryEffect } from "@/lib/bebrave/effects";
 import { SYMBOL_PATHS, validParticleSymbol, PERSONAL_SYMBOLS } from "@/lib/bebrave/symbol-paths";
 import { carvingEdge, carvingPigment } from "@/lib/bebrave/carving-contrast";
+import { particleSizeMultiplier } from "@/lib/bebrave/enchantment-painter";
 
 export function pointsToPath(points: Array<[number, number]>) {
   if (!points.length) return "";
@@ -50,10 +51,11 @@ export function sparkGeometry(radius: number, legendary: boolean) {
  * new random roll, or storage migration is needed on publication or refresh. */
 export function enchantmentParticleStyle(radius: number, delay: number,effectId?:string): CSSProperties {
   const blood=effectId==="blood-v1";
+  const direction=delay/3.8*Math.PI*2,reach=100+radius*28;
   return {
-    "--particle-x": `${((radius-3.5)*(blood?9:40)).toFixed(2)}px`,
-    "--particle-y": `${((blood?100+radius*28:-90-radius*24)).toFixed(2)}px`,
-    "--particle-curl": `${(blood?0:(delay-1.9)*23).toFixed(2)}deg`,
+    "--particle-x": `${(blood?Math.cos(direction)*reach:(radius-3.5)*40).toFixed(2)}px`,
+    "--particle-y": `${(blood?Math.sin(direction)*reach:-90-radius*24).toFixed(2)}px`,
+    "--particle-curl": `${((delay-1.9)*23).toFixed(2)}deg`,
     "--particle-duration": `${(blood?4+delay*.35:2.8+delay*.6).toFixed(2)}s`,
     "--trail-opacity": delay>2.25 ? ".7" : "0",
     "--star-opacity": delay>1.3?"1":"0",
@@ -70,7 +72,7 @@ export function particleMark(radius:number,effectId?:string) {
 
 export function CarvingSpark({x=0,y=0,r,delay=0,legendary=false,effectId,symbol}:{x?:number;y?:number;r:number;delay?:number;legendary?:boolean;effectId?:string;symbol?:number}) {
   if(symbol!==undefined&&SYMBOL_PATHS[symbol])return <g className="bebrave-sparkle" transform={`translate(${x} ${y})`}>
-    <g className="bebrave-energy-particle" style={enchantmentParticleStyle(r,delay,effectId)}><g transform={`scale(${r*2.5})`}><path className="bebrave-sparkle-star bebrave-particle-mark" d={SYMBOL_PATHS[symbol]}/></g></g>
+    <g className="bebrave-energy-particle" style={enchantmentParticleStyle(r,delay,effectId)}><g transform={`scale(${r*2.5*particleSizeMultiplier(symbol,effectId)})`}><path className="bebrave-sparkle-star bebrave-particle-mark" d={SYMBOL_PATHS[symbol]}/></g></g>
   </g>;
   const shape = sparkGeometry(r, legendary);
   const special=legendary&&legendaryEffect(effectId)!=="will-o-wisp-v1";

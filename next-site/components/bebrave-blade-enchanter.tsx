@@ -3,7 +3,7 @@
 import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import type { BeBravePublicDrawing, BeBraveSessionView } from "@/lib/bebrave-types";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
-import { PARTICLE_SYMBOLS, PERSONAL_SYMBOL, FEATHER_SYMBOL, SYMBOL_NAMES, SYMBOL_PATHS } from "@/lib/bebrave/symbol-paths";
+import { INFUSION_SYMBOLS, PERSONAL_SYMBOL, FEATHER_SYMBOL, SYMBOL_NAMES, SYMBOL_PATHS } from "@/lib/bebrave/symbol-paths";
 import { carvingParticleSymbol, type EnchantmentCamera } from "@/lib/bebrave/enchantment-painter";
 import { useCarvingEnchantments } from "./use-carving-enchantments";
 import { BeBraveCarving } from "./bebrave-stroke";
@@ -23,8 +23,9 @@ export function BladePreview({drawing}:{drawing:BeBravePublicDrawing}) {
     const root=scene.current;if(!root)return;
     const measure=()=>{
       const width=root.clientWidth,height=root.clientHeight;
-      const scale=Math.min(width/720,height/576);
-      camera.current={top:0,height:576,scale,pixelRatio:window.devicePixelRatio||1,left:(width-720*scale)/2,offsetTop:0,viewportWidth:width,viewportHeight:height};
+      const scale=2*Math.min(width/720,height/576);
+      const visibleHeight=height/scale;
+      camera.current={top:288-visibleHeight/2,height:visibleHeight,scale,pixelRatio:window.devicePixelRatio||1,left:(width-720*scale)/2,offsetTop:0,viewportWidth:width,viewportHeight:height};
       wake();
     };
     const observer=new ResizeObserver(measure);observer.observe(root);measure();
@@ -33,7 +34,7 @@ export function BladePreview({drawing}:{drawing:BeBravePublicDrawing}) {
   return <div ref={scene} className="bebrave-blade-preview" role="img" aria-label="Animated example X carving">
     <canvas ref={auraRef} className="bebrave-enchantment-canvas" aria-hidden="true"/>
     <canvas ref={motesRef} className="bebrave-enchantment-canvas bebrave-enchantment-motes" aria-hidden="true"/>
-    {!canvasReady&&<svg viewBox="0 0 720 576" aria-hidden="true"><BeBraveCarving strokes={drawing.strokes} color={drawing.color} rarity={drawing.rarity} seed={drawing.effectSeed} effectId={drawing.effectId} canvasEffects/></svg>}
+    {!canvasReady&&<svg viewBox="180 144 360 288" aria-hidden="true"><BeBraveCarving strokes={drawing.strokes} color={drawing.color} rarity={drawing.rarity} seed={drawing.effectSeed} effectId={drawing.effectId} canvasEffects/></svg>}
   </div>;
 }
 
@@ -43,7 +44,7 @@ export function BladeEnchanter({session,busy=false,problem,onBack,onEnchant}:{
 }) {
   const personal=session.chosenEffect==="blood-v1";
   const colors=personal?[{name:"Crimson",value:"#C51D36"}]:BEBRAVE_EPIC_COLORS;
-  const symbols:readonly number[]=personal?[PERSONAL_SYMBOL]:PARTICLE_SYMBOLS;
+  const symbols:readonly number[]=personal?[PERSONAL_SYMBOL]:INFUSION_SYMBOLS;
   const [color,setColor]=useState<string|null>(colors.some(choice=>choice.value===session.chosenColor)?session.chosenColor:null);
   const [symbol,setSymbol]=useState<number|null>(personal?PERSONAL_SYMBOL:session.chosenSymbol??null);
   const preview=useMemo<BeBravePublicDrawing>(()=>({
@@ -61,15 +62,15 @@ export function BladeEnchanter({session,busy=false,problem,onBack,onEnchant}:{
       </figure>
       <div className="bebrave-enchanter-pickers">
         <fieldset disabled={busy}>
-          <legend>Color</legend>
+          <legend>Aura</legend>
           <div className="bebrave-enchanter-colors" onKeyDown={choiceKeys}>
             {colors.map(choice=><button key={choice.value} type="button" aria-label={choice.name} title={choice.name} aria-pressed={color===choice.value} style={{"--enchant-color":choice.value} as CSSProperties} onClick={()=>setColor(choice.value)}><span/></button>)}
           </div>
         </fieldset>
-        <fieldset disabled={busy||!color} className={`bebrave-enchanter-symbols ${color?"is-ready":""}`} aria-hidden={!color}>
-          <legend>Symbol</legend>
+        <fieldset disabled={busy} className="bebrave-enchanter-symbols">
+          <legend>Infusion</legend>
           <div onKeyDown={choiceKeys}>
-            {symbols.map(choice=><button key={choice} type="button" aria-label={personal?"Feather and dagger":SYMBOL_NAMES[choice]} title={personal?"Feather and dagger":SYMBOL_NAMES[choice]} aria-pressed={symbol===choice} style={{color:color??undefined}} onClick={()=>setSymbol(choice)}><svg viewBox="-1.2 -1.2 2.4 2.4" fill="currentColor" aria-hidden="true" focusable="false">{personal?<><path transform="translate(-.5 0) scale(.65)" d={SYMBOL_PATHS[FEATHER_SYMBOL]}/><path transform="translate(.5 0) scale(.65)" d={SYMBOL_PATHS[PERSONAL_SYMBOL]}/></>:<path d={SYMBOL_PATHS[choice]}/>}</svg></button>)}
+            {symbols.map(choice=><button key={choice} type="button" aria-label={personal?"Feather and dagger":SYMBOL_NAMES[choice]} title={personal?"Feather and dagger":SYMBOL_NAMES[choice]} aria-pressed={symbol===choice} style={{color:color??colors[0].value}} onClick={()=>setSymbol(choice)}><svg viewBox="-1.2 -1.2 2.4 2.4" fill="currentColor" aria-hidden="true" focusable="false">{personal?<><path transform="translate(-.5 0) scale(.65)" d={SYMBOL_PATHS[FEATHER_SYMBOL]}/><path transform="translate(.5 0) scale(.65)" d={SYMBOL_PATHS[PERSONAL_SYMBOL]}/></>:<path d={SYMBOL_PATHS[choice]}/>}</svg></button>)}
           </div>
         </fieldset>
       </div>

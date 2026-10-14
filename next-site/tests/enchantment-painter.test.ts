@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { EnchantmentPainter,carvingParticleSymbol,enchantmentAnchors,enchantmentParticleAt,enchantmentSurface,sampleEnchantmentStroke } from "../lib/bebrave/enchantment-painter";
+import { EnchantmentPainter,carvingParticleSymbol,enchantmentAnchors,enchantmentParticleAt,enchantmentSurface,sampleEnchantmentStroke,particleSizeMultiplier } from "../lib/bebrave/enchantment-painter";
 import { createEnchantmentLoop } from "../lib/bebrave/enchantment-loop";
 import { packDrawing,unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { PARTICLE_SYMBOLS,SYMBOL_PATHS } from "../lib/bebrave/symbol-paths";
@@ -62,9 +62,26 @@ test("Legendary hearts, rainbow and blood keep their distinct moving identities"
   const heart=enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"hearts-v1"},anchor,2,1);
   assert.equal(heart.kind,"heart");
   const blood=enchantmentParticleAt({...drawing,rarity:"legendary",effectId:"blood-v1"},anchor,2,1);
-  assert.equal(blood.kind,"blood");assert.ok(blood.y>anchor.y);assert.equal(blood.color,"#760B20");
+  assert.equal(blood.kind,"blood");assert.ok(Math.hypot(blood.x-anchor.x,blood.y-anchor.y)>0);assert.equal(blood.color,"#760B20");
   const rainbow={...drawing,rarity:"legendary" as const,effectId:"rainbow-v1"};
   assert.notEqual(enchantmentParticleAt(rainbow,anchor,2,1).color,enchantmentParticleAt(rainbow,anchor,2,3).color);
+});
+
+test("personal particles radiate into every quadrant and enlarged infusions stay deterministic",()=>{
+  const anchor={x:360,y:1200,r:3.6,delay:.4},personal={...drawing,rarity:"legendary" as const,effectId:"blood-v1"};
+  const quadrants=new Set<string>();
+  for(let i=0;i<64;i++){
+    const particle=enchantmentParticleAt(personal,anchor,i,1.7);
+    quadrants.add(`${Math.sign(particle.x-anchor.x)},${Math.sign(particle.y-anchor.y)}`);
+    assert.deepEqual(particle,enchantmentParticleAt(unpackDrawing(packDrawing(personal)),anchor,i,1.7));
+  }
+  assert.deepEqual([...quadrants].sort(),["-1,-1","-1,1","1,-1","1,1"]);
+  const skull=enchantmentParticleAt({...drawing,particleSymbol:0x2620},anchor,2,1);
+  const star=enchantmentParticleAt({...drawing,particleSymbol:0x2605},anchor,2,1);
+  assert.equal(skull.radius,star.radius*1.33);
+  assert.equal(particleSizeMultiplier(0x1fab6,"blood-v1"),1.33);
+  assert.equal(particleSizeMultiplier(0x1f5e1,"blood-v1"),1.33);
+  assert.equal(particleSizeMultiplier(0x2605),1);
 });
 
 test("appending live pointer samples updates the same painter without waiting for a React render",()=>{

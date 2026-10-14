@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { packDrawing,unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { carvingParticleSymbol } from "../lib/bebrave/enchantment-painter";
-import { PERSONAL_SYMBOL,FEATHER_SYMBOL,SYMBOL_PATHS } from "../lib/bebrave/symbol-paths";
+import { PERSONAL_SYMBOL,FEATHER_SYMBOL,SYMBOL_PATHS,INFUSION_SYMBOLS,PARTICLE_SYMBOLS,SYMBOL_NAMES } from "../lib/bebrave/symbol-paths";
 import { carvingPigment,carvingEdge,contrastRatio } from "../lib/bebrave/carving-contrast";
 import { BEBRAVE_UNCOMMON_COLORS,BEBRAVE_EPIC_COLORS,BEBRAVE_SUPERIOR_COLORS } from "../lib/bebrave-config";
 import { legendaryToolSparkles } from "../lib/bebrave/tool-sparkles";
@@ -27,10 +27,17 @@ test("Common uses ivory without changing stored pigment; uncommon pigments and t
   assert.equal(carvingPigment("superior","#00F5FF"),"#00F5FF");
   assert.equal(BEBRAVE_EPIC_COLORS.some(choice=>/violet|purple/i.test(choice.name)),false);
   assert.deepEqual(BEBRAVE_UNCOMMON_COLORS,BEBRAVE_SUPERIOR_COLORS);
-  assert.deepEqual(BEBRAVE_EPIC_COLORS.map(choice=>choice.value),["#00F5FF","#FF2BD6","#FFF44F","#39FF14","#FF7A00","#3D7BFF"]);
+  assert.deepEqual(BEBRAVE_EPIC_COLORS.map(choice=>choice.value),["#FF2BD6","#FF7A00","#FFF44F","#39FF14","#00F5FF","#3D7BFF"]);
+  assert.deepEqual(BEBRAVE_EPIC_COLORS.map(choice=>choice.name),["Fuchsia","Vermillion","Saffron","Viridian","Celadon","Cerulean"]);
   for(const {name,value} of BEBRAVE_UNCOMMON_COLORS){
     assert.ok(contrastRatio(value,carvingEdge(value))>=3,`${name}: continuous engraved edge`);
   }
+});
+
+test("infusions follow the requested visual order without changing the seeded archive order",()=>{
+  assert.deepEqual(INFUSION_SYMBOLS.map(symbol=>SYMBOL_NAMES[symbol]),["Club","Diamond","Heart","Spade","Music note","Music notes","Portleaf","Sun","Flower","Sprout","Clover","Starboardleaf","Lightning","Sparkle","Sparkles","Hydrogendianion","Death","Star"]);
+  assert.deepEqual([...INFUSION_SYMBOLS].sort((a,b)=>a-b),[...PARTICLE_SYMBOLS].sort((a,b)=>a-b));
+  assert.deepEqual(PARTICLE_SYMBOLS,[9733,9824,9827,9829,9830,9728,9760,9834,9880,9883,10022,10087,9752,9753,9835,9889,10024,10048]);
 });
 
 test("drawing cancels selection and long-press menus and restores normal browsing on cleanup",()=>{

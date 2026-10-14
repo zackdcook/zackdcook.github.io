@@ -5,18 +5,18 @@ import { HumanCheck } from "@/components/human-check";
 import { BeBraveTree } from "@/components/bebrave-tree";
 import { TreeAtmosphere } from "@/components/tree-atmosphere";
 import { ActionBar, Dialogue, HomeControls, OverlayScene } from "./bebrave-menu";
-import { ToolEncounter, ToolImage } from "./bebrave-tool-encounter";
+import { ToolEncounter, ToolImage, SelectedTool } from "./bebrave-tool-encounter";
 import { BeBraveCypress } from "./bebrave-cypress";
 import { usePreferences } from "./site-preferences";
 import { observeBeBraveBrowser } from "@/lib/bebrave/browser-metrics";
-import { afterReveal, resumedScene, toolCopy } from "@/lib/bebrave/presentation";
+import { afterReveal, resumedScene, toolCopy, toolPrompt, cacheDescription, cacheOpened, toolsFarewell } from "@/lib/bebrave/presentation";
 import { BladeEnchanter } from "./bebrave-blade-enchanter";
 import { treeHistory,initialHistoryWindow } from "@/lib/bebrave/history-cache";
 import { BEBRAVE_ACTIVE_HEIGHT,defaultBeBraveTimeline,fallbackBeBraveTreeState,type BeBraveLocalTimeline,type BeBraveNormalTool,type BeBraveRarity,type BeBraveSessionView,type BeBraveTreeState } from "@/lib/bebrave-types";
 
 const timelineKey="zack.bebrave.timeline.v1";
 const siteTimelineKey="zack.timeline.v1";
-type Scene="entry"|"base"|"admire"|"complete"|"human"|"tools"|"cache"|"cache-code"|"epic-color"|"reveal"|"warning"|"draw"|"chop"|"confirm-chop"|"strikes"|"fallen"|"stump"|"regret";
+type Scene="entry"|"base"|"admire"|"complete"|"human"|"tools"|"cache-code"|"epic-color"|"reveal"|"warning"|"draw"|"chop"|"confirm-chop"|"strikes"|"fallen"|"stump"|"regret";
 type DraftStroke={strokeId:string;strokeOrder:number;points:Array<[number,number]>};
 
 function normalizeTimeline(value:unknown):BeBraveLocalTimeline{
@@ -46,11 +46,10 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     else delete document.documentElement.dataset.bebraveSession;
     return()=>{delete document.documentElement.dataset.bebraveSession;};
   },[session,testMode]);
-  const selectedNormal=session?.chosenTool&&session.chosenTool!=="cache"?session.chosenTool as BeBraveNormalTool:null;
   useEffect(()=>{
     if(scene!=="reveal"){setRevealSettled(false);return;}
     if(reduced){setRevealSettled(true);return;}
-    const timer=setTimeout(()=>setRevealSettled(true),950);
+    const timer=setTimeout(()=>setRevealSettled(true),1800);
     return()=>clearTimeout(timer);
   },[scene,reduced,session?.id]);
   useEffect(()=>{
@@ -156,21 +155,19 @@ export function BeBraveExperience({enabled,siteKey,testMode=false}:{enabled:bool
     {scene==="base"&&<ActionBar><button className="button" onClick={()=>setScene("entry")}>Back</button></ActionBar>}
     {scene==="human"&&<OverlayScene visual={<div className="bebrave-center-modal bebrave-human-modal"><form ref={humanForm} onSubmit={createSession}>{!testMode&&<HumanCheck siteKey={siteKey} action="bebrave" resetKey={session?.id||"new"}/>}<button className="button" disabled={busy} data-menu-focus>{busy?"Checking…":"Continue"}</button><button type="button" className="button" disabled={busy} onClick={()=>setScene("entry")}>Back</button>{problem&&<p className="form-hint" role="alert">{problem}</p>}</form></div>} />}
     {scene==="tools"&&<OverlayScene
-      visual={<ToolEncounter session={session} selected={highlightedTool} busy={busy} onHighlight={setHighlightedTool} onChoose={tool=>{setHighlightedTool(tool);if(tool==="cache")setScene("cache");else void chooseTool(tool);}}/>}
-      actions={<button className="button" onClick={()=>setScene("entry")} disabled={busy}>Back</button>}
-    ><p hidden={Boolean(highlightedTool)}>You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and brass house key laying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?</p>{highlightedTool&&<p>{highlightedTool!=="cache"?toolCopy[highlightedTool].dialogue:"The lockbox rattles from within as you pick it up, nearly betraying the secret it was asked to keep."}</p>}{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
+      visual={<ToolEncounter session={session} selected={highlightedTool} busy={busy} onChoose={tool=>{setProblem("");setHighlightedTool(tool);}}/>}
+      actions={<><button className="button" onClick={()=>{setProblem("");if(highlightedTool)setHighlightedTool(null);else setScene("entry");}} disabled={busy}>Back</button>{highlightedTool&&<button className="button" disabled={busy} onClick={()=>{if(highlightedTool==="cache"){setCacheCode("");setCacheMessage("");setScene("cache-code");}else if(highlightedTool)void chooseTool(highlightedTool);}}>{highlightedTool==="cache"?"Enter a code":"Unleash its potential"}</button>}</>}
+    ><p aria-live="polite">{highlightedTool?highlightedTool==="cache"?cacheDescription:toolCopy[highlightedTool].dialogue:toolPrompt}</p>{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
     {scene==="reveal"&&session&&<OverlayScene
       visual={<ToolEncounter session={session} reveal/>}
       actions={<button className="button" disabled={!revealSettled||busy} onClick={()=>setScene(afterReveal(session))}>Continue</button>}
-    >{selectedNormal?<p>{toolCopy[selectedNormal].dialogue}</p>:undefined}</OverlayScene>}
-    {scene==="cache"&&<Dialogue actions={<><button className="button" onClick={()=>setScene("tools")}>No</button><button className="button" onClick={()=>{setCacheMessage("");setScene("cache-code");}}>Yes</button></>}>The lockbox rattles from within as you pick it up, nearly betraying the secret it was asked to keep. Enter a code?</Dialogue>}
+    ><p>{session.chosenTool==="cache"?cacheOpened:toolsFarewell}</p></OverlayScene>}
     {scene==="cache-code"&&<OverlayScene
-      visual={<div className="bebrave-center-modal bebrave-cache-modal bebrave-menu-panel"><ToolImage tool="cache"/><input className="bebrave-code-display" value={cacheCode} inputMode="text" autoCapitalize="characters" autoComplete="off" spellCheck={false} maxLength={24} onChange={e=>setCacheCode(e.target.value.replace(/[^a-z0-9]/gi," ").replace(/ /g,"").toUpperCase())} onKeyDown={e=>{if(e.key==="Enter"&&!busy){e.preventDefault();void tryCache();}}} aria-label="Entered cache code"/><button className="button" disabled={busy||!cacheCode} onClick={tryCache}>Enter</button></div>}
-      actions={<button className="button" disabled={busy} onClick={()=>{setCacheCode("");setCacheMessage("");setScene("tools");}}>Back</button>}
-    >{cacheMessage?<p role="status">{cacheMessage}</p>:undefined}</OverlayScene>}
+      visual={<div className="bebrave-center-modal bebrave-cache-modal bebrave-menu-panel"><ToolImage tool="cache"/><input className="bebrave-code-display" value={cacheCode} inputMode="text" autoCapitalize="characters" autoComplete="off" spellCheck={false} maxLength={24} onChange={e=>setCacheCode(e.target.value.replace(/[^a-z0-9]/gi," ").replace(/ /g,"").toUpperCase())} onKeyDown={e=>{if(e.key==="Enter"&&!busy){e.preventDefault();void tryCache();}}} aria-label="Entered cache code"/>{cacheMessage&&<p className="bebrave-cache-message" role="status">{cacheMessage}</p>}<ActionBar><button className="button" disabled={busy} onClick={()=>{setCacheCode("");setCacheMessage("");setScene("tools");}}>Back</button><button className="button" disabled={busy||!cacheCode} onClick={tryCache}>Enter</button></ActionBar></div>}
+    />}
     {scene==="epic-color"&&session&&<OverlayScene visual={<BladeEnchanter key={session.id} session={session} busy={busy} problem={problem} onBack={()=>setScene("entry")} onEnchant={(color,symbol)=>void chooseEpicColor(color,symbol)}/>}/>}
 
-    {scene==="warning"&&<Dialogue actions={<><button className="button" disabled={busy} onClick={()=>setScene(session?.chosenTool==="cache"?"epic-color":"entry")}>Back</button><button className="button" disabled={busy} onClick={startDrawing}>Start carving</button></>}><p>You’ll have 60 seconds to carve once you begin. There’s no undo, so be ready.</p>{problem&&<p role="alert">{problem}</p>}</Dialogue>}
+    {scene==="warning"&&session&&<OverlayScene visual={<SelectedTool session={session}/>} actions={<><button className="button" disabled={busy} onClick={()=>setScene(session.chosenTool==="cache"?"epic-color":"entry")}>Back</button><button className="button" disabled={busy} onClick={startDrawing}>Start carving</button></>}><p>You’ll have 60 seconds to carve once you begin. There’s no undo, so be ready.</p>{problem&&<p role="alert">{problem}</p>}</OverlayScene>}
     {scene==="chop"&&<ActionBar><button className="button" onClick={firstStrike}>Chop</button></ActionBar>}
     {scene==="confirm-chop"&&<Dialogue actions={<><button className="button" disabled={busy} onClick={()=>{saveTimeline({...timeline,kind:"living",hacked:true,additionalStrikes:null,completedAdditionalStrikes:0,snapshotSequence:null,snapshotHeight:null,felledAt:null,immediateFallenSeen:false});setScene("entry");}}>Stop</button><button className="button" disabled={busy} onClick={continueChop}>Continue</button></>}>You hack at the tree’s hardened trunk. This tree has been here a very long time. Continue?</Dialogue>}
     {scene==="strikes"&&<ActionBar><button className="button" disabled={busy} onClick={strike}>Chop</button></ActionBar>}

@@ -2,7 +2,7 @@ import type { BeBravePublicDrawing } from "../bebrave-types";
 import { sparklePoints } from "./effect-anchors";
 import { legendaryColor, legendaryEffect } from "./effects";
 import { carvingEdge, carvingPigment } from "./carving-contrast";
-import { PARTICLE_SYMBOLS, PERSONAL_SYMBOLS, SYMBOL_PATHS, validParticleSymbol } from "./symbol-paths";
+import { PARTICLE_SYMBOLS, PERSONAL_SYMBOLS, SKULL_SYMBOL, SYMBOL_PATHS, validParticleSymbol } from "./symbol-paths";
 import { fullEffectDetail, type EffectDetail } from "./effect-quality";
 
 type Point = [number, number];
@@ -79,6 +79,8 @@ export function carvingParticleSymbol(drawing: BeBravePublicDrawing, index = 0):
   return PARTICLE_SYMBOLS[((seed ^ (seed >>> 16)) >>> 0) % PARTICLE_SYMBOLS.length];
 }
 
+export const particleSizeMultiplier = (symbol:number,effectId?:string) => effectId==="blood-v1"||symbol===SKULL_SYMBOL?1.33:1;
+
 /** Each stored anchor continuously emits. A new cycle has a different seeded
  * trajectory; restoring an archive needs no particle positions or new rolls. */
 export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anchor, index: number, seconds: number): EnchantmentParticle {
@@ -88,9 +90,11 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   const life = 2.3 + noise(seed + 4) * 2.1;
   const clock = seconds / life + anchor.delay / 3.8 + noise(seed);
   const age = fraction(clock), cycle = Math.floor(clock);
-  const drift = (noise(seed + cycle * 19) - .5) * (blood ? 20 : 126);
+  const direction = noise(seed + cycle * 19) * tau;
+  const reach = 110 + anchor.r * 30;
+  const drift = blood ? Math.cos(direction) * reach : (noise(seed + cycle * 19) - .5) * 126;
   const curl = (noise(seed + 8) - .5) * (blood ? 4 : 46);
-  const lift = blood ? 110 + anchor.r * 30 : -(104 + anchor.r * 25);
+  const lift = blood ? Math.sin(direction) * reach : -(104 + anchor.r * 25);
   const position = (a: number): Point => [
     anchor.x + drift * a + Math.sin(a * tau + seed) * curl * Math.sin(a * Math.PI),
     anchor.y + lift * a + (blood ? 0 : Math.sin(a * tau * 1.4 + seed) * 9 * Math.sin(a * Math.PI)),
@@ -99,12 +103,13 @@ export function enchantmentParticleAt(drawing: BeBravePublicDrawing, anchor: Anc
   const base = effect === "rainbow-v1" ? rainbowColor(seconds, anchor.x) : legendaryColor(effect, drawing.color);
   const kind = blood ? "blood" : effect === "hearts-v1" ? "heart" : effect === "will-o-wisp-v1" ? "wisp" : index % 5 === 0 ? "trail" : index % 3 === 0 ? "spark" : "mote";
   const twinkle = kind === "spark" ? .72 + .28 * Math.sin(seconds * (7 + noise(seed) * 7) + seed) ** 8 : 1;
+  const symbol=carvingParticleSymbol(drawing,index);
   return {
     x, y, kind, color: blood ? "#760B20" : base, highlight: blood?"#D82B45":highlight(base, .45),
-    symbol: carvingParticleSymbol(drawing, index),
-    radius: anchor.r * (kind === "spark" ? 3 : 2.5) * (.55 + .65 * Math.sin(age * Math.PI)),
+    symbol,
+    radius: anchor.r * (kind === "spark" ? 3 : 2.5) * (.55 + .65 * Math.sin(age * Math.PI)) * particleSizeMultiplier(symbol,effect),
     opacity: clamp(age / .12) * clamp((1 - age) / .3) * twinkle,
-    rotation: blood ? 0 : Math.sin(seconds * 1.5 + seed) * .3,
+    rotation: (blood?direction:0) + Math.sin(seconds * 1.5 + seed) * .3,
     tail: [position(Math.max(0, age - .035)), position(Math.max(0, age - .075)), position(Math.max(0, age - .12))],
   };
 }

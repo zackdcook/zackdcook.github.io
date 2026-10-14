@@ -7,6 +7,10 @@ export const toolCopy: Record<BeBraveNormalTool, { label: string; dialogue: stri
 };
 export const normalTools: BeBraveNormalTool[] = ["arrowhead", "nail", "key"];
 export const groundTools = [...normalTools, "cache"] as const;
+export const toolPrompt = "You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and a brass house key. All three are lying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?";
+export const cacheDescription = "The lockbox rattles from within as you pick it up, nearly betraying the secret it was asked to keep.";
+export const cacheOpened = "The top of the cache springs open, peeling away a layer of moss. Inside sits a small pocket knife, tied with a braided parachute-cord lanyard. The knife flicks open with a satisfying clink.";
+export const toolsFarewell = "The other items speak their names and fade away…";
 
 /** A refresh can replay presentation, but only the server can choose a result. */
 export function resumedScene(session: BeBraveSessionView | null) {

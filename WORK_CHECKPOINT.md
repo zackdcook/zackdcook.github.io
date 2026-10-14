@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Be Brave tool confirmation and infusion v8 — implemented, 2026-10-14 UTC
+
+Implements Zack's latest preproduction review: description-first tool confirmation, same-scene lockbox description, corrected prompt, aligned/even item labels, Back/Unleash and Back/Enter a code, unified code-panel Back/Enter, restored cache-opening narration, normal Continue size, selected tool at the timed warning, initially available Aura/Infusion pickers, exact requested names/orders, centered 2× X preview, 33% larger personal/skull particles and radial feather/dagger emission. Stable archive symbol order and stored art remain intact.
+
+One-time TEST code reset is complete: all 62 existing Legendary codes are available again; all 17 reward rows and 53 archives remain unchanged. Identity/history digests and rolled-back reuse verification are in `next-site/docs/reimagining/BE_BRAVE_TOOL_FLOW_2026-10-14.md`. No distribution plaintext was read. Ordinary codes remain single-use; the one personal reusable setting remains. No production changes.
+
+157 tests, TypeScript, art/themes, optimized build and whitespace pass. Browser control recovered; existing Codespace was already stopped and clean, then resumed only for native publishing. Preflight confirms original checkout clean/on spring-clean, missing old failed upload, mirror/remote experimental ref `2e3c779`, and main `75de96b`. Current next action: normal-push the tested descendant (including preserved prior pending QA notes) to the same experimental branch, publish/review the test revision, then stop and close the Codespace. Do not force-push, merge main or release production. This entry supersedes the earlier browser-outage recovery steps below.
+
 ## Be Brave final cleanup v7 — READY test preview, 2026-10-13
 
 Continues latest v6 `92db7be` in an isolated worktree. Implements the ten requested cleanup items: keypad removal, scattered knife stars, compact six-color workshop, cap removal, Mourn the fallen/Leave, same Uncommon/Superior pigments without Uncommon glow, fallen pinch zoom, feather plus dagger personal effect, document-wide Safari selection lock. Test-only whitelist/catalog migration applied. All 154 tests, typecheck, assets/themes, optimized build and SQL rollback checks pass; 49 archive and 62 code-row digests are unchanged, including after live browser QA.

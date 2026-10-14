@@ -73,7 +73,11 @@ test("each Legendary identity survives archive storage and reconstructs its dist
     if(effectId==="blood-v1"){
       assert.ok(render(saved).includes(SYMBOL_PATHS[PERSONAL_SYMBOL]));
       assert.ok(render(saved).includes('stroke="#C51D36"'));
-      assert.ok(Number.parseFloat(String(enchantmentParticleStyle(3.5,2,effectId)["--particle-y" as keyof ReturnType<typeof enchantmentParticleStyle>]))>0);
+      const offsets=[.4,1.4,2.4,3.4].map(delay=>enchantmentParticleStyle(3.5,delay,effectId));
+      for(const axis of ["--particle-x","--particle-y"] as const){
+        assert.ok(offsets.some(style=>Number.parseFloat(String(style[axis as keyof typeof style]))>0));
+        assert.ok(offsets.some(style=>Number.parseFloat(String(style[axis as keyof typeof style]))<0));
+      }
     }
   }
   assert.equal(legendaryEffect("future-unknown-id"),"will-o-wisp-v1");

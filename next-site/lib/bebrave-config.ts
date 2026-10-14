@@ -22,12 +22,12 @@ export function epicChanceForPity(pity: number) {
 }
 
 export const BEBRAVE_SUPERIOR_COLORS = [
-  { name: "Neon Cyan", value: "#00F5FF" },
-  { name: "Neon Magenta", value: "#FF2BD6" },
-  { name: "Neon Yellow", value: "#FFF44F" },
-  { name: "Neon Green", value: "#39FF14" },
-  { name: "Neon Orange", value: "#FF7A00" },
-  { name: "Electric Blue", value: "#3D7BFF" },
+  { name: "Fuchsia", value: "#FF2BD6" },
+  { name: "Vermillion", value: "#FF7A00" },
+  { name: "Saffron", value: "#FFF44F" },
+  { name: "Viridian", value: "#39FF14" },
+  { name: "Celadon", value: "#00F5FF" },
+  { name: "Cerulean", value: "#3D7BFF" },
 ] as const;
 
 // Rarity changes the treatment, while every colored tier shares these pigments.

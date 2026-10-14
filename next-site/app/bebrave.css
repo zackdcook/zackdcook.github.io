@@ -429,7 +429,7 @@ html:is([data-effects="reduced"],[data-motion="reduced"]) :is(.bebrave-sparkle-s
 html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-stroke[data-effect="rainbow-v1"]{filter:none}
 @media(prefers-reduced-motion:reduce){.bebrave-stroke-glow,.bebrave-sparkle-star,.bebrave-energy-glint,.bebrave-stroke[data-effect="rainbow-v1"]{filter:none}.bebrave-stroke-halo,.bebrave-aura-current,.bebrave-energy-particle,.bebrave-energy-satellite{display:none}.bebrave-image-choice .bebrave-object-label::before{animation:none}}
 
-/* Blade workshop: one live carving, then color and a monochrome sigil. */
+/* Blade workshop: a zoomed live carving with aura and infusion choices. */
 .bebrave-enchanter{width:min(100%,760px);max-height:100%;display:grid;grid-template-rows:auto auto auto auto;gap:12px;padding:18px;overflow:hidden;animation:bebrave-dialogue-open .28s var(--ease-settle) both}
 .bebrave-enchanter h2{margin:0;outline:none;font:650 clamp(18px,2.5vw,25px)/1.3 var(--game-type);letter-spacing:-.035em;color:var(--discovery-dialog-ink)}
 .bebrave-enchanter-body{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:18px;min-height:0}
@@ -448,8 +448,6 @@ html:is([data-effects="reduced"],[data-motion="reduced"]) .bebrave-stroke[data-e
 .bebrave-enchanter-pickers button:focus-visible{outline:2px solid var(--discovery-dialog-choice);outline-offset:2px}
 .bebrave-enchanter-colors button>span{width:24px;height:24px;border-radius:50%;background:var(--enchant-color);box-shadow:inset 0 0 0 1px #fff7,0 2px 0 #080d2290}
 .bebrave-enchanter-symbols svg{width:25px;height:25px;pointer-events:none}
-.bebrave-enchanter-symbols{visibility:hidden;opacity:0;transition:opacity .24s}
-.bebrave-enchanter-symbols.is-ready{visibility:visible;opacity:1}
 .bebrave-enchanter-actions{display:flex;gap:8px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--discovery-dialog-edge) 38%,transparent)}
 .bebrave-enchanter-actions .button{flex:1;justify-content:flex-start}
 .bebrave-enchanter-actions .button:last-child:not(:disabled){background:var(--discovery-dialog-selected);border-color:color-mix(in srgb,var(--discovery-dialog-choice) 50%,transparent)}
@@ -470,3 +468,20 @@ html[data-effects="reduced"] .bebrave-enchanter{animation:none}
 @media(prefers-reduced-motion:reduce){.bebrave-enchanter{animation:none}.bebrave-enchanter-symbols{transition:none}}
 
 .bebrave-legendary[data-effect="blood-v1"] .bebrave-particle-mark{fill:#760b20;stroke:#d82b45;stroke-width:.08}
+
+/* A fixed four-column row keeps every label on the same baseline. */
+.bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{grid-template-rows:minmax(150px,1fr) clamp(200px,32svh,260px)}
+.bebrave-encounter-objects{inset:auto;left:0;bottom:0;translate:0;width:100%;height:auto;aspect-ratio:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(4px,1vw,12px);align-items:end}
+.bebrave-encounter-objects>.bebrave-ground-object:is(.object-arrowhead,.object-nail,.object-key,.object-cache){position:relative;inset:auto;width:100%;min-width:0;aspect-ratio:auto;display:grid;grid-template-rows:clamp(64px,22vw,180px) 64px;scale:1;rotate:0deg;translate:0;animation:none;transform:none}
+.bebrave-encounter-objects>.bebrave-ground-object>.bebrave-tool-image{position:relative;inset:auto;width:100%;height:100%;translate:0;transform-origin:50% 85%;transition:transform .5s var(--ease-settle)}
+.bebrave-encounter-objects .bebrave-object-label{position:relative;left:auto;top:auto;translate:0;rotate:0deg;display:block;box-sizing:border-box;width:100%;max-width:100%;height:64px;padding:6px 4px;font-size:clamp(8px,1.2vw,11px)}
+.bebrave-encounter-objects>.is-chosen>.bebrave-tool-image{transform:scale(1.33)}
+.bebrave-encounter-objects .bebrave-rarity-fx{inset:-6% -6% auto;height:clamp(64px,22vw,180px)}
+.bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{animation:bebrave-tools-fade .6s 1.2s ease-out both}
+@keyframes bebrave-tools-fade{from{opacity:1}to{opacity:0;visibility:hidden}}
+.bebrave-warning-tool.bebrave-ground-object{position:relative;inset:auto;width:clamp(120px,46vw,280px);max-height:42svh;aspect-ratio:1;rotate:0deg;translate:0;scale:1}
+.bebrave-cache-modal>.bebrave-rpg-actions{position:static;transform:none;width:100%;margin-top:14px}
+.bebrave-cache-message{margin:12px 0 0;white-space:pre-line;font:500 13px/1.65 var(--game-type);color:var(--discovery-dialog-ink)}
+.bebrave-overlay .bebrave-rpg-hud .bebrave-rpg-actions>.button:only-child{flex:0 1 auto;min-width:130px}
+html[data-effects="reduced"] .bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{opacity:0;visibility:hidden}
+@media(prefers-reduced-motion:reduce){.bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{opacity:0;visibility:hidden}}
