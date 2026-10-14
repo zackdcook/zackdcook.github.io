@@ -6,7 +6,7 @@ import {BeBraveTree} from "./bebrave-tree";
 import {HomeControls,OverlayScene,ActionBar} from "./bebrave-menu";
 import {ToolEncounter} from "./bebrave-tool-encounter";
 import {observeBeBraveBrowser} from "@/lib/bebrave/browser-metrics";
-import {toolCopy} from "@/lib/bebrave/presentation";
+import {toolCopy,cacheDescription,cacheOpened,toolsFarewell} from "@/lib/bebrave/presentation";
 import type {BeBraveNormalTool,BeBravePublicDrawing,BeBraveSessionView,BeBraveTreeState} from "@/lib/bebrave-types";
 
 /** A guarded, synthetic browser workload. Never writes or requests shared art. */
@@ -51,7 +51,7 @@ export function BeBraveBenchmark(){
     <div className="bebrave-stage-art" aria-hidden="true"><div className="bebrave-stage-bg"/><div className="bebrave-stage-mid"/></div>
     <OverlayScene visual={<ToolEncounter session={fixture} reveal={reveal} selected={chosen} onHighlight={tool=>setChosen(tool)}/>}
       actions={<><button className="button" onClick={()=>setReveal(!reveal)}>{reveal?"Tools":"Reveal"}</button><button className="button" onClick={()=>setTools(false)}>Back</button></>}>
-      <p className="bebrave-benchmark-label">Synthetic visual fixture. No timer, reward or database write.</p><p>{chosen==="cache"?"The lockbox rattles from within as you pick it up, nearly betraying the secret it was asked to keep.":toolCopy[chosen].dialogue}</p>
+      <p className="bebrave-benchmark-label">Synthetic visual fixture. No timer, reward or database write.</p><p>{reveal?chosen==="cache"?cacheOpened:toolsFarewell:chosen==="cache"?cacheDescription:toolCopy[chosen].dialogue}</p>
     </OverlayScene>
   </div>;
   return <div className="bebrave-stage bebrave-world-stage">

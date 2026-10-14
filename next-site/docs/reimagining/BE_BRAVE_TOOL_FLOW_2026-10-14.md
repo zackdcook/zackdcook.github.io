@@ -4,9 +4,9 @@ Continues local v7 checkpoint `b6d3bf5585aecb3c167adf67e4ba8e18378ba100` and rem
 
 ## User flow
 
-Clicking any ground item previews its description without choosing a server result. Back clears that preview; Unleash its potential commits an ordinary tool and reveals its rarity. Other item names/rarities remain briefly visible and fade away, with the requested farewell narration and one normal-sized Continue action. All four item labels share a fixed-height, evenly spaced four-column row. The corrected tool prompt is preserved verbatim in the shared presentation copy.
+Clicking any ground item previews its description without choosing a server result. Back clears that preview; Unleash its potential commits an ordinary tool and reveals its rarity. Other item names/rarities stay visible, with the revised “The other items speak their names before fading away…” narration and one normal-sized Continue action. All four item labels share a compact, evenly spaced four-column row with separate gaps. Artwork retains the previous arrowhead/nail/key/cache proportions independently of caption widths. Unlocking swaps the cache sprite in its existing display frame; a separate knife display floats directly above that frame, without overlap with its caption. The corrected tool prompt is preserved verbatim in the shared presentation copy.
 
-The lockbox previews in the same scene, with its description and Back / Enter a code. Code entry has its native alphanumeric field and Back on the left / Enter on the right in the same panel. Successful unlocking restores the exact cache-opening/pocket-knife narration. The timer warning shows the selected, rarity-styled tool in front of the existing trunk scene.
+The lockbox previews in the same scene, with its description and Back / Enter a code (the action breaks after Enter). Code entry has its native alphanumeric field and Back on the left / Enter on the right in the same panel. Successful unlocking restores the exact cache-opening/pocket-knife narration. The timer warning shows the selected, rarity-styled tool in front of the existing trunk scene.
 
 Aura and Infusion are both enabled and visible from the initial workshop. Either may be chosen first. Confirming still requires an explicit aura and infusion. The live X preview uses a centered 2× camera zoom and matching SVG fallback, preserving the compact panel footprint. Its negative compositor offset keeps the X intersection centered in the actual canvas, with a regression test covering phone and desktop surfaces.
 
@@ -31,7 +31,7 @@ Personal Crimson continues to alternate feather U+1FAB6 and dagger U+1F5E1, now 
 
 ## One-time test code reset
 
-Zack explicitly requested resetting every Legendary code. An atomic operation on test project `qkkgcoejkqvthbjcldcw` cleared the used marker and owner for the 16 redeemed rows. All 62 existing codes are now available, retaining their original IDs, private verifiers, campaign/effect assignments and creation metadata. There were no disabled codes. Ordinary codes remain single-use after their next redemption; the one existing personal reusable setting remains enabled.
+Zack explicitly requested resetting every Legendary code. An atomic operation on test project `qkkgcoejkqvthbjcldcw` cleared the used marker and owner for the 16 redeemed rows. All 62 existing codes were available immediately after the reset, retaining their original IDs, private verifiers, campaign/effect assignments and creation metadata. There were no disabled codes. Ordinary codes remain single-use after their next redemption; the one existing personal reusable setting remains enabled.
 
 This administrative data reset is deliberately not a deployment migration. No production data/schema/configuration was changed, no distribution CSV or plaintext code was accessed, and old reward rows were retained.
 
@@ -45,10 +45,18 @@ Digests use `md5(string_agg(to_jsonb(row)::text, '|' order by primary_key))`, wi
 
 ## Verification and publication
 
-146 standard tests plus 12 API/module-mock tests pass (158 total), including centered 2× compositing, initial enabled pickers, requested order with stable archive seeding, particle scaling/radial emission, and existing preservation/security checks. TypeScript, art/themes, optimized Next.js build and whitespace checks pass. React review confirms client-side preview only, guarded confirmation requests, retained busy/ownership checks, accessible names/pressed states, keyboard menu handling, and existing animation cleanup.
+146 standard tests plus 14 API/module-mock tests pass (160 total), including opened-cache replacement, separate knife placement, retained item names/rarities, revised narration, centered 2× compositing, initial enabled pickers, requested order with stable archive seeding, particle scaling/radial emission, and existing preservation/security checks. TypeScript, art/themes, optimized Next.js build and whitespace checks pass. React review confirms client-side preview only, guarded confirmation requests, retained busy/ownership checks, accessible names/pressed states, keyboard menu handling, and existing animation cleanup.
 
 Security advisors show only the preexisting service-only RLS-without-policy INFO notices; no new security warning. Reference: https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy .
 
 Browser control recovered. The existing Codespace was stopped with a clean `spring-clean-2026-10` checkout before resuming. Native preflight independently confirmed the original checkout is clean, the old failed-upload file is absent, the isolated mirror and remote experimental ref are both `2e3c779`, and main is still `75de96bb3ef7a4edf138d07ee313519bb3bb212e`. Publish this descendant normally through the existing mirror, update only the test preview, record the result, and stop/close the Codespace afterward.
 
 Rendered acceptance and final deployment details follow after publication. Physical iPhone Safari selection/pinch still needs actual-device confirmation.
+
+## Latest phone feedback — incorporated before acceptance
+
+Zack’s follow-up keeps the other tools visible instead of animating a fade. The caption row no longer controls artwork sizes, and has explicit 8–16px gaps. The closed/open cache use the same size and position; the knife occupies a separate slot above it. The cache action says Enter / a code on two lines. The synthetic Tools fixture now shares the actual narration so the Legendary composition can be reviewed without redeeming a distribution code.
+
+The preceding v8 live browser review passed description-only preview (session stays tool_select), unified native code input (qa-123 → QA123), Back-left/Enter-right in a 44px-high action row, normal 130×44px Continue, and the selected tool at the timer warning. The unstarted QA session d9a3e3cf-3aff-4218-8478-30aba8ba994b was cancelled, with zero archives/rewards. Workshops at 390×844 and 320×568 exposed all 24 choices with no body/document overflow and Infusion-first selection. The centered X is visibly correct.
+
+Concurrent user testing subsequently added four archives and three rewards and spent one ordinary code. Latest read-only totals are 57 archives, 20 rewards and 61 usable codes; all original 53 archive rows and 17 reward rows retain the before-reset full-row digests above, and all 62 code identities are unchanged. Do not undo the user’s testing or reset codes a second time merely to restore the intermediate count.

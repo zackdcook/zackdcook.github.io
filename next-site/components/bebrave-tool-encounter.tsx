@@ -28,7 +28,10 @@ export function ToolEncounter({ session, reveal = false, selected, busy, onHighl
         const chosen = reveal && session?.chosenTool === tool;
         const rarity = chosen ? session?.chosenRarity : tool !== "cache" ? session?.toolResults?.[tool] : null;
         const name = tool === "cache" ? "Mossy cache" : toolCopy[tool].label;
-        const content = <>{chosen&&knife&&<span className="bebrave-open-lockbox"><ToolImage tool="cache-open"/></span>}<ToolImage tool={chosen && knife ? "knife" : tool}/>{reveal && rarity && <RarityEffect rarity={rarity} seed={session?.effectSeed??0}/>}<span className="bebrave-object-label">{tool === "cache" ? chosen && knife ? "Pocket knife" : <span>Mossy cache</span> : name}{reveal && rarity && <strong className="bebrave-rarity-name">{rarity}</strong>}</span></>;
+        const content = <><span className="bebrave-tool-display">
+          <ToolImage tool={chosen&&knife?"cache-open":tool}/>
+          {chosen&&knife?<span className="bebrave-cache-knife"><ToolImage tool="knife"/><RarityEffect rarity="legendary" seed={session?.effectSeed??0}/></span>:reveal&&rarity&&<RarityEffect rarity={rarity} seed={session?.effectSeed??0}/>}
+        </span><span className="bebrave-object-label">{tool === "cache" ? chosen && knife ? "Pocket knife" : <span>Mossy cache</span> : name}{reveal && rarity && <strong className="bebrave-rarity-name">{rarity}</strong>}</span></>;
         return reveal ? <div key={tool} className={`bebrave-ground-object object-${tool} bebrave-reveal-tool ${chosen ? "is-chosen" : "is-missed"} rarity-${rarity || "common"}`} aria-label={`${name}${rarity ? `: ${rarity}` : ""}`}>{content}</div> :
           <button key={tool} type="button" className={`bebrave-ground-object object-${tool} bebrave-image-choice ${selected === tool ? "is-highlighted" : ""}`} disabled={busy} aria-label={name} aria-pressed={selected === tool} onClick={() => (onChoose || onHighlight)?.(tool)}>{content}</button>;
       })}

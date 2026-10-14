@@ -91,10 +91,10 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 @keyframes bebrave-choice-rise{0%{scale:.9;translate:0 0}45%{scale:1.42;translate:0 -25px}100%{scale:1.33;translate:0 -20px}}
 @keyframes bebrave-choice-settle{from{scale:1}to{scale:.82}}
 @keyframes bebrave-banner{from{translate:-26px 0;opacity:.2}to{translate:0 0;opacity:1}}
-.bebrave-reveal-tool.rarity-uncommon>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-uncommon)) drop-shadow(-2px 0 var(--effect-uncommon))}
-.bebrave-reveal-tool.rarity-superior>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-superior)) drop-shadow(-2px 0 var(--effect-superior)) drop-shadow(0 0 5px var(--effect-superior))}
-.bebrave-reveal-tool.rarity-epic>.bebrave-tool-image{filter:drop-shadow(3px 0 var(--effect-epic)) drop-shadow(-3px 0 var(--effect-epic)) drop-shadow(0 0 5px var(--effect-epic))}
-.bebrave-reveal-tool.rarity-legendary>.bebrave-tool-image{filter:drop-shadow(3px 0 #ff941f) drop-shadow(-3px 0 #ff941f) drop-shadow(0 0 7px #ffb65b) drop-shadow(0 0 15px #ff7a0066)}
+.bebrave-reveal-tool.rarity-uncommon>.bebrave-tool-image,.bebrave-reveal-tool.rarity-uncommon>.bebrave-tool-display>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-uncommon)) drop-shadow(-2px 0 var(--effect-uncommon))}
+.bebrave-reveal-tool.rarity-superior>.bebrave-tool-image,.bebrave-reveal-tool.rarity-superior>.bebrave-tool-display>.bebrave-tool-image{filter:drop-shadow(2px 0 var(--effect-superior)) drop-shadow(-2px 0 var(--effect-superior)) drop-shadow(0 0 5px var(--effect-superior))}
+.bebrave-reveal-tool.rarity-epic>.bebrave-tool-image,.bebrave-reveal-tool.rarity-epic>.bebrave-tool-display>.bebrave-tool-image{filter:drop-shadow(3px 0 var(--effect-epic)) drop-shadow(-3px 0 var(--effect-epic)) drop-shadow(0 0 5px var(--effect-epic))}
+.bebrave-reveal-tool.rarity-legendary>.bebrave-tool-image,.bebrave-cache-knife>.bebrave-tool-image{filter:drop-shadow(3px 0 #ff941f) drop-shadow(-3px 0 #ff941f) drop-shadow(0 0 7px #ffb65b) drop-shadow(0 0 15px #ff7a0066)}
 .bebrave-rarity-fx{position:absolute;inset:-6%;z-index:3;pointer-events:none}.bebrave-rarity-fx i{display:none}
 :is(.fx-epic,.fx-legendary) i{display:block;position:absolute;width:9px;height:9px;animation:bebrave-star 3.8s ease-in-out infinite;background:var(--effect-silver);clip-path:polygon(50% 0,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0 50%,39% 38%)}
 .fx-legendary i{background:#ffd48a;animation-duration:2.1s}
@@ -469,19 +469,24 @@ html[data-effects="reduced"] .bebrave-enchanter{animation:none}
 
 .bebrave-legendary[data-effect="blood-v1"] .bebrave-particle-mark{fill:#760b20;stroke:#d82b45;stroke-width:.08}
 
-/* A fixed four-column row keeps every label on the same baseline. */
+/* Caption spacing is independent of the original physical artwork proportions. */
 .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{grid-template-rows:minmax(150px,1fr) clamp(200px,32svh,260px)}
-.bebrave-encounter-objects{inset:auto;left:0;bottom:0;translate:0;width:100%;height:auto;aspect-ratio:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(4px,1vw,12px);align-items:end}
-.bebrave-encounter-objects>.bebrave-ground-object:is(.object-arrowhead,.object-nail,.object-key,.object-cache){position:relative;inset:auto;width:100%;min-width:0;aspect-ratio:auto;display:grid;grid-template-rows:clamp(64px,22vw,180px) 64px;scale:1;rotate:0deg;translate:0;animation:none;transform:none}
-.bebrave-encounter-objects>.bebrave-ground-object>.bebrave-tool-image{position:relative;inset:auto;width:100%;height:100%;translate:0;transform-origin:50% 85%;transition:transform .5s var(--ease-settle)}
-.bebrave-encounter-objects .bebrave-object-label{position:relative;left:auto;top:auto;translate:0;rotate:0deg;display:block;box-sizing:border-box;width:100%;max-width:100%;height:64px;padding:6px 4px;font-size:clamp(8px,1.2vw,11px)}
-.bebrave-encounter-objects>.is-chosen>.bebrave-tool-image{transform:scale(1.33)}
-.bebrave-encounter-objects .bebrave-rarity-fx{inset:-6% -6% auto;height:clamp(64px,22vw,180px)}
-.bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{animation:bebrave-tools-fade .6s 1.2s ease-out both}
-@keyframes bebrave-tools-fade{from{opacity:1}to{opacity:0;visibility:hidden}}
+.bebrave-ground-encounter{container-type:size}
+.bebrave-encounter-objects{--tool-unit:min(1cqw,calc((50cqh - 40px) / 30.68));inset:auto;left:0;bottom:0;translate:0;width:100%;height:auto;aspect-ratio:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,2vw,16px);align-items:end}
+.bebrave-encounter-objects>.bebrave-ground-object:is(.object-arrowhead,.object-nail,.object-key,.object-cache){position:relative;inset:auto;width:100%;min-width:0;height:56px;aspect-ratio:auto;display:block;scale:1;rotate:0deg;translate:0;animation:none;transform:none;opacity:1;visibility:visible}
+.bebrave-tool-display{position:absolute;left:50%;bottom:calc(100% + 8px);translate:-50% 0;width:calc(18.88 * var(--tool-unit));aspect-ratio:1}
+.object-key>.bebrave-tool-display{width:calc(14.16 * var(--tool-unit))}
+.object-cache>.bebrave-tool-display{left:auto;right:0;translate:0;width:calc(30.68 * var(--tool-unit))}
+.bebrave-tool-display>.bebrave-tool-image{translate:0;transform-origin:50% 85%;transition:transform .5s var(--ease-settle)}
+.bebrave-encounter-objects .bebrave-object-label{position:relative;left:auto;top:auto;translate:0;rotate:0deg;display:block;box-sizing:border-box;width:100%;max-width:100%;height:56px;padding:5px 4px;font-size:clamp(8px,1.2vw,11px)}
+.bebrave-encounter-objects .bebrave-rarity-name{font-size:clamp(8px,1.2vw,10px)}
+.bebrave-encounter-objects>.is-chosen:not(.object-cache)>.bebrave-tool-display>.bebrave-tool-image{transform:scale(1.33)}
+.bebrave-encounter-objects>.is-missed:not(.object-cache)>.bebrave-tool-display>.bebrave-tool-image{transform:scale(.82)}
+.bebrave-encounter-objects>.is-missed.object-cache>.bebrave-tool-display>.bebrave-tool-image{transform:scale(.92)}
+.bebrave-encounter-objects>.bebrave-image-choice:is(.is-highlighted,:focus-visible):not(.object-cache)>.bebrave-tool-display>.bebrave-tool-image{transform:scale(1.08)}
+.bebrave-cache-knife{position:absolute;left:0;bottom:calc(100% + 12px);width:100%;height:100%;pointer-events:none}
+.bebrave-cache-knife>.bebrave-tool-image{translate:0}
 .bebrave-warning-tool.bebrave-ground-object{position:relative;inset:auto;width:clamp(120px,46vw,280px);max-height:42svh;aspect-ratio:1;rotate:0deg;translate:0;scale:1}
 .bebrave-cache-modal>.bebrave-rpg-actions{position:static;transform:none;width:100%;margin-top:14px}
 .bebrave-cache-message{margin:12px 0 0;white-space:pre-line;font:500 13px/1.65 var(--game-type);color:var(--discovery-dialog-ink)}
 .bebrave-overlay .bebrave-rpg-hud .bebrave-rpg-actions>.button:only-child{flex:0 1 auto;min-width:130px}
-html[data-effects="reduced"] .bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{opacity:0;visibility:hidden}
-@media(prefers-reduced-motion:reduce){.bebrave-encounter-objects>.bebrave-reveal-tool.is-missed{opacity:0;visibility:hidden}}
