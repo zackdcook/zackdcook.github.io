@@ -1,5 +1,17 @@
 # Be Brave tool confirmation and infusion revision — v8
 
+## Final test acceptance
+
+Final application `ee8819142421825840bbf0769c3e57c8e4330df0` is normally pushed to the existing experimental ref. READY Preview `dpl_9uuBrhtEBH5hJYuBFUxvsHUcU3bL` serves the stable test URL: https://zack-cook-git-experiment-be-brave-encha-6d0cb7-dove-mack0o-3684.vercel.app/bebrave . This acceptance supersedes the intermediate pending-publication notes below.
+
+- 390×844: all four caption frames are 84.5×56px at y=502 with exactly 8px gaps. Closed/open cache geometry is identical: x=264.953125, y=382.953125, width/height=111.046875. Knife/cache gap is 12px; cache/caption gap is 8px. All four items remain fully visible. No body/document overflow.
+- 320×568: all captions are 67×56px at y=286 with 8px gaps. Closed/open cache remains x=218, y=190, 88×88px, with the knife 12px above. All four remain visible, without page overflow. Artwork proportions retain the earlier relationship and scale together to fit the available height.
+- Actual game: preview leaves the server tool choice uncommitted; Unleash reveals rarity. The cache action visibly reads Enter / a code on two lines. The ordinary reveal uses the exact before-fading narration, retains four tools, and has one normal Continue. Unified native code input/Back/Enter and the selected warning tool also pass.
+- Final optimized CSS preserves separate scale/translate/rotate resets, eliminating inherited caption enlargement and movement. 160 tests, typecheck, assets/themes, whitespace and the 49-page build pass; only CSS changed after the test run.
+- Both own ordinary QA sessions were cancelled, each with zero archive/reward rows. The agent redeemed no distribution code. Final original code-identity/reward/archive digests still match. Concurrent user testing used one ordinary code after the reset (61 usable); that later activity remains intact.
+
+Saved proof shows the synthetic Legendary layout. Its Tools/Back are harness controls; the actual game uses the verified single Continue. No production, protection or infrastructure changes. After publishing these notes, stop the existing cautious-trout Codespace and close its editor. Documentation needs no new application build. Physical-device Safari selection and two-finger pinch remain actual-device checks.
+
 Continues local v7 checkpoint `b6d3bf5585aecb3c167adf67e4ba8e18378ba100` and remote experimental head `2e3c7791c3243c8d6adc09a803d6468afc27869b`. Target remains `experiment/be-brave-enchantments-2026-10-12`; no main merge or production release is authorized.
 
 ## User flow

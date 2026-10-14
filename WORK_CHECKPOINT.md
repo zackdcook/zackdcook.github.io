@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Be Brave v8 — final test acceptance, 2026-10-14 UTC
+
+Final app ee8819142421825840bbf0769c3e57c8e4330df0 is normally pushed to experiment/be-brave-enchantments-2026-10-12. READY dpl_9uuBrhtEBH5hJYuBFUxvsHUcU3bL serves the stable test /bebrave alias. All requested menus/pickers/effects and the latest phone corrections are complete: other tools stay visible, narration says before fading, compact captions remain aligned with 8px gaps, earlier artwork proportions are retained, closed/open cache has identical geometry, knife floats above with 12px clearance, Enter / a code breaks onto two lines. Final 390×844 and 320×568 checks pass without overflow; actual confirmation/wording/Continue/warning-tool pass.
+
+160 tests/typecheck/art/themes/49-page build/whitespace pass. Both own ordinary test sessions are cancelled without archives/rewards. All 62 codes were reset once; concurrent user testing then used one ordinary code (61 usable) and added rewards/carvings. Original 17 reward/53 archive digests and all code identities are unchanged. Preserve that subsequent testing. Full evidence: next-site/docs/reimagining/BE_BRAVE_TOOL_FLOW_2026-10-14.md.
+
+This acceptance supersedes pending/outage steps below. After publishing these notes, stop cautious-trout and close the editor; documentation needs no new application build. Original spring-clean checkout is clean, main 75de96b and production are untouched. No production release is authorized. Physical-device Safari selection/pinch remain actual-device checks.
+
 ## Be Brave tool confirmation and infusion v8 — latest phone correction, 2026-10-14 UTC
 
 Implements Zack's preproduction review: description-first tool confirmation, same-scene lockbox description, corrected prompt, aligned/even item labels, Back/Unleash and Back/Enter a code, unified code-panel Back/Enter, restored cache-opening narration, normal Continue size, selected tool at the timed warning, initially available Aura/Infusion pickers, exact requested names/orders, centered 2× X preview, 33% larger personal/skull particles and radial feather/dagger emission. Stable archive symbol order and stored art remain intact.
