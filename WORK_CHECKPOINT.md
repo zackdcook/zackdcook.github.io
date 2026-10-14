@@ -1,5 +1,15 @@
 # Website reimagining checkpoint
 
+## BeBrave anti-abuse — verified preview only, 2026-10-14 UTC
+
+New task scope: protect against cookie/private-window repeat participation and blank-attempt tool rerolls while preserving production drawings. Feature `feature/bebrave-anti-abuse-2026-10-14`, application `ffce3077c0425c6a37b3b7978529b4eb48269181`, READY Preview `dpl_4JyGCHPhaMivmhKtuJXnJQEQgtg5`. Verified game and QA at `https://zack-cook-ecfdvbf2e-dove-mack0o-3684.vercel.app/bebrave` and `/test-bebrave-security`. Latest production/main baseline `587c47c` and deployment `dpl_GaF9aCfeE1JMihyzRkWp6whAWzEf` are unchanged by this work. Prior release permissions below refer to the preceding BeBrave application, not this new preview review.
+
+Server-keyed IPv4/IPv6 subnet signals; atomic identity/start limits in short and rolling-day windows; four independent attempts until a fixed five-foot growth cycle completes; retained personal growth gate. Shared Wi-Fi owners are never merged. Empty retries clone exact rolls/chosen tool/effects/reward references even after tree growth, retaining originals. Deadline idempotency and atomic challenge claims are enforced. New private records expire, with hourly cleanup and updated privacy disclosure. Four household slots bound anonymous abuse but cannot establish one human/device; different networks/limited-retention expiry remain possible escape routes. No MAC/device fingerprint.
+
+TEST `qkkgcoejkqvthbjcldcw` alone has additive migration `20261014102930_bebrave_participation_guards.sql`, registered after transactional iteration. 168 tests, typecheck, assets/themes, optimized 51-route build, whitespace, TEST SQL rollback suite and deployed concurrent/normal-browser flows pass. All original production archive/completed-row checksums and all 61 TEST archives/20 stroke chunks match baseline exactly. No production abuse tests or writes, real code uses, new persisted carvings, or test-data copy. Provider-response mocks and real TEST token claims cover replay; no real production CAPTCHA token was acquired.
+
+Evidence and release boundaries: `next-site/docs/reimagining/BE_BRAVE_ANTI_ABUSE_2026-10-14.md`, with passing deployed QA screenshot. Any later production release must apply only this canonical migration, retain genuine production configuration with no TEST flags, and preserve existing drawings; do not broadly push experimental migration history. Finish feature-only evidence publication, stop cautious-trout, close its editor, and retain original clean spring-clean checkout plus separate anti-abuse worktree.
+
 ## Be Brave — LIVE on main and production, 2026-10-14 UTC
 
 Zack explicitly authorized main/production cutover, superseding all earlier test-only restrictions below. Application52f936b3647f37cbb190ff37a98d82a093c357a2 is normally fast-forwarded to main and the existing experimental branch. Fresh Git production build dpl_ELWBVY83AzLKyqU8LpiEU1bMYUWK is READY and serves https://zackdcook.com/bebrave (verified exact URL); www also points to it. This documentation-only descendant records the completed release without changing app code.
