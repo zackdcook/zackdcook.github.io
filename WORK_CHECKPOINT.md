@@ -1,12 +1,16 @@
 # Website reimagining checkpoint
 
-## Be Brave live release — authorized and prepared, 2026-10-14 UTC
+## Be Brave — LIVE on main and production, 2026-10-14 UTC
 
-Zack now authorizes main merge and production release, superseding earlier test-only restrictions. Final UI: Enter a code one line; both Aura/Infusion initially unselected and preview/caption blank until both chosen, including personal rewards. 161 tests/typecheck/assets/themes/49-page build/whitespace pass.
+Zack explicitly authorized main/production cutover, superseding all earlier test-only restrictions below. Application52f936b3647f37cbb190ff37a98d82a093c357a2 is normally fast-forwarded to main and the existing experimental branch. Fresh Git production build dpl_ELWBVY83AzLKyqU8LpiEU1bMYUWK is READY and serves https://zackdcook.com/bebrave (verified exact URL); www also points to it. This documentation-only descendant records the completed release without changing app code.
 
-Production belqlsqnbexwkpmnptyy has the additive live enchantment migration, real existing Turnstile/Supabase configuration with no test flags, and the 50 intended original distribution codes under a production campaign (all unused, personal one reusable). The 12 QA codes and test tree/history are excluded. Original 2 sessions unchanged, real tree30ft/0 completed; reset RPC absent. Production rollback redemption/ownership/timer/enchantment checks pass. Full evidence: next-site/docs/reimagining/BE_BRAVE_LIVE_RELEASE_2026-10-14.md.
+Enter a code is one line. Aura/Infusion initialize unselected, including personal/prior rewards; preview/caption stay blank until both chosen. Actual 390×844 ordinary/personal workshop and Infusion-first interaction pass. All preceding requested tools/reveal/cache geometry/captions/menus/particle changes are retained. 161 tests, typecheck, assets/themes, whitespace and optimized49-page build pass.
 
-Next: final blank-workshop UI check, guarded normal main fast-forward from75de96b, fresh production-target build, verify real public game and disabled QA routes/reset, then stop the existing Codespace. Do not promote the test-storage Preview or disclose private code verifiers/keys. Preserve existing main history, public pages, signup records and production data. User authorization permits this release without another confirmation.
+Production belqlsqnbexwkpmnptyy has the additive enchantment migration, original genuine Turnstile/Supabase configuration with no test flags, and50 original distribution codes under be-brave-production-2026-10-14, all unspent/enabled; personal one reusable.12 QA codes/test history excluded. Original2 sessions digest unchanged, tree30ft/0 completed/0 archives. Production rollback ownership/redemption/timer/enchantment tests pass without persisted fixtures or real-code use.
+
+Public game/state200, state enabled/revision1/height8640/count0. Test viewport404, reset POST404, session POST without token400 human-check error. QA page is disabled/not-found (streamed HTTP200 with NEXT_HTTP_ERROR_FALLBACK;404, no benchmark UI). Live browser has no Reset control and shows real Cloudflare verification; CAPTCHA was not completed. Runtime-log connector403 and no installed CLI; physical iPhone gestures remain device checks. Full evidence: next-site/docs/reimagining/BE_BRAVE_LIVE_RELEASE_2026-10-14.md. Proof screenshot: be-brave-production-live-2026-10-14.jpg saved separately.
+
+Final housekeeping after syncing these notes: stop existing cautious-trout and immediately close its editor; retain the clean original spring-clean checkout. No new Codespace/dev server, force push, test data migration, secret disclosure or production-protection weakening. Main is now the release branch; do not reinstate the superseded no-production restriction. Preserve real users/codes/carvings from this point forward. Prior production dpl_4Uzwt4ELBoYd8ckmEAR1jkQP7PqQ is the rollback artifact.
 
 ## Be Brave v8 — final test acceptance, 2026-10-14 UTC
 
