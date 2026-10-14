@@ -473,7 +473,8 @@ html[data-effects="reduced"] .bebrave-enchanter{animation:none}
 .bebrave-stage:has(.bebrave-ground-encounter) .bebrave-overlay{grid-template-rows:minmax(150px,1fr) clamp(200px,32svh,260px)}
 .bebrave-ground-encounter{container-type:size}
 .bebrave-encounter-objects{--tool-unit:min(1cqw,calc((50cqh - 40px) / 30.68));inset:auto;left:0;bottom:0;translate:0;width:100%;height:auto;aspect-ratio:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,2vw,16px);align-items:end}
-.bebrave-encounter-objects>.bebrave-ground-object:is(.object-arrowhead,.object-nail,.object-key,.object-cache){position:relative;inset:auto;width:100%;min-width:0;height:56px;aspect-ratio:auto;display:block;scale:1;rotate:0deg;translate:0;animation:none;transform:none;opacity:1;visibility:visible}
+/* Keep individual transform resets; a transform shorthand lets build minification drop them. */
+.bebrave-encounter-objects>.bebrave-ground-object:is(.object-arrowhead,.object-nail,.object-key,.object-cache){position:relative;inset:auto;width:100%;min-width:0;height:56px;aspect-ratio:auto;display:block;scale:1;rotate:0deg;translate:0;animation:none;opacity:1;visibility:visible}
 .bebrave-tool-display{position:absolute;left:50%;bottom:calc(100% + 8px);translate:-50% 0;width:calc(18.88 * var(--tool-unit));aspect-ratio:1}
 .object-key>.bebrave-tool-display{width:calc(14.16 * var(--tool-unit))}
 .object-cache>.bebrave-tool-display{left:auto;right:0;translate:0;width:calc(30.68 * var(--tool-unit))}
