@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## BeBrave anti-abuse — LIVE, two-attempt policy, 2026-10-14 UTC
+
+Zack explicitly authorized production release, changing the household/shared-connection growth allowance from four to **two independent attempts per fixed five-foot growth cycle**. This supersedes the preview-only scope below. Application `865b9ffc0ed16691aa75bb58d0a10f83156bfcf7` normally fast-forwarded to main; production `dpl_75hG8KysMuZNF2d6UhF5LFyzjmwW` is READY/Current with zackdcook.com assigned. Verified live URL https://zackdcook.com/bebrave. Documentation-only descendants retain the same application.
+
+Only canonical migrations `20261014102930_bebrave_participation_guards.sql` and `20261014120857_bebrave_two_attempt_growth_cycle.sql` were atomically applied to production and registered; TEST data/history/fixtures excluded. Genuine production database/Turnstile/HMAC config retained, no TEST flags in production. 168 tests, typecheck, asset/theme checks, whitespace, 51-route build, adjusted TEST rollback suite and same-commit deployed preview concurrency acceptance pass. Two independent attempts total; a third is blocked even after short-window expiry. Blank retry retains tool/results; same-session timer starts are idempotent; challenge replay and expired restart rejected. Original production drawing checksums and all 61 TEST archives/20 chunks remain unchanged through deployment. Public state200/enabled, revision2/height8928/completed1; live UI has no Reset. No production abuse test or new mark/code use.
+
+Release record and screenshots: `next-site/docs/reimagining/BE_BRAVE_ANTI_ABUSE_PRODUCTION_2026-10-14.md`. Keep limited-retention private network signals, service-only RLS default deny, and the cleanup job. No MAC fingerprint or guaranteed one-human identity. Finish normal evidence publication on main/feature, stop the existing cautious-trout Codespace and close its editor; retain the clean original spring-clean checkout and separate anti-abuse worktree.
+
 ## BeBrave anti-abuse — verified preview only, 2026-10-14 UTC
 
 New task scope: protect against cookie/private-window repeat participation and blank-attempt tool rerolls while preserving production drawings. Feature `feature/bebrave-anti-abuse-2026-10-14`, application `ffce3077c0425c6a37b3b7978529b4eb48269181`, READY Preview `dpl_4JyGCHPhaMivmhKtuJXnJQEQgtg5`. Verified game and QA at `https://zack-cook-ecfdvbf2e-dove-mack0o-3684.vercel.app/bebrave` and `/test-bebrave-security`. Latest production/main baseline `587c47c` and deployment `dpl_GaF9aCfeE1JMihyzRkWp6whAWzEf` are unchanged by this work. Prior release permissions below refer to the preceding BeBrave application, not this new preview review.
