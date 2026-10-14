@@ -1,5 +1,13 @@
 # Website reimagining checkpoint
 
+## Be Brave live release — authorized and prepared, 2026-10-14 UTC
+
+Zack now authorizes main merge and production release, superseding earlier test-only restrictions. Final UI: Enter a code one line; both Aura/Infusion initially unselected and preview/caption blank until both chosen, including personal rewards. 161 tests/typecheck/assets/themes/49-page build/whitespace pass.
+
+Production belqlsqnbexwkpmnptyy has the additive live enchantment migration, real existing Turnstile/Supabase configuration with no test flags, and the 50 intended original distribution codes under a production campaign (all unused, personal one reusable). The 12 QA codes and test tree/history are excluded. Original 2 sessions unchanged, real tree30ft/0 completed; reset RPC absent. Production rollback redemption/ownership/timer/enchantment checks pass. Full evidence: next-site/docs/reimagining/BE_BRAVE_LIVE_RELEASE_2026-10-14.md.
+
+Next: final blank-workshop UI check, guarded normal main fast-forward from75de96b, fresh production-target build, verify real public game and disabled QA routes/reset, then stop the existing Codespace. Do not promote the test-storage Preview or disclose private code verifiers/keys. Preserve existing main history, public pages, signup records and production data. User authorization permits this release without another confirmation.
+
 ## Be Brave v8 — final test acceptance, 2026-10-14 UTC
 
 Final app ee8819142421825840bbf0769c3e57c8e4330df0 is normally pushed to experiment/be-brave-enchantments-2026-10-12. READY dpl_9uuBrhtEBH5hJYuBFUxvsHUcU3bL serves the stable test /bebrave alias. All requested menus/pickers/effects and the latest phone corrections are complete: other tools stay visible, narration says before fading, compact captions remain aligned with 8px gaps, earlier artwork proportions are retained, closed/open cache has identical geometry, knife floats above with 12px clearance, Enter / a code breaks onto two lines. Final 390×844 and 320×568 checks pass without overflow; actual confirmation/wording/Continue/warning-tool pass.

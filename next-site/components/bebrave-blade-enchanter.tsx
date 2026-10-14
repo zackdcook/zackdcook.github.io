@@ -4,7 +4,7 @@ import { useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "
 import type { BeBravePublicDrawing, BeBraveSessionView } from "@/lib/bebrave-types";
 import { BEBRAVE_EPIC_COLORS } from "@/lib/bebrave-config";
 import { INFUSION_SYMBOLS, PERSONAL_SYMBOL, FEATHER_SYMBOL, SYMBOL_NAMES, SYMBOL_PATHS } from "@/lib/bebrave/symbol-paths";
-import { carvingParticleSymbol, type EnchantmentCamera } from "@/lib/bebrave/enchantment-painter";
+import { type EnchantmentCamera } from "@/lib/bebrave/enchantment-painter";
 import { useCarvingEnchantments } from "./use-carving-enchantments";
 import { BeBraveCarving } from "./bebrave-stroke";
 import { choiceKeys } from "./bebrave-menu";
@@ -44,20 +44,19 @@ export function BladeEnchanter({session,busy=false,problem,onBack,onEnchant}:{
   const personal=session.chosenEffect==="blood-v1";
   const colors=personal?[{name:"Crimson",value:"#C51D36"}]:BEBRAVE_EPIC_COLORS;
   const symbols:readonly number[]=personal?[PERSONAL_SYMBOL]:INFUSION_SYMBOLS;
-  const [color,setColor]=useState<string|null>(colors.some(choice=>choice.value===session.chosenColor)?session.chosenColor:null);
-  const [symbol,setSymbol]=useState<number|null>(personal?PERSONAL_SYMBOL:session.chosenSymbol??null);
-  const preview=useMemo<BeBravePublicDrawing>(()=>({
-    id:"blade-preview",publicSequence:0,rarity:session.chosenRarity??"legendary",color:color??colors[0].value,
-    effectSeed:session.effectSeed??12,effectId:session.chosenEffect??undefined,particleSymbol:symbol??undefined,strokes:sampleStrokes,
-  }),[color,symbol,session.chosenRarity,session.effectSeed,session.chosenEffect,personal]);
-  const activeSymbol=carvingParticleSymbol(preview);
+  const [color,setColor]=useState<string|null>(null);
+  const [symbol,setSymbol]=useState<number|null>(null);
+  const preview=useMemo<BeBravePublicDrawing|null>(()=>color&&symbol!==null?{
+    id:"blade-preview",publicSequence:0,rarity:session.chosenRarity??"legendary",color,
+    effectSeed:session.effectSeed??12,effectId:session.chosenEffect??undefined,particleSymbol:symbol,strokes:sampleStrokes,
+  }:null,[color,symbol,session.chosenRarity,session.effectSeed,session.chosenEffect]);
   const colorName=colors.find(choice=>choice.value===color)?.name;
   return <div className="bebrave-enchanter bebrave-menu-panel">
     <h2 tabIndex={-1} data-menu-focus>Enchant the blade.</h2>
     <div className="bebrave-enchanter-body">
       <figure className="bebrave-enchanter-example">
-        <BladePreview drawing={preview}/>
-        <figcaption>{colorName??""}{colorName&&" · "}{personal?"Feather & dagger":SYMBOL_NAMES[activeSymbol]}</figcaption>
+        {preview?<BladePreview drawing={preview}/>:<div className="bebrave-blade-preview" role="img" aria-label="Choose an aura and an infusion to preview your carving"/>}
+        <figcaption>{preview&&<>{colorName} · {personal?"Feather & dagger":SYMBOL_NAMES[symbol!]}</>}</figcaption>
       </figure>
       <div className="bebrave-enchanter-pickers">
         <fieldset disabled={busy}>
@@ -69,7 +68,7 @@ export function BladeEnchanter({session,busy=false,problem,onBack,onEnchant}:{
         <fieldset disabled={busy} className="bebrave-enchanter-symbols">
           <legend>Infusion</legend>
           <div onKeyDown={choiceKeys}>
-            {symbols.map(choice=><button key={choice} type="button" aria-label={personal?"Feather and dagger":SYMBOL_NAMES[choice]} title={personal?"Feather and dagger":SYMBOL_NAMES[choice]} aria-pressed={symbol===choice} style={{color:color??colors[0].value}} onClick={()=>setSymbol(choice)}><svg viewBox="-1.2 -1.2 2.4 2.4" fill="currentColor" aria-hidden="true" focusable="false">{personal?<><path transform="translate(-.5 0) scale(.65)" d={SYMBOL_PATHS[FEATHER_SYMBOL]}/><path transform="translate(.5 0) scale(.65)" d={SYMBOL_PATHS[PERSONAL_SYMBOL]}/></>:<path d={SYMBOL_PATHS[choice]}/>}</svg></button>)}
+            {symbols.map(choice=><button key={choice} type="button" aria-label={personal?"Feather and dagger":SYMBOL_NAMES[choice]} title={personal?"Feather and dagger":SYMBOL_NAMES[choice]} aria-pressed={symbol===choice} style={{color:color??"var(--discovery-dialog-ink)"}} onClick={()=>setSymbol(choice)}><svg viewBox="-1.2 -1.2 2.4 2.4" fill="currentColor" aria-hidden="true" focusable="false">{personal?<><path transform="translate(-.5 0) scale(.65)" d={SYMBOL_PATHS[FEATHER_SYMBOL]}/><path transform="translate(.5 0) scale(.65)" d={SYMBOL_PATHS[PERSONAL_SYMBOL]}/></>:<path d={SYMBOL_PATHS[choice]}/>}</svg></button>)}
           </div>
         </fieldset>
       </div>
