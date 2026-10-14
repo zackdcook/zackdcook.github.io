@@ -43,6 +43,11 @@ export async function POST(request: Request) {
     const different=await db.rpc("bebrave_choose_tool",{p_session:retry.id,p_visitor_hash:actor,p_tool:"key",p_color:"#00F5FF",p_seed:99});
     check(different.error?.message.includes("tool already chosen"),"Blank retry allowed a different tool.");
     report.blankRetry={sameTool:true,sameRolls:true,sameEffects:true,differentToolRejected:true};
+    const others=attempts.map((value,index)=>({value,actor:actors[index]})).filter(entry=>entry.value.session_id&&entry.value.session_id!==id);
+    await Promise.all(others.map(entry=>rpc("bebrave_choose_tool",{p_session:entry.value.session_id,p_visitor_hash:entry.actor,p_tool:"arrowhead",p_color:"#40271C",p_seed:42})));
+    const independent=await Promise.all(others.map(entry=>rpc("bebrave_begin_drawing",{p_session:entry.value.session_id,p_visitor_hash:entry.actor,p_network_hash:network})));
+    check(independent.filter(value=>value.deadline).length===1&&independent.filter(value=>value.error==="network_growth").length===2,"Two-attempt growth allowance was exceeded.");
+    report.growthCycle={independentAttempts:2,additionalConcurrentStarts:3,accepted:1,rejected:2};
     const claims=await Promise.all(Array.from({length:6},()=>rpc("bebrave_claim_challenge",{p_token_hash:token})));
     check(claims.filter(Boolean).length===1,"Challenge claim replay succeeded.");
     report.tokenReplay={requests:6,accepted:1,rejected:5};

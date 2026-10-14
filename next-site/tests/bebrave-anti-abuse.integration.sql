@@ -61,9 +61,9 @@ begin
   prepared:=public.bebrave_prepare_session(actor,network,actor,9999,0,0);
   assert prepared->>'error'='growth','completed carving bypassed five-foot gate';
 
-  -- Household allowance: four distinct owners, never one silently merged owner.
+  -- Household allowance: two distinct owners, never one silently merged owner.
   select height into h from public.bebrave_tree_state where id=true;
-  for i in 1..4 loop
+  for i in 1..2 loop
     other:=encode(extensions.gen_random_bytes(32),'hex');
     household:=array_append(household,other);
     prepared:=public.bebrave_prepare_session(other,network2,other,0,0,0);
@@ -77,20 +77,20 @@ begin
     select height into h from public.bebrave_tree_state where id=true;
   end loop;
   -- Age only our new-identity fixtures out of the SHORT window. The growth gate
-  -- must still stop a fifth player, despite four accepted one-foot publications.
+  -- must still stop a third player, despite two accepted one-foot publications.
   update private.bebrave_participation_events set created_at=clock_timestamp()-interval '11 minutes'
     where network_hash=network2 and kind='identity';
   other:=encode(extensions.gen_random_bytes(32),'hex');
   prepared:=public.bebrave_prepare_session(other,network2,other,0,0,0);
   assert prepared->>'error'='network_growth','network grew and refilled its own allowance';
   assert not exists(select 1 from public.bebrave_visitors where visitor_hash=other),'denied fresh identity inserted';
-  assert (prepared->>'growth_feet_remaining')::integer=1,'wrong household wait';
-  -- One unrelated contribution opens the next fixed cycle. Four of our own
-  -- contributions must not release individual slots and open a fifth again.
-  update public.bebrave_tree_state set height=height+288,active_top=active_top+288,active_bottom=active_bottom+288 where id=true;
+  assert (prepared->>'growth_feet_remaining')::integer=3,'wrong household wait';
+  -- Three feet of unrelated growth open the next fixed cycle. Two of our own
+  -- contributions must not release individual slots and open a third again.
+  update public.bebrave_tree_state set height=height+864,active_top=active_top+864,active_bottom=active_bottom+864 where id=true;
   update private.bebrave_participation_events set created_at=clock_timestamp()-interval '16 minutes'
     where network_hash=network2 and kind='start';
-  for i in 1..4 loop
+  for i in 1..2 loop
     other:=household[i];
     prepared:=public.bebrave_prepare_session(other,network2,other,0,0,0);
     ready:=(prepared->>'session_id')::uuid;
