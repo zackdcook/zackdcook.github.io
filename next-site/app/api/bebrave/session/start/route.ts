@@ -2,6 +2,7 @@ import {
   assertSessionId, ownedSession, requestContext, sessionDraftStrokes, sessionView,
 } from "@/lib/bebrave-server";
 import { serviceSupabase } from "@/lib/supabase";
+import { participationResponse } from "@/lib/bebrave/participation-response";
 
 export async function POST(request: Request) {
   try {
@@ -11,9 +12,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const id = assertSessionId(body.sessionId);
 
-    const { error } = await serviceSupabase().rpc("bebrave_start_drawing", {
+    const { data:started, error } = await serviceSupabase().rpc("bebrave_begin_drawing", {
       p_session:id,
       p_visitor_hash:context.visitorHash,
+      p_network_hash:context.networkHash,
     });
 
     if (error) {
@@ -23,6 +25,9 @@ export async function POST(request: Request) {
       }, { status:429 });
       throw new Error("The carving could not start.");
     }
+    if (!started || typeof started !== "object") throw new Error("The carving could not start.");
+    const blocked = participationResponse(started);
+    if (blocked) return blocked;
 
     const row = await ownedSession(id, context.visitorHash);
     return Response.json({

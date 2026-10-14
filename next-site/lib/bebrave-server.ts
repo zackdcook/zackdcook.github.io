@@ -1,6 +1,7 @@
 import "server-only";
 import { assembleStrokes, readChunkPages, type StrokeChunk } from "./bebrave/completed-strokes";
 import { testModeEnabled } from "./experimental-environment";
+import { networkGroup } from "./bebrave/network-signal";
 
 import { createHmac, randomBytes, randomInt } from "node:crypto";
 import { cookies, headers } from "next/headers";
@@ -75,10 +76,11 @@ export async function requestContext(request: Request, createVisitor = true) {
     ? (h.get("x-vercel-forwarded-for") || h.get("x-forwarded-for"))?.split(",")[0]?.trim()
     : "local-development";
   const ua = (h.get("user-agent") || "unknown").slice(0, 240);
-  const day = new Date().toISOString().slice(0, 10);
   return {
     visitorHash: digest("visitor", visitor),
-    networkHash: digest(`network:${day}`, address || "unknown"),
+    // A stable keyed digest supports rolling windows across UTC midnight.
+    // Only the private participation ledger stores it, for at most seven days.
+    networkHash: digest("network:v2", process.env.VERCEL ? networkGroup(address || "") : "local-development"),
     browserHint: digest("browser", ua),
   };
 }
@@ -87,8 +89,11 @@ export async function verifyBeBraveTurnstile(request: Request, token: string) {
   const context = await requestContext(request, true);
   if (!context) throw new Error("This browser could not start a carving session.");
   if (beBraveTestMode()) return context;
+  if (!token || token.length > 2048) throw new Error("Please complete the quick human check.");
   const limited = await serviceSupabase().rpc("bebrave_turnstile_limit", { p_visitor_hash: context.visitorHash, p_network_hash: context.networkHash });
   if (limited.error) throw new Error("Too many carving attempts. Please give the tree a little time.");
+  const claimed = await serviceSupabase().rpc("bebrave_claim_challenge", { p_token_hash: digest("turnstile-token", token) });
+  if (claimed.error || claimed.data !== true) throw new Error("The human check expired or couldn’t finish. Please try again.");
   const host = new URL(request.headers.get("origin") || request.url).hostname;
   await verifyTurnstile(token, host, "bebrave");
   return context;

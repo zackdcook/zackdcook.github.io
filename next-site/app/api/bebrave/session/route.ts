@@ -4,6 +4,7 @@ import {
   verifyBeBraveTurnstile, visitorRow,
 } from "@/lib/bebrave-server";
 import { serviceSupabase } from "@/lib/supabase";
+import { participationResponse } from "@/lib/bebrave/participation-response";
 
 async function remaining(visitorHash: string) {
   const visitor = await visitorRow(visitorHash);
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
 
     const priorVisitor = await visitorRow(context.visitorHash);
     const pity = Number(priorVisitor?.epic_pity || 0);
-    const { data:id, error } = await serviceSupabase().rpc("bebrave_create_or_resume_session", {
+    const { data:prepared, error } = await serviceSupabase().rpc("bebrave_prepare_session", {
       p_visitor_hash:context.visitorHash,
       p_network_hash:context.networkHash,
       p_browser_hint:context.browserHint,
@@ -55,16 +56,12 @@ export async function POST(request: Request) {
       p_roll_key:securePityRoll(pity),
     });
 
-    if (error || typeof id !== "string") {
-      const match = error?.message?.match(/growth:(\d+)/);
-      if (match) {
-        return Response.json({
-          error:"growth",
-          growthFeetRemaining:Number(match[1]),
-        }, { status:429 });
-      }
+    if (error || !prepared || typeof prepared !== "object") {
       throw new Error("The tree could not prepare your tools. Please try again.");
     }
+    const blocked = participationResponse(prepared);
+    if (blocked) return blocked;
+    const id = assertSessionId(prepared.session_id);
 
     const reward = await serviceSupabase().rpc("bebrave_apply_legendary_unlock", {p_session:id,p_visitor_hash:context.visitorHash});
     if(reward.error)throw new Error("The tree could not prepare your tools. Please try again.");
