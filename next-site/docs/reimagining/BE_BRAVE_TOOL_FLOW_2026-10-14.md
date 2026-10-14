@@ -8,7 +8,7 @@ Clicking any ground item previews its description without choosing a server resu
 
 The lockbox previews in the same scene, with its description and Back / Enter a code. Code entry has its native alphanumeric field and Back on the left / Enter on the right in the same panel. Successful unlocking restores the exact cache-opening/pocket-knife narration. The timer warning shows the selected, rarity-styled tool in front of the existing trunk scene.
 
-Aura and Infusion are both enabled and visible from the initial workshop. Either may be chosen first. Confirming still requires an explicit aura and infusion. The live X preview uses a centered 2× camera zoom and matching SVG fallback, preserving the compact panel footprint.
+Aura and Infusion are both enabled and visible from the initial workshop. Either may be chosen first. Confirming still requires an explicit aura and infusion. The live X preview uses a centered 2× camera zoom and matching SVG fallback, preserving the compact panel footprint. Its negative compositor offset keeps the X intersection centered in the actual canvas, with a regression test covering phone and desktop surfaces.
 
 | Aura order | Pigment |
 | --- | --- |
@@ -45,7 +45,7 @@ Digests use `md5(string_agg(to_jsonb(row)::text, '|' order by primary_key))`, wi
 
 ## Verification and publication
 
-145 standard tests plus 12 API/module-mock tests pass (157 total), including initial enabled pickers, requested order with stable archive seeding, particle scaling/radial emission, and existing preservation/security checks. TypeScript, art/themes, optimized Next.js build and whitespace checks pass. React review confirms client-side preview only, guarded confirmation requests, retained busy/ownership checks, accessible names/pressed states, keyboard menu handling, and existing animation cleanup.
+146 standard tests plus 12 API/module-mock tests pass (158 total), including centered 2× compositing, initial enabled pickers, requested order with stable archive seeding, particle scaling/radial emission, and existing preservation/security checks. TypeScript, art/themes, optimized Next.js build and whitespace checks pass. React review confirms client-side preview only, guarded confirmation requests, retained busy/ownership checks, accessible names/pressed states, keyboard menu handling, and existing animation cleanup.
 
 Security advisors show only the preexisting service-only RLS-without-policy INFO notices; no new security warning. Reference: https://supabase.com/docs/guides/database/database-linter?lint=0008_rls_enabled_no_policy .
 

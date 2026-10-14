@@ -8,6 +8,7 @@ import { carvingParticleSymbol, type EnchantmentCamera } from "@/lib/bebrave/enc
 import { useCarvingEnchantments } from "./use-carving-enchantments";
 import { BeBraveCarving } from "./bebrave-stroke";
 import { choiceKeys } from "./bebrave-menu";
+import { bladePreviewCamera, BLADE_PREVIEW_VIEWBOX } from "@/lib/bebrave/blade-preview";
 
 const sampleStrokes = [
   {strokeId:"x-one",strokeOrder:0,points:[[210,92],[510,484]] as [number,number][]},
@@ -23,9 +24,7 @@ export function BladePreview({drawing}:{drawing:BeBravePublicDrawing}) {
     const root=scene.current;if(!root)return;
     const measure=()=>{
       const width=root.clientWidth,height=root.clientHeight;
-      const scale=2*Math.min(width/720,height/576);
-      const visibleHeight=height/scale;
-      camera.current={top:288-visibleHeight/2,height:visibleHeight,scale,pixelRatio:window.devicePixelRatio||1,left:(width-720*scale)/2,offsetTop:0,viewportWidth:width,viewportHeight:height};
+      camera.current=bladePreviewCamera(width,height,window.devicePixelRatio||1);
       wake();
     };
     const observer=new ResizeObserver(measure);observer.observe(root);measure();
@@ -34,7 +33,7 @@ export function BladePreview({drawing}:{drawing:BeBravePublicDrawing}) {
   return <div ref={scene} className="bebrave-blade-preview" role="img" aria-label="Animated example X carving">
     <canvas ref={auraRef} className="bebrave-enchantment-canvas" aria-hidden="true"/>
     <canvas ref={motesRef} className="bebrave-enchantment-canvas bebrave-enchantment-motes" aria-hidden="true"/>
-    {!canvasReady&&<svg viewBox="180 144 360 288" aria-hidden="true"><BeBraveCarving strokes={drawing.strokes} color={drawing.color} rarity={drawing.rarity} seed={drawing.effectSeed} effectId={drawing.effectId} canvasEffects/></svg>}
+    {!canvasReady&&<svg viewBox={BLADE_PREVIEW_VIEWBOX} aria-hidden="true"><BeBraveCarving strokes={drawing.strokes} color={drawing.color} rarity={drawing.rarity} seed={drawing.effectSeed} effectId={drawing.effectId} canvasEffects/></svg>}
   </div>;
 }
 

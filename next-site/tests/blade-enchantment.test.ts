@@ -2,12 +2,25 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { packDrawing,unpackDrawing } from "../lib/bebrave/completed-strokes";
 import { carvingParticleSymbol } from "../lib/bebrave/enchantment-painter";
+import { enchantmentSurface } from "../lib/bebrave/enchantment-painter";
+import { bladePreviewCamera } from "../lib/bebrave/blade-preview";
 import { PERSONAL_SYMBOL,FEATHER_SYMBOL,SYMBOL_PATHS,INFUSION_SYMBOLS,PARTICLE_SYMBOLS,SYMBOL_NAMES } from "../lib/bebrave/symbol-paths";
 import { carvingPigment,carvingEdge,contrastRatio } from "../lib/bebrave/carving-contrast";
 import { BEBRAVE_UNCOMMON_COLORS,BEBRAVE_EPIC_COLORS,BEBRAVE_SUPERIOR_COLORS } from "../lib/bebrave-config";
 import { legendaryToolSparkles } from "../lib/bebrave/tool-sparkles";
 import { lockCarvingSelection } from "../lib/bebrave/carving-selection";
 import type { BeBravePublicDrawing } from "../lib/bebrave-types";
+
+test("the 2x preview centers the X in the actual compositor surface on phones and desktop",()=>{
+  for(const [width,height] of [[292,72],[338,118],[340,240]]){
+    const camera=bladePreviewCamera(width,height,3),surface=enchantmentSurface(camera,576);
+    const screenX=(360*surface.scale*surface.ratio+surface.translateX)/surface.ratio+surface.cssLeft;
+    const screenY=(288*surface.scale*surface.ratio+surface.translateY)/surface.ratio+surface.cssTop;
+    assert.ok(Math.abs(screenX-width/2)<1e-6);
+    assert.ok(Math.abs(screenY-height/2)<1e-6);
+    assert.equal(camera.scale,2*Math.min(width/720,height/576));
+  }
+});
 
 test("selected symbols persist through archives; the personal effect retains both feather and dagger",()=>{
   const drawing:BeBravePublicDrawing={id:"enchantment",publicSequence:1,rarity:"legendary",color:"#41DCE8",effectSeed:12,particleSymbol:0x2620,effectId:"will-o-wisp-v1",strokes:[]};
