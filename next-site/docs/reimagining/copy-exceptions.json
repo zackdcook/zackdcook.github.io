@@ -208,5 +208,15 @@
     "path": "next-site/components/bebrave-experience.tsx",
     "text": "You look down at the base of the trunk and see a stone-carved arrowhead, a bent rusty nail, and brass house key laying on the ground beside a mossy cache sealed by a numeric keypad. Which do you choose?",
     "reason": "Zack explicitly revised the tool confirmation and lockbox code-entry flow on 2026-10-13: descriptions remain in the item scene, Back/Unleash or Back/Enter a code replace Yes/No, and the tool prompt uses his corrected wording."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "got too dull to keep going. The tree wears your carving proudly.",
+    "reason": "Zack requested appending Come back to repeat the ritual after giving the tree enough time to recover. on 2026-10-14. The original sentence remains intact within the longer completion message."
+  },
+  {
+    "path": "next-site/components/bebrave-experience.tsx",
+    "text": "′ growth before next:",
+    "reason": "Zack requested Recovery time remaining: followed by the number of new carvings above the disabled carve button on 2026-10-14, then specified one bold dialogue line in the choice color on 2026-10-15. This replaces the earlier growth label and uses the existing recovery counter."
   }
 ]
