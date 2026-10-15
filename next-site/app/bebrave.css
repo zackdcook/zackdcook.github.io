@@ -35,9 +35,7 @@ html:has(.bebrave-stage:not(.bebrave-world-stage)),body:has(.bebrave-stage:not(.
 .bebrave-rpg-hud .bebrave-rpg-actions{position:static;transform:none;width:100%;padding:0}
 .bebrave-rpg-actions .button{flex:1 1 0;min-width:0;white-space:normal;justify-content:flex-start;padding:12px 14px}
 .bebrave-rpg-actions .button:only-child{flex:1}
-.bebrave-carve-button{flex-wrap:nowrap}
-.bebrave-carve-label{min-width:0;display:grid;gap:4px}
-.bebrave-growth-wait{font:500 10px/1.3 var(--game-type);font-variant-numeric:tabular-nums}
+.bebrave-growth-wait{font-weight:700;font-variant-numeric:tabular-nums;color:var(--discovery-dialog-choice)}
 .bebrave-overlay{position:absolute;inset:0;z-index:90;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;gap:18px;padding:90px max(32px,env(safe-area-inset-right)) max(26px,env(safe-area-inset-bottom)) max(32px,env(safe-area-inset-left));pointer-events:none}
 .bebrave-overlay-main{min-width:0;min-height:0;max-width:100%;display:grid;place-items:center;pointer-events:auto}
 .bebrave-overlay .bebrave-rpg-hud{position:static;transform:none;width:min(100%,780px);justify-self:center;max-height:44dvh}
