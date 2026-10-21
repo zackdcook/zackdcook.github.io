@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-01",
+  "updated": "2026-10-21",
   "ringColor": "#66693E",
   "stages": [
     {
@@ -14,7 +14,7 @@
     {
       "id": "draft",
       "label": "0th draft",
-      "value": 27250,
+      "value": 30000,
       "target": 50000,
       "unit": "words",
       "status": "active",
