@@ -29,7 +29,7 @@ export function beBraveConfigured() {
 
 function hmacKey() {
   const key = process.env.BEBRAVE_HMAC_KEY;
-  if (!key || key.length < 32) throw new Error("Be Brave server security is not configured.");
+  if (!key || key.length < 32) throw new Error("Guestbook server security is not configured.");
   return key;
 }
 

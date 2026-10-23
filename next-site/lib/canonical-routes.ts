@@ -1,5 +1,7 @@
 /** Aliases go directly to the URLs used in navigation, metadata and sitemap. */
 export const canonicalRedirects = [
+  { source: "/doodlebook", destination: "/guestbook", permanent: false },
+  { source: "/bebrave", destination: "/guestbook", permanent: false },
   { source: "/index.html", destination: "/", permanent: true },
   { source: "/creative-works", destination: "/creativeworks", permanent: true },
   { source: "/about-me", destination: "/aboutme", permanent: true },

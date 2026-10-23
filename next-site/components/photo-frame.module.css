@@ -1,0 +1,1 @@
+.frame{position:relative;isolation:auto;overflow:hidden;border-radius:clamp(18px,3vw,34px);background:var(--color-surface);box-shadow:var(--material-cast-x,0px) calc(24px + var(--material-cast-y,0px)) 60px -10px var(--material-shadow)}

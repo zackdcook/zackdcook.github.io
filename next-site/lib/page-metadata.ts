@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { site } from "@/content/site";
 import { projects } from "@/content/projects";
 
+export const websiteStructuredData = {
+  "@context": "https://schema.org", "@type": "WebSite",
+  "@id": `${site.url}/#website`, url: `${site.url}/`, name: site.name,
+};
+
 export type ShareRecord = { id: string; path: string; title: string; description: string; category: string; status?: string; date?: string };
 export const shareRecords: ShareRecord[] = [
   { id: "home", path: "/", title: "Zack Cook.", description: site.description, category: "Aspiring Author + Engineer" },
@@ -10,6 +15,7 @@ export const shareRecords: ShareRecord[] = [
   { id: "events", path: "/events", title: "Come say hi =)", description: "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.", category: "Events" },
   { id: "folly", path: "/words-of-folly", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
   { id: "shoutouts", path: "/shoutouts", title: "Cool peeps.", description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.", category: "Shoutouts" },
+  { id: "guestbook", path: "/guestbook", title: "Guestbook", description: "A shared cypress tree that keeps every mark in its place.", category: "Guestbook" },
   ...projects.map(p => ({ id: `project-${p.slug}`, path: `/writing/${p.slug}`, title: p.shareTitle, description: p.summary, category: p.category, status: p.status })),
 ];
 

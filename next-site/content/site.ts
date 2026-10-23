@@ -3,8 +3,8 @@ export const site = {
   email: "hi@zackdcook.com",
   url: "https://zackdcook.com",
   title: "Zack Cook: Engineer ⇌ Author",
-  icon: "/images/brand/favicon-living.svg",
-  appleIcon: "/images/brand/apple-living.png",
+  icon: "/images/brand/zack-cook-mark.svg",
+  appleIcon: "/images/brand/zack-cook-mark-180.png",
   homeIcon: "/images/brand/home-living.webp",
   // These control the footer. Add only your own public profile/payment links.
   instagram: "https://www.instagram.com/zackyc.xyz/",

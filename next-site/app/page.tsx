@@ -11,6 +11,7 @@ import editorial from "@/content/editorial.json";
 import { getUpcomingEvents } from "@/lib/site-events";
 import { EditorialKitties } from "@/components/editorial-kitties";
 import styles from "./home.module.css";
+import { websiteStructuredData } from "@/lib/page-metadata";
 
 export const metadata = { alternates: { canonical: "/" } };
 
@@ -18,6 +19,7 @@ export default async function Home() {
   const [events, shoutouts] = await Promise.all([getUpcomingEvents(), getShoutouts()]);
   const event = events[0];
   return <div className={styles.world}>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(websiteStructuredData).replace(/</g,"\\u003c")}} />
     <section id="home"><FieldJournalHero /></section>
     <section id="creative-works" className={`desk-section ${styles.manuscript}`}>
       <div className="shell"><ActiveProject detailsLink /></div>
@@ -41,7 +43,15 @@ export default async function Home() {
           <Link className="button" href="/aboutme">A lil history</Link>
           </div>
         </div>
-        <EditorialKitties emptyPhoto={editorial.home.emptyCatPhoto} label={editorial.home.editorialLabel} />
+        <EditorialKitties label={editorial.home.editorialLabel} />
+      </div>
+    </section>
+    <section id="guestbook" className={styles.guestbook}>
+      <div className="shell">
+        <p className="eyebrow">DOODLES</p>
+        <h2>Sign my guestbook 📝</h2>
+        <p>Write your signature, leave a message, or draw something fun!</p>
+        <Link className="button" href="/guestbook" prefetch={false}>Make your mark</Link>
       </div>
     </section>
     <section id="words-of-folly" className={`folly-feature ${styles.clearing}`}>

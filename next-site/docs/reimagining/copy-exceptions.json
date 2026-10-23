@@ -218,5 +218,40 @@
     "path": "next-site/components/bebrave-experience.tsx",
     "text": "′ growth before next:",
     "reason": "Zack requested Recovery time remaining: followed by the number of new carvings above the disabled carve button on 2026-10-14, then specified one bold dialogue line in the choice color on 2026-10-15. This replaces the earlier growth label and uses the existing recovery counter."
+  },
+  {
+    "path": "next-site/app/aboutme/page.tsx",
+    "text": "During my final year of college, I moved to a small town in Arkansas for a summer internship. Reading for pleasure was somewhere near the bottom of my list of enjoyable activities, but after a few weeks in a town of 11,619 people, I got so bored that I searched for dopamine in a place I'd always considered barren of entertainment: a bookstore. There, on the shelf, sat a book with a vaguely familiar title:",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/app/aboutme/page.tsx",
+    "text": "I graduated cum laude from UF in 2012 (fun fact: this is where I met my wife), and then went on to work in Sarasota for a short while. This is when I began experiencing heavy withdrawal symptoms from the literary high that George R. R. Martin had injected straight into my basal ganglia. Taking pity on the starved and clueless book junkie I’d become, a friend lent me his copies of the first three books in the Wheel of Time series.",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/app/bebrave/page.tsx",
+    "text": "The Be Brave tree needs JavaScript for its shared drawing and local timeline.",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "A sunny window and cat tree, with two cats relaxing",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "Brave chased a shadow and got outside. Follow him?",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "Empty-window photo coming soon.",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/components/editorial-kitties.tsx",
+    "text": "The cats have left. Zack’s empty-window photograph will go here.",
+    "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
   }
 ]

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s · ${site.title}` },
   description: site.description,
-  icons: { icon: { url: "/images/brand/tab-mark-v2.svg", type: "image/svg+xml", sizes: "any" }, apple: { url: "/images/brand/apple-gradient-v2.png", sizes: "180x180", type: "image/png" } },
+  icons: { icon: [{ url: "/images/brand/zack-cook-mark.svg", type: "image/svg+xml", sizes: "any" }, { url: "/images/brand/zack-cook-mark-96.png", type: "image/png", sizes: "96x96" }], apple: { url: "/images/brand/zack-cook-mark-180.png", sizes: "180x180", type: "image/png" } },
   authors: [{ name: site.name }],
   openGraph: { type: "website", siteName: site.name, title: site.title, description: site.description, images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.title }] },
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.shareImage] },

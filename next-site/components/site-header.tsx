@@ -64,7 +64,7 @@ export function SiteHeader() {
         <span><span>Zack</span> <span>Cook</span></span>
       </Link>
       <nav className={styles.desktop} aria-label="Main navigation">
-        {navigation.map(({title,href}) => <Link key={href} href={href} prefetch scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)}>{title}</Link>)}
+        {navigation.map(({title,href}) => <Link key={href} href={href} prefetch={href !== "/guestbook"} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)}>{title}</Link>)}
         <BookMenuItem />
       </nav>
       <div className={styles.controls}>
@@ -85,7 +85,7 @@ export function SiteHeader() {
       }
     }}>
       <nav className={styles.destinations} aria-label="Mobile navigation">
-        {navigation.map(({title,href}) => <Link key={href} href={href} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)} onClick={close}>
+        {navigation.map(({title,href}) => <Link key={href} href={href} prefetch={href !== "/guestbook"} scroll={href === "/" ? false : undefined} onNavigate={href === "/" ? goHome : undefined} aria-current={current(href)} onClick={close}>
           <span>{title}</span>
         </Link>)}
         <BookMenuItem closeMenu={close} />
