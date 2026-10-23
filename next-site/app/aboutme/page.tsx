@@ -29,21 +29,26 @@ export default function AboutMe() {
 
     <AboutStory>
       <article className={`prose about-story ${styles.story}`}>
+        <header className={styles.opening} data-about-opening>
+          <div>
+            <p className="eyebrow">About Me</p>
+            <h1>I’m Zack<br /> <em>Cook.</em></h1>
+          </div>
+          <div className={styles.openingPortrait}><ReversiblePortrait /></div>
+        </header>
         <section className={styles.chapter} data-about-chapter="opening">
-        <div className={styles.opening} data-about-opening>
-          <p className="eyebrow">About Me</p>
-          <h1>I’m Zack<br /> <em>Cook.</em></h1>
-        </div>
-        <div className={styles.openingPortrait}><ReversiblePortrait /></div>
+        <div className={styles.chapterCopy}>
       <p><span className={styles.ink}>You may know me as Zack, Zack D. Cook, or, if you’re the government, Zachary David Cook. If you’ve known me for a while, you might be inclined to call me <span>Zacky C</span>. For one brief moment in the annals of history, I became Zacak when your friendly neighborhood supermarket accidentally wrote it on my birthday cake.</span></p>
 
       <p><span className={styles.ink}>Hello there!</span></p>
 
       <p><span className={styles.ink}>By day, I’m an industrial engineer for Publix Manufacturing, classically trained as a chemical engineer at the University of Florida. At dawn and dusk, I’m a self-taught aspiring author. And in whatever time I have left, I collect hobbies. So many hobbies. Please, in the name of all things holy, don’t tempt me with another one.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="family">
       <AboutMemoryPhoto id="family" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="family"><span className={styles.ink}>Cue history lesson.</span></p>
 
       <p><span className={styles.ink}>I grew up in Fort Myers, Florida, surrounded by a wonderful family full of smarty-pants creatives. Spend five minutes with them and you'll see that my creativity bug is both contagious and hereditary. Most of my childhood revolved around LEGO, Pokémon, and Star Wars—no, wait, scratch “childhood.” That still pretty much describes my adult life. My childhood dream was to dig up dinosaur bones. Thanks, <i>Jurassic Park</i>. I never quite became a paleontologist, but these days, I’m an avid dinosaur-watcher (by which I mean birds). Nailed it!</span></p>
@@ -53,30 +58,38 @@ export default function AboutMe() {
       <AboutMemoryPhoto id="high-school" inline />
       <p data-about-photo="high-school"><span className={styles.ink}>When I was in high school, my friends and I somehow managed to entertain ourselves by loitering around CVS and inventing our own <i>Jackass</i>-style challenges. We called them “The Manliest Man” competitions, featuring milk-chugging, bike-jousting, and full-contact downhill piggyback races. Apart from stupid stunts, I spent a lot of time on the computer, chatting on AIM, playing <i>World of Warcraft</i>, and downloading viruses—I mean songs—through LimeWire. The mid-aughts sure were a fun time.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="graduation">
       <AboutMemoryPhoto id="graduation" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="graduation"><span className={styles.ink}>I graduated in the top 10 of my class at Estero High School in 2008, then began my studies at UF. My original plan was to study 3D animation and CGI, fantasizing about making CGI for Star Wars, but that major wasn't offered by UF at the time. Besides, <i>Revenge of the Sith</i> had come out a few years earlier, and George Lucas had said he was done making Star Wars movies. So what was the point of studying animation? (HAHA. Hah. ha...) So, in choosing my major, I went with what I was best at: math, science, chemistry… chemical engineering! It was also touted as “the toughest major,” which, for some reason, only made me want to do it more.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="uf">
       <AboutMemoryPhoto id="uf" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="uf"><span className={styles.ink}>UF was a blast (fun fact: this is where I met my wife). During my final year of schooling, I moved to a small town in Arkansas for a summer internship. Reading for pleasure was somewhere near the bottom of my list of enjoyable activities, but after a few weeks in a town of 11,619 people, I got so bored that I searched for dopamine in a place I'd always considered barren of entertainment: a bookstore. There, on the shelf, sat a book with a vaguely familiar title: <i>A Game of Thrones</i>. I read that bitch in approximately seven breaths. I couldn’t put it down, nor the rest of the series.</span></p>
 
       <p><span className={styles.ink}>Review: "Oh shit. Books can be this good?"</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="gator">
       <AboutMemoryPhoto id="gator" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="gator"><span className={styles.ink}>I graduated cum laude from UF in 2012, and then went on to work in Sarasota for a short while. This is when I began experiencing heavy withdrawal symptoms from the literary high that George R. R. Martin had injected straight into my basal ganglia. Taking pity on the starved and clueless book junkie I’d become, a friend lent me his copies of the first three books in the Wheel of Time series.</span></p>
 
       <p><span className={styles.ink}>"Now <i>this</i> is podracing!"</span></p>
 
       <p><span className={styles.ink}>My career path in Sarasota wasn’t what I had planned—it wasn’t related to my degree—so I attended UF’s career showcase to look for something more fulfilling. And there I found it! A company I interviewed with offered me first choice among several plants located across the country. Madness took me, and I decided to relocate to Niagara Falls, NY. Why, you ask? Because a couple of dudes wearing literal barrels at the recruiting event—a suit-and-tie recruiting event, mind you—convinced me that their plant knew how to party better than any of the others.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="buffalo">
       <AboutMemoryPhoto id="buffalo" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="buffalo"><span className={styles.ink}>They, in fact, <i>did</i> know how to party.</span></p>
 
       <p><span className={styles.ink}>In addition to bringing me along for all of their shenanigans, my Buffalonian friends also inducted me into their book club. By crazy coincidence, they had just finished reading The Wheel of Time series! From there, reading became one of the few hobbies that stuck with me.</span></p>
@@ -87,20 +100,25 @@ export default function AboutMe() {
 
       <p><span className={styles.ink}>There was something about the creative freedom of making up crazy shit and having fun on the fly that filled me with a latent eldritch power. I just wouldn't learn how to tap into it until years later.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="welcome-home">
       <AboutMemoryPhoto id="welcome-home" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="welcome-home"><span className={styles.ink}>I had a great time in New York, but grew to miss my family too much, so I moved back to Florida in 2017. Upon arrival back in the Sunshine State, I picked up my first book by Brandon Sanderson, <i>The Way of Kings</i>, and he became my favorite author on the spot.</span></p>
 
       <p><span className={styles.ink}>Sanderson's ability to write from such diverse perspectives made me curious about who he was as a person. I did some research into his life experiences and eventually stumbled upon videos of his creative writing lectures at BYU. I think it was the way he taught those classes, breaking down the craft of writing almost like the scientific method, that made me brave enough to venture into the world of writing myself.</span></p>
 
       <p><span className={styles.ink}>That and the existential dread of a temporary mortal life. So I started writing my own novel.</span></p>
 
+      </div>
       </section>
       <section className={styles.chapter} data-about-chapter="today">
       <AboutMemoryPhoto id="today" inline />
+      <div className={styles.chapterCopy}>
       <p data-about-photo="today"><span className={styles.ink}>And that, my patient friend, is what brings us here to this peculiar intersection of space and time: me, writing this short account of my life, sitting by the window with my three cats, listening to the birds enjoy their lunch during a calm autumnal drizzle; and you, somewhere else, sometime after this moment has passed, reading these very words.</span></p>
       <p><span className={styles.ink}>-Zack</span></p>
+      </div>
       </section>
       </article>
     </AboutStory>

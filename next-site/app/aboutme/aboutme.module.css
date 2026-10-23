@@ -1,45 +1,47 @@
-.page{position:relative;isolation:isolate}
-.readingGrid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.9fr);gap:clamp(42px,7vw,115px);position:relative;align-items:start;view-timeline-name:--life-story;view-timeline-axis:block}
+.page{position:relative;isolation:isolate;container-type:inline-size}
+.readingGrid{
+ --about-gap:max(var(--gutter),calc((100cqi - 1240px)/2));
+ /* Half the previous photo column, including its responsive width and gap. */
+ --about-photo-width:calc((min(1240px,calc(100cqi - var(--gutter)*2)) - clamp(42px,7vw,115px))*3/14);
+ position:relative;view-timeline-name:--life-story;view-timeline-axis:block
+}
 .readingProgress{position:absolute;inset:0 auto 0 -18px;width:1px;pointer-events:none}
 .readingProgress>span{display:block;position:sticky;top:125px;height:calc(100svh - 210px);min-height:220px;max-height:680px;background:color-mix(in srgb,var(--color-border) 24%,transparent)}
 .readingProgress i{position:absolute;inset:0;background:var(--color-brass);transform-origin:top;scale:1 0}
-.story{margin:0;max-width:700px;min-width:0;position:relative;touch-action:pan-y pinch-zoom;text-wrap:wrap}
-.chapter{display:flow-root;min-height:var(--photo-height,0px)}
-.opening{margin:0 0 32px}
+.story{margin:0;max-width:none;min-width:0;position:relative;touch-action:pan-y pinch-zoom;text-wrap:wrap}
+.opening{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--about-gap);align-items:start;margin:0 0 clamp(40px,4vw,64px)}
 .opening h1{font:650 clamp(3.4rem,7.3vw,7rem)/1.03 var(--display);letter-spacing:-.055em;margin:.2em 0 0}
 .opening h1 em{font-style:normal;color:var(--color-accent)}
 .opening :global(.eyebrow){font:650 11px/1.5 var(--sans);letter-spacing:.16em;color:var(--color-accent)}
-.chapter>p{view-timeline-name:--paragraph-arrival;view-timeline-axis:block;font:400 17px/1.9 var(--sans);color:var(--color-ink);margin:0 0 1.5em}
-.chapter>p,.chapter>p>.ink{text-align:justify;text-align-last:start;text-wrap:wrap}
+.openingPortrait{display:block;min-width:0}
+.openingPortrait :global(.portrait-frame){max-width:none;width:100%}
+.chapter{display:grid;grid-template-columns:minmax(0,1fr) var(--about-photo-width);column-gap:var(--about-gap);align-items:start;position:relative;margin-bottom:clamp(32px,3vw,48px);view-timeline-name:--chapter-arrival;view-timeline-axis:block}
+.chapter:last-child{margin-bottom:0}
+.chapterCopy{grid-column:1;grid-row:1;min-width:0}
+.chapterCopy>p{font:400 17px/1.9 var(--sans);color:var(--color-ink);margin:0 0 1.5em}
+.chapterCopy>p:last-child{margin-bottom:0}
+.chapterCopy>p,.chapterCopy>p>.ink{text-align:justify;text-align-last:start;text-wrap:wrap}
 .story [data-about-photo]{scroll-margin-top:130px}
-.ink{display:block;transform-origin:left center}
-.openingPortrait,.inlinePhoto{display:none}
-/* The window uses the viewport's edges, just like the reading column. The
-   header naturally covers the photos above it; no inset mask cuts them early. */
-.photoRail{position:sticky;top:0;height:100dvh;min-width:0;overflow:clip;overflow-clip-margin:12px}
-.memoryCard{position:absolute;left:0;top:0;width:100%;height:auto}
-.memoryCard:not(:first-child){visibility:hidden}
-.readingGrid[data-rail-ready="true"] .memoryCard[aria-hidden="false"]{visibility:visible}
-.memoryCard :global(.portrait-frame){max-width:none;width:100%}
-.railPhoto{display:block;position:relative;margin:0;width:100%;height:auto}
-.railPhoto img,.inlinePhoto img{display:block;width:100%;height:auto;max-width:100%}
+.ink{display:block}
+/* Photos belong to their paragraphs in normal document flow. No clipped
+   viewport or independent scroll transforms can cut their cast shadows. */
+.chapter>.inlinePhoto{display:block;grid-column:2;grid-row:1;position:sticky;top:110px;align-self:start;margin:0;width:100%;height:auto}
+.inlinePhoto img{display:block;width:100%;height:auto;max-width:100%}
+@media(max-width:1120px){.chapter>.inlinePhoto{top:100px}}
 @media(max-width:959px),(max-height:599px){
- .chapter{min-height:0}.readingGrid{display:block}.story{max-width:700px;margin:auto}.photoRail{display:none}
+ .story{max-width:700px;margin:auto}
+ .opening{display:block;margin-bottom:36px}
  .opening h1{font-size:clamp(3.4rem,11vw,6.4rem)}
- .openingPortrait{display:block;margin:28px 0 36px;width:100%;view-timeline-name:--portrait-arrival;view-timeline-axis:block}
- .openingPortrait :global(.portrait-frame){max-width:none}
- .inlinePhoto{display:block;margin:12px 0 36px;width:100%;view-timeline-name:--memory-arrival;view-timeline-axis:block}
+ .openingPortrait{margin:28px 0 0;width:100%}
+ .chapter{display:block;margin-bottom:36px}
+ .chapter>.inlinePhoto{position:relative;top:auto;margin:12px 0 36px;width:100%}
 }
-@media(max-width:740px){.chapter>p{font-size:16px;line-height:1.9}.opening{margin-bottom:24px}}
+@media(max-width:740px){.chapterCopy>p{font-size:16px;line-height:1.9}}
 @supports(animation-timeline:view()){@media(prefers-reduced-motion:no-preference){
- :global(html:not([data-effects="reduced"])) .chapter>p>.ink{animation:paragraph-arrive linear both;animation-timeline:--paragraph-arrival;animation-range:entry 0% entry 85%}
+ :global(html:not([data-effects="reduced"])) .chapter{animation:chapter-arrive linear both;animation-timeline:--chapter-arrival;animation-range:entry 0px entry 140px}
  :global(html:not([data-effects="reduced"])) .readingProgress i{animation:reading-progress linear both;animation-timeline:--life-story;animation-range:contain 0% contain 100%}
- :global(html:not([data-effects="reduced"])) .inlinePhoto{animation:photo-arrive linear both;animation-timeline:--memory-arrival;animation-range:entry 0% entry 75%}
- :global(html:not([data-effects="reduced"])) .openingPortrait :global(.portrait-frame){animation:portrait-recede linear both;animation-timeline:--portrait-arrival;animation-range:entry 0% exit 100%}
 }}
-@keyframes paragraph-arrive{from{opacity:.55;translate:0 30px}to{opacity:1;translate:0 0}}
+@keyframes chapter-arrive{from{opacity:.65;translate:0 20px}to{opacity:1;translate:0 0}}
 @keyframes reading-progress{to{scale:1 1}}
-@keyframes photo-arrive{from{opacity:.75;translate:0 26px}to{opacity:1;translate:0 0}}
-@keyframes portrait-recede{from{translate:0 24px;rotate:1deg}to{translate:0 -42px;rotate:-1deg}}
-.readingGrid[data-arrival-mode="fallback"] :is(.ink,.inlinePhoto){transition:opacity .55s ease,translate .55s var(--ease-settle)}
-.readingGrid[data-arrival-mode="fallback"] :is(.ink,.inlinePhoto):not([data-arrived="true"]){opacity:.55;translate:0 26px}
+.readingGrid[data-arrival-mode="fallback"] .chapter{transition:opacity .55s ease,translate .55s var(--ease-settle)}
+.readingGrid[data-arrival-mode="fallback"] .chapter:not([data-arrived="true"]){opacity:.65;translate:0 20px}
