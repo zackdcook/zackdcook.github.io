@@ -9,6 +9,26 @@ export const bookCopy = {
 export const consentVersion = `book-launch.v1\n${bookCopy.headline}\n${bookCopy.supporting}`;
 export const bookDismissedKey = "zack.book-launch.dismissed.v1";
 export const bookSubscribedKey = "zack.book-launch.subscribed.v1";
+export const newsletterSubscribedKey = "zack.newsletter.subscribed.v1";
+export const newsletterCopy = {
+  checkbox: "Subscribe to future newsletters, too",
+  consent: "Ongoing notes from my writing desk. Unsubscribe using the link in any newsletter.",
+  success: "You’re on the newsletter list!",
+  bothSuccess: "You’re on both lists! I’ll email you when the book drops and send you future newsletters.",
+} as const;
+export const newsletterConsentVersion = `newsletter.v1\n${newsletterCopy.checkbox}\n${newsletterCopy.consent}`;
+export function subscriptionChoices(book: unknown, newsletter: unknown) {
+  if ((book !== undefined && typeof book !== "boolean") || (newsletter !== undefined && typeof newsletter !== "boolean")) throw new Error("validation");
+  // Older clients only requested the existing book alert. They can never opt
+  // into newsletters implicitly, including during a rolling deployment.
+  const choices = { book: book === undefined ? true : book, newsletter: newsletter === true };
+  if (!choices.book && !choices.newsletter) throw new Error("validation");
+  return choices;
+}
+export type SubscriptionChoices = { book: boolean; newsletter: boolean };
+export function subscriptionReceipt(choices: SubscriptionChoices) {
+  return choices.book && choices.newsletter ? newsletterCopy.bothSuccess : choices.newsletter ? newsletterCopy.success : bookCopy.success;
+}
 export const analyticsOptOutKey = "zack.analytics.opt-out.v1";
 export type Placement = "homepage" | "menu";
 export function savedChoice(value: unknown) { return value === "true"; }

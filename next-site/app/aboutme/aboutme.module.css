@@ -45,3 +45,6 @@
 @keyframes reading-progress{to{scale:1 1}}
 .readingGrid[data-arrival-mode="fallback"] .chapter{transition:opacity .55s ease,translate .55s var(--ease-settle)}
 .readingGrid[data-arrival-mode="fallback"] .chapter:not([data-arrived="true"]){opacity:.65;translate:0 20px}
+
+.signature{display:block;width:min(270px,75%);height:auto;margin:8px 0 28px;opacity:.92}
+:global(html[data-theme="dark"]) .signature{filter:invert(1)}

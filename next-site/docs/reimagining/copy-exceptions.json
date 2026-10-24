@@ -253,5 +253,10 @@
     "path": "next-site/components/editorial-kitties.tsx",
     "text": "The cats have left. Zack’s empty-window photograph will go here.",
     "reason": "Owner-approved Guestbook public launch and About wording/photo update, October 22, 2026. The existing game mechanics and dialogue remain unchanged; obsolete secret-entrance text is retired."
+  },
+  {
+    "path": "next-site/components/folly-pile.tsx",
+    "text": "Drag a leaf to arrange it. Drag from empty space into the pile to fluff and scatter the leaves. Click or tap a leaf to read it. On touch screens, swipe to scroll, or hold a leaf to pick it up. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.",
+    "reason": "Zack requested immediate full-pile touch stirring with no page scrolling inside the interactive area on 2026-10-23. Updated accessible instructions describe the new gesture and scrolling outside the pile."
   }
 ]

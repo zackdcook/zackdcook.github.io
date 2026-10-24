@@ -1,25 +1,29 @@
 import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 const records = new Map<string, Record<string, unknown>>();
+const newsletters = new Map<string, Record<string, unknown>>();
 let attempts = 0, dbUnavailable = false, inserted: Record<string, unknown> | null = null;
 const tasks: (() => Promise<void>)[] = [];
 mock.module("server-only", { exports: { default: {} } });
 mock.module("../lib/supabase.ts", { exports: {
   serviceSupabase: () => ({
-    rpc: async () => ({ data: ++attempts <= 6, error: dbUnavailable ? { code: "unavailable" } : null }),
+    rpc: async (name: string, args: Record<string, unknown>) => {
+      if (name === "book_launch_check_limit") return {data: ++attempts <= 6,error: dbUnavailable ? {} : null};
+      assert.equal(name,"register_email_subscriptions");
+      if (dbUnavailable) return {data:null,error:{}};
+      const email=String(args.p_email),meta=args.p_metadata as Record<string,unknown>;
+      const book_added=args.p_book===true && !records.has(email),newsletter_added=args.p_newsletter===true && !newsletters.has(email);
+      if(book_added) {inserted={email,consent_version:args.p_book_consent,source_page:meta.page,referrer_domain:meta.referrer_domain,status:"active"};records.set(email,inserted);}
+      if(newsletter_added) newsletters.set(email,{email,consent_version:args.p_newsletter_consent,status:"active",unsubscribe_token:"a".repeat(64)});
+      return {data:{book_added,newsletter_added},error:null};
+    },
     from: (table: string) => {
-      assert.equal(table, "book_launch_subscribers");
-      return { upsert: (row: Record<string, unknown>, options: Record<string, unknown>) => {
-        assert.deepEqual(options, { onConflict: "email", ignoreDuplicates: true });
-        return { select: async (columns: string) => {
-          assert.equal(columns, "id");
-          if (dbUnavailable) return { data: null, error: {} };
-          const email = String(row.email);
-          if (records.has(email)) return { data: [], error: null };
-          inserted = row; records.set(email, { ...row, status: "active" });
-          return { data: [{ id: "private-record-id" }], error: null };
-        } };
-      } };
+      assert.equal(table,"newsletter_subscribers");
+      return { update: (patch:Record<string,unknown>)=>({eq:(column:string,token:string)=>({eq:async()=>{
+        assert.equal(column,"unsubscribe_token");
+        for(const row of newsletters.values()) if(row.unsubscribe_token===token && row.status==="active") Object.assign(row,patch);
+        return {error:dbUnavailable ? {} : null};
+      }})}) };
     },
   }),
 } });
@@ -60,6 +64,30 @@ test("signup route accepts one normalized record and gives identical responses t
   assert.deepEqual(await (await POST(request({ placement: "menu" }))).json(), response);
   assert.deepEqual(records.get("reader@example.com"), suppressed);
   assert.ok(!JSON.stringify(response).includes("record"));
+});
+test("newsletter-only and both choices have separate explicit consent and idempotent membership",async()=>{
+  attempts=0;
+  await POST(request({email:"newsletter@example.com",book:false,newsletter:true}));
+  assert.equal(records.has("newsletter@example.com"),false);
+  assert.ok(newsletters.has("newsletter@example.com"));
+  assert.match(String(newsletters.get("newsletter@example.com")!.consent_version),/newsletter.v1/);
+  await POST(request({email:"newsletter@example.com",book:true,newsletter:true}));
+  const consent=structuredClone(newsletters.get("newsletter@example.com"));
+  assert.ok(records.has("newsletter@example.com"));
+  await POST(request({email:"newsletter@example.com",book:false,newsletter:true}));
+  assert.deepEqual(newsletters.get("newsletter@example.com"),consent);
+  assert.equal((await POST(request({book:false,newsletter:false}))).status,400);
+  assert.equal((await POST(request({book:false,newsletter:"true"}))).status,400);
+});
+test("unsubscribe is scoped to the newsletter and never changes book consent",async()=>{
+  attempts=0;
+  const previous=structuredClone(records.get("newsletter@example.com"));
+  assert.equal((await POST(request({action:"unsubscribe_newsletter",unsubscribe_token:"a".repeat(64)}))).status,200);
+  assert.equal(newsletters.get("newsletter@example.com")!.status,"unsubscribed");
+  assert.deepEqual(records.get("newsletter@example.com"),previous);
+  await POST(request({email:"newsletter@example.com",book:false,newsletter:true}));
+  assert.equal(newsletters.get("newsletter@example.com")!.status,"unsubscribed","duplicate requests never override an unsubscribe");
+  assert.equal((await POST(request({action:"unsubscribe_newsletter",unsubscribe_token:"bad"}))).status,400);
 });
 test("origin, body size, honeypot, validation, and challenge failures cannot insert records", async () => {
   attempts = 0;

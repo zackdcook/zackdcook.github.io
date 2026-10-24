@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { site } from "@/content/site";
+import progress from "@/content/progress.json";
 import { projects } from "@/content/projects";
 
 export const websiteStructuredData = {
@@ -10,7 +11,7 @@ export const websiteStructuredData = {
 export type ShareRecord = { id: string; path: string; title: string; description: string; category: string; status?: string; date?: string };
 export const shareRecords: ShareRecord[] = [
   { id: "home", path: "/", title: "Zack Cook.", description: site.description, category: "Aspiring Author + Engineer" },
-  { id: "writing", path: "/creativeworks", title: "I’m writing a novel!", description: "Follow Zack Cook’s first novel: a completed 35,834-word braindump and a zeroth draft at 27,250 of 50,000 words.", category: "Creative Works" },
+  { id: "writing", path: "/creativeworks", title: "I’m writing a novel!", description: `Follow Zack Cook’s first novel: a completed 35,834-word braindump and a zeroth draft at ${progress.stages.find(stage=>stage.id==="draft")!.value.toLocaleString("en-US")} of 50,000 words.`, category: "Creative Works" },
   { id: "about", path: "/aboutme", title: "About Me", description: "Meet Zack Cook, also known as Zacky C: an aspiring author, Publix industrial engineer, and University of Florida chemical engineering graduate in Lakeland, Florida.", category: "About Me" },
   { id: "events", path: "/events", title: "Come say hi =)", description: "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.", category: "Events" },
   { id: "folly", path: "/words-of-folly", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
@@ -27,7 +28,7 @@ export function pageMetadata(id: string, title?: string): Metadata {
   const imageOrigin = process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL
     ? `https://${process.env.VERCEL_BRANCH_URL}`
     : site.url;
-  const image = { url: new URL(`/share/${record.id}`, imageOrigin).toString(), width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
+  const image = { url: new URL(`/share/${record.id}?v=stone-20261023`, imageOrigin).toString(), width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
   return {
     title: title || record.title,
     description: record.description,

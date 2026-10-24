@@ -12,7 +12,7 @@ export default function robots(): MetadataRoute.Robots {
         : { userAgent: "*", disallow: "/" },
     sitemap:
       process.env.SITE_LIVE === "true" && process.env.VERCEL_ENV !== "preview"
-        ? "https://zackdcook.com/sitemap.xml"
+        ? ["https://zackdcook.com/sitemap.xml", "https://zackdcook.com/image-sitemap.xml"]
         : undefined,
   };
 }

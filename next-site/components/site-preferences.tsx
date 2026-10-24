@@ -5,10 +5,10 @@ import { defaultPreferences, normalizePreferences, preferenceKey, type Preferenc
 import { livingTimeline, normalizeTimeline, timelineKey, type LocalTimeline } from "@/lib/local-timeline";
 import { TiltLightingControl } from "@/components/tilt-lighting-control";
 
-import { bookDismissedKey, bookSubscribedKey, analyticsOptOutKey, savedChoice } from "@/lib/book-launch/shared";
+import { bookDismissedKey, bookSubscribedKey, newsletterSubscribedKey, analyticsOptOutKey, savedChoice } from "@/lib/book-launch/shared";
 
 const beBraveTimelineKey = "zack.bebrave.timeline.v1";
-const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, bookDismissed: false, bookSubscribed: false, analyticsOptOut: false, dismissBook: () => {}, subscribeBook: () => {}, setAnalyticsOptOut: (_value: boolean) => {}, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
+const PreferenceContext = createContext({ preferences: defaultPreferences, reduced: false, hydrated: false, bookDismissed: false, bookSubscribed: false, newsletterSubscribed: false, subscribeNewsletter: () => {}, unsubscribeNewsletter: () => {}, analyticsOptOut: false, dismissBook: () => {}, subscribeBook: () => {}, setAnalyticsOptOut: (_value: boolean) => {}, timeline: livingTimeline, resetVersion: 0, update: (_patch: Partial<Preferences>) => {}, changeTimeline: (_next: LocalTimeline) => {}, openPreferences: (_source: HTMLElement) => {} });
 export const usePreferences = () => useContext(PreferenceContext);
 
 export function SitePreferences({ children }: { children: React.ReactNode }) {
@@ -17,6 +17,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
   const [timeline, setTimeline] = useState(livingTimeline);
   const [bookDismissed, setBookDismissed] = useState(false);
   const [bookSubscribed, setBookSubscribed] = useState(false);
+  const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
   const [analyticsOptOut, setAnalyticsChoice] = useState(false);
   const [hydrated, setHydrated] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
@@ -35,6 +36,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     try {
       setBookDismissed(savedChoice(localStorage.getItem(bookDismissedKey)));
       setBookSubscribed(savedChoice(localStorage.getItem(bookSubscribedKey)));
+      setNewsletterSubscribed(savedChoice(localStorage.getItem(newsletterSubscribedKey)));
       setAnalyticsChoice(savedChoice(localStorage.getItem(analyticsOptOutKey)));
     } catch { setAnalyticsChoice(true); }
     setHydrated(true);
@@ -53,6 +55,7 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
       try {
       if (event.key === bookDismissedKey || event.key === null) setBookDismissed(savedChoice(localStorage.getItem(bookDismissedKey)));
       if (event.key === bookSubscribedKey || event.key === null) setBookSubscribed(savedChoice(localStorage.getItem(bookSubscribedKey)));
+      if (event.key === newsletterSubscribedKey || event.key === null) setNewsletterSubscribed(savedChoice(localStorage.getItem(newsletterSubscribedKey)));
       if (event.key === analyticsOptOutKey || event.key === null) setAnalyticsChoice(savedChoice(localStorage.getItem(analyticsOptOutKey)));
       } catch { setAnalyticsChoice(true); }
       if (event.key === timelineKey || event.key === null) {
@@ -94,9 +97,11 @@ export function SitePreferences({ children }: { children: React.ReactNode }) {
     resetting.current = true; dialog.current?.close();
   }
 
-  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, bookDismissed, bookSubscribed, analyticsOptOut,
+  return <PreferenceContext value={{ preferences, reduced: preferences.reduceEffects || systemReduced, hydrated, bookDismissed, bookSubscribed, newsletterSubscribed, analyticsOptOut,
     dismissBook: () => saveChoice(bookDismissedKey, true, setBookDismissed),
     subscribeBook: () => saveChoice(bookSubscribedKey, true, setBookSubscribed),
+    subscribeNewsletter: () => saveChoice(newsletterSubscribedKey, true, setNewsletterSubscribed),
+    unsubscribeNewsletter: () => saveChoice(newsletterSubscribedKey, false, setNewsletterSubscribed),
     setAnalyticsOptOut: value => saveChoice(analyticsOptOutKey, value, setAnalyticsChoice),
     timeline, resetVersion, update, changeTimeline, openPreferences: source => { opener.current = source; dialog.current?.showModal(); } }}>
     {children}

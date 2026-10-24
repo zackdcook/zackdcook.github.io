@@ -4,10 +4,10 @@ import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } fr
 import { QuoteLeaf } from "@/components/quote-leaf";
 import { usePreferences } from "@/components/site-preferences";
 import { follyQuotes } from "@/content/folly";
-import { makeLeafPile, moveLeaf, dragLeaf, leafGrabPoint, pushLeaves, stepLeaves, leafProjection, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
+import { makeLeafPile, moveLeaf, pushLeaves, stepLeaves, leafProjection, type LeafBody, type LeafBounds, type LeafPoint } from "@/lib/leaf-physics";
 import { createLeafReader, requestReaderLeaf, finishReaderFall, leafRetireMs, type LeafReaderStack } from "@/lib/leaf-reader";
 
-type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect; leafIndex: number | null; grip: LeafPoint };
+type Gesture = { id: number; origin: LeafPoint; previous: LeafPoint; time: number; dragging: boolean; touch: boolean; rect: DOMRect; leafIndex: number | null };
 export function FollyPile() {
   const [keyboardFocus, setKeyboardFocus] = useState(true);
   useEffect(() => {
@@ -22,7 +22,7 @@ export function FollyPile() {
   const buttons = useRef<(HTMLElement | null)[]>([]), bodies = useRef<LeafBody[]>([]);
   const bounds = useRef<LeafBounds>({ width: 1000, height: 720, leafWidth: 370 });
   const frame = useRef(0), last = useRef(0), gesture = useRef<Gesture | null>(null), suppressClick = useRef(false);
-  const painted = useRef<string[]>([]), touchHold = useRef<ReturnType<typeof setTimeout> | null>(null), touchArmed = useRef(false);
+  const painted = useRef<string[]>([]);
   const opener = useRef<HTMLElement | null>(null), reducedRef = useRef(reduced);
   const retireTimer = useRef<ReturnType<typeof setTimeout> | null>(null), selectedRef=useRef(follyQuotes.length-1);
   const [selected, setSelected] = useState(follyQuotes.length - 1);
@@ -37,18 +37,20 @@ export function FollyPile() {
       const projection = leafProjection(leaf);
       const transform = `translate(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px) translate(-50%,-50%) matrix(${projection.a.toFixed(5)},${projection.b.toFixed(5)},${projection.c.toFixed(5)},${projection.d.toFixed(5)},0,0)`;
       if (painted.current[i] !== transform) { button.style.transform = transform; painted.current[i] = transform; }
+      button.style.setProperty("--leaf-bank", String(Math.min(1,(Math.abs(leaf.rx)+Math.abs(leaf.ry))/52)));
+      button.style.setProperty("--leaf-lift", `${Math.min(18, 4 + Math.max(0,leaf.z-leaf.base)*.08).toFixed(1)}px`);
       const order = String(leaf.order);
       if (button.style.zIndex !== order) button.style.zIndex = order;
     });
+    window.dispatchEvent(new Event("zack-material-geometry"));
   }
   function animate(now: number) {
     frame.current = 0; if (reducedRef.current || dialog.current?.open || document.hidden) return;
-    const g=gesture.current, held=g?.dragging && g.leafIndex!==null ? bodies.current[g.leafIndex] : undefined;
+
     const elapsed = Math.min((now - (last.current || now - 16.67)) / 1000, 1 / 30);
-    if (held && g) dragLeaf(held,g.previous,g.grip,{x:0,y:0},elapsed,bounds.current);
-    const moving = stepLeaves(bodies.current, elapsed, bounds.current, held);
+    const moving = stepLeaves(bodies.current, elapsed, bounds.current);
     last.current = now; paint();
-    if (moving || held) frame.current = requestAnimationFrame(animate);
+    if (moving) frame.current = requestAnimationFrame(animate);
   }
   function start() { if (!frame.current && !dialog.current?.open && !document.hidden && !reducedRef.current) { last.current = 0; frame.current = requestAnimationFrame(animate); } }
   function clearRetirement() { if (retireTimer.current) clearTimeout(retireTimer.current); retireTimer.current=null; }
@@ -90,30 +92,25 @@ export function FollyPile() {
     if (!g.dragging && Math.hypot(point.x - g.origin.x, point.y - g.origin.y) < (g.touch ? 4 : 7)) return;
     if (!g.dragging) {
       g.dragging = true; suppressClick.current = true; element.dataset.dragging = "true";
-      if (g.leafIndex !== null) bodies.current[g.leafIndex].order = 1 + Math.max(...bodies.current.map(leaf => leaf.order));
     }
-    if (g.leafIndex !== null) {
-      dragLeaf(bodies.current[g.leafIndex], point, g.grip, {x:point.x-g.previous.x,y:point.y-g.previous.y}, (now-g.time)/1000, bounds.current);
-      paint(); start();
-    } else if (pushLeaves(bodies.current,g.previous,point,(now-g.time)/1000,bounds.current)) start();
+    // A swept brush reaches every layer beneath the gesture, including when
+    // the finger lands on the top leaf rather than on empty ground.
+    if (pushLeaves(bodies.current,g.previous,point,(now-g.time)/1000,bounds.current,g.touch)) { paint(); start(); }
     g.previous = point; g.time = now;
   }
   function move(event: PointerEvent<HTMLDivElement>) {
-    const g = gesture.current; if (!g || g.touch || event.pointerType !== "mouse" || g.id !== event.pointerId) return;
+    const g = gesture.current; if (!g || g.id !== event.pointerId) return;
     const point = { x: event.clientX - g.rect.left, y: event.clientY - g.rect.top };
     event.preventDefault(); dragTo(point, performance.now(), event.currentTarget);
   }
 
   function release(event: PointerEvent<HTMLDivElement>) {
     const g=gesture.current;
-    if (!g || g.touch || event.pointerType !== "mouse" || g.id !== event.pointerId) return;
+    if (!g || g.id !== event.pointerId) return;
     gesture.current = null; delete event.currentTarget.dataset.dragging;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
     if (event.type === "pointerup" && !g.dragging && g.leafIndex!==null && g.leafIndex<follyQuotes.length) {
       suppressClick.current=true; openLeaf(g.leafIndex); return;
-    }
-    if (g.dragging && g.leafIndex!==null) {
-      const leaf=bodies.current[g.leafIndex];leaf.vx*=.35;leaf.vy*=.35;
     }
     start();
   }
@@ -121,6 +118,7 @@ export function FollyPile() {
     const element = stage.current; if (!element) return;
     const layout = () => {
       cancelAnimationFrame(frame.current); frame.current = 0; gesture.current = null;
+      delete element.dataset.dragging;
       const width = element.clientWidth, height = element.clientHeight;
       const leafWidth = Math.min(370, width * .44, height * .54);
       const previous = bounds.current;
@@ -147,60 +145,25 @@ export function FollyPile() {
     return () => { observer.disconnect(); document.removeEventListener("visibilitychange",visibility); cancelAnimationFrame(frame.current); clearRetirement(); };
   }, []);
   useEffect(() => {
-    const element = stage.current; if (!element) return;
-    const clearHold = () => {
-      if (touchHold.current) clearTimeout(touchHold.current);
-      touchHold.current = null; touchArmed.current = false;
-      delete element.dataset.grabReady;
-    };
-    const cancel = () => { clearHold(); gesture.current = null; suppressClick.current = true; delete element.dataset.dragging; start(); };
-    const begin = (event: TouchEvent) => {
-      if (reducedRef.current || event.touches.length !== 1) return;
-      const hit = (event.target as Element).closest<HTMLElement>("[data-leaf-index]");
-      if (!hit) return;
-      const index = Number(hit.dataset.leafIndex), leaf = bodies.current[index], touch = event.touches[0];
-      if (!leaf) return;
-      clearHold(); suppressClick.current = false;
-      const rect = element.getBoundingClientRect(), point = {x:touch.clientX-rect.left,y:touch.clientY-rect.top};
-      const g: Gesture = {id:touch.identifier,origin:point,previous:point,time:performance.now(),dragging:false,touch:true,rect,leafIndex:index,grip:leafGrabPoint(leaf,point)};
-      gesture.current = g;
-      touchHold.current = setTimeout(() => {
-        if (gesture.current === g && !reducedRef.current) { touchArmed.current = true; element.dataset.grabReady = "true"; }
-      }, 320);
-    };
-    const move = (event: TouchEvent) => {
-      const g = gesture.current;
-      if (!g?.touch) return;
-      if (event.touches.length !== 1 || reducedRef.current) { cancel(); return; }
-      const touch = Array.from(event.touches).find(t => t.identifier === g.id); if (!touch) return;
-      const point = {x:touch.clientX-g.rect.left,y:touch.clientY-g.rect.top};
-      if (!touchArmed.current) {
-        if (Math.hypot(point.x-g.origin.x,point.y-g.origin.y) > 12) cancel();
-        return;
+    const element = stage.current;
+    const cancel = () => {
+      const g = gesture.current; gesture.current = null;
+      if (g) suppressClick.current = true;
+      if (element) {
+        delete element.dataset.dragging;
+        if (g && element.hasPointerCapture(g.id)) element.releasePointerCapture(g.id);
       }
-      if (!event.cancelable) { cancel(); return; }
-      event.preventDefault(); dragTo(point,performance.now(),element);
+      start();
     };
-    const end = (event: TouchEvent) => {
-      const g = gesture.current;
-      if (!g?.touch || !Array.from(event.changedTouches).some(t => t.identifier === g.id)) return;
-      clearHold(); gesture.current = null; delete element.dataset.dragging;
-      if (g.dragging && g.leafIndex !== null) {
-        const leaf = bodies.current[g.leafIndex]; leaf.vx *= .35; leaf.vy *= .35;
-        suppressClick.current = true; if (event.cancelable) event.preventDefault(); start();
-      }
-      // A tap uses the native button click. Only an actual held drag consumes
-      // touchend, so Safari can distinguish activation from ordinary scrolling.
-    };
-    element.addEventListener("touchstart",begin,{passive:true});
-    element.addEventListener("touchmove",move,{passive:false});
-    element.addEventListener("touchend",end,{passive:false});
-    element.addEventListener("touchcancel",cancel,{passive:true});
-    return () => { clearHold(); element.removeEventListener("touchstart",begin); element.removeEventListener("touchmove",move); element.removeEventListener("touchend",end); element.removeEventListener("touchcancel",cancel); };
+    const visibility = () => { if (document.hidden) cancel(); };
+    window.addEventListener("blur", cancel);
+    document.addEventListener("visibilitychange", visibility);
+    return () => { cancel(); cancelAnimationFrame(frame.current); frame.current=0; window.removeEventListener("blur", cancel); document.removeEventListener("visibilitychange", visibility); };
   }, []);
   useEffect(() => {
     if (!reduced) return;
     cancelAnimationFrame(frame.current); frame.current = 0; gesture.current = null;
+    if (stage.current) delete stage.current.dataset.dragging;
     clearRetirement(); updateReader(createLeafReader(selectedRef.current,false,readerRef.current.serial+1));
     bodies.current.forEach(leaf => { leaf.z=leaf.base; leaf.rx = leaf.ry = leaf.vx = leaf.vy = leaf.vz = leaf.wx = leaf.wy = leaf.wz = 0; }); paint();
   }, [reduced]);
@@ -214,17 +177,23 @@ export function FollyPile() {
   }, []);
 
   return <>
-    <span id="leaf-instructions" className="sr-only">Drag a leaf to arrange it. Drag from empty space into the pile to fluff and scatter the leaves. Click or tap a leaf to read it. On touch screens, swipe to scroll, or hold a leaf to pick it up. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
+    <span id="leaf-instructions" className="sr-only">Drag anywhere inside the pile to fluff and scatter the leaves. Click or tap a leaf to read it. Scroll outside the pile to move down the page. With a leaf focused, arrow keys move only that leaf; Enter opens it. In the reader, left and right arrows browse older and newer notes. Reduce Effects arranges the leaves in order, newest first.</span>
     <div ref={stage} className={`folly-ground ${reduced ? "folly-ground-readable" : ""}`} aria-describedby="leaf-instructions"
       onPointerDown={event => {
-        if (event.pointerType !== "mouse" || reducedRef.current || !event.isPrimary || event.button !== 0) return;
+        if (!event.isPrimary) {
+          const active = gesture.current; gesture.current = null;
+          delete event.currentTarget.dataset.dragging;
+          if (active && event.currentTarget.hasPointerCapture(active.id)) event.currentTarget.releasePointerCapture(active.id);
+          return;
+        }
+        if (reducedRef.current || event.button !== 0) return;
         suppressClick.current = false;
         const rect = event.currentTarget.getBoundingClientRect(), point = { x: event.clientX - rect.left, y: event.clientY - rect.top };
         const hit=(event.target as Element).closest<HTMLElement>("[data-leaf-index]");
         const leafIndex=hit ? Number(hit.dataset.leafIndex) : null, leaf=leafIndex===null ? null : bodies.current[leafIndex];
-        // Mouse drags capture immediately. Touch swipes stay native below.
+        // touch-action is fixed before contact; Safari must not claim the drag.
         event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId);
-        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect, leafIndex:leaf ? leafIndex : null, grip:leaf ? leafGrabPoint(leaf,point) : {x:0,y:0} };
+        gesture.current = { id: event.pointerId, origin: point, previous: point, time: performance.now(), dragging: false, touch:event.pointerType!=="mouse", rect, leafIndex:leaf ? leafIndex : null };
       }} onPointerMove={move} onPointerUp={release} onPointerCancel={release}
       onLostPointerCapture={event => { if (event.target === event.currentTarget) release(event); }}
       onContextMenu={event => { if (!reducedRef.current) event.preventDefault(); }}>

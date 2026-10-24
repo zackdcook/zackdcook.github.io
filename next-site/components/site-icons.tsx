@@ -16,8 +16,8 @@ export function SiteIcons() {
         if (!meta) { meta = document.createElement("meta"); meta.name = "theme-color"; document.head.append(meta); }
         if (meta.content !== background) meta.content = background;
       }
-      // Browser-tab SVG follows the browser's own media query. Do not replace
-      // it with a site-theme bitmap or overwrite Next's versioned icon URLs.
+      // Keep the supplied static brand icon and Next’s versioned icon URLs.
+      // Appearance changes only update the surrounding browser chrome.
     };
     update();
     // Next may replace metadata during navigation; retain the local timeline.

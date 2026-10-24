@@ -8,12 +8,12 @@
 .folly-page-heading{max-width:17ch}
 .folly-panel{position:relative;background:none;padding:0;border:0}
 .folly-label{font:450 13px/1.8 var(--sans);color:var(--color-muted);margin:0 0 22px;max-width:650px}
-.folly-ground{position:relative;width:100%;height:clamp(440px,62vw,760px);isolation:isolate;overflow:hidden;touch-action:auto;margin-top:12px;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.folly-ground{position:relative;width:100%;height:clamp(440px,62vw,760px);isolation:isolate;overflow:hidden;touch-action:none;overscroll-behavior:contain;margin-top:12px;cursor:grab;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .folly-ground[data-dragging],.folly-ground[data-grab-ready]{cursor:grabbing}
 .folly-leaves{margin:0;padding:0;list-style:none}
 .folly-leaves,.folly-leaves>li,.folly-litter{transform-style:flat}
 .folly-leaves>li{position:static}
-.pile-leaf{position:absolute;left:0;top:0;width:var(--pile-leaf-width,370px);aspect-ratio:1.6;padding:0;border:0;background:transparent;cursor:grab;color:inherit;font:inherit;transform-style:flat;pointer-events:auto;touch-action:pan-y}
+.pile-leaf{position:absolute;left:0;top:0;width:var(--pile-leaf-width,370px);aspect-ratio:1.6;padding:0;border:0;background:transparent;cursor:grab;color:inherit;font:inherit;transform-style:flat;pointer-events:auto;touch-action:none}
 .pile-leaf .leaf-hit{pointer-events:fill}
 .pile-leaf .leaf-art{pointer-events:none}
 .pile-leaf:focus-visible{outline:none}
@@ -26,7 +26,7 @@
 .leaf-veins{fill:none;stroke:color-mix(in srgb,var(--leaf-ink) 40%,var(--leaf-color));stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .leaf-center-vein{stroke-width:3.2}
 .leaf-hit{fill:transparent;pointer-events:fill}
-.leaf-hit,.leaf-art,.quote-leaf{touch-action:auto;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.leaf-hit,.leaf-art,.quote-leaf{touch-action:inherit;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
 .leaf-lettering{font-family:var(--display);font-weight:650;fill:var(--leaf-ink);pointer-events:none}
 .folly-ground-readable{height:auto;min-height:0;padding:32px 0;overflow:visible;touch-action:pan-y;cursor:auto}
 .folly-ground-readable .folly-leaves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:30px 18px}
@@ -65,3 +65,17 @@ html[data-effects="reduced"] .folly-leaves .pile-leaf{position:relative;left:aut
 html[data-effects="reduced"] .folly-litter{display:none}
 html[data-effects="reduced"] .leaf-reader[open] .reader-leaf{animation:none}
 @media(prefers-reduced-motion:reduce){.leaf-reader[open] .reader-leaf{animation:none}}
+
+/* A curved blade: raised edge, central fold, vein relief and a moving broad
+   reflection. One SVG paint layer per leaf avoids intersecting 3D text planes. */
+.quote-leaf{--leaf-raised:color-mix(in srgb,var(--leaf-color) 78%,var(--folly-highlight));--leaf-rib-light:color-mix(in srgb,var(--leaf-color) 70%,var(--folly-highlight));--leaf-fold:color-mix(in srgb,var(--leaf-color) 78%,var(--folly-depth));--leaf-edge:color-mix(in srgb,var(--leaf-color) 86%,var(--folly-depth))}
+.leaf-edge-depth{fill:color-mix(in srgb,var(--leaf-color) 64%,var(--folly-depth));stroke:none}
+.leaf-shadow{opacity:calc(.14 + var(--leaf-bank,0)*.06);filter:blur(4px);transform:translate(calc(var(--shadow-x,0px)*.65),calc(var(--leaf-lift,5px) + var(--shadow-y,0px)*.65))}
+.leaf-body{stroke:color-mix(in srgb,var(--leaf-color) 70%,var(--folly-depth));stroke-width:1.3}
+.leaf-glint{transform-box:fill-box;transform-origin:center;translate:calc((var(--glass-x,50%) - 50%)*.8) calc((var(--glass-y,30%) - 30%)*.8);opacity:calc(.08 + var(--light-strength,0)*.34)}
+.leaf-veins{stroke:color-mix(in srgb,var(--leaf-color) 76%,var(--folly-depth));stroke-width:1.4;opacity:.65}
+.leaf-vein-highlights{fill:none;stroke:color-mix(in srgb,var(--leaf-color) 76%,var(--folly-highlight));stroke-width:2;stroke-linecap:round;opacity:.55}
+.leaf-fine-veins{fill:none;stroke:var(--folly-depth);stroke-width:.8;stroke-linecap:round;opacity:.12}
+.leaf-center-vein{stroke-width:2.5}
+.folly-ground-readable .leaf-art,.folly-ground-readable .quote-leaf{touch-action:pan-y}
+html[data-effects="reduced"] .leaf-glint{opacity:.08}

@@ -5,7 +5,7 @@ import { approachLight, followLight, materialLight, panelLight, materialPose, gl
 import { consumeEarlyTilt, enrollTiltOnTap, orientationAPI, recenterTiltEvent, tiltLight, tiltStatusEvent, type TiltReading } from "@/lib/phone-tilt";
 import { publicMoteY } from "@/lib/public-atmosphere";
 
-const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.bebrave-human-modal,.bebrave-timer,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.icon-button,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
+const surfacesSelector = "[data-material-surface],[data-light-source],.calendar-dialog,.bebrave-human-modal,.bebrave-timer,.pile-leaf .quote-leaf,.folly-latest .quote-leaf,.leaf-reader .reader-leaf,.button,.icon-button,.stage-button,.rail-controls button,.feed-copy button,.project-description-toggle,.portrait-frame,.tactile-photo,.preference-control,.bebrave-rpg-dialogue,.bebrave-home-button";
 const panelsSelector = ".bebrave-human-modal,.desk-section > .shell,.bio-section > .life-section,.shoutouts-section > .shell,.about-biography > .shell,.folly-panel,.shoutout-card,.event-callout,.writing-panel,.bebrave-rpg-dialogue";
 const dynamicProperties = ["--shadow-x","--shadow-y","--shadow-blur","--cast-x","--cast-y","--rim-x","--rim-y","--material-pitch","--material-yaw","--material-cast-x","--material-cast-y"];
 
@@ -52,7 +52,7 @@ export function PointerLight() {
       style(element, "--light-strength", light.strength.toFixed(3));
       style(element, "--light-x", px(light.lightX)); style(element, "--light-y", px(light.lightY));
       // Cursor moves reflections; phone tilt also moves the small physical cast.
-      const dynamicCast = source === "tilt";
+      const dynamicCast = source === "tilt" || element.matches(".quote-leaf,.reader-leaf");
       style(element, "--shadow-x", dynamicCast ? px(light.shadowX) : "0px");
       style(element, "--shadow-y", dynamicCast ? px(light.shadowY) : "0px");
       style(element, "--shadow-blur", dynamicCast ? px(light.blur) : "0px");

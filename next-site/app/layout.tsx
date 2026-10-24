@@ -33,11 +33,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s · ${site.title}` },
   description: site.description,
-  icons: { icon: [{ url: "/images/brand/zack-cook-mark.svg", type: "image/svg+xml", sizes: "any" }, { url: "/images/brand/zack-cook-mark-96.png", type: "image/png", sizes: "96x96" }], apple: { url: "/images/brand/zack-cook-mark-180.png", sizes: "180x180", type: "image/png" } },
+  icons: { icon: [{ url: "/images/brand/zack-cook-stone-96.png", type: "image/png", sizes: "96x96" }, { url: "/images/brand/zack-cook-stone-192.png", type: "image/png", sizes: "192x192" }], apple: { url: "/images/brand/zack-cook-stone-180.png", sizes: "180x180", type: "image/png" } },
+  manifest: "/manifest.webmanifest",
   authors: [{ name: site.name }],
   openGraph: { type: "website", siteName: site.name, title: site.title, description: site.description, images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.title }] },
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [site.shareImage] },
-  robots: process.env.SITE_LIVE === "true" && process.env.VERCEL_ENV !== "preview" ? { index: true, follow: true } : { index: false, follow: false },
+  robots: process.env.SITE_LIVE === "true" && process.env.VERCEL_ENV !== "preview" ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } } : { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

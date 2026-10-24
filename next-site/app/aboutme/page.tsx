@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { AboutStory } from "@/components/about-story";
 import { AboutMemoryPhoto } from "@/components/about-memory-photo";
 import { ReversiblePortrait } from "@/components/reversible-portrait";
+import { publicImageRecords, imageStructuredData } from "@/lib/public-images";
 import { site } from "@/content/site";
 import styles from "./aboutme.module.css";
 
@@ -24,7 +25,7 @@ export default function AboutMe() {
 
   return <div className={`page-wrap about-me-page ${styles.page}`}><div className="shell">
     <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-      "@context": "https://schema.org", "@type": "ProfilePage", mainEntity: person,
+      "@context": "https://schema.org", "@type": "ProfilePage", mainEntity: person, image: publicImageRecords.filter(record=>record.page==="/aboutme").map(imageStructuredData),
     }).replace(/</g, "\\u003c") }} />
 
     <AboutStory>
@@ -118,6 +119,7 @@ export default function AboutMe() {
       <div className={styles.chapterCopy}>
       <p data-about-photo="today"><span className={styles.ink}>And that, my patient friend, is what brings us here to this peculiar intersection of space and time: me, writing this short account of my life, sitting by the window with my three cats, listening to the birds enjoy their lunch during a calm autumnal drizzle; and you, somewhere else, sometime after this moment has passed, reading these very words.</span></p>
       <p><span className={styles.ink}>-Zack</span></p>
+      <img className={styles.signature} src="/images/brand/zack-cook-signature.svg" alt="Zack Cook’s handwritten signature" width={2978} height={1312} loading="lazy" decoding="async"/>
       </div>
       </section>
       </article>
