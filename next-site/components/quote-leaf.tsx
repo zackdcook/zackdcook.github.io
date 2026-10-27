@@ -29,7 +29,6 @@ function LeafArtwork({ quote, index }: { quote: FollyQuote; index: number }) {
         <radialGradient id={sheenId}><stop stopColor="var(--folly-highlight)" stopOpacity=".7"/><stop offset="1" stopColor="var(--folly-highlight)" stopOpacity="0"/></radialGradient>
         <linearGradient id={foldId} x1="0" y1="0" x2="0" y2="1"><stop stopColor="white" stopOpacity=".24"/><stop offset=".52" stopColor="white" stopOpacity="0"/><stop offset="1" stopColor="black" stopOpacity=".16"/></linearGradient>
       </defs>
-      <path className="leaf-shadow" d={shape.outline} transform="translate(0 7)" />
       <path className="leaf-edge-depth" d={shape.outline} transform="translate(0 3)"/>
       <path className="leaf-body" d={shape.outline} style={{fill:`url(#${ridgeId})`}} />
       <g clipPath={`url(#${clipId})`} className="leaf-relief">

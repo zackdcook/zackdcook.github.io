@@ -61,7 +61,7 @@ test("a short phone stroke creates visible lift and gentle banking",()=>{
   const bounds={width:337,height:480,leafWidth:148},mouse=makeLeafPile(1,bounds),touch=structuredClone(mouse);
   const start={x:touch[0].x,y:touch[0].y},end={x:start.x+28,y:start.y+12};
   pushLeaves(mouse,start,end,.07,bounds); pushLeaves(touch,start,end,.07,bounds,true);
-  assert.ok(touch[0].vx>mouse[0].vx && touch[0].vz>=mouse[0].vz);
+  assert.ok(touch[0].vx>0 && touch[0].vx<mouse[0].vx && touch[0].vz<mouse[0].vz);
   let lift=0,tilt=0,spin=0;
   const rz=touch[0].rz;
   for(let i=0;i<50;i++) {
@@ -70,7 +70,7 @@ test("a short phone stroke creates visible lift and gentle banking",()=>{
     tilt=Math.max(tilt,Math.hypot(touch[0].rx,touch[0].ry));
     spin=Math.max(spin,Math.abs(touch[0].rz-rz));
   }
-  assert.ok(lift>30,`lift ${lift}`); assert.ok(tilt>8,`tilt ${tilt}`); assert.ok(spin>1,`spin ${spin}`);
+  assert.ok(lift>3 && lift<35,`lift ${lift}`); assert.ok(tilt>2,`tilt ${tilt}`); assert.ok(spin>.2,`spin ${spin}`);
 });
 test("flight preserves whole-leaf paint order and projects identically anywhere in the frame",()=>{
   const bounds={width:1000,height:720,leafWidth:300},leaves=makeLeafPile(7,bounds);

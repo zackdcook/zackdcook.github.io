@@ -1,12 +1,9 @@
+import { pageMetadata } from "@/lib/page-metadata";
 import Link from "next/link";
 import { CopyFeed } from "@/components/copy-feed";
 import { site } from "@/content/site";
 
-export const metadata = {
-  title: "Follow by RSS",
-  description: "Follow Zack Cook’s Words of Folly in your favorite feed reader.",
-  alternates: { canonical: "/rss" },
-};
+export const metadata = pageMetadata("rss");
 
 export default function Rss() {
   const feed = `${site.url}/words-of-folly/feed.xml`;

@@ -23,10 +23,9 @@
 @media(prefers-reduced-motion:reduce){.book-signup-form[aria-busy="true"] button::after{animation:none}}
 html[data-effects="reduced"] .book-signup-form[aria-busy="true"] button::after{animation:none}
 
-.book-subscription-options{border:0;padding:0;margin:0 0 16px;min-width:0}
-.book-subscription-options .book-subscription-choice{min-height:44px;padding:7px 0;gap:16px;font:450 14px/1.45 var(--sans);border:0;margin:0}
 .book-subscription-choice>span:first-child{flex:1}
 .book-subscription-choice .checkbox-control{flex:0 0 auto}
-.book-panel .newsletter-consent,.book-dialog .newsletter-consent{font:400 12px/1.5 var(--sans);color:var(--color-muted);margin:4px 0 0;max-width:46ch}
 .book-signup-fields .button:disabled{opacity:.55;cursor:default}
-.book-other-list{display:block;background:none;border:0;border-bottom:1px solid currentColor;color:var(--color-accent);font:500 14px/1.5 var(--sans);padding:10px 0 3px;margin-top:12px;cursor:pointer}
+.book-signup-form .book-subscription-choice{min-height:44px;padding:7px 0;gap:16px;font:450 14px/1.45 var(--sans);border:0;margin:12px 0 0}
+.book-duplicate-note{display:block;margin-top:8px;font:450 13px/1.5 var(--sans);color:var(--color-muted)}
+.book-success>p{margin:0}

@@ -13,6 +13,7 @@ import "./art-assets.css";
 import "./book-launch.css";
 import "./folly.css";
 import "./bebrave.css";
+import Loading from "./loading";
 import { Suspense } from "react";
 import { SitePreferences } from "@/components/site-preferences";
 import { InputMode } from "@/components/input-mode";
@@ -33,7 +34,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.title, template: `%s · ${site.title}` },
   description: site.description,
-  icons: { icon: [{ url: "/images/brand/zack-cook-stone-96.png", type: "image/png", sizes: "96x96" }, { url: "/images/brand/zack-cook-stone-192.png", type: "image/png", sizes: "192x192" }], apple: { url: "/images/brand/zack-cook-stone-180.png", sizes: "180x180", type: "image/png" } },
+  icons: { icon: [{ url: "/images/brand/zack-cook-geode-96.png", type: "image/png", sizes: "96x96" }, { url: "/images/brand/zack-cook-geode-192.png", type: "image/png", sizes: "192x192" }], apple: { url: "/images/brand/zack-cook-geode-180.png", sizes: "180x180", type: "image/png" } },
   manifest: "/manifest.webmanifest",
   authors: [{ name: site.name }],
   openGraph: { type: "website", siteName: site.name, title: site.title, description: site.description, images: [{ url: site.shareImage, width: 1200, height: 630, alt: site.title }] },
@@ -61,7 +62,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <OrganicTransition name="zacks-corner">
             <div id="page-sheet">
               <main id="main" tabIndex={-1}>
-                <Suspense fallback={<div className="shell page-wrap loading-leaf" role="status">Opening a new leaf…</div>}>{children}</Suspense>
+                <Suspense fallback={<Loading />}>{children}</Suspense>
               </main>
               <SiteFooter />
             </div>

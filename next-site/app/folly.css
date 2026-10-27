@@ -21,7 +21,6 @@
 .pile-leaf[data-keyboard-focus="true"]:focus-visible .leaf-body{stroke:var(--color-accent);stroke-width:9}
 .quote-leaf{display:block;position:relative;width:100%;aspect-ratio:1.6;color:var(--leaf-ink);background:none}
 .leaf-art{display:block;width:100%;height:100%;overflow:visible}
-.leaf-shadow{fill:var(--folly-depth);opacity:.16;pointer-events:none}
 .leaf-body{fill:var(--leaf-color);stroke:color-mix(in srgb,var(--leaf-ink) 45%,var(--leaf-color));stroke-width:2;stroke-linejoin:round}
 .leaf-veins{fill:none;stroke:color-mix(in srgb,var(--leaf-ink) 40%,var(--leaf-color));stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .leaf-center-vein{stroke-width:3.2}
@@ -56,8 +55,6 @@
 @keyframes leaf-settle-back{from{transform:var(--reader-from-transform,none);translate:var(--reader-from-translate,0 0)}to{transform:translate(-1%,2%) rotate(-9deg) scale(.97);translate:0 0}}
 @keyframes leaf-buried-away{0%,58%{opacity:1}to{opacity:0}}
 .folly-latest{display:block;width:min(620px,100%);margin:0 auto}
-.folly-latest .quote-leaf,.leaf-reader .reader-leaf{--leaf-dynamic-shadow-x:calc(var(--shadow-x,0px)*.62);--leaf-dynamic-shadow-y:calc(var(--shadow-y,7px)*.62)}
-.folly-latest .leaf-shadow,.leaf-reader .reader-leaf .leaf-shadow{transform:translate(var(--leaf-dynamic-shadow-x,0px),var(--leaf-dynamic-shadow-y,7px))}
 @media(max-width:600px){.folly-ground{height:min(64svh,540px);min-height:400px}.folly-ground-readable{height:auto;min-height:0}.leaf-reader{width:98vw;padding:12px 8px}.leaf-reader-nav{gap:6px}.leaf-reader-nav .button{padding:10px 9px;font-size:12px}.leaf-reader-nav .leaf-reader-end{padding:10px 0}}
 html[data-effects="reduced"] .folly-ground{height:auto;min-height:0;padding:32px 0;overflow:visible;touch-action:pan-y;cursor:auto}
 html[data-effects="reduced"] .folly-leaves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:30px 18px}
@@ -70,7 +67,6 @@ html[data-effects="reduced"] .leaf-reader[open] .reader-leaf{animation:none}
    reflection. One SVG paint layer per leaf avoids intersecting 3D text planes. */
 .quote-leaf{--leaf-raised:color-mix(in srgb,var(--leaf-color) 78%,var(--folly-highlight));--leaf-rib-light:color-mix(in srgb,var(--leaf-color) 70%,var(--folly-highlight));--leaf-fold:color-mix(in srgb,var(--leaf-color) 78%,var(--folly-depth));--leaf-edge:color-mix(in srgb,var(--leaf-color) 86%,var(--folly-depth))}
 .leaf-edge-depth{fill:color-mix(in srgb,var(--leaf-color) 64%,var(--folly-depth));stroke:none}
-.leaf-shadow{opacity:calc(.14 + var(--leaf-bank,0)*.06);filter:blur(4px);transform:translate(calc(var(--shadow-x,0px)*.65),calc(var(--leaf-lift,5px) + var(--shadow-y,0px)*.65))}
 .leaf-body{stroke:color-mix(in srgb,var(--leaf-color) 70%,var(--folly-depth));stroke-width:1.3}
 .leaf-glint{transform-box:fill-box;transform-origin:center;translate:calc((var(--glass-x,50%) - 50%)*.8) calc((var(--glass-y,30%) - 30%)*.8);opacity:calc(.08 + var(--light-strength,0)*.34)}
 .leaf-veins{stroke:color-mix(in srgb,var(--leaf-color) 76%,var(--folly-depth));stroke-width:1.4;opacity:.65}

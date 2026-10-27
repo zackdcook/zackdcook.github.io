@@ -37,8 +37,6 @@ export function FollyPile() {
       const projection = leafProjection(leaf);
       const transform = `translate(${leaf.x.toFixed(2)}px,${leaf.y.toFixed(2)}px) translate(-50%,-50%) matrix(${projection.a.toFixed(5)},${projection.b.toFixed(5)},${projection.c.toFixed(5)},${projection.d.toFixed(5)},0,0)`;
       if (painted.current[i] !== transform) { button.style.transform = transform; painted.current[i] = transform; }
-      button.style.setProperty("--leaf-bank", String(Math.min(1,(Math.abs(leaf.rx)+Math.abs(leaf.ry))/52)));
-      button.style.setProperty("--leaf-lift", `${Math.min(18, 4 + Math.max(0,leaf.z-leaf.base)*.08).toFixed(1)}px`);
       const order = String(leaf.order);
       if (button.style.zIndex !== order) button.style.zIndex = order;
     });

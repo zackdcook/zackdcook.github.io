@@ -46,22 +46,22 @@ function request(overrides: Record<string, unknown> = {}, headers: Record<string
     origin: "https://zackdcook.com", "content-type": "application/json", "x-vercel-forwarded-for": "192.0.2.1", ...headers,
   }, body: JSON.stringify({ email: "Reader@Example.com", website: "", token: "single-use-test-token", placement: "homepage", page: "/?email=private", referrer: "https://news.example.com/?secret=1", utm_source: "book-drop", ...overrides }) });
 }
-test("signup route accepts one normalized record and gives identical responses to active and suppressed duplicates", async () => {
+test("signup route accepts one normalized record and adds only a small receipt flag for active and suppressed duplicates", async () => {
   attempts = 0;
   const first = await POST(request());
   assert.equal(first.status, 200);
   const response = await first.json();
-  assert.deepEqual(response, { accepted: true });
+  assert.deepEqual(response, { accepted: true, already_subscribed: false });
   assert.equal(records.size, 1);
   assert.equal(inserted?.email, "reader@example.com");
   assert.equal(inserted?.source_page, "/");
   assert.equal(inserted?.referrer_domain, "example.com");
   const original = structuredClone(records.get("reader@example.com"));
-  assert.deepEqual(await (await POST(request())).json(), response);
+  assert.deepEqual(await (await POST(request())).json(), {accepted:true, already_subscribed:true});
   assert.deepEqual(records.get("reader@example.com"), original);
   records.get("reader@example.com")!.status = "suppressed";
   const suppressed = structuredClone(records.get("reader@example.com"));
-  assert.deepEqual(await (await POST(request({ placement: "menu" }))).json(), response);
+  assert.deepEqual(await (await POST(request({ placement: "menu" }))).json(), {accepted:true, already_subscribed:true});
   assert.deepEqual(records.get("reader@example.com"), suppressed);
   assert.ok(!JSON.stringify(response).includes("record"));
 });
@@ -70,7 +70,7 @@ test("newsletter-only and both choices have separate explicit consent and idempo
   await POST(request({email:"newsletter@example.com",book:false,newsletter:true}));
   assert.equal(records.has("newsletter@example.com"),false);
   assert.ok(newsletters.has("newsletter@example.com"));
-  assert.match(String(newsletters.get("newsletter@example.com")!.consent_version),/newsletter.v1/);
+  assert.match(String(newsletters.get("newsletter@example.com")!.consent_version),/newsletter.v2/);
   await POST(request({email:"newsletter@example.com",book:true,newsletter:true}));
   const consent=structuredClone(newsletters.get("newsletter@example.com"));
   assert.ok(records.has("newsletter@example.com"));

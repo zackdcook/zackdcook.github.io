@@ -1,122 +1,62 @@
-# Book announcements and newsletters
+# Book Alert and optional newsletters
 
-The homepage and Book Alert menu share one form. The book announcement starts
-selected; “Subscribe to future newsletters, too” always starts unchecked.
-Uncheck the book option for newsletter-only signup. The email field and one
-human check submit both choices together. No email address is kept in browser
-storage. Each subscription has its own local completion flag; the remaining
-list stays available in the menu and after a success message. The existing
-homepage dismissal key is retained.
+The homepage and **Book Alert** menu use the original book-launch invitation,
+email field and **Count me in** button. Entering an email always requests the
+one-time launch announcement. The single optional checkbox,
+**Subscribe to ongoing future newsletters**, starts unchecked. There is no
+book-only checkbox, newsletter-only form or follow-up newsletter promotion.
+
+After acceptance, the browser remembers the signup and hides the homepage
+invitation on future visits. **Book Alert** remains available in the menu,
+including to people who already signed up. It always opens the original form.
+The original homepage dismissal key is preserved; no email is stored locally.
+
+## Confirmation and duplicates
+
+The success message remains “You’re on the list! I’ll email you when the book
+drops.” A repeated book signup adds only the small line
+“(you were already successfully subscribed, be tee dubs)”. This is an on-page
+receipt. No confirmation-email sender has been introduced.
+
+Normalized email has a unique constraint. A duplicate preserves the original
+row, timestamp, consent, suppression status and attribution. An existing book
+subscriber may explicitly select the newsletter checkbox later; this records
+only their new newsletter consent and does not duplicate their book signup.
+An unchecked checkbox never opts anyone in or removes a previous opt-in.
 
 ## View and manage
 
-Open the **zackdcook** Supabase project → **Table Editor** →
-**newsletter_subscribers**. Filter `status = active` for the mailing list.
-The existing `book_launch_subscribers` table remains the one-time list.
-`newsletter_consent_events` records newsletter signup, unsubscribe and
-suppression changes. Each table is private to the backend and project owner.
+In the **zackdcook** Supabase project, open **Table Editor →
+book_launch_subscribers**. The new **ongoing_newsletter** column is true only
+for active, explicit newsletter consent. Existing book-only subscribers stay
+false. This is a synchronized summary of the private newsletter consent and
+status records; it updates when someone unsubscribes.
 
-To honor a removal request, set only the newsletter row’s `status` to
-`unsubscribed` and `unsubscribed_at` to the current time. To block mail to a
-problem address, use `suppressed`. Do not set an address back to active without
-new consent. Repeated public signup submissions never reactivate an unsubscribed
-or suppressed record. Delete a subscriber only for an intentional erasure
-request; deleting a newsletter row also erases its consent history.
+For newsletter removal, set the corresponding **newsletter_subscribers** row’s
+status to `unsubscribed` and `unsubscribed_at` to the current time. For mail
+suppression, use `suppressed`. Do not reactivate a record without fresh consent.
+The private **newsletter_consent_events** table preserves opt-in and removal
+history. Existing data and the book-announcement promise are preserved.
 
-The **email_subscription_audience** view is an owner-only combined list, with
-one row per normalized email and independent book/newsletter flags. The
-newsletter unsubscribe URL is included per subscriber. It uses a random
-256-bit token in the URL fragment, so it is not sent in page URLs, referrers or
-page-request logs. The static unsubscribe page only makes a request after the
-reader confirms. It affects the newsletter only, and still works with new
-signups disabled.
+The private **email_subscription_audience** view has one row per email, the
+independent book/newsletter states and a personal newsletter unsubscribe URL.
+Its 256-bit random token is in the URL fragment. The static unsubscribe page
+only posts after the visitor confirms, and changes only newsletter status.
 
-## Preparing mail without duplicates
+## Sending and cost
 
-No email provider or automatic sending has been added. This feature collects
-consent and provides unsubscribe handling on the existing free infrastructure.
-A future sending integration must include the per-recipient unsubscribe link
-in every newsletter and use the delivery ledger below. Exporting a list and
-sending it through an unrelated tool cannot enforce these guarantees by itself.
+This feature collects subscriptions; there is no automatic sending provider.
+Every newsletter sent later must include the per-recipient unsubscribe link.
+Use the audience view to select active newsletters, or the union of pending
+book announcements and active newsletters for the debut announcement, with
+one copy per address. The **email_campaign_deliveries** unique `(campaign,email)`
+key can claim each delivery before sending, preventing list-overlap duplicates.
+Recheck active/suppressed status immediately before delivery and use provider
+idempotency keys for retries. Do not send newsletters to book-only subscribers.
 
-For a regular newsletter, export only rows where `newsletter_active = true`.
-For the debut announcement, use `book_announcement_pending = true OR
-newsletter_active = true` to send one copy to overlapping subscribers. Record
-the announcement as sent for the book list when delivered, keeping the
-newsletter active. Never include book-only subscribers in a regular newsletter.
-
-The `email_campaign_deliveries` table has a unique `(campaign,email)` key. A
-sender must insert a campaign claim **before** sending, with `ON CONFLICT DO
-NOTHING`, and send only the returned rows. Set `sent_at` after delivery; handle
-uncertain deliveries explicitly instead of blindly retrying them. Reuse the
-same campaign ID for retries. This prevents a list overlap or retry from
-creating a second send. Check active/suppressed status again immediately before
-actual delivery. A provider's idempotency key should also use campaign + email.
-
-## Costs and preservation
-
-One existing `/api/book-launch` endpoint handles signup and unsubscribe. There
-are no subscription status polls, per-visitor page queries or new services.
-Both selections use one atomic database RPC; existing network limits,
-Turnstile, honeypot, origin checks and request bounds are retained. Newsletter
-fields are explicitly boolean. Older clients can only request the original
-one-time book list. Consent evidence is independent and existing consent/status
-is never overwritten by a duplicate.
-
-The SQL is additive. Before the production change, the one-time list contained
-9 records. Compare its count and fingerprint immediately after the migration.
-Tests use isolated storage and rolled-back transactions, not live subscribers.
-
-## Images and gesture changes
-
-The supplied group photo replaces the About Me Gator graduation photo. The
-signature SVG traces the photographed ink centerline and removes the ruled
-lines and other writing; strokes use consistent width with round joins.
-Favicons, Apple touch icon, manifest and share-card marks use the supplied stone
-Z. Images are sized at build time, with no new image optimization endpoint.
-Descriptive alternatives, image structured data and an image sitemap help
-search engines discover the actual photos. Decorative artwork keeps empty
-alternatives where appropriate; indexing and ranking remain Google's choice.
-
-Folly uses immediate Pointer Events and capture for mouse, pen and touch.
-`touch-action:none` applies only to the interactive pile. A swept brush reaches
-all stacked blades, including when starting on a blade. Up, cancel, lost
-capture, window blur, hidden tabs, resizing and reduced-motion changes clear
-interaction state. Taps and keyboard leaf navigation remain available.
-Lightweight SVG relief, veins, a central fold and shared cursor/tilt reflection
-provide depth without introducing WebGL or a canvas rendering dependency.
-
-Production migration `20261024022406_independent_newsletter_subscriptions`
-completed successfully. The original book list remained 9 rows with unchanged
-fingerprint `2dfb529d4730d558c689025c4aed153d`. Newsletter count was zero;
-anonymous table reads and RPC execution were denied; the backend role had
-RPC access. No one was enrolled by migration, and no email was sent.
-
-## Release validation
-
-- 175 existing and new automated tests passed, including route security,
-  independent choices/consent, late-verification cancellation and deduplication.
-- Production build and TypeScript checks passed. The unsubscribe page, image
-  sitemap, manifest, icons and public pages are static; only the pre-existing
-  signup API handles the new actions.
-- Chromium and WebKit were checked at desktop and mobile viewport sizes.
-  All eight leaves responded; taps opened the reader; interrupted gestures
-  recovered without browser errors. Chromium used native CDP touch drags and
-  an outside-pile touch swipe to confirm page scrolling. WebKit used its mobile
-  engine with touch-pointer handler checks and native taps. Physical iOS Safari
-  was not available in this environment and is not claimed as verified.
-- Sixteen browser form scenarios covered newsletter-only, both selections,
-  returning book subscribers and returning newsletter subscribers in the four
-  browser/viewport combinations. Browser requests used local mock responses;
-  the actual backend route was separately tested with module mocks, and the
-  real database logic with the service role in rolled-back test transactions.
-- Additional 320px, 390px and desktop checks passed for menu/Escape behavior,
-  persistent dismissal, cursor light response, reduced effects, overflow,
-  static assets and image metadata. Photo and signature rendering were
-  visually inspected in both engines.
-- Database security review found no warnings. The no-policy RLS notices are
-  intentional: only the backend service role and project owner can access
-  subscriber data.
-- No email sending provider was installed and no emails were sent. Future
-  campaigns must use the deduplicated audience, delivery ledger and included
-  unsubscribe URLs as described above.
+One existing `/api/book-launch` endpoint handles signups and unsubscribe.
+Turnstile, origin checks, request bounds, honeypot and rate limits remain.
+There is no new Function endpoint, background task, status polling, service or
+paid dependency. Supabase writes use one existing atomic registration RPC.
+Table and function grants are explicit and service-only, compatible with the
+October 30 Data API default-privilege change; public access stays revoked.

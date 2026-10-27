@@ -3,8 +3,8 @@ export const site = {
   email: "hi@zackdcook.com",
   url: "https://zackdcook.com",
   title: "Zack Cook: Engineer ⇌ Author",
-  icon: "/images/brand/zack-cook-stone-192.png",
-  appleIcon: "/images/brand/zack-cook-stone-180.png",
+  icon: "/images/brand/zack-cook-geode-192.png",
+  appleIcon: "/images/brand/zack-cook-geode-180.png",
   homeIcon: "/images/brand/home-living.webp",
   // These control the footer. Add only your own public profile/payment links.
   instagram: "https://www.instagram.com/zackyc.xyz/",
@@ -14,7 +14,7 @@ export const site = {
   supportLabel: "Fill my veins with caffeine",
   shareImage: "/opengraph-image",
   description:
-    "Zack Cook is an aspiring author and industrial engineer in Lakeland, Florida. Stay tuned for his first novel, read his ramblings, and explore the things that inspire him.",
+    "Zack Cook is an aspiring author and industrial engineer in Lakeland, Florida. Follow his debut novel, explore Words of Folly, and leave a mark in his guestbook.",
 };
 
 export function displayDate(date: string) {

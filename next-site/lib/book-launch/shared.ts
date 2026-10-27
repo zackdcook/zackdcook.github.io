@@ -11,12 +11,11 @@ export const bookDismissedKey = "zack.book-launch.dismissed.v1";
 export const bookSubscribedKey = "zack.book-launch.subscribed.v1";
 export const newsletterSubscribedKey = "zack.newsletter.subscribed.v1";
 export const newsletterCopy = {
-  checkbox: "Subscribe to future newsletters, too",
-  consent: "Ongoing notes from my writing desk. Unsubscribe using the link in any newsletter.",
-  success: "You’re on the newsletter list!",
-  bothSuccess: "You’re on both lists! I’ll email you when the book drops and send you future newsletters.",
+  checkbox: "Subscribe to ongoing future newsletters",
 } as const;
-export const newsletterConsentVersion = `newsletter.v1\n${newsletterCopy.checkbox}\n${newsletterCopy.consent}`;
+export const newsletterConsentVersion = `newsletter.v2\n${newsletterCopy.checkbox}`;
+export type SignupReceipt = { alreadySubscribed: boolean };
+export const duplicateSignupCopy = "(you were already successfully subscribed, be tee dubs)";
 export function subscriptionChoices(book: unknown, newsletter: unknown) {
   if ((book !== undefined && typeof book !== "boolean") || (newsletter !== undefined && typeof newsletter !== "boolean")) throw new Error("validation");
   // Older clients only requested the existing book alert. They can never opt
@@ -26,14 +25,14 @@ export function subscriptionChoices(book: unknown, newsletter: unknown) {
   return choices;
 }
 export type SubscriptionChoices = { book: boolean; newsletter: boolean };
-export function subscriptionReceipt(choices: SubscriptionChoices) {
-  return choices.book && choices.newsletter ? newsletterCopy.bothSuccess : choices.newsletter ? newsletterCopy.success : bookCopy.success;
+export function subscriptionReceipt(_choices: SubscriptionChoices) {
+  return bookCopy.success;
 }
 export const analyticsOptOutKey = "zack.analytics.opt-out.v1";
 export type Placement = "homepage" | "menu";
 export function savedChoice(value: unknown) { return value === "true"; }
 export function bookVisibility(dismissed: boolean, subscribed: boolean) {
-  return { homepage: !dismissed && !subscribed, menu: !subscribed };
+  return { homepage: !dismissed && !subscribed, menu: true };
 }
 export function normalizeEmail(value: unknown) {
   if (typeof value !== "string") throw new Error("validation");

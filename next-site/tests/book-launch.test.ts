@@ -20,8 +20,8 @@ test("homepage and menu retain the three independent visitor states on repeated 
   for (let visit = 0; visit < 4; visit++) {
     assert.deepEqual(bookVisibility(savedChoice(null), savedChoice(null)), { homepage: true, menu: true });
     assert.deepEqual(bookVisibility(savedChoice("true"), false), { homepage: false, menu: true });
-    assert.deepEqual(bookVisibility(false, savedChoice("true")), { homepage: false, menu: false });
-    assert.deepEqual(bookVisibility(true, true), { homepage: false, menu: false });
+    assert.deepEqual(bookVisibility(false, savedChoice("true")), { homepage: false, menu: true });
+    assert.deepEqual(bookVisibility(true, true), { homepage: false, menu: true });
   }
   for (const value of ["false", "1", "{}", "yes", null, true]) assert.equal(savedChoice(value), false);
 });

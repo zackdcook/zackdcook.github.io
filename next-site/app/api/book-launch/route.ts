@@ -38,13 +38,13 @@ export async function POST(request: Request) {
         utm_medium: campaign(body.utm_medium), utm_campaign: campaign(body.utm_campaign), country: requestCountry(request) },
     });
     if (error) throw new Error("unavailable");
-    // ON CONFLICT DO NOTHING: no existing consent/status/attribution is changed.
-    // Identical success for active, suppressed, and notified duplicates.
+    // Duplicates retain their original consent, status and attribution.
+    // Only the requested success footnote distinguishes a repeated book signup.
     const newRecord = data?.book_added === true;
     if (choices.book) after(() => captureAccepted(request, {
       ...body, referrer_domain: body.referrer,
     }, newRecord, body.analytics_opt_out !== false));
-    return NextResponse.json({ accepted: true }, { headers: { "Cache-Control": "no-store" } });
+    return NextResponse.json({ accepted: true, already_subscribed: choices.book && !newRecord }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof Error && ["request", "validation", "challenge", "rate_limit", "unavailable"].includes(error.message)) category = error.message;
     console.warn("book_launch_signup", { category });

@@ -16,7 +16,9 @@ export const shareRecords: ShareRecord[] = [
   { id: "events", path: "/events", title: "Come say hi =)", description: "Meet Zack Cook at Write On, Lakeland! Every Thursday, 4–6 p.m., at Pressed Books & Coffee in downtown Lakeland, Florida.", category: "Events" },
   { id: "folly", path: "/words-of-folly", title: "Words of Folly", description: "Small reminders Zack Cook tells himself while writing, gathered in an interactive pile of leaves.", category: "Words of Folly" },
   { id: "shoutouts", path: "/shoutouts", title: "Cool peeps.", description: "Authors, friends, and other cool peeps Zack Cook wants you to check out.", category: "Shoutouts" },
-  { id: "guestbook", path: "/guestbook", title: "Guestbook", description: "A shared cypress tree that keeps every mark in its place.", category: "Guestbook" },
+  { id: "guestbook", path: "/guestbook", title: "Guestbook", description: "Sign Zack Cook’s guestbook: write your signature, leave a message, or draw something fun on the shared tree.", category: "Guestbook" },
+  { id: "privacy", path: "/privacy", title: "Privacy", description: "How Zack Cook’s site handles book alerts, optional newsletters, anonymous analytics, and guestbook interactions.", category: "Privacy" },
+  { id: "rss", path: "/rss", title: "Follow by RSS", description: "Follow Zack Cook’s Words of Folly in your favorite feed reader.", category: "RSS" },
   ...projects.map(p => ({ id: `project-${p.slug}`, path: `/writing/${p.slug}`, title: p.shareTitle, description: p.summary, category: p.category, status: p.status })),
 ];
 
@@ -28,7 +30,7 @@ export function pageMetadata(id: string, title?: string): Metadata {
   const imageOrigin = process.env.VERCEL_ENV === "preview" && process.env.VERCEL_BRANCH_URL
     ? `https://${process.env.VERCEL_BRANCH_URL}`
     : site.url;
-  const image = { url: new URL(`/share/${record.id}?v=stone-20261023`, imageOrigin).toString(), width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
+  const image = { url: new URL(`/share/${record.id}?v=geode-20261026`, imageOrigin).toString(), width: 1200, height: 630, alt: `${record.title} · ${site.name}` };
   return {
     title: title || record.title,
     description: record.description,

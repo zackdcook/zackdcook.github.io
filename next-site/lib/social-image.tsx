@@ -6,7 +6,7 @@ import type { ShareRecord } from "@/lib/page-metadata";
 
 export async function socialImage(record: ShareRecord) {
   const [logo, display, body] = await Promise.all([
-    readFile(join(process.cwd(), "public/images/brand/zack-cook-stone-512.png")),
+    readFile(join(process.cwd(), "public/images/brand/zack-cook-geode-512.png")),
     readFile(join(process.cwd(), "public/fonts/Fraunces-Soft-Semibold.ttf")),
     readFile(join(process.cwd(), "public/fonts/DM-Sans-Regular.ttf")),
   ]);

@@ -14,5 +14,5 @@ test("human verification is bound to the chosen subscriptions as well as the ema
   assert.equal(gate.take(first.id,"old-token"),null);
   assert.equal(gate.take(second.id,"new-token")!.book,false);
   assert.equal(subscriptionReceipt({book:true,newsletter:false}),bookCopy.success);
-  assert.equal(subscriptionReceipt({book:false,newsletter:true}),newsletterCopy.success);
+  assert.equal(subscriptionReceipt({book:false,newsletter:true}),bookCopy.success);
 });

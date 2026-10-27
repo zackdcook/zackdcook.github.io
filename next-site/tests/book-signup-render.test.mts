@@ -10,8 +10,10 @@ test("both real signup placements initially render an enabled submit without loa
     const html = renderToString(createElement(BookContext, { value: { enabled: true, testMode: false, open() {} } },
       createElement(BookSignupForm, { placement, titleId: "test-title", onSuccess() {} })));
     assert.match(html, /type="email"/);
-    assert.match(html,/Subscribe to future newsletters, too/);
+    assert.match(html,/Subscribe to ongoing future newsletters/);
     assert.match(html,/name="newsletter"/);
+    assert.ok(!html.includes('name="book"'));
+    assert.ok(!html.includes("writing desk"));
     assert.ok(!/name="newsletter"[^>]*checked/.test(html));
     assert.match(html, /type="submit">Count me in/);
     assert.ok(!html.includes('class="human-check"'));

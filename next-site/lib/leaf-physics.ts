@@ -22,7 +22,7 @@ export function leafProjection(leaf: LeafBody) {
   const scale=leaf.scale*(1+Math.max(0,leaf.z-leaf.base)/1400);
   return {a:cy*cz*scale,b:(sx*sy*cz+cx*sz)*scale,c:-cy*sz*scale,d:(cx*cz-sx*sy*sz)*scale};
 }
-/** Project the complete blade, stem and cast without a shared perspective. */
+/** Project the complete blade and stem without a shared perspective. */
 export function leafProjectedBounds(leaf: LeafBody, bounds: LeafBounds) {
   const {a,b,c,d}=leafProjection(leaf);
   const halfWidth=bounds.leafWidth/2, halfHeight=halfWidth/1.6;
@@ -31,8 +31,8 @@ export function leafProjectedBounds(leaf: LeafBody, bounds: LeafBounds) {
     const px=leaf.x+dx*a+dy*c, py=leaf.y+dx*b+dy*d;
     left=Math.min(left,px); right=Math.max(right,px); top=Math.min(top,py); bottom=Math.max(bottom,py);
   }
-  const shadow=10+Math.max(0,leaf.z-leaf.base)*.08;
-  return { left:left-shadow, right:right+shadow, top:top-shadow, bottom:bottom+shadow };
+  const edge=3;
+  return { left:left-edge, right:right+edge, top:top-edge, bottom:bottom+edge };
 }
 function containLeaf(leaf: LeafBody, bounds: LeafBounds) {
   for (let pass=0; pass<3; pass++) {
@@ -64,7 +64,7 @@ export function makeLeafPile(count: number, bounds: LeafBounds, writtenCount=cou
 export function pushLeaves(leaves: LeafBody[], from: LeafPoint, to: LeafPoint, elapsed: number, bounds: LeafBounds, touch=false) {
   const dx=to.x-from.x, dy=to.y-from.y, distance=Math.hypot(dx,dy);
   if (!Number.isFinite(distance) || distance<.05) return false;
-  const dt=clamp(elapsed,1/120,.08), speed=Math.min(1200,distance/dt), gain=touch ? 1.4 : 1;
+  const dt=clamp(elapsed,1/120,.08), speed=Math.min(1200,distance/dt), gain=touch ? .45 : 1;
   let touched=false, order=leaves.reduce((highest,leaf)=>Math.max(highest,leaf.order),0);
   for (const leaf of leaves) {
     const t=clamp(((leaf.x-from.x)*dx+(leaf.y-from.y)*dy)/(distance*distance),0,1);
@@ -75,15 +75,15 @@ export function pushLeaves(leaves: LeafBody[], from: LeafPoint, to: LeafPoint, e
     if (contact<=0) continue;
     touched=true;
     const grip=.3+contact*.7, lift=Math.min(170,bounds.leafWidth*.58)*Math.sqrt(leaf.scale);
-    leaf.x+=dx*grip*(touch ? .85 : .65); leaf.y+=dy*grip*(touch ? .85 : .65);
+    leaf.x+=dx*grip*(touch ? .3 : .65); leaf.y+=dy*grip*(touch ? .3 : .65);
     leaf.vx=clamp(leaf.vx+dx/distance*speed*grip*.24*gain,-650,650);
     leaf.vy=clamp(leaf.vy+dy/distance*speed*grip*.24*gain,-650,650);
     leaf.z=Math.max(leaf.z,leaf.base+3);
     leaf.vz=Math.max(leaf.vz,Math.min(Math.sqrt(2*560*lift)*.9,(150+speed*.48)*grip*gain));
-    const turn=Math.min(140,speed/Math.max(140,bounds.leafWidth)*70)*grip;
+    const turn=Math.min(140,speed/Math.max(140,bounds.leafWidth)*70)*grip*gain;
     leaf.wx=(dy/distance*.85+Math.sin(leaf.phase)*.45)*turn;
     leaf.wy=(-dx/distance*.9+Math.cos(leaf.phase)*.3)*turn;
-    leaf.wz=clamp(leaf.wz+(ox*dy-oy*dx)/Math.max(60,bounds.leafWidth)*grip*3+Math.sin(leaf.phase+dx/distance)*turn*.18,-100,100);
+    leaf.wz=clamp(leaf.wz+(ox*dy-oy*dx)/Math.max(60,bounds.leafWidth)*grip*3*gain+Math.sin(leaf.phase+dx/distance)*turn*.18,-100,100);
     leaf.order=++order; containLeaf(leaf,bounds);
   }
   return touched;
